@@ -1,4 +1,7 @@
 {
   "version": 2,
-  "projects": {}
+  "projects": {
+    "bottleshop-api": "apps/bottleshop-api",
+    "bottleshopdeliveryapp": "apps/bottleshopdeliveryapp"
+  }
 }
