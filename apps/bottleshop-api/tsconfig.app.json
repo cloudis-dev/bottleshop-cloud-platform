@@ -2,9 +2,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
     "types": ["node"],
-    "target": "es2018"
+    "target": "es2017",
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "importHelpers": true
   },
   "exclude": ["**/*.spec.ts"],
   "include": ["**/*.ts"]

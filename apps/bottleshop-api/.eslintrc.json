@@ -1,5 +1,6 @@
 {
-  "extends": ["../../.eslintrc.json"],
+  "extends": ["../../.eslintrc.json", "plugin:import/typescript"],
+  "plugins": ["@nrwl/nx", "import"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
@@ -8,7 +9,10 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "rules": {
+        "quotes": ["error", "single"],
+        "import/no-unresolved": 0
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

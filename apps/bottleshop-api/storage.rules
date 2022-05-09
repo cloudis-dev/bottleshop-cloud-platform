@@ -1,9 +1,24 @@
-// replace this file with your own firebase storage rules
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
+    match /assets/pdf/{singleSegment} {
+      allow read: if true;
+    }
+    match /assets/mails/{singleSegment} {
+      allow read: if true;
+    }
+    match /shop/{allPaths=**} {
+      allow read: if true;
+    }
+    match /flags/{allPaths=**} {
+      allow read: if true;
+    }
+    match /warehouse/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid != "";
+    }
     match /{allPaths=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if request.auth != null && request.auth.uid != "";
     }
   }
 }

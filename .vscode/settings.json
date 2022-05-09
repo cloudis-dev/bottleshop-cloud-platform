@@ -1,0 +1,26 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": false
+  },
+  "prettier.resolveGlobalModules": true,
+  "jestrunner.enableYarnPnpSupport": false,
+  "npm.packageManager": "yarn",
+  "task.autoDetect": "off",
+  "dart.openTestView": ["testRunStart", "testRunStart"],
+  "python.testing.autoTestDiscoverOnSaveEnabled": false,
+  "files.refactoring.autoSave": false,
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 120,
+  "emmet.showAbbreviationSuggestions": false,
+  "emmet.showExpandedAbbreviation": "never",
+  "editor.acceptSuggestionOnEnter": "smart",
+  "editor.inlineSuggest.enabled": true,
+  "editor.snippetSuggestions": "none",
+  "audioCues.lineHasInlineSuggestion": "off"
+}

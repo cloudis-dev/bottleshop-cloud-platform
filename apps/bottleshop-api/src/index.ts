@@ -1,22 +1,26 @@
-// The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
+import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-// The Firebase Admin SDK to access Firebase Features from within Cloud Functions.
-import * as admin from 'firebase-admin';
-admin.initializeApp();
+admin.initializeApp(functions.config().firebase);
+const settings = { timestampInSnapshots: true };
+admin.firestore().settings(settings);
 
-// Set up extra settings. Since May 29, 2020, Firebase Firebase Added support for
-// calling FirebaseFiresore.settings with { ignoreUndefinedProperties: true }.
-// When this parameter is set, Cloud Firestore ignores undefined properties
-// inside objects rather than rejecting the API call.
-admin.firestore().settings({
-  ignoreUndefinedProperties: true,
-});
-
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
-
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info('Hello logs!', { structuredData: true });
-  response.send('Hello from Firebase!');
-});
+export { createPaymentIntent } from './functions/create-payment-intent';
+export { onPaymentStatusUpdate } from './functions/on-payment-status-update';
+export { getCurrentTimestamp } from './functions/timestamp';
+export { onOrderWrite } from './functions/on-order-write/on-order-write';
+export { onProductWrite } from './functions/on-product-write/on-product-write';
+export { createStripeCustomer, onUserWrite } from './functions/on-user-write';
+export {
+  applyPromoCode,
+  onCartUpdated,
+  removePromoCode,
+  removeShippingFee,
+  setShippingFee,
+  validateCart,
+} from './functions/cart';
+export { onCategoryWriteAlgoliaUpdate as onCategoryWrite } from './functions/on-category-write-algolia-update';
+export { onAdminUserCreate, onAdminUserDelete } from './functions/on-admin-user-create-delete';
+export { createStripePriceIds } from './functions/create-stripe-price-ids';
+export { createCashOnDeliveryOrder } from './functions/create-cash-on-delivery-order';
+export { deleteAccount } from './functions/delete-account';

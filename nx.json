@@ -17,7 +17,12 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
         "accessToken": "N2I1MTU5NDktMGY3OS00MzgxLWIyMmItYTMxZTJkYmRlNGRkfHJlYWQtd3JpdGU="
       }
     }
@@ -30,6 +35,8 @@
       }
     ]
   },
-  "plugins": ["@nxrocks/nx-flutter"],
-  "defaultProject": "firebase-api"
+  "plugins": [
+    "@nxrocks/nx-flutter"
+  ],
+  "defaultProject": "bottleshop-api"
 }

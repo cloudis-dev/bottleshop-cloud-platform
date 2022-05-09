@@ -79,10 +79,10 @@
         "cwd": "apps/bottleshopdeliveryapp"
       }
     },
-    "buildApk": {
+    "buildPwa": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build apk",
+        "command": "flutter build web --release",
         "cwd": "apps/bottleshopdeliveryapp"
       }
     },
@@ -103,7 +103,7 @@
     "buildIos": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build ios",
+        "command": "flutter build ios --no-codesign",
         "cwd": "apps/bottleshopdeliveryapp"
       }
     },

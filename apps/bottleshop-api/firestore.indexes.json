@@ -1,3 +1,159 @@
 {
-  "indexes": []
+  "indexes": [
+    {
+      "collectionGroup": "orders",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "customer.uid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "orders",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status_step_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "orders",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status_step_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category_refs",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "_final_price",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category_refs",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "_final_price",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category_refs",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "_name_sort",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category_refs",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "_name_sort",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "flash_sale.flash_sale_until",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_name_sort",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "flash_sale.uid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_name_sort",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "is_new_entry",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_name_sort",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "is_recommended",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_name_sort",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
 }

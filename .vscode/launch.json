@@ -1,0 +1,56 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    
+
+
+    {
+      "name": "Stripe: Webhooks listen",
+      "type": "stripe",
+      "request": "launch",
+      "command": "listen"
+    },
+    {
+      "name": "Stripe: Webhooks listen",
+      "type": "stripe",
+      "request": "launch",
+      "command": "listen"
+    },
+    {
+      "name": "Launch via NPM",
+      "request": "launch",
+      "runtimeArgs": [
+        "run-script",
+        "debug"
+      ],
+      "runtimeExecutable": "yarn",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "name": "bottleshopdeliveryapp",
+      "cwd": "apps/bottleshopdeliveryapp",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "bottleshopdeliveryapp (profile mode)",
+      "cwd": "apps/bottleshopdeliveryapp",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "bottleshopdeliveryapp (release mode)",
+      "cwd": "apps/bottleshopdeliveryapp",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    }
+  ]
+}

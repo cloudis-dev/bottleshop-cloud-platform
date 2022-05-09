@@ -10,28 +10,25 @@
         "main": "apps/bottleshop-api/src/index.ts",
         "tsConfig": "apps/bottleshop-api/tsconfig.app.json",
         "packageJson": "apps/bottleshop-api/package.json",
-        "assets": [
-          "apps/bottleshop-api/*.md",
-          "apps/bottleshop-api/.runtimeconfig.json"
-        ]
+        "assets": ["apps/bottleshop-api/.runtimeconfig.json", "apps/bottleshop-api/templates"]
       }
     },
     "deploy": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "firebase deploy --config firebase.bottleshop-api.json"
+        "command": "firebase deploy --only functions"
       }
     },
     "getconfig": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "firebase functions:config:get --config firebase.bottleshop-api.json > apps/bottleshop-api/.runtimeconfig.json"
+        "command": "firebase functions:config:get > apps/bottleshop-api/.runtimeconfig.json"
       }
     },
     "emulate": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "firebase emulators:start --config firebase.bottleshop-api.json"
+        "command": "firebase emulators:start --import apps/bottleshop-api/firebase-seed"
       }
     },
     "serve": {

@@ -1,1 +1,30 @@
-{}
+{
+  "firestore": {
+    "rules": "apps/bottleshop-api/firestore.rules",
+    "indexes": "apps/bottleshop-api/firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "apps/bottleshop-api/storage.rules"
+  },
+  "functions": {
+    "predeploy": [
+      "nx run bottleshop-api:build",
+      "nx run bottleshop-api:lint"
+    ],
+    "source": "dist/apps/bottleshop-api"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "auth": {
+      "port": 9099
+    },
+    "storage": {
+      "port": 8085
+    }
+  }
+}

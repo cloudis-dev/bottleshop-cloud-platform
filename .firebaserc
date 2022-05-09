@@ -1,6 +1,8 @@
 {
-  "targets": {
-  },
   "projects": {
-  }
+    "dev": "bottleshop-3-veze-dev-54908",
+    "prod": "bottleshop3veze-delivery",
+    "default": "bottleshop-3-veze-dev-54908"
+  },
+  "targets": {}
 }
