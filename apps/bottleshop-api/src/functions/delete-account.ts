@@ -8,6 +8,12 @@ export const deleteAccount = functions
   .region(tier1Region)
   .runWith({ memory: '512MB' })
   .https.onCall(async (_, context) => {
+    if (context.app == undefined) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'The function must be called from an App Check verified app.',
+      );
+    }
     if (context.auth == null) {
       return { success: false, error: 'Authentication Required!' };
     }

@@ -1,14 +1,21 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import Stripe from 'stripe';
-import { cartCollection, usersCollection } from '../constants/collections';
+
+import {
+  cartCollection,
+  usersCollection,
+} from '../constants/collections';
 import { cartFields } from '../constants/model-constants';
-import { tempCartId, tier1Region } from '../constants/other';
-import { WebPaymentData } from '../models/payment-data';
-import { StripeLineItem } from '../models/stripe-line-item';
+import { generateNewOrderId } from './create-payment-intent';
 import { getCartItemFinalPrice } from '../utils/cart-utils';
 import { getCartItems } from './cart/nested-functions/on-cart-updated';
-import { generateNewOrderId } from './create-payment-intent';
+import { StripeLineItem } from '../models/stripe-line-item';
+import {
+  tempCartId,
+  tier1Region,
+} from '../constants/other';
+import { WebPaymentData } from '../models/payment-data';
 
 const stripe = new Stripe(functions.config().stripe.api_key, {
   typescript: true,
@@ -18,6 +25,12 @@ const stripe = new Stripe(functions.config().stripe.api_key, {
 export const createStripePriceIds = functions
   .region(tier1Region)
   .https.onCall(async (data: WebPaymentData, context) => {
+    if (context.app == undefined) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'The function must be called from an App Check verified app.',
+      );
+    }
     try {
       if (context.auth && context.auth.uid) {
         const cartRef = admin
@@ -45,13 +58,10 @@ export const createStripePriceIds = functions
             lineItems.push(item);
           }
           const cartData = await cartRef.get();
-          const shippingFee = cartData.get(
-            cartFields.shippingFeeTotal
-          ) as string;
+          const shippingFee = cartData.get(cartFields.shippingFeeTotal) as string;
           if (shippingFee && shippingFee !== '0') {
             const shippingProduct = await stripe.products.create({
-              name:
-                data.locale === 'sk' ? 'Poplatok za doručenie' : 'Shipping fee',
+              name: data.locale === 'sk' ? 'Poplatok za doručenie' : 'Shipping fee',
             });
             const shippingPrice = await stripe.prices.create({
               product: shippingProduct.id,

@@ -14,6 +14,13 @@ const stripe = new Stripe(functions.config()['stripe']['api_key'], { typescript:
 export const createStripeCustomer = functions
   .region(tier1Region)
   .https.onCall(async (data: Stripe.CustomerCreateParams, context: CallableContext) => {
+    if (context.app == undefined) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'The function must be called from an App Check verified app.',
+      );
+    }
+
     try {
       if (context.auth && context.auth.uid) {
         const stripeCustomer = await stripe.customers.create(data);

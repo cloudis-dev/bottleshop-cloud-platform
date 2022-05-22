@@ -30,6 +30,12 @@ export async function generateNewOrderId(): Promise<string> {
 }
 
 export const createPaymentIntent = functions.region(tier1Region).https.onCall(async (data: PaymentData, context) => {
+  if (context.app == undefined) {
+    throw new functions.https.HttpsError(
+      'failed-precondition',
+      'The function must be called from an App Check verified app.',
+    );
+  }
   try {
     if (context.auth && context.auth.uid) {
       const cartRef = admin
