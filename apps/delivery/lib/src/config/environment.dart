@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -32,6 +30,6 @@ class Environment {
   static int get functionsEmuPort => int.parse(dotenv.env['FUNCTIONS_PORT'] ?? '5001');
   static int get firestoreEmuPort => int.parse(dotenv.env['FIRESTORE_PORT'] ?? '8080');
   static int get authEmuPort => int.parse(dotenv.env['AUTH_PORT'] ?? '9099');
-  static int get storagesEmuPort => int.parse(dotenv.env['STORAGE_PORT'] ?? '8085');
+  static int get storagesEmuPort => int.parse(dotenv.env['STORAGE_PORT'] ?? '9199');
   static int get serverPort => int.parse(dotenv.env['DEV_SERVER_PORT'] ?? '5000');
 }

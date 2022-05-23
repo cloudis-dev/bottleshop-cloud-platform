@@ -63,6 +63,7 @@ dependencies:
   dartz: ^0.10.1
   rxdart: ^0.27.3
   flutter_dotenv: ^5.0.2
+  pdfx: ^1.0.1+1
 
 dev_dependencies:
   flutter_test:
@@ -84,9 +85,10 @@ flutter:
     - .env
 
 flutter_native_splash:
-  background_image: 'assets/images/splash-landscape.png'
+  image: 'assets/images/splash_branding.png'
+  color: '#161613'
   android: false
   ios: false
   web: true
-  web_image_mode: cover
+  web_image_mode: center
   fullscreen: true
