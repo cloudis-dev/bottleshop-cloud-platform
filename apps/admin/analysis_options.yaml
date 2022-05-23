@@ -1,0 +1,19 @@
+include: package:flutter_lints/flutter.yaml
+exclude:
+  - lib/generated/**
+  - lib/l10n/**
+  - lib/generated_plugin*.dart
+  - build/**
+  - lib/src/**/*.g.dart
+
+linter:
+  rules:
+    type_annotate_public_apis: false
+    prefer_double_quotes: false
+    prefer_relative_imports: false
+    avoid_relative_lib_imports: true
+    avoid_print: true
+    prefer_const_constructors: true
+    prefer_const_constructors_in_immutables: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true

@@ -15,6 +15,10 @@
               {
                 "sourceTag": "scope:firebase",
                 "onlyDependOnLibsWithTags": ["scope:firebase"]
+              },
+              {
+                "sourceTag": "scope:flutter",
+                "onlyDependOnLibsWithTags": ["scope:flutter"]
               }
             ]
           }
@@ -23,7 +27,7 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
+      "extends": ["plugin:@nrwl/nx/typescript", "plugin:promise/recommended"],
       "rules": {}
     },
     {

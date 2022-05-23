@@ -1,0 +1,18 @@
+{
+  "provider": "apple_pay",
+  "data": {
+    "merchantIdentifier": "merchant.sk.bottleshop3veze.bottleshopdeliveryapp",
+    "displayName": "Bottleshop3veže, s.r.o",
+    "merchantCapabilities": ["3DS"],
+    "supportedNetworks": [
+      "american_express",
+      "visa",
+      "electron",
+      "maestro",
+      "master_card",
+      "diners"
+    ],
+    "countryCode": "SK",
+    "currencyCode": "EUR"
+  }
+}

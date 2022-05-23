@@ -61,5 +61,5 @@
       }
     }
   },
-  "tags": ["scope:firebase"]
+  "tags": ["scope:firebase", "type:server"]
 }

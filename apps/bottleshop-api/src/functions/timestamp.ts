@@ -7,7 +7,7 @@ export const getCurrentTimestamp = functions
   .region(tier1Region)
   .runWith({ memory: '128MB' })
   .https.onCall((data: unknown, context: functions.https.CallableContext) => {
-    if (context.app == undefined) {
+    if (!context.app) {
       throw new functions.https.HttpsError(
         'failed-precondition',
         'The function must be called from an App Check verified app.',

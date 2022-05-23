@@ -12,5 +12,5 @@
     "importHelpers": true
   },
   "exclude": ["**/*.spec.ts"],
-  "include": ["**/*.ts"]
+  "include": ["src/**/*.ts"]
 }

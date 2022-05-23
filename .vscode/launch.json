@@ -1,56 +1,29 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    
-
-
     {
-      "name": "Stripe: Webhooks listen",
-      "type": "stripe",
+      "name": "Launch development",
       "request": "launch",
-      "command": "listen"
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main_development.dart",
+      "args": ["--flavor", "development", "--target", "lib/main_development.dart"],
+      "cwd": "apps/delivery",
+      "openDevTools": "logging"
     },
     {
-      "name": "Stripe: Webhooks listen",
-      "type": "stripe",
+      "name": "Launch production",
       "request": "launch",
-      "command": "listen"
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": ["--flavor", "production", "--target", "lib/main_production.dart"]
     },
     {
-      "name": "Launch via NPM",
-      "request": "launch",
-      "runtimeArgs": [
-        "run-script",
-        "debug"
-      ],
-      "runtimeExecutable": "yarn",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
-    },
-    {
-      "name": "bottleshopdeliveryapp",
-      "cwd": "apps/bottleshopdeliveryapp",
+      "name": "Flutter",
+      "program": "lib/main.dart",
+      "cwd": "apps/admin",
       "request": "launch",
       "type": "dart"
-    },
-    {
-      "name": "bottleshopdeliveryapp (profile mode)",
-      "cwd": "apps/bottleshopdeliveryapp",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "profile"
-    },
-    {
-      "name": "bottleshopdeliveryapp (release mode)",
-      "cwd": "apps/bottleshopdeliveryapp",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "release"
     }
   ]
 }

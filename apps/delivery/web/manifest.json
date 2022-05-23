@@ -1,0 +1,35 @@
+{
+  "name": "Bottleshop 3 Veže",
+  "short_name": "Bottleshop3veze",
+  "theme_color": "#F9AA33",
+  "background_color": "#fff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": ".",
+  "description": "Maloobchod, veľkoobchod, distribúcia a dovoz do hodiny v rámci Bratislavy. Kvalitný výber, limitované edície, raritky a zberateľský alkohol s investičným charakterom.",
+  "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "images/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "mages/icons/icon-192x192.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "mages/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "mages/icons/icon-192x192.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

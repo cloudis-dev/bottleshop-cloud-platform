@@ -6,7 +6,7 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "**/node_modules": false
+    "**/node_modules": true
   },
   "prettier.resolveGlobalModules": true,
   "jestrunner.enableYarnPnpSupport": false,
@@ -22,5 +22,37 @@
   "editor.acceptSuggestionOnEnter": "smart",
   "editor.inlineSuggest.enabled": true,
   "editor.snippetSuggestions": "none",
-  "audioCues.lineHasInlineSuggestion": "off"
+  "audioCues.lineHasInlineSuggestion": "off",
+  "dart.analysisExcludedFolders": [
+    "lib/generated, lib/l10n, build"
+  ],
+  "dart.onlyAnalyzeProjectsWithOpenFiles": true,
+  "dart.lineLength": 120,
+  "dart.renameFilesWithClasses": "always",
+  "dart.flutterHotReloadOnSave": "always",
+  "dart.flutterWebRenderer": "html",
+  "dart.hotReloadOnSave": "always",
+  "dart.normalizeFileCasing": true,
+  "dart.previewFlutterUiGuides": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "dart.previewHotReloadOnSaveWatcher": true,
+  "dart.previewSdkDaps": true,
+  "gitlens.defaultGravatarsStyle": "wavatar",
+  "gitlens.fileAnnotations.command": "blame",
+  "files.defaultLanguage": "${activeEditorLanguage}",
+  "html.format.indentHandlebars": true,
+  "prettier.eslintIntegration": true,
+  "prettier.jsxBracketSameLine": true,
+  "prettier.jsxSingleQuote": true,
+  "prettier.parser": "typescript",
+  "prettier.printWidth": 120,
+  "prettier.requireConfig": true,
+  "prettier.singleQuote": true,
+  "prettier.stylelintIntegration": true,
+  "prettier.trailingComma": "all",
+  "dart.devToolsPort": 9229,
+  "dart.openDevTools": "flutter",
+  "dart.cliConsole": "terminal",
+  "dart.previewCommitCharacters": true,
+  "explorer.sortOrder": "type"
 }
