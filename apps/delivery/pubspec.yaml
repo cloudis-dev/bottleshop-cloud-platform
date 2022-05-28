@@ -48,7 +48,6 @@ dependencies:
   url_launcher: ^6.1.2
   uuid: ^3.0.6
   badges: ^2.0.2
-  logging: ^1.0.2
   align_positioned: ^3.0.0
   octo_image: ^1.0.2
   infinite_scroll_pagination: ^3.1.0
@@ -64,6 +63,10 @@ dependencies:
   rxdart: ^0.27.3
   flutter_dotenv: ^5.0.2
   pdfx: ^1.0.1+1
+  flutter_loggy: ^2.0.1
+  loggy: ^2.0.1+1
+  flutter_facebook_auth: ^4.3.4
+  sign_in_with_apple: ^4.0.0
 
 dev_dependencies:
   flutter_test:

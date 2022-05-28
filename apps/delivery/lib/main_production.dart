@@ -5,6 +5,8 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 
 import 'package:delivery/src/app/app.dart';
@@ -13,6 +15,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
+import 'package:bottleshop_delivery_flavors/l10n/l10n.dart';
 
 void main() async {
   await runZonedGuarded<Future<void>>(

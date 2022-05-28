@@ -1,0 +1,105 @@
+
+import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+class DeleteAccountTile extends HookConsumerWidget {
+  const DeleteAccountTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserProvider);
+    if (currentUser != null) {
+      return ListTile(
+        dense: true,
+        leading: Icon(
+          Icons.cancel_outlined,
+          color: Theme.of(context).errorColor,
+        ),
+        title: Text(
+          'Delete account',
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+        subtitle: Text(
+          'Remove your account and all your data',
+          style: Theme.of(context).textTheme.caption,
+        ),
+        trailing: ButtonTheme(
+          padding: const EdgeInsets.all(0),
+          minWidth: 50.0,
+          height: 25.0,
+          child: TextButton(
+            style: TextButton.styleFrom(primary: Theme.of(context).errorColor),
+            child: Text(context.l10n.deleteAccount),
+            onPressed: () {
+              showDialog<void>(
+                context: context,
+                builder: (_) {
+                  return _DeleteConfirmationDialog(parentContext: context);
+                },
+              );
+            },
+          ),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+}
+
+class _DeleteConfirmationDialog extends ConsumerWidget {
+  final BuildContext parentContext;
+
+  const _DeleteConfirmationDialog({
+    Key? key,
+    required this.parentContext,
+  }) : super(key: key);
+
+  Future<void> _deleteAccount(WidgetRef ref) async {
+    bool result;
+
+    try {
+      result = await ref.read(cloudFunctionsProviderl10n.deleteAccount();
+    } catch (err) {
+      result = false;
+    }
+
+    if (!result) {
+      /*showSimpleNotification(
+        const Text('Failed to delete account'),
+        slideDismissDirection: DismissDirection.horizontal,
+        context: parentContext,
+      );*/
+    } else {
+      await ref.read(userRepositoryProviderl10n.signOut();
+      /*showSimpleNotification(
+        const Text('Successfully deleted your account'),
+        slideDismissDirection: DismissDirection.horizontal,
+        context: parentContext,
+      );*/
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AlertDialog(
+      title: Text(context.l10n.deleteAccountDialogTitle),
+      content: Text(context.l10n.deleteAccountDialogLabel),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(context.l10n.deleteAccountNegativeOption),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            _deleteAccount(ref);
+          },
+          child: Text(context.l10n.deleteAccount),
+        ),
+      ],
+    );
+  }
+}

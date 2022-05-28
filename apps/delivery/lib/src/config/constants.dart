@@ -12,16 +12,6 @@
 
 import 'dart:ui';
 
-class TutorialModel {
-  final String heroAsset;
-  final String labelAsset;
-
-  const TutorialModel({
-    required this.heroAsset,
-    required this.labelAsset,
-  });
-}
-
 class AppPreferencesKeys {
   AppPreferencesKeys._();
 
@@ -34,6 +24,7 @@ class AppPreferencesKeys {
 
 class FirebaseCallableFunctions {
   FirebaseCallableFunctions._();
+  static const region = 'europe-west1';
 
   static const createPaymentIntent = 'createPaymentIntent';
   static const createStripeCustomer = 'createStripeCustomer';
@@ -102,24 +93,6 @@ class FirestorePaths {
       '${FirestoreCollections.usersCollection}/$uid/${FirestoreCollections.userCartSubCollection}/$productId';
 }
 
-class TutorialAssets {
-  static const assets = [
-    TutorialModel(
-      heroAsset: 'assets/images/onboarding-phone.webp',
-      labelAsset: 'assets/images/onboarding_text1.png',
-    ),
-    TutorialModel(
-      heroAsset: 'assets/images/onboarding-person.webp',
-      labelAsset: 'assets/images/onboarding_text2.webp',
-    ),
-    TutorialModel(
-      heroAsset: 'assets/images/onboarding-glasses.webp',
-      labelAsset: 'assets/images/onboarding_text3.webp',
-    ),
-  ];
-  static const boardingLogo = 'assets/images/onboarding-logo.webp';
-}
-
 const kLogo = 'assets/images/onboarding-logo.webp';
 const kDefaultAvatar = 'assets/images/avatar.webp';
 const kDefaultProductPic = 'assets/images/default_product.webp';
@@ -146,7 +119,6 @@ const kVisaBtn = 'assets/images/visa_white.png';
 const kVisaBtnDark = 'assets/images/visa_black.png';
 const kMaestroBtn = 'assets/images/maestro.png';
 const kMaestroBtnDark = 'assets/images/maestro_dark.png';
-const kDinersBtn = 'assets/images/diners_white.png';
 const kAmex = 'assets/images/amex.png';
 const kLogoTransparent = 'assets/images/logo_transparent.png';
 
@@ -155,23 +127,9 @@ const double kTabBarHeight = 50.0;
 const double kBottomBarItemsHeight = 42.0;
 
 const kSplashBackground = Color(0xFF222224);
-
-enum LanguageMode {
-  en,
-  sk,
-}
-
-const kLanguageFlagsMap = {
-  LanguageMode.en: 'assets/images/us.svg',
-  LanguageMode.sk: 'assets/images/sk.svg',
-};
-
 const kOrderTypePickUp = 'pick-up';
 const kOrderTypeHomeDelivery = 'home-delivery';
 const kOrderTypeQuickBa = 'quick-delivery-BA';
 const kOrderTypeCloseAreaBa = 'close-areas-delivery-ba';
 const kOrderTypeCashOnDelivery = 'cash-on-delivery';
-
-const devFirebaseAuthPort = 9000;
-const devFirestorePort = 8000;
-const devFunctionsPort = 5001;
+const kGoogleSignInScopes = ['email'];

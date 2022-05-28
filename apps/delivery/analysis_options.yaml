@@ -14,7 +14,6 @@ analyzer:
     - 'lib/l10n/**'
     - 'build/**'
     - 'assets/**'
-
 linter:
   rules:
     prefer_single_quotes: true
