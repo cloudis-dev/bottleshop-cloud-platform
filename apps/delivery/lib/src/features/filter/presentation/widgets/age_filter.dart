@@ -20,8 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
-
-class AgeFilter extends HookConsumerWidget with UiLoggy{
+class AgeFilter extends HookConsumerWidget with UiLoggy {
   const AgeFilter({
     Key? key,
   }) : super(key: key);
@@ -66,8 +65,8 @@ class AgeFilter extends HookConsumerWidget with UiLoggy{
                     max: args.maxAge!.toDouble(),
                     divisions: args.maxAge! - FilterConstants.minAge,
                     value: args.maxAge! - minAge.toDouble(),
-                    onChanged: (value) => ref.read(filterModelProvider(filterType.state.state =
-                        ref.read(filterModelProvider(filterType.state.state.copyWith(
+                    onChanged: (value) => ref.read(filterModelProvider(filterType).state).state =
+                        ref.read(filterModelProvider(filterType).state).state.copyWith(
                               minAge: args.maxAge! - value.round(),
                             ),
                     label: minAge.toString(),

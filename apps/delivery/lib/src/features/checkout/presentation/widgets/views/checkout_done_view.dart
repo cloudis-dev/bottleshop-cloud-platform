@@ -35,7 +35,7 @@ class CheckoutDoneView extends HookWidget {
         child: Container(
           alignment: AlignmentDirectional.center,
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          height: AppConfig(context.l10n.appHeight(60),
+          height: AppConfig(context).appHeight(60),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

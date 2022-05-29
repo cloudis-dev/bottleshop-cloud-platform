@@ -10,10 +10,10 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
-import 'package:delivery/src/config/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

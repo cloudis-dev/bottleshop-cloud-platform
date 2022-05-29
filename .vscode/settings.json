@@ -87,7 +87,7 @@
   "editor.fontSize": 16,
   "editor.fontWeight": "normal",
   "editor.fontLigatures": true,
-  "workbench.productIconTheme": "Default",
+  "workbench.productIconTheme": "IntelliJ",
   "window.autoDetectColorScheme": true,
   "window.closeWhenEmpty": true,
   "search.useParentIgnoreFiles": true,

@@ -9,8 +9,8 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/features/tutorial/data/models/tutorial_model.dart';
 import 'package:delivery/src/features/tutorial/presentation/providers/tutorial_providers.dart';
@@ -19,9 +19,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TutorialPage extends HookConsumerWidget {
-  var items;
-
-  const TutorialPage({Key? key}) : super(key: key);
+  const TutorialPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -83,7 +81,7 @@ class TutorialPage extends HookConsumerWidget {
                 )
                 .toList(),
           ),
-         items: [],if (onBoardingViewModel < TutorialAssets.assets.length - 1),
+          if (onBoardingViewModel < TutorialAssets.assets.length - 1)
             Positioned(
               right: 20,
               top: 50,
@@ -92,7 +90,7 @@ class TutorialPage extends HookConsumerWidget {
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
-                onPressed: () => ref.read(tutorialModelProvider.notifierl10n.finishIntroScreen(ref, context),
+                onPressed: () => ref.read(tutorialModelProvider.notifier).finishIntroScreen(ref, context),
                 child: Text(context.l10n.skip),
               ),
             ),
@@ -138,7 +136,7 @@ class TutorialPage extends HookConsumerWidget {
                 ),
               ),
               onPressed: () => isLast
-                  ? ref.read(tutorialModelProvider.notifierl10n.finishIntroScreen(ref, context)
+                  ? ref.read(tutorialModelProvider.notifier).finishIntroScreen(ref, context)
                   : carouselController.nextPage(curve: Curves.easeOutCubic),
               child: isLast
                   ? Row(

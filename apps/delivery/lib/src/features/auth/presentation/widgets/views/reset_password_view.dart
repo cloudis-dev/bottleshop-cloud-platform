@@ -11,8 +11,8 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/config/app_config.dart';
+import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/auth_form_template.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/reset_password_form.dart';

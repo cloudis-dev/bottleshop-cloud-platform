@@ -2,28 +2,36 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch development",
+      "name": "Flutter",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "Delivery DEV",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "debug",
       "program": "lib/main_development.dart",
-      "args": ["--flavor", "development", "--target", "lib/main_development.dart"],
+      "args": [
+        "--flavor",
+        "development",
+        "--target",
+        "lib/main_development.dart"
+      ],
       "cwd": "apps/delivery",
       "openDevTools": "logging"
     },
     {
-      "name": "Launch production",
+      "name": "Delivery PROD",
       "request": "launch",
       "type": "dart",
       "program": "lib/main_production.dart",
-      "args": ["--flavor", "production", "--target", "lib/main_production.dart"]
-    },
-    {
-      "name": "Flutter",
-      "program": "lib/main.dart",
-      "cwd": "apps/admin",
-      "request": "launch",
-      "type": "dart"
+      "args": [
+        "--flavor",
+        "production",
+        "--target",
+        "lib/main_production.dart"
+      ]
     }
   ]
 }

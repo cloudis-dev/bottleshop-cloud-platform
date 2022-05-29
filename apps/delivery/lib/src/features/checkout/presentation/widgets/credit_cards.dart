@@ -99,11 +99,6 @@ class CreditCards extends StatelessWidget {
                       width: 70,
                     ),
                     Image.asset(
-                      kDinersBtn,
-                      height: 42,
-                      width: 70,
-                    ),
-                    Image.asset(
                       defaultTargetPlatform == TargetPlatform.iOS ? kApplePayMark : kGooglePayMark,
                       height: 50,
                       width: 70,

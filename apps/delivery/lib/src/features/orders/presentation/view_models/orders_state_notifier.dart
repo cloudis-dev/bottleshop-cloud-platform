@@ -10,10 +10,10 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/utils/streamed_items_state_management/data/items_handler.dart';
 import 'package:delivery/src/core/utils/streamed_items_state_management/presentation/view_models/implementations/paged_streams_items_state_notifier.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loggy/loggy.dart';
 
 class OrdersStateNotifier extends PagedStreamsItemsStateNotifier<OrderModel, DocumentSnapshot, String> {

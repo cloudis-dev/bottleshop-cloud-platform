@@ -16,8 +16,8 @@ import 'package:delivery/src/features/checkout/presentation/providers/providers.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
 import 'package:loggy/loggy.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class PayButton extends HookConsumerWidget with NetworkLoggy {
   final PaymentData paymentData;

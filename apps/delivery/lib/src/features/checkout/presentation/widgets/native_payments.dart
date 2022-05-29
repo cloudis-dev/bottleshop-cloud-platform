@@ -13,17 +13,16 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/services/wallets_availability_service.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
-import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-final _logger = Logger((NativePaymentsl10n.toString());
+import '../providers/providers.dart';
 
-class NativePayments extends HookConsumerWidget {
+class NativePayments extends HookConsumerWidget with UiLoggy {
   final PaymentData paymentData;
   final double value;
   final void Function(String checkoutDoneMsg) onCheckoutDone;
@@ -64,14 +63,13 @@ class NativePayments extends HookConsumerWidget {
                   ),
                   onPressed: () async {
                     try {
-                      await ref.read(checkoutStateProviderl10n.payByNativePay(paymentDatal10n.then(
+                      await ref.read(checkoutStateProvider).payByNativePay(paymentData).then(
                             (value) => onCheckoutDone(
                               defaultTargetPlatform == TargetPlatform.android
                                   ? context.l10n.successful_payment_gpay
                                   : context.l10n.successful_payment,
                             ),
                           );
-                      await logPurchase(ref, context, value);
                     } on PlatformException catch (err, stack) {
                       if (err.code != 'cancelled' || err.code != 'purchaseCancelled') {
                         rethrow;

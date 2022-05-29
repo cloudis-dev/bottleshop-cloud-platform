@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 enum DeniedReason {
   email,
@@ -37,8 +38,6 @@ enum DeniedReason {
 }
 
 mixin DeliveryAvailableForUserCheck {
-
-
   bool canProceed(UserModel? user, DeliveryOption deliveryOption) {
     if (user == null) {
       return false;
@@ -56,7 +55,7 @@ mixin DeliveryAvailableForUserCheck {
       return [];
     }
 
-    loggy.info('validating user: ${user.uid} option: ${deliveryOption.toString()}');
+    logInfo('validating user: ${user.uid} option: ${deliveryOption.toString()}', 'DeliveryAvailableForUserCheck');
     var deniedReasons = <DeniedReason>[];
     switch (deliveryOption) {
       case DeliveryOption.pickUp:
@@ -98,7 +97,7 @@ mixin DeliveryAvailableForUserCheck {
         if (user.shippingAddress == null) {
           deniedReasons.add(DeniedReason.shippingAddress);
         }
-        if (user.shippingAddress?.city.toLowerCase(l10n.trim() != 'bratislava') {
+        if (user.shippingAddress?.city.toLowerCase().trim() != 'bratislava') {
           deniedReasons.add(DeniedReason.shipToCity);
         }
         deniedReasons.add(DeniedReason.quickDeliveryNotice);
@@ -132,7 +131,7 @@ mixin DeliveryAvailableForUserCheck {
         }
         deniedReasons.add(DeniedReason.noDeliverySelected);
     }
-    loggy.info('user can proceed: ${deniedReasons.isEmpty} reasons: $deniedReasons}');
+    logInfo('user can proceed: ${deniedReasons.isEmpty} reasons: $deniedReasons}');
     return deniedReasons;
   }
 }
@@ -181,7 +180,7 @@ class DeliveryOptionState extends StateNotifier<DeliveryOption> with DeliveryAva
   }
 
   String? get label {
-    return ChargeShipping.fromDeliveryOption(statel10n.shipping;
+    return ChargeShipping.fromDeliveryOption(state).shipping;
   }
 
   bool get paymentRequired {
@@ -197,12 +196,10 @@ final deliveryOptionsStateProvider = StateNotifierProvider.autoDispose<DeliveryO
 final _isLoadingProvider = StateProvider.autoDispose<bool>((_) => false);
 
 class ShippingDetailsView extends HookConsumerWidget {
-  final _logger = Logger((ShippingDetailsViewl10n.toString());
-
   final void Function(PaymentData paymentData) onNextPage;
   final void Function() onBackButton;
 
-  ShippingDetailsView({
+  const ShippingDetailsView({
     Key? key,
     required this.onNextPage,
     required this.onBackButton,
@@ -221,7 +218,7 @@ class ShippingDetailsView extends HookConsumerWidget {
       return () => {};
     }, const []);
 
-    final isLoading = ref.watch(_isLoadingProvider.statel10n.state;
+    final isLoading = ref.watch(_isLoadingProvider.state).state;
 
     return Loader(
       inAsyncCall: isLoading,
@@ -232,9 +229,9 @@ class ShippingDetailsView extends HookConsumerWidget {
           ),
           leading: BackButton(
             onPressed: () async {
-              ref.read(_isLoadingProvider.statel10n.state = true;
-              await ref.read(cloudFunctionsProviderl10n.removeShippingFee(l10n.whenComplete(() {
-                ref.read(_isLoadingProvider.statel10n.state = false;
+              ref.read(_isLoadingProvider.state).state = true;
+              await ref.read(cloudFunctionsProvider).removeShippingFee().whenComplete(() {
+                ref.read(_isLoadingProvider.state).state = false;
               });
               onBackButton();
             },
@@ -305,9 +302,9 @@ class DeliveryOptionTile extends HookConsumerWidget {
               value: orderType.deliveryOption,
               groupValue: selectedDeliveryOption,
               onChanged: (value) {
-                ref.read(deliveryOptionsStateProvider.notifierl10n.selectDeliveryOption(value);
-                ref.read(cloudFunctionsProviderl10n.setShippingFee(value);
-                final deniedReasons = ref.read(deliveryOptionsStateProvider.notifierl10n.validate(user, value);
+                ref.read(deliveryOptionsStateProvider.notifier).selectDeliveryOption(value);
+                ref.read(cloudFunctionsProvider).setShippingFee(value);
+                final deniedReasons = ref.read(deliveryOptionsStateProvider.notifier).validate(user, value);
                 onUserDenied(context, deniedReasons);
               },
             ),

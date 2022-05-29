@@ -39,8 +39,6 @@ final _searchBarFocusNode = FocusNode();
 
 final _searchEditingCtrlProvider = Provider.autoDispose<TextEditingController>((_) => TextEditingController());
 
-final _logger = Logger((ProductsSearchPagel10n.toString());
-
 class ProductsSearchPage extends HookConsumerWidget {
   const ProductsSearchPage({Key? key}) : super(key: key);
 

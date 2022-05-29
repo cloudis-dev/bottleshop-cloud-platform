@@ -12,12 +12,12 @@
 
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/utils/firestore_json_parsing_util.dart';
 import 'package:delivery/src/features/products/data/models/filter_query.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
-import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 enum SearchMatchField { name }

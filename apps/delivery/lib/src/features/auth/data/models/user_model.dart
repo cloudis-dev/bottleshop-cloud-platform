@@ -14,7 +14,6 @@ import 'package:delivery/src/features/auth/data/models/address_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:delivery/l10n/l10n.dart';
 
 @immutable
 class UserModel extends Equatable {

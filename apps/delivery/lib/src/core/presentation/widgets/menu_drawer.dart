@@ -16,7 +16,6 @@ import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
 import 'package:delivery/src/core/presentation/widgets/side_menu_header.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/views/terms_conditions_view.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

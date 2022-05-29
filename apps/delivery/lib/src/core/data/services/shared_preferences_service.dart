@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/preferences.dart';
 import 'package:delivery/src/core/utils/language_utils.dart';
@@ -17,7 +18,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:delivery/l10n/l10n.dart';
 
 LanguageMode locale2Language(Locale locale) {
   switch (locale.languageCode) {

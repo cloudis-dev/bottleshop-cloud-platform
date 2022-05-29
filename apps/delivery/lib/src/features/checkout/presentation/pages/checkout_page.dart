@@ -81,7 +81,8 @@ class CheckoutPage extends HookConsumerWidget with UiLoggy {
                   deliveryType: paymentData.deliveryType,
                   orderNote: paymentData.orderNote,
                 );
-                final sessionId = await ref.read(cloudFunctionsProvider).createStripePriceIds(sessionRequest);
+                loggy.debug('Session created: $sessionRequest');
+
 
               }
             } else {

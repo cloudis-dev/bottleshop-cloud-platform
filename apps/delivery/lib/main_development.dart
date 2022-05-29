@@ -14,19 +14,18 @@ import 'package:delivery/src/features/auth/presentation/providers/auth_providers
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// ignore: unused_import
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter_loggy/flutter_loggy.dart';
-import 'package:loggy/loggy.dart';
-
-// ignore: unused_import
-import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

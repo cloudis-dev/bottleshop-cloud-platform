@@ -10,11 +10,11 @@
 //
 //
 
-import 'package:delivery/src/core/data/models/country_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/features/filter/data/models/filter_aggregations_model.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum FilterType {
@@ -23,31 +23,24 @@ enum FilterType {
 }
 
 /// This uses autodispose to discard unapplied changes.
-final filterModelProvider = StateProvider.autoDispose
-    .family<FilterModel, FilterType>((ref, filterType) {
-  return ref.watch(appliedFilterProvider(filterTypel10n.statel10n.state;
+final filterModelProvider = StateProvider.autoDispose.family<FilterModel, FilterType>((ref, filterType) {
+  return ref.watch(appliedFilterProvider(filterType));
 });
 
-final appliedFilterProvider = StateProvider.family<FilterModel, FilterType>(
-    (_, __) => FilterModel.empty());
+final appliedFilterProvider = StateProvider.family<FilterModel, FilterType>((_, __) => FilterModel.empty());
 
-final filterAggregationsProvider =
-    StreamProvider.autoDispose<FilterAggregationsModel>(
+final filterAggregationsProvider = StreamProvider.autoDispose<FilterAggregationsModel>(
   (ref) {
-    Future<FilterAggregationsModel> _parseFilterAggregations(
-        Map<String, dynamic> data) async {
+    Future<FilterAggregationsModel> _parseFilterAggregations(Map<String, dynamic> data) async {
       final List<DocumentReference> countriesRefs =
-          data[FilterAggregationsModel.usedCountriesFieldName]
-              .cast<DocumentReference>();
+          data[FilterAggregationsModel.usedCountriesFieldName].cast<DocumentReference>();
 
       final countryDocs = await Future.wait(
         countriesRefs.map((e) async => e.get()),
       );
 
-      data[FilterAggregationsModel.usedCountriesFieldName] = countryDocs
-          .map((e) =>
-              CountryModel.fromMap(e.id, e.data() as Map<String, dynamic>))
-          .toList();
+      data[FilterAggregationsModel.usedCountriesFieldName] =
+          countryDocs.map((e) => CountryModel.fromMap(e.id, e.data() as Map<String, dynamic>)).toList();
       return FilterAggregationsModel.fromMap(data);
     }
 

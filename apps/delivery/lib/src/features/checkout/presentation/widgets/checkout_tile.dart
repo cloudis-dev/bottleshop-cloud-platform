@@ -12,16 +12,16 @@
 
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/presentation/widgets/adaptive_alert_dialog.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
-import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +29,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-final _proceedButtonStateProvider = StateProvider.autoDispose.family<ButtonState, String>((ref, _) => ButtonState.idle);
+final _proceedButtonStateProvider = StateProvider.family<ButtonState, String>((ref, _) => ButtonState.idle);
 
-final _promoButtonStateProvider = StateProvider.autoDispose<ButtonState>((ref) => ButtonState.idle);
+final _promoButtonStateProvider = StateProvider<ButtonState>((ref) => ButtonState.idle);
 
 class CheckoutTile extends HookConsumerWidget {
   final String actionLabel;
@@ -53,7 +53,7 @@ class CheckoutTile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final promoCodeTextController = useTextEditingController();
 
-    return ref.watch(cartProviderl10n.when(
+    return ref.watch(cartProvider).when(
           data: (cart) {
             return Positioned(
               bottom: MediaQuery.of(context).padding.bottom,
@@ -72,7 +72,7 @@ class CheckoutTile extends HookConsumerWidget {
                           blurRadius: 5.0)
                     ]),
                 child: SizedBox(
-                  width: AppConfig(context.l10n.appWidth(90),
+                  width: AppConfig(context).appWidth(90),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -134,7 +134,7 @@ class CheckoutTile extends HookConsumerWidget {
                                   try {
                                     if (cart.promoCode != null) {
                                       ref.read(_promoButtonStateProvider.state);
-                                      var res = await ref.read(cloudFunctionsProviderl10n.removePromoCode();
+                                      var res = await ref.read(cloudFunctionsProvider).removePromoCode();
                                       if (res) {
                                         showSimpleNotification(
                                           Text(context.l10n.promoCodeRemoved),
@@ -145,7 +145,7 @@ class CheckoutTile extends HookConsumerWidget {
                                       }
                                     } else {
                                       var promo = await showAddPromoDialog(context, promoCodeTextController);
-                                      ref.read(_promoButtonStateProvider.statel10n.state = ButtonState.loading;
+                                      ref.read(_promoButtonStateProvider.state).state = ButtonState.loading;
                                       if (promo != null || promo!.isNotEmpty) {
                                         final res = await ref.read(cartRepositoryProvider)!.promoApplied(promo);
                                         if (res) {
@@ -166,11 +166,11 @@ class CheckoutTile extends HookConsumerWidget {
                                       }
                                     }
                                   } finally {
-                                    ref.read(_promoButtonStateProvider.statel10n.state = ButtonState.idle;
+                                    ref.read(_promoButtonStateProvider.state).state = ButtonState.idle;
                                   }
                                 },
-                                minWidth: AppConfig(context.l10n.appWidth(20),
-                                maxWidth: AppConfig(context.l10n.appWidth(20),
+                                minWidth: AppConfig(context).appWidth(20),
+                                maxWidth: AppConfig(context).appWidth(20),
                                 state: ref.watch(
                                   _promoButtonStateProvider.select<ButtonState>((value) => value),
                                 ),
@@ -215,7 +215,7 @@ class CheckoutTile extends HookConsumerWidget {
                                     minWidth: double.infinity,
                                     onPressed: actionCallback == null ? null : () => onPrimaryButtonClick(ref, context),
                                     state: ref.watch(
-                                        _proceedButtonStateProvider(actionLabell10n.select<ButtonState>((value) => value)),
+                                        _proceedButtonStateProvider(actionLabel).select<ButtonState>((value) => value)),
                                     stateWidgets: {
                                       ButtonState.idle: Text(
                                         actionLabel,
@@ -258,9 +258,7 @@ class CheckoutTile extends HookConsumerWidget {
 
   void onPrimaryButtonClick(WidgetRef ref, BuildContext context) async {
     try {
-      ref.read(_proceedButtonStateProvider(actionLabell10n.statel10n.state = ButtonState.loading;
-
-      final res = await ref.read(cloudFunctionsProviderl10n.validateCart();
+      final res = await ref.read(cloudFunctionsProvider).validateCart();
       switch (res) {
         case CartStatus.ok:
           actionCallback!();
@@ -291,7 +289,7 @@ class CheckoutTile extends HookConsumerWidget {
           break;
       }
     } finally {
-      ref.read(_proceedButtonStateProvider(actionLabell10n.statel10n.state = ButtonState.idle;
+      ref.read(_proceedButtonStateProvider(actionLabel).notifier).state = ButtonState.idle;
     }
   }
 
@@ -331,9 +329,9 @@ class CheckoutTile extends HookConsumerWidget {
                       onPressed: () => Navigator.pop(context, null),
                     ),
                     CupertinoDialogAction(
-                      child: Text(context.l10n.saveButton),
                       onPressed: () => Navigator.pop(context, controller.text),
                       isDefaultAction: true,
+                      child: Text(context.l10n.saveButton),
                     ),
                   ]
                 : [

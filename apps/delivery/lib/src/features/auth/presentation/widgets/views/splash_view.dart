@@ -10,9 +10,9 @@
 //
 //
 
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:delivery/src/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 

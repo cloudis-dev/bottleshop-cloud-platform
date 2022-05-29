@@ -12,9 +12,9 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/core/data/models/preferences.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
@@ -23,7 +23,6 @@ import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:delivery/src/features/auth/data/models/device_model.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';

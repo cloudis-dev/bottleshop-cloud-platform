@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/widgets/dropdown.dart';
 import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
@@ -27,7 +28,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:delivery/l10n/l10n.dart';
 
 class AccountPageView extends HookConsumerWidget {
   const AccountPageView({Key? key}) : super(key: key);
