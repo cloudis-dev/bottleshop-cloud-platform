@@ -18,7 +18,7 @@ import 'package:delivery/src/core/presentation/widgets/adaptive_alert_dialog.dar
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:dartz/dartz.dart';

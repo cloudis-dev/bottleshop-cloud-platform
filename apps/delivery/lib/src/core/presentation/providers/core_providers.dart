@@ -1,17 +1,15 @@
-import 'package:delivery/l10n/)dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/services/push_notification_service.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/data/services/storage_service.dart';
 import 'package:delivery/src/core/data/services/stripe_service.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final pushNotificationsProvider = Provider<PushNotificationService>((ref) => PushNotificationService(ref));
-
-class PushNotificationService {}
 
 final stripeProvider = Provider<StripeService>((ref) => StripeService(ref.read));
 
@@ -38,14 +36,14 @@ final currentLocaleProvider = Provider<Locale>((ref) {
   final mode = ref.watch(sharedPreferencesServiceProvider.select((value) => value.getAppLanguage()));
   final systemLanguage = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
   if (!AppLocalizations.supportedLocales.map((e) => e.languageCode).toList().contains(mode.name)) {
-    return S.delegate.supportedLocales.firstWhere(
+    return AppLocalizations.supportedLocales.firstWhere(
       (element) => element.languageCode == systemLanguage,
-      orElse: () => S.delegate.supportedLocales.first,
+      orElse: () => AppLocalizations.supportedLocales.first,
     );
   }
-  return S.delegate.supportedLocales.firstWhere(
+  return AppLocalizations.supportedLocales.firstWhere(
     (element) => mode.toString().contains(element.languageCode),
-    orElse: () => S.delegate.supportedLocales.first,
+    orElse: () => AppLocalizations.supportedLocales.first,
   );
 });
 

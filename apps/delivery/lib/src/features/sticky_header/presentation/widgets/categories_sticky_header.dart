@@ -15,11 +15,9 @@ import 'package:delivery/src/features/categories/presentation/providers/provider
 import 'package:delivery/src/features/products/presentation/widgets/category_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
-final _logger = Logger((CategoriesStickyHeaderl10n.toString());
-
-class CategoriesStickyHeader extends HookConsumerWidget {
+class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy{
   const CategoriesStickyHeader({
     Key? key,
   }) : super(key: key);
@@ -33,7 +31,7 @@ class CategoriesStickyHeader extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(mainCategoriesWithoutExtraProvider.statel10n.state;
+    final categories = ref.watch(mainCategoriesWithoutExtraProvider.state).state;
 
     return SizedBox(
       height: 65,
@@ -53,7 +51,7 @@ class CategoriesStickyHeader extends HookConsumerWidget {
                 ),
                 itemCount: (categories.length) + 1,
                 itemBuilder: (context, index) {
-                  log.info(('categories: ${categories.length} index: $index');
+                  loggy.info(('categories: ${categories.length} index: $index');
                   if (index == (categories.length)) {
                     return const SizedBox(
                       width: 12,

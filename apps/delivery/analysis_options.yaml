@@ -4,16 +4,16 @@ analyzer:
   errors:
     missing_required_param: warning
     missing_return: warning
-    todo: ignore
-    invalid_annotation_target: ignore
-  exclude:
-    - '**/*.g.dart'
-    - '**/*.freezed.dart'
-    - '**/generated_plugin*.dart'
-    - 'lib/generated/**'
-    - 'lib/l10n/**'
-    - 'build/**'
-    - 'assets/**'
+
+exclude:
+  - '**/*.g.dart'
+  - '**/*.freezed.dart'
+  - '**/**/*generated_plugin*.dart'
+  - 'lib/generated/**'
+  - 'lib/l10n/**'
+  - 'build/**'
+  - 'assets/**'
+
 linter:
   rules:
     prefer_single_quotes: true
@@ -23,3 +23,4 @@ linter:
     prefer_relative_imports: false
     no_default_cases: false
     prefer_mixin: false
+    library_private_types_in_public: false

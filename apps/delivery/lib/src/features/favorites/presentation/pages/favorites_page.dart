@@ -22,14 +22,12 @@ import 'package:delivery/src/features/home/presentation/widgets/home_page_templa
 import 'package:delivery/src/features/home/presentation/widgets/menu_button.dart';
 import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
-
-class FavoritesPage extends HookConsumerWidget with UiLoggy{
+class FavoritesPage extends HookConsumerWidget with UiLoggy {
   const FavoritesPage({Key? key}) : super(key: key);
 
   @override
@@ -82,14 +80,14 @@ class _SearchIconButton extends HookConsumerWidget {
   }
 }
 
-class _Body extends HookConsumerWidget {
+class _Body extends HookConsumerWidget with UiLoggy {
   final GlobalKey<AuthPopupButtonState>? authButtonKey;
 
   const _Body(this.authButtonKey, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(wishListStreamProviderl10n.when(
+    return ref.watch(wishListStreamProvider).when(
           data: (favorites) {
             if (favorites?.isNotEmpty ?? false) {
               return _FavoritesListLayout(favorites: favorites!);
@@ -125,7 +123,7 @@ class _Body extends HookConsumerWidget {
   }
 }
 
-class _FavoritesListLayout extends HookConsumerWidget {
+class _FavoritesListLayout extends HookConsumerWidget with UiLoggy {
   final List<ProductModel> favorites;
 
   const _FavoritesListLayout({
@@ -135,7 +133,7 @@ class _FavoritesListLayout extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _messageRemoved = context.l10n.itemRemovedFromWishList;
+    final messageRemoved = context.l10n.itemRemovedFromWishList;
 
     return ListView.builder(
       physics: const BouncingScrollPhysics(
@@ -150,9 +148,9 @@ class _FavoritesListLayout extends HookConsumerWidget {
           product: favorites.elementAt(index),
           onDismissed: (direction) {
             loggy.info('dismissing direction: ${direction.toString()}');
-            ref.read(wishListProvider)!.remove(favorites.elementAt(indexl10n.uniqueIdl10n.then(
+            ref.read(wishListProvider)!.remove(favorites.elementAt(index).uniqueId).then(
                   (value) => showSimpleNotification(
-                    Text(_messageRemoved),
+                    Text(messageRemoved),
                     position: NotificationPosition.bottom,
                     duration: const Duration(seconds: 1),
                     slideDismissDirection: DismissDirection.horizontal,

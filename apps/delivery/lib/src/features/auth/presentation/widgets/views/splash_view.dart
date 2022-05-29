@@ -12,7 +12,7 @@
 
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
@@ -22,7 +22,7 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = AppConfig(context.l10n.appOrientation();
+    final orientation = AppConfig(context).appOrientation();
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(

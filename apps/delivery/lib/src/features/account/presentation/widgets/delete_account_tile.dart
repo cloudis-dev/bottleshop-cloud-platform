@@ -1,4 +1,5 @@
-
+import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -59,7 +60,7 @@ class _DeleteConfirmationDialog extends ConsumerWidget {
     bool result;
 
     try {
-      result = await ref.read(cloudFunctionsProviderl10n.deleteAccount();
+      result = await ref.read(cloudFunctionsProvider).deleteAccount();
     } catch (err) {
       result = false;
     }
@@ -71,7 +72,7 @@ class _DeleteConfirmationDialog extends ConsumerWidget {
         context: parentContext,
       );*/
     } else {
-      await ref.read(userRepositoryProviderl10n.signOut();
+      await ref.read(userRepositoryProvider).signOut();
       /*showSimpleNotification(
         const Text('Successfully deleted your account'),
         slideDismissDirection: DismissDirection.horizontal,

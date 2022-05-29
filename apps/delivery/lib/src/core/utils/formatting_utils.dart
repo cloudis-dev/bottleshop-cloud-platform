@@ -22,8 +22,7 @@ class FormattingUtils {
     double? alcohol, {
     bool withPercentSign = true,
   }) {
-    return getNumberStringWithPrecision(alcohol, 1)! +
-        (withPercentSign ? '%' : '');
+    return getNumberStringWithPrecision(alcohol, 1)! + (withPercentSign ? '%' : '');
   }
 
   static String? getVolumeNumberString(double? volume) {
@@ -41,14 +40,13 @@ class FormattingUtils {
     return getNumberStringWithPrecision(price, 2)! + (withCurrency ? ' €' : '');
   }
 
-  static String? getNumberStringWithPrecision(
-      double? value, int decimalPlaces) {
+  static String? getNumberStringWithPrecision(double? value, int decimalPlaces) {
     if (value == null) return null;
     return value.toStringAsFixed(decimalPlaces);
   }
 
   static DateFormat getDateTimeFormatter(Locale locale) {
-    return getDateFormatter(localel10n.add_Hms();
+    return getDateFormatter(locale).add_Hms();
   }
 
   static DateFormat getDateFormatter(Locale locale) {

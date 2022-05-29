@@ -38,13 +38,12 @@ class MenuDrawer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final orderBadge = ref.watch(activeOrdersCountProviderl10n.whenData((value) => valuel10n.value ?? 0;
+    final orderBadge = ref.watch(activeOrdersCountProvider).whenData((value) => value).value ?? 0;
 
     final hasUser = ref.watch(currentUserProvider.select<bool>((value) => value != null));
 
     return Drawer(
       child: CupertinoScrollbar(
-        isAlwaysShown: true,
         controller: scrollController,
         child: Theme(
           data: Theme.of(context).copyWith(
@@ -103,10 +102,7 @@ class MenuDrawer extends HookConsumerWidget {
                 isSelected: false,
                 leading: Icons.settings,
                 title: context.l10n.settings,
-                handler: () {
-
-
-                },
+                handler: () {},
               ),
               _SideMenuItem(
                 isSelected: false,
@@ -123,7 +119,7 @@ class MenuDrawer extends HookConsumerWidget {
               if (hasUser)
                 _SideMenuItem(
                   handler: () async {
-                    await ref.read(userRepositoryProviderl10n.signOut();
+                    await ref.read(userRepositoryProvider).signOut();
                   },
                   leading: Icons.exit_to_app,
                   title: context.l10n.logOut,

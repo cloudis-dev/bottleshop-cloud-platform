@@ -22,7 +22,7 @@ class ProfileAvatar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (imageUrl != null && Uri.parse(imageUrl!l10n.isAbsolute) {
+    if (imageUrl != null) {
       return OctoImage(
         image: NetworkImage(imageUrl!),
         fit: BoxFit.cover,

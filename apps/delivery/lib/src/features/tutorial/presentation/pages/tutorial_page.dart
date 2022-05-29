@@ -12,12 +12,15 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/features/tutorial/data/models/tutorial_model.dart';
 import 'package:delivery/src/features/tutorial/presentation/providers/tutorial_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TutorialPage extends HookConsumerWidget {
+  var items;
+
   const TutorialPage({Key? key}) : super(key: key);
 
   @override
@@ -36,7 +39,7 @@ class TutorialPage extends HookConsumerWidget {
               height: MediaQuery.of(context).size.height,
               disableCenter: true,
               viewportFraction: 1.0,
-              onPageChanged: ref.read(tutorialModelProvider.notifierl10n.pageChanged,
+              onPageChanged: ref.read(tutorialModelProvider.notifier).pageChanged,
             ),
             items: TutorialAssets.assets
                 .map(
@@ -80,7 +83,7 @@ class TutorialPage extends HookConsumerWidget {
                 )
                 .toList(),
           ),
-          if (onBoardingViewModel < TutorialAssets.assets.length - 1)
+         items: [],if (onBoardingViewModel < TutorialAssets.assets.length - 1),
             Positioned(
               right: 20,
               top: 50,

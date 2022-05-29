@@ -1,5 +1,5 @@
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/home/presentation/widgets/cart_appbar_button.dart';

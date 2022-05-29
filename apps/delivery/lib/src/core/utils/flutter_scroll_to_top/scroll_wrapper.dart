@@ -129,10 +129,11 @@ class _ScrollWrapperState extends State<ScrollWrapper> {
                             child: Material(
                               type: MaterialType.circle,
                               color: promptTheme.color!,
+                            ),
                           ),
                         ),
                 ),
-              ),
+              )
             ],
           ),
         ),

@@ -13,7 +13,7 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/features/home/data/models/slider_model.dart';
 import 'package:delivery/src/features/home/presentation/providers/providers.dart';
 import 'package:carousel_slider/carousel_slider.dart';

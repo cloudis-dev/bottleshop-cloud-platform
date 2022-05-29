@@ -27,7 +27,8 @@ class TermsAndConditionsTextContent extends StatelessWidget {
               decoration: TextDecoration.underline,
               decorationColor: Colors.blue,
             ),
-            recognizer: TapGestureRecognizer(l10n..onTap = onNavigateToTermsPage,
+            recognizer: null
+          //TapGestureRecognizer.onTap = onNavigateToTermsPage,
           ),
           TextSpan(
             text: context.l10n.termsPopUpCompany,

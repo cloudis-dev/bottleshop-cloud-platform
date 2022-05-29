@@ -36,6 +36,21 @@ final currentUserProvider = Provider<UserModel?>((ref) {
   return user;
 });
 
+final currentUserAsStream = StreamProvider.autoDispose<UserModel?>(
+  (ref) {
+    var controller = StreamController<UserModel?>();
+    var user = ref.watch(userRepositoryProvider).user;
+    controller.add(user);
+
+    ref.onDispose(() async {
+      await controller.close();
+    });
+
+    return controller.stream.distinct().asBroadcastStream();
+  },
+  name: 'currentUserAsStream',
+);
+
 final authStatusProvider = Provider<AuthStatus>((ref) {
   final authState = ref.watch(userRepositoryProvider.select((value) => value.status));
   return authState;
@@ -100,7 +115,7 @@ final isAppVersionCompatible = StreamProvider.autoDispose<bool>(
 );
 
 final appDownloadRedirectUrlProvider = FutureProvider.autoDispose<String>(
-  (_) {
+  (_) async {
     return FirebaseFirestore.instance
         .collection(FirestoreCollections.versionConstraintsCollection)
         .doc('main_app')

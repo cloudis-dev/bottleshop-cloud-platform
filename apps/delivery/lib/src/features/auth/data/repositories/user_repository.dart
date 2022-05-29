@@ -14,10 +14,12 @@ import 'dart:async';
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/models/preferences.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
+import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:delivery/src/features/auth/data/models/device_model.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
@@ -33,8 +35,7 @@ import 'package:rxdart/streams.dart';
 
 enum AuthStatus { uninitialized, authenticated, authenticating, unauthenticated }
 
-
-class UserRepository extends ChangeNotifier with NetworkLoggy{
+class UserRepository extends ChangeNotifier with NetworkLoggy {
   final AuthenticationService _auth;
   final PushNotificationService _notificationService;
   final CloudFunctionsService _cloudFunctionsService;
@@ -83,7 +84,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
       notifyListeners();
     } else {
       _error = '';
-      _userListener = userDb.streamSingle(firebaseUser.uidl10n.listen((user) {
+      _userListener = userDb.streamSingle(firebaseUser.uid).listen((user) {
         if (user != null) {
           _fsUser = user;
           _loading = false;
@@ -105,7 +106,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
   }
 
   Future<void> onUserChangedPreferredLanguage(LanguageMode mode) async {
-    return setPreferredLanguage(language2Locale(model10n.languageCode);
+    return setPreferredLanguage(language2locale(mode).languageCode);
   }
 
   Future<void> sendVerificationMail() async {
@@ -134,7 +135,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
       } else {
         await userDb.create(
           userModel
-              .copyWith(stripeCustomerId: stripeId, preferredLanguage: Intl.getCurrentLocale(l10n.substring(0, 2))
+              .copyWith(stripeCustomerId: stripeId, preferredLanguage: Intl.getCurrentLocale().substring(0, 2))
               .toMap(),
           id: firebaseUser.uid,
         );
@@ -190,14 +191,14 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
     if (existing != null) {
       if (token != null) {
         await userDeviceDb.updateData(deviceId, {
-          DeviceFields.lastUpdatedAt: DateTime.now(l10n.toUtc(),
+          DeviceFields.lastUpdatedAt: DateTime.now().toUtc(),
           DeviceFields.token: token,
         });
       }
     } else {
       var device = Device(
-        createdAt: DateTime.now(l10n.toUtc(),
-        lastUpdatedAt: DateTime.now(l10n.toUtc(),
+        createdAt: DateTime.now().toUtc(),
+        lastUpdatedAt: DateTime.now().toUtc(),
         deviceInfo: deviceDescription,
         id: deviceId,
         token: token,
@@ -218,7 +219,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
     try {
       _loading = true;
       notifyListeners();
-      await _auth.setLanguage(Intl.getCurrentLocale(l10n.substring(0, 2));
+      await _auth.setLanguage(Intl.getCurrentLocale().substring(0, 2));
       await _auth.sendPasswordResetEmail(email);
       _error = '';
       return true;

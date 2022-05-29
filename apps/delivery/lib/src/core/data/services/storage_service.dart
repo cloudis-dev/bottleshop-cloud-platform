@@ -24,7 +24,7 @@ class StorageService with NetworkLoggy {
       downloadURL = await _firebaseStorage.ref(filePath).getDownloadURL();
       return downloadURL;
     } catch (e) {
-      _logger.warning('filepath $filePath does not exist - reverting to default');
+      loggy.warning('filepath $filePath does not exist - reverting to default');
       return null;
     }
   }

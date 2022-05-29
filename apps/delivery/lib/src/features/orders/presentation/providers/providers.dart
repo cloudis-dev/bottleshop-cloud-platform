@@ -26,13 +26,13 @@ final ordersProvider = ChangeNotifierProvider.autoDispose<OrdersStateNotifier>(
 
     return OrdersStateNotifier(
       (lastDoc) => orderRepo.getUserOrdersStream(lastDoc, currentUser),
-    l10n..requestData();
+    ).requestData();
   },
 );
 
 final activeOrdersCountProvider = StreamProvider.autoDispose<int>((ref) {
   final currentUser = ref.watch(currentUserProvider);
-  return ref.watch(orderRepositoryProviderl10n.activeOrdersCount(currentUser);
+  return ref.watch(orderRepositoryProvider)l10n.activeOrdersCount(currentUser);
 });
 
 final orderStreamProvider =

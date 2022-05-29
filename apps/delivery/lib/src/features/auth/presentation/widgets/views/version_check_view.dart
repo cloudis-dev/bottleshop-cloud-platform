@@ -20,7 +20,7 @@ class VersionCheckView extends HookConsumerWidget with UiLoggy{
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: ref.watch(isAppVersionCompatiblel10n.when(
+      body: ref.watch(isAppVersionCompatible).when(
             data: (isCompatible) => isCompatible ? checkSuccessWidgetBuilder(context) : const _WrongAppVersionView(),
             loading: () => const SplashView(),
             error: (err, stack) {
@@ -32,7 +32,7 @@ class VersionCheckView extends HookConsumerWidget with UiLoggy{
   }
 }
 
-class _WrongAppVersionView extends HookConsumerWidget {
+class _WrongAppVersionView extends HookConsumerWidget with UiLoggy{
   const _WrongAppVersionView({Key? key}) : super(key: key);
 
   @override
@@ -53,7 +53,7 @@ class _WrongAppVersionView extends HookConsumerWidget {
           const SizedBox(
             height: 32,
           ),
-          ref.watch(appDownloadRedirectUrlProviderl10n.when(
+          ref.watch(appDownloadRedirectUrlProvider).when(
                 data: (url) => SizedBox(
                   height: 52,
                   child: ElevatedButton(

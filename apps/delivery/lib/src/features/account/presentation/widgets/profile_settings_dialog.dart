@@ -51,10 +51,10 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
                 formatter: FormattingUtils.getDateFormatter(currentLocale),
               );
             },
+      style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
       child: Text(
         context.l10n.edit,
       ),
-      style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
     );
   }
 
@@ -91,23 +91,23 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
               },
             ),
             TextButton(
-              child: Text(context.l10n.save),
               style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
               onPressed: () {
                 var isValid = _formKey.currentState!.validate();
                 if (isValid) {
                   _formKey.currentState!.save();
                   userDb.updateData(user.uid, profileData!);
-                  showSimpleNotification(
-                    Text(context.l10n.profileUpdated),
-                    position: NotificationPosition.top,
-                    duration: const Duration(seconds: 2),
-                    slideDismissDirection: DismissDirection.horizontal,
-                    context: context,
-                  );
-                  Navigator.of(context).pop();
+                  // showSimpleNotification(
+                  //   Text(context.l10n.profileUpdated),
+                  //   position: NotificationPosition.top,
+                  //   duration: const Duration(seconds: 2),
+                  //   slideDismissDirection: DismissDirection.horizontal,
+                  //   context: context,
+                  // );
+                  // Navigator.of(context).pop();
                 }
               },
+              child: Text(context.l10n.save),
             ),
           ],
         );

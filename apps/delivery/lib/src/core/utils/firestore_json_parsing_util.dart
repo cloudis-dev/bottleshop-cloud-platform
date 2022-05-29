@@ -122,7 +122,7 @@ class FirestoreJsonParsingUtil {
       (previousValue, element) => Tuple2(
         previousValue.value1 + element,
         previousValue.value2
-            .followedBy([_parseCategories(docs.skip(previousValue.value).take(element).toList())!]).toList(),
+            .followedBy([_parseCategories(docs.skip(previousValue.value1).take(element).toList())!]).toList(),
       ),
     );
 

@@ -15,7 +15,6 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
-import 'package:bottleshop_delivery_flavors/l10n/l10n.dart';
 
 void main() async {
   await runZonedGuarded<Future<void>>(

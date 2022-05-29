@@ -25,7 +25,7 @@ class CartContentService extends DatabaseService<CartRecord> {
         );
 
   Stream<List<CartItemModel>> getCartItemsStream() {
-    return streamList(l10n.asyncMap(
+    return streamList().asyncMap(
       (event) async {
         final list = <CartItemModel>[];
         for (final item in event) {
@@ -46,7 +46,7 @@ class CartContentService extends DatabaseService<CartRecord> {
   }
 
   Future<List<CartItemModel>> getCartItems() async {
-    return getQueryList(l10n.then((event) async {
+    return getQueryList().then((event) async {
       final list = <CartItemModel>[];
       for (var item in event) {
         var data = await item.productRef.get();

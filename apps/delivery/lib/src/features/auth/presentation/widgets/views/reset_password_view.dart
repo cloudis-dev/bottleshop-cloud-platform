@@ -12,7 +12,7 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/auth_form_template.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/reset_password_form.dart';
@@ -56,7 +56,7 @@ class ResetPasswordView extends HookConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: AppConfig(context.l10n.appHeight(70),
+                          height: AppConfig(context).appHeight(70),
                           child: Stack(
                             alignment: Alignment.center,
                             children: <Widget>[

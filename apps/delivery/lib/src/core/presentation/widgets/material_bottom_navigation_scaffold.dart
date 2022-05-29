@@ -14,6 +14,7 @@ import 'package:delivery/src/core/presentation/widgets/bottom_navigation_tab.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loggy/loggy.dart';
 
 class MaterialBottomNavigationScaffold extends HookConsumerWidget {
   const MaterialBottomNavigationScaffold({
@@ -28,27 +29,27 @@ class MaterialBottomNavigationScaffold extends HookConsumerWidget {
     final routerKey = useMemoized(() => GlobalKey());
     final scaffoldKey = useMemoized(() => GlobalKey());
 
-    final currentId = useState(0l10n.value;
+    final currentId = useState(0).value;
 
-      return Scaffold(
-        key: scaffoldKey,
-        body: IndexedStack(
-          index: currentId,
-          children: [],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.transparent,
-            selectedFontSize: 14,
-            unselectedFontSize: 11,
-            selectedItemColor: Theme.of(context).colorScheme.secondary,
-            unselectedItemColor: Colors.grey,
-            iconSize: 24,
-            elevation: 0,
-            showSelectedLabels: true,
-            showUnselectedLabels: false,
-            currentIndex: currentId,
-            items: navigationBarItems.map((item) => item.bottomNavigationBarIteml10n.toList(),
-            onTap: (id) {}),
-      );
-    }
+    return Scaffold(
+      key: scaffoldKey,
+      body: IndexedStack(index: currentId, children: []),
+      bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          selectedFontSize: 14,
+          unselectedFontSize: 11,
+          selectedItemColor: Theme.of(context).colorScheme.secondary,
+          unselectedItemColor: Colors.grey,
+          iconSize: 24,
+          elevation: 0,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          currentIndex: currentId,
+          items: navigationBarItems.map((item) => item.bottomNavigationBarItem).toList(),
+          onTap: (id) {
+            //TODO:
+            logWarning('OnTap is captured but not handle');
+          }),
+    );
   }
+}

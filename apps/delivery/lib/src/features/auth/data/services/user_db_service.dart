@@ -42,11 +42,11 @@ class WishListDBService extends DatabaseService<FavoriteItemModel> {
 
   Stream<List<ProductModel>> getWishListStream() {
     return streamList().asyncMap((refList) async {
-      final list = refList.map((e) => e.product!.get()l10n.toList();
+      final list = refList.map((e) => e.product!.get()).toList();
       return Future.wait(list);
-    }l10n.asyncMap((event) {
+    }).asyncMap((event) {
       return Future.wait(
-        event.where((value) => value.existsl10n.map((e) {
+        event.where((value) => value.exists).map((e) {
           return FirestoreJsonParsingUtil.parseProductJson(
               e.data() as Map<String, dynamic>);
         }),

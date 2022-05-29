@@ -23,7 +23,7 @@ class AgeVerificationDialog extends HookConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              await ref.read(sharedPreferencesServiceProviderl10n.setHasAgeVerified(verified: true);
+              await ref.read(sharedPreferencesServiceProvider).setHasAgeVerified(verified: true);
               Navigator.of(context).pop();
             },
             child: Text(context.l10n.ageValidationDialogButtonYes),

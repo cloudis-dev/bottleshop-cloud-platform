@@ -36,7 +36,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filter = ref.watch(appliedFilterProvider(filterTypel10n.statel10n.state;
+    final filter = ref.watch(appliedFilterProvider(filterType).state).state;
 
     return SizedBox(
       height: 52,
@@ -57,7 +57,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
               child: Ink(
                 child: IconButton(
                   onPressed: () {
-                    ref.read(appliedFilterProvider(filterTypel10n.statel10n.state = FilterModel.empty();
+                    ref.read(appliedFilterProvider(filterType.state) = FilterModel.empty();
                   },
                   icon: const Icon(
                     Icons.cancel,

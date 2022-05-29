@@ -12,7 +12,7 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/auth_form_template.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/sign_in_form.dart';
@@ -60,7 +60,7 @@ class SignInPage extends HookConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           SizedBox(
-                            height: AppConfig(context.l10n.appHeight(70),
+                            height: AppConfig(context).appHeight(70),
                             child: Stack(
                               alignment: Alignment.center,
                               children: <Widget>[
@@ -74,8 +74,8 @@ class SignInPage extends HookConsumerWidget {
                                     child: signInToggled
                                         ? SignInForm(authCallback: (result) {
                                             if (result == false) {
-                                              var error = ref.watch(userRepositoryProvider.notifierl10n.error ?? '';
-                                              ref.read(userRepositoryProviderl10n.handleFatalFailure();
+                                              var error = ref.watch(userRepositoryProvider.notifier).error ?? '';
+                                              ref.read(userRepositoryProvider).handleFatalFailure();
                                               showSimpleNotification(
                                                 Text(error.isNotEmpty ? error : 'Fatal error'),
                                                 position: NotificationPosition.bottom,
@@ -87,8 +87,8 @@ class SignInPage extends HookConsumerWidget {
                                           })
                                         : SignUpForm(authCallback: (result) {
                                             if (result == false) {
-                                              var error = ref.watch(userRepositoryProvider.notifierl10n.error ?? '';
-                                              ref.read(userRepositoryProviderl10n.handleFatalFailure();
+                                              var error = ref.watch(userRepositoryProvider.notifier).error ?? '';
+                                              ref.read(userRepositoryProvider).handleFatalFailure();
                                               showSimpleNotification(
                                                 Text(error.isNotEmpty ? error : 'Fatal error'),
                                                 position: NotificationPosition.bottom,
@@ -108,8 +108,8 @@ class SignInPage extends HookConsumerWidget {
                             signInToggled ? context.l10n.dontHaveAnAccount : context.l10n.account_already,
                           ),
                           TextButton(
-                            onPressed: () => ref.read(widgetToggleProvider.notifierl10n.state =
-                                !ref.read(widgetToggleProvider.notifierl10n.state,
+                            onPressed: () => ref.read(widgetToggleProvider.notifier).state =
+                                !ref.read(widgetToggleProvider.notifier).state,
                             child: Text(
                               !signInToggled ? context.l10n.sign_in : context.l10n.sign_up,
                             ),

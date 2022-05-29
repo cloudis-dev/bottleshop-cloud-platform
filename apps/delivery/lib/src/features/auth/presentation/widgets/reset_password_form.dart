@@ -31,7 +31,7 @@ class ResetPasswordForm extends HookConsumerWidget {
       autovalidateMode: AutovalidateMode.disabled,
       onChanged: () {
         if (emailFieldController.text.isNotEmpty) {
-          ref.read(formValidProvider.notifierl10n.state = _formKey.currentState!.validate();
+          ref.read(formValidProvider.notifier).state = _formKey.currentState!.validate();
         }
       },
       child: Column(

@@ -14,6 +14,7 @@ import 'package:delivery/src/features/auth/data/models/address_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:delivery/l10n/l10n.dart';
 
 @immutable
 class UserModel extends Equatable {
@@ -62,12 +63,9 @@ class UserModel extends Equatable {
       registrationDate: map[UserFields.registrationDate]?.toDate() as DateTime?,
       introSeen: map[UserFields.introSeen] as bool? ?? false,
       phoneNumber: map[UserFields.phoneNumber] as String?,
-      shippingAddress: map[UserFields.shippingAddress] != null
-          ? Address.fromMap(map[UserFields.shippingAddress])
-          : null,
-      billingAddress: map[UserFields.billingAddress] != null
-          ? Address.fromMap(map[UserFields.billingAddress])
-          : null,
+      shippingAddress:
+          map[UserFields.shippingAddress] != null ? Address.fromMap(map[UserFields.shippingAddress]) : null,
+      billingAddress: map[UserFields.billingAddress] != null ? Address.fromMap(map[UserFields.billingAddress]) : null,
       stripeCustomerId: map[UserFields.stripeCustomerId] as String?,
       isAnonymous: map[UserFields.anonymousUser] as bool? ?? false,
       isEmailVerified: map[UserFields.isEmailVerified] as bool? ?? false,
@@ -118,21 +116,15 @@ class UserModel extends Equatable {
         (avatar == null || identical(avatar, this.avatar)) &&
         (dayOfBirth == null || identical(dayOfBirth, this.dayOfBirth)) &&
         (lastLoggedIn == null || identical(lastLoggedIn, this.lastLoggedIn)) &&
-        (registrationDate == null ||
-            identical(registrationDate, this.registrationDate)) &&
+        (registrationDate == null || identical(registrationDate, this.registrationDate)) &&
         (introSeen == null || identical(introSeen, this.introSeen)) &&
         (phoneNumber == null || identical(phoneNumber, this.phoneNumber)) &&
-        (shippingAddress == null ||
-            identical(shippingAddress, this.shippingAddress)) &&
-        (billingAddress == null ||
-            identical(billingAddress, this.billingAddress)) &&
-        (stripeCustomerId == null ||
-            identical(stripeCustomerId, this.stripeCustomerId)) &&
+        (shippingAddress == null || identical(shippingAddress, this.shippingAddress)) &&
+        (billingAddress == null || identical(billingAddress, this.billingAddress)) &&
+        (stripeCustomerId == null || identical(stripeCustomerId, this.stripeCustomerId)) &&
         (isAnonymous == null || identical(isAnonymous, this.isAnonymous)) &&
-        (isEmailVerified == null ||
-            identical(isEmailVerified, this.isEmailVerified)) &&
-        (preferredLanguage == null ||
-            identical(preferredLanguage, this.preferredLanguage))) {
+        (isEmailVerified == null || identical(isEmailVerified, this.isEmailVerified)) &&
+        (preferredLanguage == null || identical(preferredLanguage, this.preferredLanguage))) {
       return this;
     }
 
@@ -172,17 +164,15 @@ class UserModel extends Equatable {
     } else {
       email = user.email;
     }
-    var isFb = user.providerData
-        .where((element) => element.providerId == 'facebook.com')
-        .isNotEmpty;
+    var isFb = user.providerData.where((element) => element.providerId == 'facebook.com').isNotEmpty;
 
     return UserModel._(
       uid: user.uid,
       email: email,
       name: user.displayName,
       avatar: user.photoURL,
-      registrationDate: DateTime.now(l10n.toUtc(),
-      lastLoggedIn: DateTime.now(l10n.toUtc(),
+      registrationDate: DateTime.now().toUtc(),
+      lastLoggedIn: DateTime.now().toUtc(),
       introSeen: false,
       isAnonymous: user.isAnonymous,
       isEmailVerified: isFb ? true : user.emailVerified,
@@ -240,8 +230,7 @@ class StripeCustomer {
   });
 
   factory StripeCustomer.fromUser(UserModel user) {
-    return StripeCustomer(
-        metadata: StripeMetadata(uid: user.uid), email: user.email);
+    return StripeCustomer(metadata: StripeMetadata(uid: user.uid), email: user.email);
   }
 
   Map<String, dynamic> toMap() {

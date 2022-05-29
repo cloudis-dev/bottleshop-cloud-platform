@@ -1,22 +1,13 @@
-// Copyright 2020 cloudis.dev
-//
-// info@cloudis.dev
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-//
-
+import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/widgets/checkbox_list_tile_formfield.dart';
+import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
-import 'package:delivery/src/features/account/presentation/widgets/checkbox_list_tile_formfield.dart';
 import 'package:delivery/src/features/auth/data/models/address_model.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -39,24 +30,34 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final profileData = useState(<String, dynamic>{});
-    final user = ref.watch(currentUserProvider);
-    return TextButton(
-      onPressed: user == null
-          ? null
-          : () async {
-              await showAddressDialog(
-                context: context,
-                controller: scrollController,
-                user: user,
-                profileData: profileData.value,
-              );
-            },
-      child: Text(
-        context.edit,
-      ),
-      style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
-    );
+    return ref.watch(currentUserAsStream).when(
+          data: (user) {
+            var profileData = <String, dynamic>{};
+            return TextButton(
+              onPressed: user == null
+                  ? null
+                  : () async {
+                      await showAddressDialog(
+                        context: context,
+                        controller: scrollController,
+                        user: user,
+                        profileData: profileData,
+                      );
+                    },
+              style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
+              child: Text(
+                context.l10n.edit,
+              ),
+            );
+          },
+          loading: () => const Loader(),
+          error: (err, stack) {
+            loggy.error('Failed to stream current user', err, stack);
+            return Center(
+              child: Text(context.l10n.error),
+            );
+          },
+        );
   }
 
   Future<void> showAddressDialog({
@@ -72,7 +73,6 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
           title: buildDialogTitle(context),
           content: CupertinoScrollbar(
             controller: controller,
-            isAlwaysShown: true,
             child: SingleChildScrollView(
               controller: controller,
               child: buildAddressForm(
@@ -86,11 +86,10 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
             TextButton(
               child: Text(context.l10n.cancelButton),
               onPressed: () {
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text(context.l10n.saveButton),
               onPressed: () {
                 var isValid = _formKey.currentState!.validate();
                 loggy.info('form valid: $isValid');
@@ -109,16 +108,12 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
                     userData['shipping_address'] = profileData;
                   }
                   userDb.updateData(user.uid, userData);
-                  /*showSimpleNotification(
-                    Text(context.l10n.profileUpdatedMsg),
-                    position: NotificationPosition.bottom,
-                    slideDismissDirection: DismissDirection.horizontal,
-                    context: context,
-                  );*/
-                  Navigator.of(context).pop();
+                  // TODO: Notify result go back
+
                 }
               },
               style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
+              child: Text(context.l10n.saveButton),
             ),
           ],
         );

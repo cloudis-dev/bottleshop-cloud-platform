@@ -12,7 +12,7 @@
 
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/presentation/widgets/drawer_state_acquirer.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/widgets/age_filter.dart';
 import 'package:delivery/src/features/filter/presentation/widgets/age_year_filter_toggle.dart';

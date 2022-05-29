@@ -98,6 +98,7 @@ class _Body extends HookConsumerWidget {
               children: <Widget>[
                 Expanded(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         user?.name ?? context.l10n.anonymousUser,
@@ -109,7 +110,6 @@ class _Body extends HookConsumerWidget {
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ],
-                    crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                 ),
                 SizedBox(

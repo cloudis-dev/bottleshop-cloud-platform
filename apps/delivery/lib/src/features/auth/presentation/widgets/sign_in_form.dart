@@ -39,9 +39,9 @@ class SignInForm extends HookConsumerWidget {
     final password = useTextEditingController();
     final showPassword = useState<bool>(false);
     final formValid = useState<bool>(true);
-    final termsAgreed = ref.watch(termsAcceptanceProvider.notifierl10n.termsAccepted;
+    final termsAgreed = ref.watch(termsAcceptanceProvider.notifier).termsAccepted;
     final isAppleAvailable = ref.watch(walletsAvailableProvider.select((value) => value.appleSignInAvailable));
-    final _formKey = useMemoized(() => GlobalKey<FormState>());
+    final formKey = useMemoized(() => GlobalKey<FormState>());
 
     return Material(
       color: backgroundColor,
@@ -49,12 +49,12 @@ class SignInForm extends HookConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Form(
-          key: _formKey,
+          key: formKey,
           autovalidateMode: AutovalidateMode.disabled,
           onChanged: () {
             if (email.text.isNotEmpty && password.text.isNotEmpty) {
-              WidgetsBinding.instance?.addPostFrameCallback((_) {
-                formValid.value = _formKey.currentState?.validate() ?? false;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                formValid.value = formKey.currentState?.validate() ?? false;
               });
             }
           },

@@ -53,8 +53,8 @@ class SignUpForm extends HookConsumerWidget {
           autovalidateMode: AutovalidateMode.disabled,
           onChanged: () {
             if (email.text.isNotEmpty && password.text.isNotEmpty && passwordRepeat.text.isNotEmpty) {
-              WidgetsBinding.instance?.addPostFrameCallback((_) {
-                ref.read(signUpFormValidProvider.notifierl10n.state = _formKey.currentState!.validate();
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ref.read(signUpFormValidProvider.notifier).state = _formKey.currentState!.validate();
               });
             }
           },
@@ -95,8 +95,8 @@ class SignUpForm extends HookConsumerWidget {
                   icon: Icon(showPassword.value ? Icons.visibility : Icons.visibility_off),
                 ),
                 controller: passwordRepeat,
-                validator: (val) => MatchValidator(errorText: context.l10n.passwordsDontMatch)
-                    .validateMatch(val!, password.value.text),
+                validator: (val) =>
+                    MatchValidator(errorText: context.l10n.passwordsDontMatch).validateMatch(val!, password.value.text),
                 obscureText: !showPassword.value,
                 maxLines: 1,
                 onSaved: (value) => password.text = value!,
@@ -108,7 +108,7 @@ class SignUpForm extends HookConsumerWidget {
                         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                           FocusManager.instance.primaryFocus!.unfocus();
                         }
-                        final result = await ref.read(userRepositoryProviderl10n.signUpWithEmailAndPassword(
+                        final result = await ref.read(userRepositoryProvider).signUpWithEmailAndPassword(
                               context,
                               email.text,
                               password.text,

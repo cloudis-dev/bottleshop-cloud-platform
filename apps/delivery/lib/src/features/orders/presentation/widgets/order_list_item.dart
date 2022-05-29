@@ -81,7 +81,7 @@ class OrderListItem extends HookConsumerWidget {
                                 Text('${context.l10n.itemsCount}:'),
                                 const SizedBox(),
                                 Text(
-                                  order.cartItems.map((e) => e.countl10n.fold(0, (dynamic acc, e) => acc + el10n.toString(),
+                                  order.cartItems.map((e) => e.count).fold(0, (dynamic acc, e) => acc + e).toString(),
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                               ]),
@@ -90,7 +90,7 @@ class OrderListItem extends HookConsumerWidget {
                                   Text('${context.l10n.created}:'),
                                   const SizedBox(),
                                   Text(
-                                    FormattingUtils.getDateFormatter(currentLocalel10n.format(order.createdAt),
+                                    FormattingUtils.getDateFormatter(currentLocale).format(order.createdAt),
                                     style: Theme.of(context).textTheme.caption,
                                   ),
                                 ],
@@ -100,7 +100,7 @@ class OrderListItem extends HookConsumerWidget {
                                   const SizedBox(),
                                   const SizedBox(),
                                   Text(
-                                    FormattingUtils.getTimeFormatter(currentLocalel10n.format(order.createdAt),
+                                    FormattingUtils.getTimeFormatter(currentLocale).format(order.createdAt),
                                     style: Theme.of(context).textTheme.caption,
                                   )
                                 ],
