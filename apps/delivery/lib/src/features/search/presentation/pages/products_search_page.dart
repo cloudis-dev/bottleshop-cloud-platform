@@ -30,6 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
 const _debounceMs = 750;
 const _maxProductsResults = 10;
@@ -115,7 +116,7 @@ class _Body extends HookConsumerWidget {
           message: context.l10n.upsSomethingWentWrong,
           buttonMessage: context.l10n.tryAgain,
           onButtonPressed: () =>
-              _onSearchChanged(scaffoldStateKey.currentState, ref.read(_searchEditingCtrlProviderl10n.text, ref),
+              _onSearchChanged(scaffoldStateKey.currentState, ref.read(_searchEditingCtrlProvider).text, ref),
         );
     }
   }
@@ -139,8 +140,8 @@ class _ResultsWidget extends HookConsumerWidget {
         buttonMessage: context.l10n.searchAgain,
         onButtonPressed: () {
           // Scaffold.of(context).
-          ref.read(_searchEditingCtrlProviderl10n.clear();
-          ref.read(searchResultsProvider.statel10n.state = const Tuple3(SearchState.cleaned, [], []);
+          ref.read(_searchEditingCtrlProvider).clear();
+          ref.read(searchResultsProvider.state).state = const Tuple3(SearchState.cleaned, [], []);
           FocusScope.of(context).requestFocus(_searchBarFocusNode);
         },
       );
@@ -152,7 +153,7 @@ class _ResultsWidget extends HookConsumerWidget {
         (searchedCategory) => Tuple2(
           categories.firstWhere(
             (element) =>
-                CategoriesTreeModel.getAllCategoryPlainModels(elementl10n.map((e) => e.idl10n.contains(searchedCategory.id),
+                CategoriesTreeModel.getAllCategoryPlainModels(element).map((e) => e.id).contains(searchedCategory.id),
           ),
           searchedCategory,
         ),
@@ -199,29 +200,29 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
 
   query = query.trim();
 
-  if (_getContext(l10n.read(previousQuery.statel10n.state == query) {
+  if (_getContext().read(previousQuery.state).state == query) {
     return;
   } else {
-    _getContext(l10n.read(previousQuery.statel10n.state = query;
+    _getContext().read(previousQuery.state).state = query;
   }
 
   try {
     final currentTime = DateTime.now();
-    _getContext(l10n.read(lastQueriedSearchTimeProvider.statel10n.state = currentTime;
+    _getContext().read(lastQueriedSearchTimeProvider.state).state = currentTime;
 
-    _getContext(l10n.read(debounceTimerProvider.statel10n.state?.cancel();
+    _getContext().read(debounceTimerProvider.state).state?.cancel();
 
     if (query.isEmpty) {
-      _getContext(l10n.read(searchResultsProvider.statel10n.state = const Tuple3(SearchState.cleaned, [], []);
+      _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.cleaned, [], []);
     } else {
-      _getContext(l10n.read(searchResultsProvider.statel10n.state = const Tuple3(SearchState.typing, [], []);
+      _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.typing, [], []);
 
-      _getContext(l10n.read(debounceTimerProvider.statel10n.state = Timer(
+      _getContext().read(debounceTimerProvider.state).state = Timer(
         const Duration(milliseconds: _debounceMs),
         () async {
           try {
             bool isLastQueryMade(WidgetRef ref) {
-              final lastQueriedTime = ref.read(lastQueriedSearchTimeProvider.statel10n.state;
+              final lastQueriedTime = ref.read(lastQueriedSearchTimeProvider.state).state;
               return lastQueriedTime == currentTime;
             }
 
@@ -229,7 +230,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
               return;
             }
 
-            _getContext(l10n.read(searchResultsProvider.statel10n.state = const Tuple3(SearchState.waiting, [], []);
+            _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.waiting, [], []);
 
             final res = await ProductsSearchService.search(
               query,
@@ -242,7 +243,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
               return;
             }
 
-            _getContext(l10n.read(searchResultsProvider.statel10n.state = Tuple3(
+            _getContext().read(searchResultsProvider.state).state = Tuple3(
               SearchState.completed,
               res.value1,
               res.value2,
@@ -250,9 +251,9 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
           } on _OutOfWidgetTreeException catch (_) {
             return;
           } catch (err, stack) {
-            _getContext(l10n.read(searchResultsProvider.statel10n.state = const Tuple3(SearchState.error, [], []);
+            _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.error, [], []);
 
-            loggy.error('Search failed', err, stack);
+            logError('Search failed', err, stack);
           }
         },
       );
@@ -260,9 +261,9 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
   } on _OutOfWidgetTreeException catch (_) {
     return;
   } catch (err, stack) {
-    _getContext().read(searchResultsProvider.state.state = const Tuple3(SearchState.error, [], []);
+    _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.error, [], []);
 
-    loggy.error('search failed', err, stack);
+    logError('search failed', err, stack);
   }
 }
 
@@ -277,7 +278,7 @@ List<TextSpan> parseMatchToTextSpans(String match) {
             return [Tuple2(false, tmp.first)];
           }
 
-          return Iterable<int>.generate(tmp.lengthl10n.map((e) => Tuple2(
+          return Iterable<int>.generate(tmp.length).map((e) => Tuple2(
                 e % 2 == 0,
                 tmp[e].replaceFirst('</em>', ''),
               ));

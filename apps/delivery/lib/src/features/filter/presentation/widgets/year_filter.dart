@@ -18,11 +18,9 @@ import 'package:delivery/src/features/filter/presentation/viewmodels/filter_mode
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
-final _logger = Logger((YearFilterl10n.toString());
-
-class YearFilter extends HookConsumerWidget {
+class YearFilter extends HookConsumerWidget with UiLoggy {
   const YearFilter({
     Key? key,
   }) : super(key: key);
@@ -31,14 +29,14 @@ class YearFilter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final maxYear = ref.watch(filterModelProvider(filterTypel10n.select<int>((value) => value.maxYear));
-    final isYearActive = ref.watch(filterModelProvider(filterTypel10n.select<bool>((value) => value.isYearActive));
+    final maxYear = ref.watch(filterModelProvider(filterType).select<int>((value) => value.maxYear));
+    final isYearActive = ref.watch(filterModelProvider(filterType).select<bool>((value) => value.isYearActive));
 
     return Offstage(
       offstage: ref.watch(
-        filterModelProvider(filterTypel10n.select<bool>((value) => value.isFilterByAge),
+        filterModelProvider(filterType).select<bool>((value) => value.isFilterByAge),
       ),
-      child: ref.watch(filterAggregationsProviderl10n.when(
+      child: ref.watch(filterAggregationsProvider).when(
             data: (aggs) => Column(
               children: [
                 Row(
@@ -65,8 +63,8 @@ class YearFilter extends HookConsumerWidget {
                   max: FilterConstants.maxYear.toDouble(),
                   divisions: FilterConstants.maxYear - aggs.minYear!,
                   value: maxYear.toDouble(),
-                  onChanged: (value) => ref.read(filterModelProvider(filterTypel10n.statel10n.state =
-                      ref.read(filterModelProvider(filterTypel10n.statel10n.state.copyWith(
+                  onChanged: (value) => ref.read(filterModelProvider(filterType).state).state =
+                      ref.read(filterModelProvider(filterType).state).state.copyWith(
                             maxYear: value.round(),
                           ),
                   label: maxYear.toString(),

@@ -20,21 +20,21 @@ class ProductsLayoutModeToggle extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final layoutMode = ref.watch(productsLayoutModeProvider.statel10n.state;
+    final layoutMode = ref.watch(productsLayoutModeProvider.state).state;
     const appIcon = Icon(Icons.apps);
     if (layoutMode == SupportedLayoutMode.grid) {
       return IconButton(
         icon: appIcon,
-        onPressed: () => ref.read(productsLayoutModeProvider.statel10n.state =
-            ref.read(productsLayoutModeProvider.statel10n.state == SupportedLayoutMode.list
+        onPressed: () => ref.read(productsLayoutModeProvider.state).state =
+            ref.read(productsLayoutModeProvider.state).state == SupportedLayoutMode.list
                 ? SupportedLayoutMode.grid
                 : SupportedLayoutMode.list,
       );
     } else {
       return IconButton(
         icon: const Icon(Icons.format_list_bulleted),
-        onPressed: () => ref.read(productsLayoutModeProvider.statel10n.state =
-            ref.read(productsLayoutModeProvider.statel10n.state == SupportedLayoutMode.list
+        onPressed: () => ref.read(productsLayoutModeProvider.state).state =
+            ref.read(productsLayoutModeProvider.state).state == SupportedLayoutMode.list
                 ? SupportedLayoutMode.grid
                 : SupportedLayoutMode.list,
       );

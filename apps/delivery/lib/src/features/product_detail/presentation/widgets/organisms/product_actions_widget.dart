@@ -16,7 +16,7 @@ enum _ProductAction {
   favorite,
 }
 
-final _logger = Logger((ProductActionsWidgetl10n.toString());
+final  = Logger((ProductActionsWidgetl10n.toString());
 
 class ProductActionsWidget extends HookConsumerWidget {
   final ProductModel product;

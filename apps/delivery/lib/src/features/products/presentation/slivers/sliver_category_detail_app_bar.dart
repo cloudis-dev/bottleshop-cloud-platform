@@ -134,7 +134,7 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
               (e) => _TabWrapper(
                 child: Tab(
                   child: Text(
-                    e.categoryDetails.getName(currentLocalel10n.toUpperCase(),
+                    e.categoryDetails.getName(currentLocale).toUpperCase(),
                   ),
                 ),
               ),

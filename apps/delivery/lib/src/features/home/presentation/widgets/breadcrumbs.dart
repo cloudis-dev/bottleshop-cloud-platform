@@ -22,7 +22,7 @@ class Breadcrumbs extends HookConsumerWidget {
                       (e) => TextButtonTheme(
                         data: textButtonLinkTheme,
                         child: TextButton(
-                          child: e.page.getPageName(context.l10n.fold(
+                          child: e.page.getPageName(context).fold(
                                 (l) => ValueListenableBuilder<String?>(
                                   valueListenable: l,
                                   builder: (context, value, _) {

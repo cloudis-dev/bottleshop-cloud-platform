@@ -28,14 +28,14 @@ class SortMenuButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sortModel = ref.watch(sortModelProvider.statel10n.state;
+    final sortModel = ref.watch(sortModelProvider.notifier).state;
 
     return PopupMenuButton<_ButtonOptions>(
       icon: const Icon(
         Icons.sort_by_alpha,
       ),
       onSelected: (option) {
-        ref.read(sortModelProvider.statel10n.state = () {
+        ref.read(sortModelProvider.state).state = () {
           switch (option) {
             case _ButtonOptions.ascending:
             case _ButtonOptions.descending:

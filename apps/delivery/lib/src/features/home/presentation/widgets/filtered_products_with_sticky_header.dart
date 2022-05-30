@@ -58,7 +58,7 @@ class FilteredProductsWithStickyHeader extends HookConsumerWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
           SliverProductsList(
             productsState: productsState.itemsState,
-            requestData: () => ref.read(filteredProductsProvider(null)l10n.requestData(),
+            requestData: () => ref.read(filteredProductsProvider(null)).requestData(),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],

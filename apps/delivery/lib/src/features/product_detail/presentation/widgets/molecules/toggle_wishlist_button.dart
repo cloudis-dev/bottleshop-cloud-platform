@@ -1,5 +1,4 @@
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/favorites/presentation/providers/providers.dart';
@@ -10,7 +9,7 @@ import 'package:overlay_support/overlay_support.dart';
 
 final _addToWishlistButtonStateProvider = StateProvider.autoDispose.family<ButtonState, ProductModel>(
   (ref, product) {
-    return ref.watch(isInWishListStreamProvider(product.uniqueId)l10n.maybeWhen(
+    return ref.watch(isInWishListStreamProvider(product.uniqueId)).maybeWhen(
           data: (_) => ButtonState.idle,
           orElse: () => ButtonState.loading,
         );
@@ -29,7 +28,7 @@ class ToggleWishlistButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final buttonState = ref.watch(_addToWishlistButtonStateProvider(productl10n.statel10n.state;
+    final buttonState = ref.watch(_addToWishlistButtonStateProvider(product).state).state;
     final loaderColor = Theme.of(context).primaryColor;
 
     return ProgressButton(
@@ -37,9 +36,8 @@ class ToggleWishlistButton extends HookConsumerWidget {
       maxWidth: 90,
       onPressed: actionOverride ??
           () {
-            ref.read(_addToWishlistButtonStateProvider(productl10n.statel10n.state = ButtonState.loading;
-            ref.read(isInWishListStreamProvider(product.uniqueId)l10n.whenData(
-              (isInWishList) {
+            ref.read(_addToWishlistButtonStateProvider(product).state).state = ButtonState.loading;
+            ref.read(isInWishListStreamProvider(product.uniqueId)).whenData((isInWishList) {
                 if (isInWishList ?? false) {
                   return ref
                       .read(wishListProvider)!
@@ -60,8 +58,7 @@ class ToggleWishlistButton extends HookConsumerWidget {
                         ),
                       );
                 } else {
-                  logAddToWishlist(context, product.uniqueId, product.name,
-                      product.allCategories.first.categoryDetails.toString(), 1);
+                  
                   return ref
                       .read(wishListProvider)!
                       .add(product.uniqueId)
@@ -83,16 +80,16 @@ class ToggleWishlistButton extends HookConsumerWidget {
                       );
                 }
               },
-            l10n.whenData(
+            ).whenData(
               (value) => value.whenComplete(
-                () => {ref.read(_addToWishlistButtonStateProvider(productl10n.statel10n.state = ButtonState.idle},
+                () => {ref.read(_addToWishlistButtonStateProvider(product).state).state = ButtonState.idle},
               ),
             );
           },
       state: buttonState,
       stateWidgets: {
         ButtonState.idle: Icon(
-          ref.watch(isInWishListStreamProvider(product.uniqueId)l10n.maybeWhen(
+          ref.watch(isInWishListStreamProvider(product.uniqueId)).maybeWhen(
                 data: (isInWishList) => (isInWishList ?? false) ? Icons.favorite : Icons.favorite_border,
                 orElse: () => Icons.favorite_border,
               ),

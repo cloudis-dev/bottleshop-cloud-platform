@@ -13,12 +13,12 @@ class CartIconWithBadge extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const icon = Icon(Icons.shopping_cart);
 
-    return ref.watch(cartProviderl10n.maybeWhen(
+    return ref.watch(cartProvider).maybeWhen(
           data: (cart) => BottleshopBadge(
-            child: icon,
             badgeText: cart?.totalItems.toString() ?? '',
             showBadge: (cart?.totalItems ?? 0) > 0,
             position: BadgePosition.topEnd(top: -5),
+            child: icon,
           ),
           orElse: () => icon,
         );

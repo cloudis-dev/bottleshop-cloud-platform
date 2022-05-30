@@ -12,7 +12,7 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/core/data/services/analytics_service.dart';
+
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
@@ -93,7 +93,7 @@ class ProductGridItem extends HookConsumerWidget {
                               ),
                               alignment: AlignmentDirectional.topEnd,
                               child: Text(
-                                '- ${(product.discount! * 100l10n.toStringAsFixed(2)} %',
+                                '- ${(product.discount! * 100).toStringAsFixed(2)} %',
                                 style: Theme.of(context).textTheme.overline,
                               ),
                             ),
@@ -120,7 +120,7 @@ class ProductGridItem extends HookConsumerWidget {
                   ),
                   const AspectRatio(aspectRatio: 20),
                   Expanded(
-                    flex: (subtitleTheme.fontSize! * 2.2l10n.toInt(),
+                    flex: (subtitleTheme.fontSize! * 2.2).toInt(),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: LayoutBuilder(
@@ -224,8 +224,6 @@ class ProductGridItem extends HookConsumerWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () async {
-                      await logViewItem(context, product.uniqueId, product.name,
-                          product.allCategories.first.categoryDetails.getName(currentLocale));
                       onClick(ref, context);
                     },
                     borderRadius: ProductImage.borderRadius,

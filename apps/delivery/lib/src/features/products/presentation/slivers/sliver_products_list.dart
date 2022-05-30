@@ -36,7 +36,7 @@ class SliverProductsList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final layoutMode = ref.watch(productsLayoutModeProvider.statel10n.state;
+    final layoutMode = ref.watch(productsLayoutModeProvider.state).state;
 
     if (layoutMode == SupportedLayoutMode.list) {
       return SliverPagedList<ProductModel>(

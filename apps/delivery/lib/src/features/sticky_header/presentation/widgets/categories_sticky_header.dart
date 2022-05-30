@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
-class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy{
+class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy {
   const CategoriesStickyHeader({
     Key? key,
   }) : super(key: key);
@@ -51,7 +51,7 @@ class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy{
                 ),
                 itemCount: (categories.length) + 1,
                 itemBuilder: (context, index) {
-                  loggy.info(('categories: ${categories.length} index: $index');
+                  loggy.info(('categories: ${categories.length} index: $index'));
                   if (index == (categories.length)) {
                     return const SizedBox(
                       width: 12,

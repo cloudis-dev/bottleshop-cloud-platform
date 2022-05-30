@@ -73,7 +73,7 @@ class ProductHomeTab extends HookConsumerWidget {
             style: Theme.of(context).textTheme.subtitle2,
           ),
         ),
-        if (_buildExtraCategoryString(product.extraCategories, currentLocalel10n.isNotEmpty) ...[
+        if (_buildExtraCategoryString(product.extraCategories, currentLocale).isNotEmpty) ...[
           const SizedBox(height: 20),
           ListTile(
             dense: true,
@@ -101,8 +101,8 @@ class ProductHomeTab extends HookConsumerWidget {
     Locale currentLocale,
   ) {
     var result = '';
-    categories.where((category) => !category.categoryDetails.isExtraCategoryl10n.forEach((category) {
-      result += CategoryModel.allCategoryDetails(categoryl10n.map((e) => e.getName(currentLocale)l10n.join(' - ');
+    categories.where((category) => !category.categoryDetails.isExtraCategory).forEach((category) {
+      result += CategoryModel.allCategoryDetails(category).map((e) => e.getName(currentLocale)).join(' - ');
     });
     return result;
   }
@@ -112,7 +112,7 @@ class ProductHomeTab extends HookConsumerWidget {
     if (extraCategories != null) {
       extraCategories.forEach(
         (category) {
-          result += CategoryModel.allCategoryDetails(categoryl10n.map((e) => e.getName(currentLocale)l10n.join(' - ');
+          result += CategoryModel.allCategoryDetails(category).map((e) => e.getName(currentLocale)).join(' - ');
         },
       );
     }

@@ -11,8 +11,7 @@
 //
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-enum ChangeStatus { added, modified, removed }
+import 'package:delivery/src/core/data/services/streamed_items_state_management/data/change_status.dart';
 
 class ChangeStatusUtil {
   ChangeStatusUtil._();

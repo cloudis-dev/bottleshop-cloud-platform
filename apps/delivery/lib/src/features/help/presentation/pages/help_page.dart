@@ -76,7 +76,7 @@ class _Body extends HookConsumerWidget {
     return SingleChildScrollView(
       controller: scrollCtrl,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: ref.watch(mdContentProviderl10n.when(
+      child: ref.watch(mdContentProvider).when(
             data: (mds) {
               return Column(
                 children: <Widget>[

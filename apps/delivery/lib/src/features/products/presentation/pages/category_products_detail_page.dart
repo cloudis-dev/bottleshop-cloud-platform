@@ -53,7 +53,7 @@ class CategoryProductsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return category == null
-        ? ref.watch(categoryProvider(categoryUid!)l10n.maybeWhen(
+        ? ref.watch(categoryProvider(categoryUid!)).maybeWhen(
               data: (e) => _Body(
                 category: e,
                 subcategoryId: subcategoryId,
@@ -147,7 +147,7 @@ class _Body extends HookConsumerWidget {
             : SubcategoriesTabBar(
                 category,
                 Tab(child: Text(context.l10n.all.toUpperCase())),
-                (e) => Tab(text: e.categoryDetails.getName(currentLocalel10n.toUpperCase()),
+                (e) => Tab(text: e.categoryDetails.getName(currentLocale).toUpperCase()),
                 controller: tabController,
               ),
         body: Scaffold(

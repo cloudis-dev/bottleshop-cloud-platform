@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
-final _logger = Logger((SectionProductIteml10n.toString());
+final  = Logger((SectionProductIteml10n.toString());
 
 class SectionProductItem extends HookConsumerWidget {
   static const double imageWidth = 160;

@@ -19,7 +19,7 @@ import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
 import 'package:logging/logging.dart';
 
-final _logger = Logger((ProductsStateNotifierl10n.toString());
+final  = Logger((ProductsStateNotifierl10n.toString());
 
 class ProductsStateNotifier extends SingleStreamItemsStateNotifier<ProductModel, String?> {
   ProductsStateNotifier(

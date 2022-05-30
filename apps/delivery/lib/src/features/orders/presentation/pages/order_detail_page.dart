@@ -30,11 +30,9 @@ import 'package:delivery/src/features/orders/presentation/widgets/order_steps_wi
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
-final _logger = Logger((OrderDetailPagel10n.toString());
-
-class OrderDetailPage extends HookConsumerWidget {
+class OrderDetailPage extends HookConsumerWidget with UiLoggy {
   final String orderUniqueId;
 
   const OrderDetailPage({
@@ -47,7 +45,7 @@ class OrderDetailPage extends HookConsumerWidget {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final scrollCtrl = useScrollController();
 
-    return ref.watch(orderStreamProvider(orderUniqueId)l10n.when(
+    return ref.watch(orderStreamProvider(orderUniqueId)).when(
           data: (order) {
             if (order == null) {
               return const _OrderErrorTab();

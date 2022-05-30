@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:collection/algorithms.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -18,13 +19,11 @@ import 'package:delivery/src/core/utils/iterable_extension.dart';
 import 'package:delivery/src/core/utils/sorting_util.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
-
-class CountryDropdownsFilterGroup extends HookConsumerWidget with UiLoggy{
+class CountryDropdownsFilterGroup extends HookConsumerWidget with UiLoggy {
   const CountryDropdownsFilterGroup({
     Key? key,
   }) : super(key: key);
@@ -72,7 +71,7 @@ class CountryDropdownsFilterGroup extends HookConsumerWidget with UiLoggy{
   }
 }
 
-class _CountryDropdownFilter extends HookConsumerWidget {
+class _CountryDropdownFilter extends HookConsumerWidget with UiLoggy {
   const _CountryDropdownFilter({
     Key? key,
     required this.id,
@@ -87,7 +86,7 @@ class _CountryDropdownFilter extends HookConsumerWidget {
     final filterType = ref.watch(filterTypeScopedProvider);
 
     final usedCountries =
-        ref.watch(filterModelProvider(filterTypel10n.select<List<CountryModel>>((value) => value.countries));
+        ref.watch(filterModelProvider(filterType).select<List<CountryModel>>((value) => value.countries));
 
     final currentLocale = ref.watch(currentLocaleProvider);
 
@@ -105,7 +104,7 @@ class _CountryDropdownFilter extends HookConsumerWidget {
             selectedValue,
           ));
 
-    return ref.watch(filterAggregationsProviderl10n.when(
+    return ref.watch(filterAggregationsProvider).when(
           data: (aggs) {
             return Row(
               children: [
@@ -126,9 +125,9 @@ class _CountryDropdownFilter extends HookConsumerWidget {
                         )
                         .toList(),
                     onChanged: (value) {
-                      ref.read(filterModelProvider(filterTypel10n.statel10n.state =
-                          ref.read(filterModelProvider(filterTypel10n.statel10n.state.copyWith(
-                                countries: usedCountries.followedBy([value!]l10n.toList(),
+                      ref.read(filterModelProvider(filterType).state).state =
+                          ref.read(filterModelProvider(filterType).state).state.copyWith(
+                                countries: usedCountries.followedBy([value!]).toList(),
                               );
                     },
                   ),
@@ -138,12 +137,10 @@ class _CountryDropdownFilter extends HookConsumerWidget {
                     icon: const Icon(Icons.cancel),
                     color: Theme.of(context).colorScheme.secondary,
                     onPressed: () {
-                      final res =
-                          List<CountryModel>.from(ref.read(filterModelProvider(filterType).state.countries)
-                            ..removeAt(id);
+                      final res = ref.read(filterModelProvider(filterType).notifier).state.countries..removeAt(id);
 
-                      ref.read(filterModelProvider(filterType.state =
-                          ref.read(filterModelProvider(filterType.state.state.copyWith(
+                      ref.read(filterModelProvider(filterType).notifier).state =
+                          ref.read(filterModelProvider(filterType).state).state.copyWith(
                                 countries: res,
                               );
                     },

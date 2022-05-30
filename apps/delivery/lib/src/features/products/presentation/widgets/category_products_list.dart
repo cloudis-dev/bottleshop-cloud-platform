@@ -48,7 +48,7 @@ class CategoryProductsList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appliedFilter = ref.watch(appliedFilterProvider(FilterType.categoryProductsl10n.statel10n.state;
+    final appliedFilter = ref.watch(appliedFilterProvider(FilterType.categoryProducts).state).state;
     final hasProducts = ref
         .watch(
           categoryHasProductsProvider(
@@ -56,9 +56,9 @@ class CategoryProductsList extends HookConsumerWidget {
               isAllCategory,
               category.subCategories,
             )
-                ? category.subCategories.map((e) => e.categoryDetailsl10n.toList()
+                ? category.subCategories.map((e) => e.categoryDetails).toList()
                 : [category.categoryDetails],
-          l10n.state,
+          ).state,
         )
         .state;
 
@@ -196,7 +196,7 @@ class _NoProductsBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appliedFilter = ref.watch(appliedFilterProvider(FilterType.categoryProductsl10n.statel10n.state;
+    final appliedFilter = ref.watch(appliedFilterProvider(FilterType.categoryProducts).state).state;
 
     if (appliedFilter.isAnyFilterActive) {
       return MultiSliver(
@@ -211,7 +211,7 @@ class _NoProductsBody extends HookConsumerWidget {
             hasScrollBody: false,
             child: Padding(
               padding: EdgeInsets.only(
-                    bottom: NestedScrollView.sliverOverlapAbsorberHandleFor(context.l10n.layoutExtent!,
+                    bottom: NestedScrollView.sliverOverlapAbsorberHandleFor(context).layoutExtent!,
                   ) +
                   const EdgeInsets.only(bottom: _bottomPad),
               child: EmptyTab(
@@ -231,7 +231,7 @@ class _NoProductsBody extends HookConsumerWidget {
         hasScrollBody: false,
         child: Padding(
           padding: EdgeInsets.only(
-                bottom: NestedScrollView.sliverOverlapAbsorberHandleFor(context.l10n.layoutExtent!,
+                bottom: NestedScrollView.sliverOverlapAbsorberHandleFor(context).layoutExtent!,
               ) +
               const EdgeInsets.only(bottom: _bottomPad),
           child: EmptyTab(
@@ -278,7 +278,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isAnyFilterActive =
-        ref.watch(appliedFilterProvider(FilterType.categoryProductsl10n.select<bool>((value) => value.isAnyFilterActive));
+        ref.watch(appliedFilterProvider(FilterType.categoryProducts).select<bool>((value) => value.isAnyFilterActive));
 
     final currentLocale = ref.watch(currentLocaleProvider);
 
@@ -314,7 +314,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
                 ),
                 sliver: SliverProductsList(
                   productsState: productsStates[id],
-                  requestData: () => ref.read(providers[id]l10n.requestData(),
+                  requestData: () => ref.read(providers[id]).requestData(),
                 ),
               ),
             )
@@ -331,7 +331,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
 
       return SliverProductsList(
         productsState: productsState,
-        requestData: () => ref.read(providerl10n.requestData(),
+        requestData: () => ref.read(provider).requestData(),
       );
     }
   }

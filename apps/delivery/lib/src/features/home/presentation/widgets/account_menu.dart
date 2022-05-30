@@ -8,10 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 import 'package:overlay_support/overlay_support.dart';
-
-final _logger = Logger((AccountMenul10n.toString());
 
 enum _TabsState {
   menu,
@@ -117,7 +115,6 @@ class _MenuItemsTab extends HookConsumerWidget {
     return IntrinsicHeight(
       child: CupertinoScrollbar(
         controller: scrollCtrl,
-        isAlwaysShown: true,
         child: SingleChildScrollView(
           controller: scrollCtrl,
           child: Theme(
@@ -163,8 +160,7 @@ class _MenuItemsTab extends HookConsumerWidget {
                     leading: const Icon(Icons.exit_to_app),
                     title: Text(context.l10n.logOut),
                     onTap: () async {
-                      await ref.read(userRepositoryProviderl10n.signOut();
-                      //OverlaySupportEntry.of(context)?.dismiss(animate: false);
+                      await ref.read(userRepositoryProvider).signOut();
                     },
                   )
               ],
@@ -203,7 +199,6 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
           ),
           Expanded(
             child: CupertinoScrollbar(
-              isAlwaysShown: true,
               controller: scrollCtrl,
               child: SingleChildScrollView(
                 controller: scrollCtrl,
@@ -224,15 +219,15 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
             ),
           ),
           CupertinoDialogAction(
-            child: Text(context.l10n.termsPopUpYes),
             onPressed: onAccept,
             textStyle: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).colorScheme.secondary),
+            child: Text(context.l10n.termsPopUpYes),
           ),
           CupertinoDialogAction(
-            child: Text(context.l10n.termsPopUpNo),
             onPressed: onBack,
             isDefaultAction: true,
             textStyle: Theme.of(context).textTheme.subtitle2,
+            child: Text(context.l10n.termsPopUpNo),
           ),
         ],
       ),
@@ -240,7 +235,7 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
   }
 }
 
-class _SignUpTab extends HookWidget {
+class _SignUpTab extends HookWidget with UiLoggy {
   final VoidCallback onBack;
 
   const _SignUpTab({
@@ -254,7 +249,7 @@ class _SignUpTab extends HookWidget {
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
-        isAlwaysShown: true,
+
         controller: scrollCtrl,
         child: SingleChildScrollView(
           controller: scrollCtrl,
@@ -276,7 +271,7 @@ class _SignUpTab extends HookWidget {
                 child: SignUpForm(
                   backgroundColor: Colors.transparent,
                   borderRadius: BorderRadius.zero,
-                  authCallback: (val) => _logger.info('Sign up callback status: $val'),
+                  authCallback: (val) => loggy.info('Sign up callback status: $val'),
                 ),
               ),
             ],
@@ -303,7 +298,7 @@ class _LoginTab extends HookWidget {
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
-        isAlwaysShown: true,
+
         controller: scrollCtrl,
         child: SingleChildScrollView(
           controller: scrollCtrl,

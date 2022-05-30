@@ -11,7 +11,7 @@ class MenuButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showBadge = ref.watch(activeOrdersCountProviderl10n.whenData((value) => value > 0l10n.value ?? false;
+    final showBadge = ref.watch(activeOrdersCountProvider).whenData((value) => value > 0).value ?? false;
 
     return IconButton(
       icon: BottleshopBadge(

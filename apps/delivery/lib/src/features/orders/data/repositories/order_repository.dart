@@ -31,7 +31,7 @@ class OrderRepository {
         isEqualTo: user.uid,
       ),
     ];
-    return ordersDbService.streamList(args: argsl10n.map((event) => event.where((element) => !element.isCompletel10n.length);
+    return ordersDbService.streamList(args: args).map((event) => event.where((element) => !element.isComplete).length);
   }
 
   Stream<PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>> getUserOrdersStream(
@@ -50,7 +50,7 @@ class OrderRepository {
       orderBy: [orderBy],
       args: [query],
       startAfterDocument: lastDoc,
-    l10n.map(
+    ).map(
       (event) => PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>(
         event
             .map(

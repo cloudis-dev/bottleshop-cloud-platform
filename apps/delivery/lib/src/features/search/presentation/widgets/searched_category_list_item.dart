@@ -37,7 +37,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
   void onClick(WidgetRef ref, BuildContext context) {
     final subcategoryId = navigationCategory.categoryDetails.id != categoryPlainModel.id
         ? navigationCategory.subCategories
-            .map((e) => CategoriesTreeModel.getAllCategoryPlainModels(el10n.map((e) => e.id))
+            .map((e) => CategoriesTreeModel.getAllCategoryPlainModels(e).map((e) => e.id))
             .toList()
             .indexWhere((element) => element.contains(categoryPlainModel.id))
         : null;
@@ -61,7 +61,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  decoration: CategoryContainerDecoration(context.l10n.copyWith(
+                  decoration: CategoryContainerDecoration(context).copyWith(
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: SizedBox(

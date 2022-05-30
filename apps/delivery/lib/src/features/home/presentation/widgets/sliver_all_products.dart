@@ -66,7 +66,7 @@ class _AllProductsList extends HookConsumerWidget {
 
     return SliverProductsList(
       productsState: productsState,
-      requestData: () => ref.read(allProductsProviderl10n.requestData(),
+      requestData: () => ref.read(allProductsProvider).requestData(),
     );
   }
 }

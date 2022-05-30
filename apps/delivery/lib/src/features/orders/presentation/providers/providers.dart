@@ -26,16 +26,15 @@ final ordersProvider = ChangeNotifierProvider.autoDispose<OrdersStateNotifier>(
 
     return OrdersStateNotifier(
       (lastDoc) => orderRepo.getUserOrdersStream(lastDoc, currentUser),
-    ).requestData();
+    );
   },
 );
 
 final activeOrdersCountProvider = StreamProvider.autoDispose<int>((ref) {
   final currentUser = ref.watch(currentUserProvider);
-  return ref.watch(orderRepositoryProvider)l10n.activeOrdersCount(currentUser);
+  return ref.watch(orderRepositoryProvider).activeOrdersCount(currentUser);
 });
 
-final orderStreamProvider =
-    StreamProvider.autoDispose.family<OrderModel?, String>(
+final orderStreamProvider = StreamProvider.autoDispose.family<OrderModel?, String>(
   (ref, orderUniqueId) => ordersDbService.streamSingle(orderUniqueId),
 );

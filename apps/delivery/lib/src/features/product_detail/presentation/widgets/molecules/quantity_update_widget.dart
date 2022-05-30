@@ -9,7 +9,7 @@ import 'package:overlay_support/overlay_support.dart';
 
 final _quantityUpdateButtonStateProvider = StateProvider.autoDispose.family<ButtonState, ProductModel>(
   (ref, product) {
-    return ref.watch(cartQuantityStreamProvider(product)l10n.maybeWhen(
+    return ref.watch(cartQuantityStreamProvider(product)).maybeWhen(
           data: (_) => ButtonState.idle,
           orElse: () => ButtonState.loading,
         );
@@ -29,9 +29,9 @@ class QuantityUpdateWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final buttonState = ref.watch(_quantityUpdateButtonStateProvider(productl10n.statel10n.state;
+    final buttonState = ref.watch(_quantityUpdateButtonStateProvider(product).state).state;
     final currentQuantity =
-        ref.watch(cartQuantityStreamProvider(product)l10n.maybeWhen(data: (quantity) => quantity, orElse: () => 0);
+        ref.watch(cartQuantityStreamProvider(product)).maybeWhen(data: (quantity) => quantity, orElse: () => 0);
 
     return ProgressButton(
       onPressed: () {},
@@ -84,7 +84,7 @@ class QuantityUpdateWidget extends HookConsumerWidget {
                       (currentQuantity >= product.count
                           ? null
                           : () async {
-                              ref.read(_quantityUpdateButtonStateProvider(productl10n.statel10n.state = ButtonState.loading;
+                              ref.read(_quantityUpdateButtonStateProvider(product).state).state = ButtonState.loading;
                               try {
                                 return ref
                                     .read(cartRepositoryProvider)!
@@ -97,7 +97,7 @@ class QuantityUpdateWidget extends HookConsumerWidget {
                                   context: context,
                                 );
                               } finally {
-                                ref.read(_quantityUpdateButtonStateProvider(productl10n.statel10n.state = ButtonState.idle;
+                                ref.read(_quantityUpdateButtonStateProvider(product).state).state = ButtonState.idle;
                               }
                             }),
                   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
