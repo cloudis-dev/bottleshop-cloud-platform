@@ -44,7 +44,7 @@ export const createPaymentIntent = functions.region(tier1Region).https.onCall(as
         .doc(data.userId)
         .collection(cartCollection)
         .doc(tempCartId);
-      const cart: Cart = await getEntityByRef<Cart>(cartRef);
+      const cart: Cart | undefined = await getEntityByRef<Cart>(cartRef);
       if (cart) {
         const orderId = await generateNewOrderId();
         return await stripe.paymentIntents.create({
@@ -61,7 +61,9 @@ export const createPaymentIntent = functions.region(tier1Region).https.onCall(as
             orderId,
           },
         });
-      }
+      } else {
+         return { error: 'bad request'}
+        }
     } else {
       return { access: 'denied' };
     }

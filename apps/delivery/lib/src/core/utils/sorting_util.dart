@@ -45,7 +45,8 @@ class SortingUtil {
       a = b;
       b = temp;
     }
-    return removeDiacritics(a!.toLowerCase()).compareTo(removeDiacritics(b!.toLowerCase()));
+    return removeDiacritics(a!.toLowerCase())
+        .compareTo(removeDiacritics(b!.toLowerCase()));
   }
 
   static int numbersSortCompare(double a, double b, {bool ascending = true}) {

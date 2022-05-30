@@ -78,7 +78,9 @@ class _OrderStepRow extends HookConsumerWidget {
           isLastStep() ? Icons.check_circle : Icons.circle,
           // OrdersView.orderStepsIcons[orderStepId],
           // color: isLast ? AppTheme.completedOrderColor : Colors.black,
-          color: (isLastStep() ? Colors.green : Theme.of(context).colorScheme.secondary)
+          color: (isLastStep()
+                  ? Colors.green
+                  : Theme.of(context).colorScheme.secondary)
               .withOpacity(isEnabled ? 1 : _disabledOpacity),
         ),
         Expanded(
@@ -102,7 +104,9 @@ class _OrderStepRow extends HookConsumerWidget {
                   child: Text(
                     isEnabled
                         ? FormattingUtils.getDateTimeFormatter(currentLocale)
-                            .format(order.statusStepsDates[order.orderType.orderStepsIds.indexOf(orderStepId)])
+                            .format(order.statusStepsDates[order
+                                .orderType.orderStepsIds
+                                .indexOf(orderStepId)])
                         : context.l10n.waiting,
                     style: Theme.of(context).textTheme.subtitle2,
                     overflow: TextOverflow.ellipsis,
@@ -136,7 +140,10 @@ class _OrderStepConnectorDivider extends StatelessWidget {
                 thickness: 2,
                 color: enabled
                     ? Theme.of(context).colorScheme.secondary
-                    : Theme.of(context).colorScheme.secondary.withOpacity(_disabledOpacity),
+                    : Theme.of(context)
+                        .colorScheme
+                        .secondary
+                        .withOpacity(_disabledOpacity),
               ),
             ),
           ),

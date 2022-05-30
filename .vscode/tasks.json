@@ -4,14 +4,26 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "NX Rub Delivery:dev",
+      "label": "Build Delivery app",
       "type": "shell",
-      "command": "nx run delivery run",
+      "command": "yarn nx run-many --target=build --all --parallel",
       "problemMatcher": [],
       "group": {
         "kind": "build",
         "isDefault": true
-      },
+      }
+    },
+    {
+      "type": "flutter",
+      "command": "flutter",
+      "args": [
+        "build",
+        "ios"
+      ],
+      "group": "build",
+      "problemMatcher": [],
+      "label": "flutter: flutter build ios",
+      "detail": "apps/delivery"
     }
   ]
 }

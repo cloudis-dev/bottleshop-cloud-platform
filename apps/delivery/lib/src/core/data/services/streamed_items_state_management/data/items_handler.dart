@@ -41,11 +41,13 @@ class ItemsHandler<T, E> {
     List<T> itemsToRemove,
   ) {
     if (itemsToRemove.isEmpty) {
-      return items.where(itemFilterTest ?? (_) => true).toList()..sort(sortCompare);
+      return items.where(itemFilterTest ?? (_) => true).toList()
+        ..sort(sortCompare);
     } else {
       return List.unmodifiable(
         items
-            .where((element) => itemsToRemove.every((e) => !_areEqual(element, e)))
+            .where(
+                (element) => itemsToRemove.every((e) => !_areEqual(element, e)))
             .where(itemFilterTest ?? (_) => true)
             .toList(),
       );
@@ -57,11 +59,13 @@ class ItemsHandler<T, E> {
     List<T> updatedItems,
   ) {
     if (updatedItems.isEmpty) {
-      return items.where(itemFilterTest ?? (_) => true).toList()..sort(sortCompare);
+      return items.where(itemFilterTest ?? (_) => true).toList()
+        ..sort(sortCompare);
     } else {
       return List.unmodifiable(
         items
-            .where((element) => updatedItems.every((e) => !_areEqual(element, e)))
+            .where(
+                (element) => updatedItems.every((e) => !_areEqual(element, e)))
             .followedBy(updatedItems)
             .distinct(uniqueSelector)
             .where(itemFilterTest ?? (_) => true)

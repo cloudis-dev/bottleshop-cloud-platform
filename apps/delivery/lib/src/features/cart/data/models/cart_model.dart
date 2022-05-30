@@ -25,7 +25,8 @@ class CartModel extends Equatable {
   final String? promoCode;
   final double promoCodeValue;
 
-  double get totalCartValue => totalProductsPrice + shippingFeeTotal - promoCodeValue;
+  double get totalCartValue =>
+      totalProductsPrice + shippingFeeTotal - promoCodeValue;
   double get totalCartVat => totalProductsVat + shippingFeeVat;
   // Promo code value is not counted here
   double get subTotal => totalCartValue + promoCodeValue - totalCartVat;
@@ -44,13 +45,18 @@ class CartModel extends Equatable {
   factory CartModel.fromMap(Map<String, dynamic> map) {
     return CartModel(
       totalItems: int.parse(map[CartFields.totalItemsField].toString()),
-      totalProductsPrice: double.parse(map[CartFields.totalProductsPriceField].toString()),
-      totalProductsVat: double.parse(map[CartFields.totalProductsVatField].toString()),
+      totalProductsPrice:
+          double.parse(map[CartFields.totalProductsPriceField].toString()),
+      totalProductsVat:
+          double.parse(map[CartFields.totalProductsVatField].toString()),
       shipping: map[CartFields.shippingField],
-      shippingFeeTotal: double.parse(map[CartFields.shippingFeeTotalField]?.toString() ?? '0.00'),
-      shippingFeeVat: double.parse(map[CartFields.shippingVatField]?.toString() ?? '0.00'),
+      shippingFeeTotal: double.parse(
+          map[CartFields.shippingFeeTotalField]?.toString() ?? '0.00'),
+      shippingFeeVat:
+          double.parse(map[CartFields.shippingVatField]?.toString() ?? '0.00'),
       promoCode: map[CartFields.promoCodeField] as String?,
-      promoCodeValue: double.parse(map[CartFields.promoCodeValueField]?.toString() ?? '0.00'),
+      promoCodeValue: double.parse(
+          map[CartFields.promoCodeValueField]?.toString() ?? '0.00'),
     );
   }
 

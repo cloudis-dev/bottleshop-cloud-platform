@@ -52,7 +52,8 @@ class ProductGridItem extends HookConsumerWidget {
         aspectRatio: widgetAspectRatio,
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).hintColor.withOpacity(0.2)),
+            border:
+                Border.all(color: Theme.of(context).hintColor.withOpacity(0.2)),
             color: Theme.of(context).primaryColor,
             borderRadius: ProductImage.borderRadius,
             boxShadow: [
@@ -88,7 +89,8 @@ class ProductGridItem extends HookConsumerWidget {
                                 vertical: 3,
                               ),
                               decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(100)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(100)),
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               alignment: AlignmentDirectional.topEnd,
@@ -153,7 +155,8 @@ class ProductGridItem extends HookConsumerWidget {
                           FittedBox(
                             fit: fit,
                             child: Text(
-                              FormattingUtils.getAlcoholNumberString(product.alcohol ?? 0),
+                              FormattingUtils.getAlcoholNumberString(
+                                  product.alcohol ?? 0),
                               style: body1Theme,
                             ),
                           ),
@@ -192,7 +195,9 @@ class ProductGridItem extends HookConsumerWidget {
                                     style: Theme.of(context)
                                         .textTheme
                                         .caption!
-                                        .copyWith(decoration: TextDecoration.lineThrough),
+                                        .copyWith(
+                                            decoration:
+                                                TextDecoration.lineThrough),
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.end,
                                   ),
@@ -210,7 +215,9 @@ class ProductGridItem extends HookConsumerWidget {
                       child: FittedBox(
                         fit: fit,
                         child: Text(
-                          product.count > 0 ? '${product.count} ${context.l10n.inStock}' : context.l10n.outOfStock,
+                          product.count > 0
+                              ? '${product.count} ${context.l10n.inStock}'
+                              : context.l10n.outOfStock,
                           style: stockTextTheme,
                         ),
                       ),

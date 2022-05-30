@@ -20,13 +20,16 @@ void main() async {
   await runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
       await FirebaseAppCheck.instance.activate(
         webRecaptchaSiteKey: '6LdIPtUfAAAAACEZhCIe8TEdRDcltugVuPqTS8RY',
       );
-      runApp(const MyApp());
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      runApp(const App());
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
     },
-    (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
+    (error, stack) =>
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
   );
 }

@@ -17,7 +17,9 @@ abstract class PagedScrollViewBase<T> extends StatelessWidget {
   })  : cacheItemsCountExtent = cacheItemsCountExtent ?? 3,
         super(key: key);
 
-  final Widget Function(BuildContext context, SliverChildBuilderDelegate builderDelegate) scrollViewSliverBuilder;
+  final Widget Function(
+          BuildContext context, SliverChildBuilderDelegate builderDelegate)
+      scrollViewSliverBuilder;
   final ScrollViewItemBuilder<T> itemBuilder;
   final ScrollViewErrorWidgetBuilder? errorWidgetBuilder;
   final WidgetBuilder? loadingWidgetBuilder;

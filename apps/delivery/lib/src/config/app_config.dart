@@ -21,6 +21,7 @@ class AppConfig {
   Orientation? _orientation;
   Brightness? _brightness;
 
+  // ignore: no_leading_underscores_for_local_identifiers
   AppConfig(BuildContext _context) {
     this._context = _context;
     var queryData = MediaQuery.of(this._context);
@@ -28,8 +29,10 @@ class AppConfig {
     _brightness = queryData.platformBrightness;
     _height = queryData.size.height / 100.0;
     _width = queryData.size.width / 100.0;
-    _heightPadding = _height - ((queryData.padding.top + queryData.padding.bottom) / 100.0);
-    _widthPadding = _width - (queryData.padding.left + queryData.padding.right) / 100.0;
+    _heightPadding =
+        _height - ((queryData.padding.top + queryData.padding.bottom) / 100.0);
+    _widthPadding =
+        _width - (queryData.padding.left + queryData.padding.right) / 100.0;
   }
 
   Orientation? appOrientation() => _orientation;

@@ -54,7 +54,7 @@ class OrderDetailPage extends HookConsumerWidget with UiLoggy {
                 return Scaffold(
                   key: scaffoldKey,
                   appBar: AppBar(
-                    leading: BackButton(onPressed: () => null),
+                    leading: const BackButton(),
                     title: Text('${context.l10n.order} #${order.orderId}'),
                     actions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
                   ),
@@ -318,7 +318,7 @@ class _Body extends HookConsumerWidget {
                           ],
                         ),
                       ),
-                    ...order.cartItems.map<Widget>((e) => OrderCartListItem(e)),
+                    ...order.cartItems.map<Widget>((e) => OrderCartListItem(cartItem: e)),
                   ],
                 ),
               ),

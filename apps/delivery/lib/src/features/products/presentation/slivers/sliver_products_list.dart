@@ -45,7 +45,7 @@ class SliverProductsList extends HookConsumerWidget {
         itemBuilder: (context, dynamic item, _) => ProductListItem(
           product: item,
         ),
-        errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onPressed),
+        errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onButtonPressed: onPressed),
         loadingWidgetBuilder: (_) => const ListLoadingWidget(),
       );
     } else {
@@ -58,7 +58,7 @@ class SliverProductsList extends HookConsumerWidget {
             product: item,
           ),
           gridDelegate: const ProductSliverGridDelegate(),
-          errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onPressed),
+          errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onButtonPressed: onPressed),
           loadingWidgetBuilder: (_) => const ListLoadingWidget(),
         ),
       );

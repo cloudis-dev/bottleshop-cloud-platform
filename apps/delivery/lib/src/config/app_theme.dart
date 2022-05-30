@@ -37,19 +37,31 @@ const _kBottleshopOnSurfaceDark = Colors.white;
 const _kBottleshopOnBackgroundDark = Colors.white;
 
 TextTheme workSansTextTheme = TextTheme(
-  headline1: GoogleFonts.workSans(fontSize: 96, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-  headline2: GoogleFonts.workSans(fontSize: 60, fontWeight: FontWeight.w600, letterSpacing: -0.5),
-  headline3: GoogleFonts.workSans(fontSize: 40, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-  headline4: GoogleFonts.workSans(fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+  headline1: GoogleFonts.workSans(
+      fontSize: 96, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+  headline2: GoogleFonts.workSans(
+      fontSize: 60, fontWeight: FontWeight.w600, letterSpacing: -0.5),
+  headline3: GoogleFonts.workSans(
+      fontSize: 40, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+  headline4: GoogleFonts.workSans(
+      fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
   headline5: GoogleFonts.workSans(fontSize: 24, fontWeight: FontWeight.w700),
-  headline6: GoogleFonts.workSans(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-  subtitle1: GoogleFonts.workSans(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
-  subtitle2: GoogleFonts.workSans(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-  bodyText1: GoogleFonts.workSans(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-  bodyText2: GoogleFonts.workSans(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-  button: GoogleFonts.workSans(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-  caption: GoogleFonts.workSans(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-  overline: GoogleFonts.workSans(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 1.5),
+  headline6: GoogleFonts.workSans(
+      fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+  subtitle1: GoogleFonts.workSans(
+      fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+  subtitle2: GoogleFonts.workSans(
+      fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+  bodyText1: GoogleFonts.workSans(
+      fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+  bodyText2: GoogleFonts.workSans(
+      fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+  button: GoogleFonts.workSans(
+      fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+  caption: GoogleFonts.workSans(
+      fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+  overline: GoogleFonts.workSans(
+      fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 1.5),
 );
 
 final appTheme = buildAppTheme();
@@ -109,17 +121,21 @@ ThemeData buildAppTheme() {
       elevation: kIsWeb ? null : 0,
       backgroundColor: kIsWeb ? _kBottleshopSecondaryColor : Colors.transparent,
       foregroundColor: Colors.black,
-      titleTextStyle: workSansTextTheme.headline6!.copyWith(color: _kBottleshopOnBackGroundColor),
-      centerTitle: defaultTargetPlatform == TargetPlatform.android ? false : true,
+      titleTextStyle: workSansTextTheme.headline6!
+          .copyWith(color: _kBottleshopOnBackGroundColor),
+      centerTitle:
+          defaultTargetPlatform == TargetPlatform.android ? false : true,
     ),
-    bottomNavigationBarTheme: base.bottomNavigationBarTheme.copyWith(backgroundColor: Colors.transparent),
+    bottomNavigationBarTheme: base.bottomNavigationBarTheme
+        .copyWith(backgroundColor: Colors.transparent),
     scaffoldBackgroundColor: _kBottleshopBackGroundColor,
     primaryTextTheme: base.primaryTextTheme.merge(workSansTextTheme),
     iconTheme: base.iconTheme.copyWith(color: _kBottleshopOnBackGroundColor),
     primaryIconTheme: base.primaryIconTheme.copyWith(color: Colors.black),
     inputDecorationTheme: base.inputDecorationTheme.copyWith(
       floatingLabelBehavior: FloatingLabelBehavior.auto,
-      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: _kBottleshopSecondaryColor)),
+      focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: _kBottleshopSecondaryColor)),
       labelStyle: workSansTextTheme.caption!.copyWith(color: Colors.black),
       hintStyle: workSansTextTheme.caption!.copyWith(
         fontStyle: FontStyle.italic,
@@ -175,17 +191,21 @@ ThemeData buildDarkAppTheme() {
       elevation: kIsWeb ? null : 0,
       // foregroundColor: Colors.black,
       backgroundColor: kIsWeb ? Colors.transparent : Colors.transparent,
-      titleTextStyle: workSansTextTheme.headline6!.copyWith(color: _kBottleshopOnBackgroundDark),
-      centerTitle: defaultTargetPlatform == TargetPlatform.android ? false : true,
+      titleTextStyle: workSansTextTheme.headline6!
+          .copyWith(color: _kBottleshopOnBackgroundDark),
+      centerTitle:
+          defaultTargetPlatform == TargetPlatform.android ? false : true,
     ),
-    bottomNavigationBarTheme: base.bottomNavigationBarTheme.copyWith(backgroundColor: Colors.transparent),
+    bottomNavigationBarTheme: base.bottomNavigationBarTheme
+        .copyWith(backgroundColor: Colors.transparent),
     scaffoldBackgroundColor: _kBottleshopBackGroundDarkColor,
     primaryTextTheme: base.primaryTextTheme.merge(workSansTextTheme),
     iconTheme: base.iconTheme.copyWith(color: _kBottleshopOnBackgroundDark),
     primaryIconTheme: base.primaryIconTheme.copyWith(color: Colors.white),
     inputDecorationTheme: base.inputDecorationTheme.copyWith(
       floatingLabelBehavior: FloatingLabelBehavior.auto,
-      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: _kBottleshopSecondaryDarkColor)),
+      focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: _kBottleshopSecondaryDarkColor)),
       labelStyle: workSansTextTheme.caption!.copyWith(color: Colors.white),
       hintStyle: workSansTextTheme.caption!.copyWith(
         fontStyle: FontStyle.italic,
@@ -199,7 +219,8 @@ ThemeData buildDarkAppTheme() {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         primary: _kBottleshopSecondaryDarkColor,
-        textStyle: workSansTextTheme.button!.copyWith(color: _kBottleshopSurfaceDarkColor),
+        textStyle: workSansTextTheme.button!
+            .copyWith(color: _kBottleshopSurfaceDarkColor),
       ),
     ),
     textButtonTheme: TextButtonThemeData(

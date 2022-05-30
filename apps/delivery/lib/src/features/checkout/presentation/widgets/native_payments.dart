@@ -37,7 +37,8 @@ class NativePayments extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final isSupported = ref.watch(walletsAvailableProvider.select((value) => value.applePayAvailable));
+    final isSupported = ref.watch(
+        walletsAvailableProvider.select((value) => value.applePayAvailable));
     return isSupported
         ? Column(
             children: [
@@ -50,7 +51,8 @@ class NativePayments extends HookConsumerWidget with UiLoggy {
                 width: 208,
                 height: 45,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: !isDarkMode ? Colors.black : Colors.white),
+                  style: ElevatedButton.styleFrom(
+                      primary: !isDarkMode ? Colors.black : Colors.white),
                   child: Image.asset(
                     defaultTargetPlatform == TargetPlatform.iOS
                         ? !isDarkMode
@@ -63,7 +65,10 @@ class NativePayments extends HookConsumerWidget with UiLoggy {
                   ),
                   onPressed: () async {
                     try {
-                      await ref.read(checkoutStateProvider).payByNativePay(paymentData).then(
+                      await ref
+                          .read(checkoutStateProvider)
+                          .payByNativePay(paymentData)
+                          .then(
                             (value) => onCheckoutDone(
                               defaultTargetPlatform == TargetPlatform.android
                                   ? context.l10n.successful_payment_gpay
@@ -71,7 +76,8 @@ class NativePayments extends HookConsumerWidget with UiLoggy {
                             ),
                           );
                     } on PlatformException catch (err, stack) {
-                      if (err.code != 'cancelled' || err.code != 'purchaseCancelled') {
+                      if (err.code != 'cancelled' ||
+                          err.code != 'purchaseCancelled') {
                         rethrow;
                       } else {
                         loggy.error('Failed to pay by native', err, stack);

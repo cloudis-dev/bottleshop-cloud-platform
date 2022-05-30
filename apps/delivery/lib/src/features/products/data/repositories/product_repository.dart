@@ -34,7 +34,8 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
   }
 
   Stream<ItemsStateStreamBatch<ProductModel>> getFlashSaleProductsStream() {
-    final currentTimestamp = Timestamp.fromMillisecondsSinceEpoch(DateTime.now).millisecondsSinceEpoch);
+    final currentTimestamp = Timestamp.fromMillisecondsSinceEpoch(
+        DateTime.now().millisecondsSinceEpoch);
 
     final flashSaleUntilPath = FieldPath(
       const [
@@ -43,14 +44,16 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
       ],
     );
 
-    var query = <QueryArgs>[QueryArgs(flashSaleUntilPath, isGreaterThanOrEqualTo: currentTimestamp)];
+    var query = <QueryArgs>[
+      QueryArgs(flashSaleUntilPath, isGreaterThanOrEqualTo: currentTimestamp)
+    ];
 
     final orderBy = <OrderBy>[
       OrderBy(flashSaleUntilPath),
       OrderBy(ProductModel.unaccentedNameSortField),
     ];
 
-    return db.streamQueryListWithChangesAll(args: query, orderBy: orderByl10n.map(
+    return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
             event
                 .map((e) => Tuple2(
@@ -62,7 +65,8 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
         );
   }
 
-  Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>> getAllProductsStream(
+  Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>>
+      getAllProductsStream(
     DocumentSnapshot? lastDoc,
     SortModel sortModel,
   ) {
@@ -154,7 +158,8 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
         );
   }
 
-  Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>> getProductsByCategoryStream(
+  Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>>
+      getProductsByCategoryStream(
     CategoryPlainModel category,
     DocumentSnapshot? lastDocument,
     SortModel sortModel,
@@ -162,8 +167,9 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
     final query = [
       QueryArgs(
         ProductModel.categoryRefsField,
-        arrayContains:
-            FirebaseFirestore.instance.collection(FirestoreCollections.categoriesCollection).doc(category.id),
+        arrayContains: FirebaseFirestore.instance
+            .collection(FirestoreCollections.categoriesCollection)
+            .doc(category.id),
       )
     ];
 

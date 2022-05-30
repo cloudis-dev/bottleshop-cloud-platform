@@ -19,11 +19,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ResetPasswordForm extends HookConsumerWidget {
   final ValueChanged<bool> authCallback;
 
-  const ResetPasswordForm({Key? key, required this.authCallback}) : super(key: key);
+  const ResetPasswordForm({Key? key, required this.authCallback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController emailFieldController = useTextEditingController();
+    final TextEditingController emailFieldController =
+        useTextEditingController();
     final _formKey = useMemoized(() => GlobalKey<FormState>());
     final formValid = ref.watch(formValidProvider);
     return Form(
@@ -31,13 +33,15 @@ class ResetPasswordForm extends HookConsumerWidget {
       autovalidateMode: AutovalidateMode.disabled,
       onChanged: () {
         if (emailFieldController.text.isNotEmpty) {
-          ref.read(formValidProvider.notifier).state = _formKey.currentState!.validate();
+          ref.read(formValidProvider.notifier).state =
+              _formKey.currentState!.validate();
         }
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(context.l10n.sign_in, style: Theme.of(context).textTheme.headline4),
+          Text(context.l10n.sign_in,
+              style: Theme.of(context).textTheme.headline4),
           StyledFormField(
             keyboardType: TextInputType.emailAddress,
             labelText: context.l10n.email,
@@ -52,22 +56,24 @@ class ResetPasswordForm extends HookConsumerWidget {
                 ? () async {
                     _formKey.currentState!.save();
                     var currentFocus = FocusScope.of(context);
-                    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                    if (!currentFocus.hasPrimaryFocus &&
+                        currentFocus.focusedChild != null) {
                       FocusManager.instance.primaryFocus!.unfocus();
                     }
                     final result = await ref
                         .read(userRepositoryProvider)
-                        .sendResetPasswordEmail(context, emailFieldController.text);
+                        .sendResetPasswordEmail(
+                            context, emailFieldController.text);
                     emailFieldController.clear();
                     authCallback(result);
                   }
                 : null,
-            child: Text(context.l10n.reset),
             style: ElevatedButton.styleFrom(
               primary: Theme.of(context).colorScheme.secondary,
               shape: const StadiumBorder(),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 70),
             ),
+            child: Text(context.l10n.reset),
           ),
         ],
       ),

@@ -25,9 +25,10 @@ class AgeYearFilterToggle extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final isFilterByAge = ref.watch(filterModelProvider(filterType).select<bool>((value) => value.isFilterByAge));
-    final isYearOrAgeActive =
-        ref.watch(filterModelProvider(filterType).select<bool>((value) => value.isYearActive || value.isAgeActive));
+    final isFilterByAge = ref.watch(filterModelProvider(filterType)
+        .select<bool>((value) => value.isFilterByAge));
+    final isYearOrAgeActive = ref.watch(filterModelProvider(filterType)
+        .select<bool>((value) => value.isYearActive || value.isAgeActive));
 
     return Container(
       margin: const EdgeInsets.only(top: 8, bottom: 16),
@@ -37,9 +38,12 @@ class AgeYearFilterToggle extends HookConsumerWidget {
           const borderWidth = 1;
 
           return ToggleButtons(
-            constraints: BoxConstraints.expand(width: (constraints.maxWidth - borderWidth * 3) / 2),
+            constraints: BoxConstraints.expand(
+                width: (constraints.maxWidth - borderWidth * 3) / 2),
             isSelected: [isFilterByAge, !isFilterByAge],
-            onPressed: (id) => ref.read(filterModelProvider(filterType).state).state =
+            onPressed: (id) => ref
+                    .read(filterModelProvider(filterType).state)
+                    .state =
                 ref.read(filterModelProvider(filterType).state).state.copyWith(
                       isFilterByAge: id == 0,
                     ),

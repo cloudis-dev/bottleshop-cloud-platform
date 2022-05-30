@@ -30,8 +30,8 @@ import 'package:delivery/src/features/products/presentation/view_models/products
 import 'package:delivery/src/features/sorting/presentation/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-
-final productsLayoutModeProvider = StateProvider<SupportedLayoutMode>((_) => SupportedLayoutMode.grid);
+final productsLayoutModeProvider =
+    StateProvider<SupportedLayoutMode>((_) => SupportedLayoutMode.grid);
 
 final productsService = Provider.autoDispose<DatabaseService<ProductModel>>(
   (_) => DatabaseService<ProductModel>(
@@ -46,11 +46,12 @@ final productsRepositoryProvider = Provider.autoDispose<ProductsRepository>(
 );
 
 final productProvider = StreamProvider.autoDispose
-    .family<ProductModel?, String>((ref, uid) => ref.watch(productsRepositoryProvider).streamProduct(uid));
+    .family<ProductModel?, String>(
+        (ref, uid) => ref.watch(productsRepositoryProvider).streamProduct(uid));
 
 /// When the category family is null, then products from all categories are queried.
-final filteredProductsProvider =
-    ChangeNotifierProvider.autoDispose.family<PagedProductsStateNotifier<int>, CategoryPlainModel?>(
+final filteredProductsProvider = ChangeNotifierProvider.autoDispose
+    .family<PagedProductsStateNotifier<int>, CategoryPlainModel?>(
   (ref, category) {
     final sortModel = ref.watch(sortModelProvider.state).state;
 
@@ -60,15 +61,19 @@ final filteredProductsProvider =
         final currentAppliedFilter = ref
             .watch(
               appliedFilterProvider(
-                category == null ? FilterType.allProducts : FilterType.categoryProducts,
+                category == null
+                    ? FilterType.allProducts
+                    : FilterType.categoryProducts,
               ).state,
             )
             .state;
 
         if (currentAppliedFilter.isAnyFilterActive) {
           final literUnit = ref
-              .watch(commonDataRepositoryProvider.select((value) => value.data.units))
-              .where((element) => element.id == '977qijBvm7cxuqPNgvb1') // liter unit id
+              .watch(commonDataRepositoryProvider
+                  .select((value) => value.data.units))
+              .where((element) =>
+                  element.id == '977qijBvm7cxuqPNgvb1') // liter unit id
               .first;
 
           return Stream.fromFuture(
@@ -103,39 +108,51 @@ final filteredProductsProvider =
   },
 );
 
-final allProductsProvider = ChangeNotifierProvider.autoDispose<PagedProductsStateNotifier<DocumentSnapshot>>(
+final allProductsProvider = ChangeNotifierProvider.autoDispose<
+    PagedProductsStateNotifier<DocumentSnapshot>>(
   (ref) {
     final sortModel = ref.watch(sortModelProvider.state).state;
 
     return PagedProductsStateNotifier(
-      (lastDoc) => ref.watch(productsRepositoryProvider).getAllProductsStream(lastDoc, sortModel),
+      (lastDoc) => ref
+          .watch(productsRepositoryProvider)
+          .getAllProductsStream(lastDoc, sortModel),
       sortModel,
     )..requestData();
   },
 );
 
-final productsByCategoryProvider =
-    ChangeNotifierProvider.autoDispose.family<PagedProductsStateNotifier<DocumentSnapshot>, CategoryPlainModel>(
+final productsByCategoryProvider = ChangeNotifierProvider.autoDispose
+    .family<PagedProductsStateNotifier<DocumentSnapshot>, CategoryPlainModel>(
   (ref, category) {
     final sortModel = ref.watch(sortModelProvider.state).state;
 
     return PagedProductsStateNotifier(
-      (lastDocument) =>
-          ref.watch(productsRepositoryProvider).getProductsByCategoryStream(category, lastDocument, sortModel),
+      (lastDocument) => ref
+          .watch(productsRepositoryProvider)
+          .getProductsByCategoryStream(category, lastDocument, sortModel),
       sortModel,
     )..requestData();
   },
 );
 
-final categoryHasProductsProvider = StateProvider.autoDispose.family<bool, List<CategoryPlainModel>>(
+final categoryHasProductsProvider =
+    StateProvider.autoDispose.family<bool, List<CategoryPlainModel>>(
   (ref, categories) {
-    final appliedFilter = ref.watch(appliedFilterProvider(FilterType.categoryProducts).state).state;
+    final appliedFilter = ref
+        .watch(appliedFilterProvider(FilterType.categoryProducts).state)
+        .state;
 
     final providers = categories
-        .map((e) => appliedFilter.isAnyFilterActive ? filteredProductsProvider(e) : productsByCategoryProvider(e))
+        .map((e) => appliedFilter.isAnyFilterActive
+            ? filteredProductsProvider(e)
+            : productsByCategoryProvider(e))
         .toList();
 
-    final productsStates = providers.map((provider) => ref.watch(provider)).map((e) => e.itemsState).toList();
+    final productsStates = providers
+        .map((provider) => ref.watch(provider))
+        .map((e) => e.itemsState)
+        .toList();
 
     return productsStates.any((element) => !element.isDoneAndEmpty);
   },

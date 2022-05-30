@@ -83,14 +83,17 @@ class _DropDownState<T> extends State<DropDown<T>> {
             widget.onChanged?.call(value);
           },
           value: widget.isCleared ? null : selectedValue,
-          items: widget.items.map<DropdownMenuItem<T>>(buildDropDownItem).toList(),
+          items:
+              widget.items.map<DropdownMenuItem<T>>(buildDropDownItem).toList(),
           hint: widget.hint,
         );
     }
 
     // Wrapping Dropdown in DropdownButtonHideUnderline removes the underline
 
-    return widget.showUnderline ? dropdown : DropdownButtonHideUnderline(child: dropdown);
+    return widget.showUnderline
+        ? dropdown
+        : DropdownButtonHideUnderline(child: dropdown);
   }
 
   DropdownMenuItem<T> buildDropDownItem(T item) => DropdownMenuItem<T>(

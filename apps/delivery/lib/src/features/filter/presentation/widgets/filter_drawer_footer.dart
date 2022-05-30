@@ -35,11 +35,14 @@ class FilterDrawerFooter extends HookConsumerWidget {
           shape: const StadiumBorder(),
         ),
         onPressed: () async {
-          final currentFilterProviderCtrl = ref.read(filterModelProvider(filterType).state);
+          final currentFilterProviderCtrl =
+              ref.read(filterModelProvider(filterType).state);
           if (currentFilterProviderCtrl.state.isAnyFilterActive) {
-            ref.read(appliedFilterProvider(filterType).state).state = currentFilterProviderCtrl.state;
+            ref.read(appliedFilterProvider(filterType).state).state =
+                currentFilterProviderCtrl.state;
           } else {
-            ref.read(appliedFilterProvider(filterType).state).state = FilterModel.empty();
+            ref.read(appliedFilterProvider(filterType).state).state =
+                FilterModel.empty();
           }
 
           context.findAncestorStateOfType<DrawerControllerState>()!.close();

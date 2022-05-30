@@ -69,13 +69,17 @@ class ProgressButton extends StatefulWidget {
       'Must be non-null widgets provided in map of stateWidgets. Missing keys => ${ButtonState.values.toSet().difference(iconedButtons.keys.toSet())}',
     );
 
-    textStyle ??= const TextStyle(color: Colors.white, fontWeight: FontWeight.w500);
+    textStyle ??=
+        const TextStyle(color: Colors.white, fontWeight: FontWeight.w500);
 
     final stateWidgets = <ButtonState, Widget>{
-      ButtonState.idle: buildChildWithIcon(iconedButtons[ButtonState.idle]!, iconPadding, textStyle),
+      ButtonState.idle: buildChildWithIcon(
+          iconedButtons[ButtonState.idle]!, iconPadding, textStyle),
       ButtonState.loading: Column(),
-      ButtonState.fail: buildChildWithIcon(iconedButtons[ButtonState.fail]!, iconPadding, textStyle),
-      ButtonState.success: buildChildWithIcon(iconedButtons[ButtonState.success]!, iconPadding, textStyle)
+      ButtonState.fail: buildChildWithIcon(
+          iconedButtons[ButtonState.fail]!, iconPadding, textStyle),
+      ButtonState.success: buildChildWithIcon(
+          iconedButtons[ButtonState.success]!, iconPadding, textStyle)
     };
 
     final stateColors = <ButtonState, Color>{
@@ -98,7 +102,8 @@ class ProgressButton extends StatefulWidget {
   }
 }
 
-class _ProgressButtonState extends State<ProgressButton> with TickerProviderStateMixin {
+class _ProgressButtonState extends State<ProgressButton>
+    with TickerProviderStateMixin {
   AnimationController? colorAnimationController;
   Animation<Color?>? colorAnimation;
   double? width;
@@ -132,9 +137,11 @@ class _ProgressButtonState extends State<ProgressButton> with TickerProviderStat
 
     width = widget.maxWidth;
 
-    animationDuration = Duration(milliseconds: widget.animationMillisecondsDuration);
+    animationDuration =
+        Duration(milliseconds: widget.animationMillisecondsDuration);
 
-    colorAnimationController = AnimationController(duration: animationDuration, vsync: this);
+    colorAnimationController =
+        AnimationController(duration: animationDuration, vsync: this);
     colorAnimationController!.addStatusListener((status) {
       if (widget.onAnimationEnd != null) {
         widget.onAnimationEnd!(status, widget.state);
@@ -166,7 +173,8 @@ class _ProgressButtonState extends State<ProgressButton> with TickerProviderStat
     }
     return AnimatedOpacity(
       opacity: visibility ? 1.0 : 0.0,
-      duration: Duration(milliseconds: (widget.animationMillisecondsDuration / 2).round()),
+      duration: Duration(
+          milliseconds: (widget.animationMillisecondsDuration / 2).round()),
       child: buttonChild,
     );
   }
@@ -186,8 +194,11 @@ class _ProgressButtonState extends State<ProgressButton> with TickerProviderStat
               padding: widget.buttonContentPadding,
               shape: widget.shape as OutlinedBorder?,
             ),
-            onPressed: widget.state == ButtonState.idle ? widget.onPressed as void Function()? : null,
-            child: getButtonChild(colorAnimation == null ? true : colorAnimation!.isCompleted),
+            onPressed: widget.state == ButtonState.idle
+                ? widget.onPressed as void Function()?
+                : null,
+            child: getButtonChild(
+                colorAnimation == null ? true : colorAnimation!.isCompleted),
           ),
         );
       },
@@ -207,15 +218,22 @@ class IconedButton {
   });
 }
 
-Widget buildChildWithIcon(IconedButton iconedButton, double iconPadding, TextStyle textStyle) {
-  return buildChildWithIC(iconedButton.text, iconedButton.icon, iconPadding, textStyle);
+Widget buildChildWithIcon(
+    IconedButton iconedButton, double iconPadding, TextStyle textStyle) {
+  return buildChildWithIC(
+      iconedButton.text, iconedButton.icon, iconPadding, textStyle);
 }
 
-Widget buildChildWithIC(String text, Icon? icon, double gap, TextStyle textStyle) {
+Widget buildChildWithIC(
+    String text, Icon? icon, double gap, TextStyle textStyle) {
   return Wrap(
     direction: Axis.horizontal,
     crossAxisAlignment: WrapCrossAlignment.center,
-    children: <Widget>[icon ?? Container(), Padding(padding: EdgeInsets.all(gap)), buildText(text, textStyle)],
+    children: <Widget>[
+      icon ?? Container(),
+      Padding(padding: EdgeInsets.all(gap)),
+      buildText(text, textStyle)
+    ],
   );
 }
 

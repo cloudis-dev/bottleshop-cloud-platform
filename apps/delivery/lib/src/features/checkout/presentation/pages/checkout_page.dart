@@ -38,7 +38,8 @@ class CheckoutPage extends HookConsumerWidget with UiLoggy {
     final currentUser = ref.watch(currentUserProvider);
     final currentLocale = ref.watch(currentLocaleProvider);
     final paymentDataNotifier = useValueNotifier<PaymentData?>(null, const []);
-    final checkoutDoneMessageNotifier = useValueNotifier<String?>(null, const []);
+    final checkoutDoneMessageNotifier =
+        useValueNotifier<String?>(null, const []);
 
     final pageCtrl = usePageController(keys: const []);
 
@@ -52,10 +53,13 @@ class CheckoutPage extends HookConsumerWidget with UiLoggy {
             paymentDataNotifier.value = paymentData;
             if (kIsWeb) {
               if (paymentData.deliveryType == kOrderTypeCashOnDelivery) {
-                final orderId = await ref.read(cloudFunctionsProvider).createCashOnDeliveryOrder(paymentData);
+                final orderId = await ref
+                    .read(cloudFunctionsProvider)
+                    .createCashOnDeliveryOrder(paymentData);
                 loggy.info('orderID: $orderId');
                 if (orderId != null) {
-                  checkoutDoneMessageNotifier.value = 'Order #$orderId confirmed';
+                  checkoutDoneMessageNotifier.value =
+                      'Order #$orderId confirmed';
                   showSimpleNotification(
                     Text(context.l10n.thankYouForYourOrder),
                     position: NotificationPosition.bottom,
@@ -82,8 +86,6 @@ class CheckoutPage extends HookConsumerWidget with UiLoggy {
                   orderNote: paymentData.orderNote,
                 );
                 loggy.debug('Session created: $sessionRequest');
-
-
               }
             } else {
               await pageCtrl.animateToPage(
@@ -125,12 +127,13 @@ class CheckoutPage extends HookConsumerWidget with UiLoggy {
         ),
         ValueListenableBuilder<String?>(
           valueListenable: checkoutDoneMessageNotifier,
-          builder: (context, checkoutDoneMessage, _) => checkoutDoneMessage == null
-              ? const SizedBox.shrink()
-              : CheckoutDoneView(
-                  checkoutDoneMessage,
-                  onClose: () {},
-                ),
+          builder: (context, checkoutDoneMessage, _) =>
+              checkoutDoneMessage == null
+                  ? const SizedBox.shrink()
+                  : CheckoutDoneView(
+                      checkoutDoneMessage,
+                      onClose: () {},
+                    ),
         )
       ],
     );

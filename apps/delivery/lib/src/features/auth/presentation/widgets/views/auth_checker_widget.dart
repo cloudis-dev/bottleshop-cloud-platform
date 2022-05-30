@@ -15,7 +15,6 @@ import 'package:delivery/src/features/auth/presentation/providers/auth_providers
 import 'package:delivery/src/features/auth/presentation/widgets/views/sign_in_page.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/splash_view.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/verify_email_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -31,7 +30,8 @@ class AuthCheckerWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserProvider);
     final authStatus = ref.watch(authStatusProvider);
-    final isLoading = ref.watch(userRepositoryProvider.select<bool>((value) => value.isLoading));
+    final isLoading = ref
+        .watch(userRepositoryProvider.select<bool>((value) => value.isLoading));
 
     switch (authStatus) {
       case AuthStatus.unauthenticated:
@@ -43,7 +43,9 @@ class AuthCheckerWidget extends HookConsumerWidget {
           return const SplashView();
         }
 
-        if (currentUser == null || currentUser.isAnonymous || currentUser.isEmailVerified) {
+        if (currentUser == null ||
+            currentUser.isAnonymous ||
+            currentUser.isEmailVerified) {
           return successViewBuilder(context);
         } else {
           return const VerifyEmailView();

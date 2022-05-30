@@ -57,7 +57,10 @@ class EmptyTab extends HookWidget {
                       end: Alignment.topRight,
                       colors: [
                         Theme.of(context).colorScheme.secondary,
-                        Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                        Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.2),
                       ],
                     ),
                   ),
@@ -107,7 +110,8 @@ class EmptyTab extends HookWidget {
               TextButton(
                 onPressed: onButtonPressed,
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),

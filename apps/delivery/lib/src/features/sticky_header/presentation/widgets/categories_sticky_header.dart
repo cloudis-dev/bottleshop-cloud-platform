@@ -31,7 +31,8 @@ class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(mainCategoriesWithoutExtraProvider.state).state;
+    final categories =
+        ref.watch(mainCategoriesWithoutExtraProvider.state).state;
 
     return SizedBox(
       height: 65,
@@ -51,17 +52,20 @@ class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy {
                 ),
                 itemCount: (categories.length) + 1,
                 itemBuilder: (context, index) {
-                  loggy.info(('categories: ${categories.length} index: $index'));
+                  loggy
+                      .info(('categories: ${categories.length} index: $index'));
                   if (index == (categories.length)) {
                     return const SizedBox(
                       width: 12,
                     );
                   } else {
                     final category = categories.elementAt(index);
-                    final heroTag = '${category.categoryDetails.id}_categoryStickyHeader';
+                    final heroTag =
+                        '${category.categoryDetails.id}_categoryStickyHeader';
 
                     return CategoryChip(
-                      onNavigateToCategory: (context) => onNavigateToCategory(ref, context, category, heroTag),
+                      onNavigateToCategory: (context) =>
+                          onNavigateToCategory(ref, context, category, heroTag),
                       category: categories.elementAt(index),
                       heroTag: heroTag,
                     );

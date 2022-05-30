@@ -5,32 +5,46 @@
       "name": "Flutter",
       "type": "dart",
       "request": "launch",
-      "program": "lib/main.dart"
-    },
-    {
-      "name": "Delivery DEV",
-      "request": "launch",
-      "type": "dart",
       "program": "lib/main_development.dart",
-      "args": [
-        "--flavor",
-        "development",
-        "--target",
-        "lib/main_development.dart"
-      ],
       "cwd": "apps/delivery",
-      "openDevTools": "logging"
+      "args": [
+        "flavor",
+        "development"
+      ]
     },
     {
-      "name": "Delivery PROD",
+      "name": "Launch via Yarn",
       "request": "launch",
-      "type": "dart",
-      "program": "lib/main_production.dart",
-      "args": [
-        "--flavor",
-        "production",
-        "--target",
-        "lib/main_production.dart"
+      "cwd": "apps/delivery",
+      "runtimeArgs": [
+        "run-script",
+        "start:api:dev"
+      ],
+      "runtimeExecutable": "yarn",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "name": "Stripe: Webhooks listen",
+      "type": "stripe",
+      "request": "launch",
+      "command": "listen",
+      "forwardTo": "http://localhost:5001/europe-west1/createPaymentIntent",
+      "events": [
+        "payment_intent.succeeded",
+        "payment_intent.canceled"
+      ],
+      "skipVerify": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Launch: Stripe + API",
+      "configurations": [
+        "Launch via Yarn",
+        "Stripe: Webhooks listen"
       ]
     }
   ]

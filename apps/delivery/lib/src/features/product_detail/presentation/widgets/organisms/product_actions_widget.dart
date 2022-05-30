@@ -9,16 +9,14 @@ import 'package:delivery/src/features/product_detail/presentation/widgets/molecu
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
-enum _ProductAction {
+enum ProductAction {
   purchase,
   favorite,
 }
 
-final  = Logger((ProductActionsWidgetl10n.toString());
-
-class ProductActionsWidget extends HookConsumerWidget {
+class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
   final ProductModel product;
   final GlobalKey<AuthPopupButtonState> authButtonKey;
 
@@ -28,16 +26,16 @@ class ProductActionsWidget extends HookConsumerWidget {
     required this.authButtonKey,
   }) : super(key: key);
 
-  void needsLoginAlert(BuildContext context, _ProductAction action) {
+  void needsLoginAlert(BuildContext context, ProductAction action) {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
           () {
             switch (action) {
-              case _ProductAction.purchase:
+              case ProductAction.purchase:
                 return context.l10n.loginNeededForPurchase;
-              case _ProductAction.favorite:
+              case ProductAction.favorite:
                 return context.l10n.loginNeededForFavorite;
             }
           }(),
@@ -63,31 +61,41 @@ class ProductActionsWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasUser = ref.watch(currentUserProvider.select<bool>((value) => value != null));
+    final hasUser =
+        ref.watch(currentUserProvider.select<bool>((value) => value != null));
 
     return SizedBox(
       height: 42,
-      child: ref.watch(isInCartStreamProvider(product)l10n.maybeWhen(
+      child: ref.watch(isInCartStreamProvider(product)).maybeWhen(
             data: (isInCart) {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   ToggleWishlistButton(
                     product: product,
-                    actionOverride: hasUser ? null : () => needsLoginAlert(context, _ProductAction.favorite),
+                    actionOverride: hasUser
+                        ? null
+                        : () =>
+                            needsLoginAlert(context, ProductAction.favorite),
                   ),
                   const SizedBox(width: 10),
                   (isInCart ?? false)
                       ? Expanded(
                           child: QuantityUpdateWidget(
                             product: product,
-                            actionOverride: hasUser ? null : () => needsLoginAlert(context, _ProductAction.purchase),
+                            actionOverride: hasUser
+                                ? null
+                                : () => needsLoginAlert(
+                                    context, ProductAction.purchase),
                           ),
                         )
                       : Expanded(
                           child: AddToCartButton(
                             product: product,
-                            actionOverride: hasUser ? null : () => needsLoginAlert(context, _ProductAction.purchase),
+                            actionOverride: hasUser
+                                ? null
+                                : () => needsLoginAlert(
+                                    context, ProductAction.purchase),
                           ),
                         ),
                 ],

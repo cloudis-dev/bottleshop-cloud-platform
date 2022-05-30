@@ -110,7 +110,8 @@ class _MenuItemsTab extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollCtrl = useScrollController();
-    final hasUser = ref.watch(currentUserProvider.select<bool>((value) => value != null));
+    final hasUser =
+        ref.watch(currentUserProvider.select<bool>((value) => value != null));
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
@@ -143,7 +144,8 @@ class _MenuItemsTab extends HookConsumerWidget {
                   onTap: null,
                 ),
                 BottleshopAboutTile(
-                  afterTap: () => OverlaySupportEntry.of(context)!.dismiss(animate: false),
+                  afterTap: () =>
+                      OverlaySupportEntry.of(context)!.dismiss(animate: false),
                 ),
                 ListTile(
                   leading: const Icon(Icons.help_outlined),
@@ -203,7 +205,8 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
               child: SingleChildScrollView(
                 controller: scrollCtrl,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
                     children: [
                       Text(
@@ -211,7 +214,8 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       const SizedBox(height: 20),
-                      TermsAndConditionsTextContent(onNavigateToTermsPage: () {})
+                      TermsAndConditionsTextContent(
+                          onNavigateToTermsPage: () {})
                     ],
                   ),
                 ),
@@ -220,7 +224,10 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
           ),
           CupertinoDialogAction(
             onPressed: onAccept,
-            textStyle: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).colorScheme.secondary),
+            textStyle: Theme.of(context)
+                .textTheme
+                .subtitle2!
+                .copyWith(color: Theme.of(context).colorScheme.secondary),
             child: Text(context.l10n.termsPopUpYes),
           ),
           CupertinoDialogAction(
@@ -249,7 +256,6 @@ class _SignUpTab extends HookWidget with UiLoggy {
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
-
         controller: scrollCtrl,
         child: SingleChildScrollView(
           controller: scrollCtrl,
@@ -271,7 +277,8 @@ class _SignUpTab extends HookWidget with UiLoggy {
                 child: SignUpForm(
                   backgroundColor: Colors.transparent,
                   borderRadius: BorderRadius.zero,
-                  authCallback: (val) => loggy.info('Sign up callback status: $val'),
+                  authCallback: (val) =>
+                      loggy.info('Sign up callback status: $val'),
                 ),
               ),
             ],
@@ -298,7 +305,6 @@ class _LoginTab extends HookWidget {
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
-
         controller: scrollCtrl,
         child: SingleChildScrollView(
           controller: scrollCtrl,

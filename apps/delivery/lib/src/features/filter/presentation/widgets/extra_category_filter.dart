@@ -26,8 +26,8 @@ class ExtraCategoriesGroupFilter extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories =
-        ref.watch(commonDataRepositoryProvider.select<List<CategoriesTreeModel>>((value) => value.data.categories));
+    final categories = ref.watch(commonDataRepositoryProvider
+        .select<List<CategoriesTreeModel>>((value) => value.data.categories));
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -36,7 +36,9 @@ class ExtraCategoriesGroupFilter extends HookConsumerWidget {
         children: [
           Text(context.l10n.onlyFollowingExtraCategories),
           const SizedBox(height: 8),
-          ...categories.where((element) => element.categoryDetails.isExtraCategory).map(
+          ...categories
+              .where((element) => element.categoryDetails.isExtraCategory)
+              .map(
                 (e) => _ExtraCategoryFilter(
                   category: e,
                 ),
@@ -62,28 +64,40 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
     final currentLocale = ref.watch(currentLocaleProvider);
 
     final enabledCategoriesIds = ref.watch(
-      filterModelProvider(filterType).select<List<String>>((value) => value.enabledExtraCategoriesIds),
+      filterModelProvider(filterType)
+          .select<List<String>>((value) => value.enabledExtraCategoriesIds),
     );
 
-    final categoryTreeIds = CategoriesTreeModel.getAllCategoryPlainModels(category!).map((e) => e.id).toList();
+    final categoryTreeIds =
+        CategoriesTreeModel.getAllCategoryPlainModels(category!)
+            .map((e) => e.id)
+            .toList();
 
-    final intersection = enabledCategoriesIds.toSet().intersection(categoryTreeIds.toSet());
+    final intersection =
+        enabledCategoriesIds.toSet().intersection(categoryTreeIds.toSet());
 
     /// Null for tristate - at least one sub selected.
-    final mainCategoryState =
-        intersection.length == categoryTreeIds.length ? true : (intersection.isEmpty ? false : null);
+    final mainCategoryState = intersection.length == categoryTreeIds.length
+        ? true
+        : (intersection.isEmpty ? false : null);
 
     void addWholeCategoryTree(WidgetRef ref) {
       ref.read(filterModelProvider(filterType).state).state =
           ref.read(filterModelProvider(filterType).state).state.copyWith(
-                enabledExtraCategoriesIds: enabledCategoriesIds.toSet().union(categoryTreeIds.toSet()).toList(),
+                enabledExtraCategoriesIds: enabledCategoriesIds
+                    .toSet()
+                    .union(categoryTreeIds.toSet())
+                    .toList(),
               );
     }
 
     void removeWholeCategoryTree(WidgetRef ref) {
       ref.read(filterModelProvider(filterType).state).state =
           ref.read(filterModelProvider(filterType).state).state.copyWith(
-                enabledExtraCategoriesIds: enabledCategoriesIds.toSet().difference(categoryTreeIds.toSet()).toList(),
+                enabledExtraCategoriesIds: enabledCategoriesIds
+                    .toSet()
+                    .difference(categoryTreeIds.toSet())
+                    .toList(),
               );
     }
 
@@ -123,9 +137,13 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
                       if (intersection.length < categoryTreeIds.length - 2) {
                         // When not the last subcategory selected, then add just this one.
                         ref.read(filterModelProvider(filterType).state).state =
-                            ref.read(filterModelProvider(filterType).state).state.copyWith(
+                            ref
+                                .read(filterModelProvider(filterType).state)
+                                .state
+                                .copyWith(
                                   enabledExtraCategoriesIds:
-                                      enabledCategoriesIds.followedBy([e.categoryDetails.id]).toList(),
+                                      enabledCategoriesIds.followedBy(
+                                          [e.categoryDetails.id]).toList(),
                                 );
                       } else {
                         // When all the subcategories selected, select also the main one.
@@ -134,10 +152,16 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
                     } else {
                       // When at least one removed, remove also the main category.
                       ref.read(filterModelProvider(filterType).state).state =
-                          ref.read(filterModelProvider(filterType).state).state.copyWith(
+                          ref
+                              .read(filterModelProvider(filterType).state)
+                              .state
+                              .copyWith(
                                 enabledExtraCategoriesIds: enabledCategoriesIds
                                     .toSet()
-                                    .difference({category!.categoryDetails.id, e.categoryDetails.id}).toList(),
+                                    .difference({
+                                  category!.categoryDetails.id,
+                                  e.categoryDetails.id
+                                }).toList(),
                               );
                     }
                   },

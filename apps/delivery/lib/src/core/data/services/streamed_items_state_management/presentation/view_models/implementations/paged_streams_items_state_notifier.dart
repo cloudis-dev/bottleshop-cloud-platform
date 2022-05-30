@@ -22,14 +22,16 @@ class PagedItemsStateStreamBatch<T, E> {
 /// The field's type based on which is the distinction of items preserved.
 ///
 /// The proposed usage is with any [PagedScrollViewBase] instance.
-class PagedStreamsItemsStateNotifier<T, E, Q> extends StreamedItemsStateNotifierBase<T, Q> {
+class PagedStreamsItemsStateNotifier<T, E, Q>
+    extends StreamedItemsStateNotifierBase<T, Q> {
   PagedStreamsItemsStateNotifier(
     this._createStream,
     ItemsHandler<T, Q> itemsHandler,
     OnErrorCallback errorCallback,
   ) : super(itemsHandler, errorCallback);
 
-  final Stream<PagedItemsStateStreamBatch<T, E>> Function(E? fromPageKey) _createStream;
+  final Stream<PagedItemsStateStreamBatch<T, E>> Function(E? fromPageKey)
+      _createStream;
 
   bool _isFetchingPage = false;
   E? _pageKeyCurrentlyBeingFetched;

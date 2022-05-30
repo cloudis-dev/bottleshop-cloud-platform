@@ -27,7 +27,9 @@ class SplashView extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(orientation == Orientation.portrait ? kSplash : kSplashLandscape),
+            image: AssetImage(orientation == Orientation.portrait
+                ? kSplash
+                : kSplashLandscape),
             fit: BoxFit.cover,
           ),
         ),

@@ -34,7 +34,8 @@ class CategoryModel extends Equatable {
           subCategory == other.subCategory;
 
   @override
-  int get hashCode => super.hashCode ^ categoryDetails.hashCode ^ subCategory.hashCode;
+  int get hashCode =>
+      super.hashCode ^ categoryDetails.hashCode ^ subCategory.hashCode;
 
   @override
   List<Object?> get props => [categoryDetails, subCategory];
@@ -42,7 +43,8 @@ class CategoryModel extends Equatable {
   @override
   bool get stringify => true;
 
-  static Iterable<CategoryPlainModel> allCategoryDetails(CategoryModel? model) sync* {
+  static Iterable<CategoryPlainModel> allCategoryDetails(
+      CategoryModel? model) sync* {
     yield model!.categoryDetails;
     if (model.subCategory != null) {
       yield* allCategoryDetails(model.subCategory!);
@@ -62,7 +64,8 @@ class CategoryModel extends Equatable {
     yield* allIds(model.subCategory!);
   }
 
-  static CategoryModel appendCategory(CategoryModel? model, CategoryPlainModel details) {
+  static CategoryModel appendCategory(
+      CategoryModel? model, CategoryPlainModel details) {
     if (model == null) {
       return CategoryModel(categoryDetails: details, subCategory: null);
     }
@@ -72,12 +75,14 @@ class CategoryModel extends Equatable {
     );
   }
 
-  static CategoryModel? changeCategory(CategoryModel? model, int id, CategoryPlainModel details) {
+  static CategoryModel? changeCategory(
+      CategoryModel? model, int id, CategoryPlainModel details) {
     if (model == null) return null;
     if (id == 0) {
       return CategoryModel(categoryDetails: details, subCategory: null);
     }
     return CategoryModel(
-        categoryDetails: model.categoryDetails, subCategory: changeCategory(model.subCategory, id - 1, details));
+        categoryDetails: model.categoryDetails,
+        subCategory: changeCategory(model.subCategory, id - 1, details));
   }
 }

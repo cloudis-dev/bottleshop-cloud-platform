@@ -16,7 +16,8 @@ import 'package:loggy/loggy.dart';
 class StorageService with NetworkLoggy {
   final FirebaseStorage _firebaseStorage;
 
-  StorageService({FirebaseStorage? firebaseStorage}) : _firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
+  StorageService({FirebaseStorage? firebaseStorage})
+      : _firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
 
   Future<String?> getDownloadURL(String filePath) async {
     String downloadURL;

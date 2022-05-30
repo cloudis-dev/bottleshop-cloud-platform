@@ -65,7 +65,6 @@ class FilterDrawer extends HookConsumerWidget {
                   const Divider(),
                   Expanded(
                     child: CupertinoScrollbar(
-                      isAlwaysShown: true,
                       controller: scrollController,
                       child: ListView(
                         controller: scrollController,

@@ -15,8 +15,10 @@ final wishListStreamProvider = StreamProvider.autoDispose<List<ProductModel>?>(
   (ref) => ref.watch(wishListProvider)?.wishList ?? Stream.value(null),
 );
 
-final isInWishListStreamProvider = StreamProvider.autoDispose.family<bool?, String>(
+final isInWishListStreamProvider =
+    StreamProvider.autoDispose.family<bool?, String>(
   (ref, productId) =>
-      ref.watch(wishListProvider)?.wishList.map((event) => event.any((element) => element.uniqueId == productId)) ??
+      ref.watch(wishListProvider)?.wishList.map(
+          (event) => event.any((element) => element.uniqueId == productId)) ??
       Stream.value(null),
 );

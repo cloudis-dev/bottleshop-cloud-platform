@@ -18,7 +18,8 @@ class FilterIconButton extends StatelessWidget {
       icon: const Icon(Icons.filter_list),
       onPressed: () {
         if (childScaffoldKey.currentState!.isEndDrawerOpen) {
-          DrawerStateAcquirer.acquireDrawerCtrl(drawerAcquirerKey.currentState!).close();
+          DrawerStateAcquirer.acquireDrawerCtrl(drawerAcquirerKey.currentState!)
+              .close();
         } else {
           childScaffoldKey.currentState!.openEndDrawer();
         }

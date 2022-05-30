@@ -26,10 +26,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
-final authProvider = Provider<AuthenticationService>(((ref) => throw UnimplementedError()));
+final authProvider =
+    Provider<AuthenticationService>(((ref) => throw UnimplementedError()));
 
-final authStateChangesProvider =
-    StreamProvider.autoDispose<User?>((ref) => ref.watch(authProvider.select((value) => value.authStateChanges)));
+final authStateChangesProvider = StreamProvider.autoDispose<User?>(
+    (ref) => ref.watch(authProvider.select((value) => value.authStateChanges)));
 
 final currentUserProvider = Provider<UserModel?>((ref) {
   final user = ref.watch(userRepositoryProvider.select((value) => value.user));
@@ -52,7 +53,8 @@ final currentUserAsStream = StreamProvider.autoDispose<UserModel?>(
 );
 
 final authStatusProvider = Provider<AuthStatus>((ref) {
-  final authState = ref.watch(userRepositoryProvider.select((value) => value.status));
+  final authState =
+      ref.watch(userRepositoryProvider.select((value) => value.status));
   return authState;
 });
 
@@ -66,7 +68,8 @@ final userRepositoryProvider = ChangeNotifierProvider<UserRepository>((ref) {
 class TermsAcceptedState extends StateNotifier<bool> {
   final Ref ref;
 
-  TermsAcceptedState(this.ref, {required bool initialState}) : super(initialState);
+  TermsAcceptedState(this.ref, {required bool initialState})
+      : super(initialState);
 
   void _storeState() {
     final preferences = ref.read(sharedPreferencesServiceProvider);
@@ -86,15 +89,18 @@ class TermsAcceptedState extends StateNotifier<bool> {
   bool get termsAccepted => state;
 }
 
-final termsAcceptanceProvider = StateNotifierProvider<TermsAcceptedState, bool>((ref) {
+final termsAcceptanceProvider =
+    StateNotifierProvider<TermsAcceptedState, bool>((ref) {
   final preferences = ref.watch(sharedPreferencesServiceProvider);
   final initialState = preferences.getTermsAgreed();
   return TermsAcceptedState(ref, initialState: initialState);
 });
 
-final widgetToggleProvider = StateProvider<bool>((ref) => true, name: 'widgetToggleProvider');
+final widgetToggleProvider =
+    StateProvider<bool>((ref) => true, name: 'widgetToggleProvider');
 
-final formValidProvider = StateProvider<bool>((ref) => true, name: 'formValidProvider');
+final formValidProvider =
+    StateProvider<bool>((ref) => true, name: 'formValidProvider');
 
 final isAppVersionCompatible = StreamProvider.autoDispose<bool>(
   (ref) {
@@ -121,8 +127,10 @@ final appDownloadRedirectUrlProvider = FutureProvider.autoDispose<String>(
         .doc('main_app')
         .get()
         .then(
-          (value) => value
-              .data()![defaultTargetPlatform == TargetPlatform.android ? 'download_url_android' : 'download_url_ios'],
+          (value) => value.data()![
+              defaultTargetPlatform == TargetPlatform.android
+                  ? 'download_url_android'
+                  : 'download_url_ios'],
         );
   },
 );

@@ -62,7 +62,8 @@ class _AllProductsList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productsState = ref.watch(allProductsProvider.select<ItemsState<ProductModel>>((value) => value.itemsState));
+    final productsState = ref.watch(allProductsProvider
+        .select<ItemsState<ProductModel>>((value) => value.itemsState));
 
     return SliverProductsList(
       productsState: productsState,

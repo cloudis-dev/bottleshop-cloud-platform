@@ -58,7 +58,8 @@ class FilteredProductsWithStickyHeader extends HookConsumerWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
           SliverProductsList(
             productsState: productsState.itemsState,
-            requestData: () => ref.read(filteredProductsProvider(null)).requestData(),
+            requestData: () =>
+                ref.read(filteredProductsProvider(null)).requestData(),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
@@ -70,7 +71,8 @@ class FilteredProductsWithStickyHeader extends HookConsumerWidget {
         ),
         slivers: [
           SliverStickyHeader(
-            header: const FiltersStickyHeader(filterType: FilterType.allProducts),
+            header:
+                const FiltersStickyHeader(filterType: FilterType.allProducts),
             sliver: kIsWeb ? PageBodyTemplateSliver(sliver: body) : body,
           ),
         ],

@@ -51,8 +51,9 @@ class PromoCodeModel extends Equatable {
       codeField: code,
       remainingUsesCountField: remainingUsesCount,
       discountField: discount,
-      productRefField:
-          FirebaseFirestore.instance.collection(FirestoreCollections.productsCollection).doc(productUniqueId),
+      productRefField: FirebaseFirestore.instance
+          .collection(FirestoreCollections.productsCollection)
+          .doc(productUniqueId),
     };
   }
 

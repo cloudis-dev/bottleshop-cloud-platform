@@ -12,9 +12,10 @@ final newArrivalsProductsProvider =
     ChangeNotifierProvider.autoDispose<ProductsStateNotifier>(
   (ref) {
     return ProductsStateNotifier(
-      ref.watch(productsRepositoryProviderl10n.getNewProductsStream,
+      ref.watch(productsRepositoryProvider
+          .select((provider) => provider.getNewProductsStream)),
       const SortModel(sortField: SortField.name, ascending: true),
-      ).requestData();
+    )..requestData();
   },
 );
 
@@ -22,9 +23,10 @@ final saleProductsProvider =
     ChangeNotifierProvider.autoDispose<ProductsStateNotifier>(
   (ref) {
     return ProductsStateNotifier(
-      ref.watch(productsRepositoryProviderl10n.getSaleProductsStream,
+      ref.watch(productsRepositoryProvider
+          .select((provider) => provider.getSaleProductsStream)),
       const SortModel(sortField: SortField.name, ascending: true),
-      ).requestData();
+    )..requestData();
   },
 );
 
@@ -32,20 +34,21 @@ final recommendedProductsProvider =
     ChangeNotifierProvider.autoDispose<ProductsStateNotifier>(
   (ref) {
     return ProductsStateNotifier(
-      ref.watch(productsRepositoryProviderl10n.getRecommendedProductsStream,
+      ref.watch(productsRepositoryProvider
+          .select((provider) => provider.getRecommendedProductsStream)),
       const SortModel(sortField: SortField.name, ascending: true),
-      ).requestData();
+    )..requestData();
   },
 );
 
 final flashSaleProductsProvider =
     ChangeNotifierProvider.autoDispose<FlashSaleProductsStateNotifier>(
   (ref) {
-    return FlashSaleProductsStateNotifier(
-      ref.watch(productsRepositoryProvider).getFlashSaleProductsStream).requestData();
+    return FlashSaleProductsStateNotifier(ref.watch(
+        productsRepositoryProvider.select((p) => p.getFlashSaleProductsStream)))
+      ..requestData();
   },
 );
-
 
 /// This is using FlashSaleModel as family, so products with the same flash sale
 /// will have the same provider.
@@ -76,7 +79,7 @@ final flashSaleEndProvider =
       ..listen(
         (event) =>
             // When ticked, check the flash sales if all the products are in time.
-            ref.read(flashSaleProductsProviderl10n.checkFlashSaleItemsTime(),
+            ref.read(flashSaleProductsProvider).checkFlashSaleItemsTime(),
       );
 
     return resultStream;

@@ -35,7 +35,9 @@ class AdaptiveBottomNavigationScaffold extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return defaultTargetPlatform != TargetPlatform.iOS
-        ? MaterialBottomNavigationScaffold(navigationBarItems: navigationBarItems)
-        : CupertinoBottomNavigationScaffold(navigationBarItems: navigationBarItems);
+        ? MaterialBottomNavigationScaffold(
+            navigationBarItems: navigationBarItems)
+        : CupertinoBottomNavigationScaffold(
+            navigationBarItems: navigationBarItems);
   }
 }

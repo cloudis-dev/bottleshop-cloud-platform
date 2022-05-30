@@ -39,7 +39,8 @@ class _Scaffold extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final drawerAcquirerKey = useMemoized(() => GlobalKey<DrawerStateAcquirerState>());
+    final drawerAcquirerKey =
+        useMemoized(() => GlobalKey<DrawerStateAcquirerState>());
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final childScaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
 

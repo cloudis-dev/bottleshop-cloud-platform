@@ -10,6 +10,8 @@
 //
 //
 
+// ignore_for_file: unused_local_variable
+
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
@@ -19,7 +21,6 @@ import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -44,7 +45,9 @@ mixin DeliveryAvailableForUserCheck {
     }
 
     var valRes = validate(user, deliveryOption);
-    if (valRes.isEmpty || (valRes.length == 1 && valRes.elementAt(0) == DeniedReason.quickDeliveryNotice)) {
+    if (valRes.isEmpty ||
+        (valRes.length == 1 &&
+            valRes.elementAt(0) == DeniedReason.quickDeliveryNotice)) {
       return true;
     }
     return false;
@@ -55,7 +58,8 @@ mixin DeliveryAvailableForUserCheck {
       return [];
     }
 
-    logInfo('validating user: ${user.uid} option: ${deliveryOption.toString()}', 'DeliveryAvailableForUserCheck');
+    logInfo('validating user: ${user.uid} option: ${deliveryOption.toString()}',
+        'DeliveryAvailableForUserCheck');
     var deniedReasons = <DeniedReason>[];
     switch (deliveryOption) {
       case DeliveryOption.pickUp:
@@ -131,7 +135,8 @@ mixin DeliveryAvailableForUserCheck {
         }
         deniedReasons.add(DeniedReason.noDeliverySelected);
     }
-    logInfo('user can proceed: ${deniedReasons.isEmpty} reasons: $deniedReasons}');
+    logInfo(
+        'user can proceed: ${deniedReasons.isEmpty} reasons: $deniedReasons}');
     return deniedReasons;
   }
 }
@@ -160,7 +165,8 @@ String buildMessage(BuildContext context, List<DeniedReason> reasons) {
       reasons.contains(DeniedReason.name) ||
       reasons.contains(DeniedReason.phoneNumber)) {
     return context.l10n.pleaseFillOutYourEmailAndName;
-  } else if (reasons.contains(DeniedReason.shippingAddress) || reasons.contains(DeniedReason.billingAddress)) {
+  } else if (reasons.contains(DeniedReason.shippingAddress) ||
+      reasons.contains(DeniedReason.billingAddress)) {
     return context.l10n.pleaseFillOutYourEmailNameBillingAndShippingAddress;
   } else if (reasons.contains(DeniedReason.shipToCity)) {
     return context.l10n.quickDeliveryIsPossibleOnlyInBratislava;
@@ -170,7 +176,8 @@ String buildMessage(BuildContext context, List<DeniedReason> reasons) {
   return reasons.toString();
 }
 
-class DeliveryOptionState extends StateNotifier<DeliveryOption> with DeliveryAvailableForUserCheck {
+class DeliveryOptionState extends StateNotifier<DeliveryOption>
+    with DeliveryAvailableForUserCheck {
   DeliveryOptionState() : super(DeliveryOption.none);
 
   void selectDeliveryOption(DeliveryOption? newOption) {
@@ -188,7 +195,8 @@ class DeliveryOptionState extends StateNotifier<DeliveryOption> with DeliveryAva
   }
 }
 
-final deliveryOptionsStateProvider = StateNotifierProvider.autoDispose<DeliveryOptionState, DeliveryOption>(
+final deliveryOptionsStateProvider =
+    StateNotifierProvider.autoDispose<DeliveryOptionState, DeliveryOption>(
   (ref) => DeliveryOptionState(),
   name: 'deliveryOptionsStateProvider',
 );
@@ -212,7 +220,7 @@ class ShippingDetailsView extends HookConsumerWidget {
     final scrollController = useScrollController();
 
     useEffect(() {
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         onUserDenied(context, [DeniedReason.noDeliverySelected]);
       });
       return () => {};
@@ -230,7 +238,10 @@ class ShippingDetailsView extends HookConsumerWidget {
           leading: BackButton(
             onPressed: () async {
               ref.read(_isLoadingProvider.state).state = true;
-              await ref.read(cloudFunctionsProvider).removeShippingFee().whenComplete(() {
+              await ref
+                  .read(cloudFunctionsProvider)
+                  .removeShippingFee()
+                  .whenComplete(() {
                 ref.read(_isLoadingProvider.state).state = false;
               });
               onBackButton();
@@ -268,8 +279,8 @@ class DeliveryOptionTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orderTypes =
-        ref.watch(commonDataRepositoryProvider.select<List<OrderTypeModel>>((value) => value.data.orderTypes));
+    final orderTypes = ref.watch(commonDataRepositoryProvider
+        .select<List<OrderTypeModel>>((value) => value.data.orderTypes));
     final selectedDeliveryOption = ref.watch(deliveryOptionsStateProvider);
     final currentLocale = ref.watch(currentLocaleProvider);
     final items = <Widget>[
@@ -279,7 +290,10 @@ class DeliveryOptionTile extends HookConsumerWidget {
           alignment: AlignmentDirectional.centerStart,
           child: Text(
             context.l10n.payUpfront,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Theme.of(context).colorScheme.secondary),
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.copyWith(color: Theme.of(context).colorScheme.secondary),
             textAlign: TextAlign.start,
           ),
         ),
@@ -294,17 +308,24 @@ class DeliveryOptionTile extends HookConsumerWidget {
       ...orderTypes
           .map<Widget>(
             (orderType) => RadioListTile<DeliveryOption>(
-              title: Text(orderType.getName(currentLocale)!, style: Theme.of(context).textTheme.bodyText1),
-              subtitle: Text(orderType.getDescription(currentLocale)!, style: Theme.of(context).textTheme.caption),
+              title: Text(orderType.getName(currentLocale)!,
+                  style: Theme.of(context).textTheme.bodyText1),
+              subtitle: Text(orderType.getDescription(currentLocale)!,
+                  style: Theme.of(context).textTheme.caption),
               dense: true,
               activeColor: Theme.of(context).colorScheme.secondary,
-              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               value: orderType.deliveryOption,
               groupValue: selectedDeliveryOption,
               onChanged: (value) {
-                ref.read(deliveryOptionsStateProvider.notifier).selectDeliveryOption(value);
+                ref
+                    .read(deliveryOptionsStateProvider.notifier)
+                    .selectDeliveryOption(value);
                 ref.read(cloudFunctionsProvider).setShippingFee(value);
-                final deniedReasons = ref.read(deliveryOptionsStateProvider.notifier).validate(user, value);
+                final deniedReasons = ref
+                    .read(deliveryOptionsStateProvider.notifier)
+                    .validate(user, value);
                 onUserDenied(context, deniedReasons);
               },
             ),
@@ -318,7 +339,10 @@ class DeliveryOptionTile extends HookConsumerWidget {
           alignment: AlignmentDirectional.centerStart,
           child: Text(
             context.l10n.payLater,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Theme.of(context).colorScheme.secondary),
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.copyWith(color: Theme.of(context).colorScheme.secondary),
             textAlign: TextAlign.start,
           ),
         ),

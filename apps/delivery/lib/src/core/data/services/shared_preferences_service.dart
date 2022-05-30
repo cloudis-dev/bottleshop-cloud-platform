@@ -46,13 +46,17 @@ class SharedPreferencesService {
   }
 
   Future<void> setAppLocale(LanguageMode locale) async {
-    await sharedPreferences.setInt(AppPreferencesKeys.preferencesLanguage, locale.index);
+    await sharedPreferences.setInt(
+        AppPreferencesKeys.preferencesLanguage, locale.index);
   }
 
   LanguageMode getAppLanguage() {
-    final languageId = sharedPreferences.getInt(AppPreferencesKeys.preferencesLanguage);
+    final languageId =
+        sharedPreferences.getInt(AppPreferencesKeys.preferencesLanguage);
 
-    if (languageId != null && languageId >= 0 && languageId < LanguageMode.values.length) {
+    if (languageId != null &&
+        languageId >= 0 &&
+        languageId < LanguageMode.values.length) {
       return LanguageMode.values.elementAt(languageId);
     } else {
       final systemLocale = WidgetsBinding.instance.platformDispatcher.locale;
@@ -62,37 +66,47 @@ class SharedPreferencesService {
   }
 
   Future<void> setThemeMode(ThemeMode themeMode) async {
-    await sharedPreferences.setInt(AppPreferencesKeys.preferencesThemeMode, themeMode.index);
+    await sharedPreferences.setInt(
+        AppPreferencesKeys.preferencesThemeMode, themeMode.index);
   }
 
   ThemeMode getThemeMode() {
     if (kIsWeb) {
       return ThemeMode.dark;
     } else {
-      return ThemeMode.values.elementAt(sharedPreferences.getInt(AppPreferencesKeys.preferencesThemeMode) ?? 0);
+      return ThemeMode.values.elementAt(
+          sharedPreferences.getInt(AppPreferencesKeys.preferencesThemeMode) ??
+              0);
     }
   }
 
   Future<void> setLayoutMode(SupportedLayoutMode layoutMode) async {
-    await sharedPreferences.setInt(AppPreferencesKeys.preferencesLayoutMode, layoutMode.index);
+    await sharedPreferences.setInt(
+        AppPreferencesKeys.preferencesLayoutMode, layoutMode.index);
   }
 
-  SupportedLayoutMode getLayoutMode() =>
-      SupportedLayoutMode.values.elementAt(sharedPreferences.getInt(AppPreferencesKeys.preferencesLayoutMode) ?? 0);
+  SupportedLayoutMode getLayoutMode() => SupportedLayoutMode.values.elementAt(
+      sharedPreferences.getInt(AppPreferencesKeys.preferencesLayoutMode) ?? 0);
 
   Future<void> setTermsAgreed({required bool termsAgreed}) async {
-    await sharedPreferences.setBool(AppPreferencesKeys.preferencesTermsAgreed, termsAgreed);
+    await sharedPreferences.setBool(
+        AppPreferencesKeys.preferencesTermsAgreed, termsAgreed);
   }
 
-  bool getTermsAgreed() => sharedPreferences.getBool(AppPreferencesKeys.preferencesTermsAgreed) ?? false;
+  bool getTermsAgreed() =>
+      sharedPreferences.getBool(AppPreferencesKeys.preferencesTermsAgreed) ??
+      false;
 
   bool getHasAgeVerified() {
-    return sharedPreferences.getBool(AppPreferencesKeys.hasAgeVerified) ?? false;
+    return sharedPreferences.getBool(AppPreferencesKeys.hasAgeVerified) ??
+        false;
   }
 
   Future<void> setHasAgeVerified({required bool verified}) {
-    return sharedPreferences.setBool(AppPreferencesKeys.hasAgeVerified, verified);
+    return sharedPreferences.setBool(
+        AppPreferencesKeys.hasAgeVerified, verified);
   }
 }
 
-final sharedPreferencesServiceProvider = Provider<SharedPreferencesService>((ref) => throw UnimplementedError());
+final sharedPreferencesServiceProvider =
+    Provider<SharedPreferencesService>((ref) => throw UnimplementedError());

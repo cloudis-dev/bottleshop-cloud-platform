@@ -41,15 +41,22 @@ void main() async {
       ),
     );
     await dotenv.load(mergeWith: {'ENV': 'dev'});
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
     if (Environment.fbEmulatorsEnabled) {
-      await FirebaseAuth.instance.useAuthEmulator(Environment.emulatorHost, Environment.authEmuPort);
-      FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: false);
-      FirebaseFirestore.instance.useFirestoreEmulator(Environment.emulatorHost, Environment.firestoreEmuPort);
-      FirebaseFunctions.instance.useFunctionsEmulator(Environment.emulatorHost, Environment.functionsEmuPort);
-      FirebaseStorage.instance.useStorageEmulator(Environment.emulatorHost, Environment.storagesEmuPort);
+      await FirebaseAuth.instance
+          .useAuthEmulator(Environment.emulatorHost, Environment.authEmuPort);
+      FirebaseFirestore.instance.settings =
+          const Settings(persistenceEnabled: false);
+      FirebaseFirestore.instance.useFirestoreEmulator(
+          Environment.emulatorHost, Environment.firestoreEmuPort);
+      FirebaseFunctions.instance.useFunctionsEmulator(
+          Environment.emulatorHost, Environment.functionsEmuPort);
+      FirebaseStorage.instance.useStorageEmulator(
+          Environment.emulatorHost, Environment.storagesEmuPort);
     }
-    await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: Environment.recaptchSiteId);
+    await FirebaseAppCheck.instance
+        .activate(webRecaptchaSiteKey: Environment.recaptchSiteId);
     await SystemChrome.setPreferredOrientations(
       [
         DeviceOrientation.portraitUp,
@@ -58,7 +65,8 @@ void main() async {
     );
     if (kIsWeb) {
       const int megabyte = 1000000;
-      SystemChannels.skia.invokeMethod('Skia.setResourceCacheMaxBytes', 512 * megabyte);
+      SystemChannels.skia
+          .invokeMethod('Skia.setResourceCacheMaxBytes', 512 * megabyte);
       await Future<void>.delayed(Duration.zero);
     } else {
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle());
@@ -90,7 +98,7 @@ void main() async {
           ),
           walletsAvailableProvider.overrideWithValue(walletsAvailable),
         ],
-        child: const MyApp(),
+        child: const App(),
       ),
     );
     FlutterError.onError = (FlutterErrorDetails details) {

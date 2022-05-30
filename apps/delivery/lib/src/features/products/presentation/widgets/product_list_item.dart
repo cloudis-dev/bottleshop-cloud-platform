@@ -28,6 +28,7 @@ class ProductListItem extends HookConsumerWidget {
   final List<TextSpan>? nameTextSpans;
 
   const ProductListItem({
+    super.key,
     required this.product,
     this.nameTextSpans,
   });
@@ -86,6 +87,8 @@ class ProductListItem extends HookConsumerWidget {
                                 style: Theme.of(context).textTheme.subtitle2,
                               ),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                   '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)}',
@@ -93,17 +96,23 @@ class ProductListItem extends HookConsumerWidget {
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
-                                  FormattingUtils.getAlcoholNumberString(product.alcohol ?? 0),
+                                  FormattingUtils.getAlcoholNumberString(
+                                      product.alcohol ?? 0),
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                               ],
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
                             ),
                             Text(
-                              product.count > 0 ? '${product.count} ${context.l10n.inStock}' : context.l10n.outOfStock,
-                              style: Theme.of(context).textTheme.overline!.copyWith(
-                                    color: product.count > 0 ? Colors.green : Colors.red,
+                              product.count > 0
+                                  ? '${product.count} ${context.l10n.inStock}'
+                                  : context.l10n.outOfStock,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .overline!
+                                  .copyWith(
+                                    color: product.count > 0
+                                        ? Colors.green
+                                        : Colors.red,
                                   ),
                             ),
                           ],
@@ -130,7 +139,9 @@ class ProductListItem extends HookConsumerWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle2!
-                                      .copyWith(decoration: TextDecoration.lineThrough)),
+                                      .copyWith(
+                                          decoration:
+                                              TextDecoration.lineThrough)),
                             ),
                         ],
                       ),

@@ -36,7 +36,8 @@ class CartView extends HookConsumerWidget with UiLoggy {
       fit: StackFit.expand,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 120),
+          margin: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom + 120),
           padding: const EdgeInsets.only(bottom: 30),
           child: CupertinoScrollbar(
             controller: scrollController,
@@ -66,7 +67,8 @@ class CartView extends HookConsumerWidget with UiLoggy {
                           ),
                         ),
                         onDismissed: (direction) async {
-                          await ref.read(cartRepositoryProvider)!.removeItem(cart.elementAt(index).product.uniqueId);
+                          await ref.read(cartRepositoryProvider)!.removeItem(
+                              cart.elementAt(index).product.uniqueId);
                           showSimpleNotification(
                             Text(context.l10n.itemRemovedFromCart),
                             position: NotificationPosition.bottom,

@@ -25,7 +25,8 @@ class IsSpecialEditionFilter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final isSpecialEdition = ref.watch(filterModelProvider(filterType).select<bool>((value) => value.isSpecialEdition));
+    final isSpecialEdition = ref.watch(filterModelProvider(filterType)
+        .select<bool>((value) => value.isSpecialEdition));
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

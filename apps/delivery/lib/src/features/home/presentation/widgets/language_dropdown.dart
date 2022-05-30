@@ -1,4 +1,3 @@
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/preferences.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/widgets/dropdown.dart';
@@ -32,10 +31,13 @@ class LanguageDropdown extends HookConsumerWidget {
           ),
         ),
       ],
-      initialValue: ref.read(sharedPreferencesServiceProvider).getAppLanguage() ?? LanguageMode.en,
+      initialValue:
+          ref.read(sharedPreferencesServiceProvider).getAppLanguage(),
       onChanged: (value) async {
         await ref.read(sharedPreferencesServiceProvider).setAppLocale(value!);
-        await ref.read(userRepositoryProvider).onUserChangedPreferredLanguage(value);
+        await ref
+            .read(userRepositoryProvider)
+            .onUserChangedPreferredLanguage(value);
         ref.refresh(sharedPreferencesServiceProvider);
       },
     );

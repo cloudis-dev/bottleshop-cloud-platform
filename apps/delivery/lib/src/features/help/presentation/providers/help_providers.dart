@@ -17,7 +17,8 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final mdContentProvider = FutureProvider<Tuple2<String, String>>((ref) async {
-  final currentLocaleLang = LanguageUtils.parseLocale(ref.watch(currentLocaleProvider));
+  final currentLocaleLang =
+      LanguageUtils.parseLocale(ref.watch(currentLocaleProvider));
   String faq, contacts;
   if (currentLocaleLang == LocaleLanguage.english) {
     faq = await rootBundle.loadString(kFaqMd);

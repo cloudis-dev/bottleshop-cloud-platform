@@ -10,7 +10,8 @@ class DismissFocusOverlay extends HookConsumerWidget {
     return GestureDetector(
       onTap: () {
         var currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
           FocusManager.instance.primaryFocus!.unfocus();
         }
       },

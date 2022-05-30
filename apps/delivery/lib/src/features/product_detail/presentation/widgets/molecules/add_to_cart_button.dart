@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-final _addToCartButtonStateProvider = StateProvider.autoDispose.family<ButtonState, ProductModel>(
+final _addToCartButtonStateProvider =
+    StateProvider.autoDispose.family<ButtonState, ProductModel>(
   (ref, product) {
     return ref.watch(cartQuantityStreamProvider(product)).maybeWhen(
           orElse: () => ButtonState.idle,
@@ -28,8 +29,9 @@ class AddToCartButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final addToCartButtonState =
-        ref.watch(_addToCartButtonStateProvider(product).select<ButtonState>((value) => value));
+    final addToCartButtonState = ref.watch(
+        _addToCartButtonStateProvider(product)
+            .select<ButtonState>((value) => value));
 
     return ProgressButton(
       state: addToCartButtonState,
@@ -37,7 +39,8 @@ class AddToCartButton extends HookConsumerWidget {
           (product.count == 0
               ? null
               : () {
-                  ref.read(_addToCartButtonStateProvider(product).state).state = ButtonState.loading;
+                  ref.read(_addToCartButtonStateProvider(product).state).state =
+                      ButtonState.loading;
                   try {
                     ref.read(cartRepositoryProvider)!.add(product.uniqueId, 1);
 
@@ -49,13 +52,16 @@ class AddToCartButton extends HookConsumerWidget {
                     );
                   } catch (e) {
                     showSimpleNotification(
-                      Text('${product.name} ${context.l10n.couldntBeAddedToTheCart}'),
+                      Text(
+                          '${product.name} ${context.l10n.couldntBeAddedToTheCart}'),
                       duration: const Duration(seconds: 1),
                       slideDismissDirection: DismissDirection.horizontal,
                       context: context,
                     );
                   } finally {
-                    ref.read(_addToCartButtonStateProvider(product).state).state = ButtonState.idle;
+                    ref
+                        .read(_addToCartButtonStateProvider(product).state)
+                        .state = ButtonState.idle;
                   }
                 }),
       stateWidgets: {
@@ -70,7 +76,8 @@ class AddToCartButton extends HookConsumerWidget {
         ButtonState.fail: const SizedBox.shrink(),
       },
       stateColors: Map.fromEntries(
-        ButtonState.values.map((e) => MapEntry(e, Theme.of(context).primaryColor)),
+        ButtonState.values
+            .map((e) => MapEntry(e, Theme.of(context).primaryColor)),
       ),
     );
   }

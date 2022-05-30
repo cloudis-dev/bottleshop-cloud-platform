@@ -31,7 +31,8 @@ class SignInPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final signInToggled = ref.watch<bool>(widgetToggleProvider);
     final scrollController = useScrollController();
-    final isLoading = ref.watch(userRepositoryProvider.select<bool>((value) => value.isLoading));
+    final isLoading = ref
+        .watch(userRepositoryProvider.select<bool>((value) => value.isLoading));
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
@@ -74,26 +75,50 @@ class SignInPage extends HookConsumerWidget {
                                     child: signInToggled
                                         ? SignInForm(authCallback: (result) {
                                             if (result == false) {
-                                              var error = ref.watch(userRepositoryProvider.notifier).error ?? '';
-                                              ref.read(userRepositoryProvider).handleFatalFailure();
+                                              var error = ref
+                                                      .watch(
+                                                          userRepositoryProvider
+                                                              .notifier)
+                                                      .error ??
+                                                  '';
+                                              ref
+                                                  .read(userRepositoryProvider)
+                                                  .handleFatalFailure();
                                               showSimpleNotification(
-                                                Text(error.isNotEmpty ? error : 'Fatal error'),
-                                                position: NotificationPosition.bottom,
-                                                background: Theme.of(context).errorColor,
-                                                slideDismissDirection: DismissDirection.horizontal,
+                                                Text(error.isNotEmpty
+                                                    ? error
+                                                    : 'Fatal error'),
+                                                position:
+                                                    NotificationPosition.bottom,
+                                                background: Theme.of(context)
+                                                    .errorColor,
+                                                slideDismissDirection:
+                                                    DismissDirection.horizontal,
                                                 context: context,
                                               );
                                             }
                                           })
                                         : SignUpForm(authCallback: (result) {
                                             if (result == false) {
-                                              var error = ref.watch(userRepositoryProvider.notifier).error ?? '';
-                                              ref.read(userRepositoryProvider).handleFatalFailure();
+                                              var error = ref
+                                                      .watch(
+                                                          userRepositoryProvider
+                                                              .notifier)
+                                                      .error ??
+                                                  '';
+                                              ref
+                                                  .read(userRepositoryProvider)
+                                                  .handleFatalFailure();
                                               showSimpleNotification(
-                                                Text(error.isNotEmpty ? error : 'Fatal error'),
-                                                position: NotificationPosition.bottom,
-                                                background: Theme.of(context).errorColor,
-                                                slideDismissDirection: DismissDirection.horizontal,
+                                                Text(error.isNotEmpty
+                                                    ? error
+                                                    : 'Fatal error'),
+                                                position:
+                                                    NotificationPosition.bottom,
+                                                background: Theme.of(context)
+                                                    .errorColor,
+                                                slideDismissDirection:
+                                                    DismissDirection.horizontal,
                                                 context: context,
                                               );
                                             }
@@ -105,13 +130,19 @@ class SignInPage extends HookConsumerWidget {
                           ),
                           const TermsAndConditionsTile(),
                           Text(
-                            signInToggled ? context.l10n.dontHaveAnAccount : context.l10n.account_already,
+                            signInToggled
+                                ? context.l10n.dontHaveAnAccount
+                                : context.l10n.account_already,
                           ),
                           TextButton(
-                            onPressed: () => ref.read(widgetToggleProvider.notifier).state =
+                            onPressed: () => ref
+                                    .read(widgetToggleProvider.notifier)
+                                    .state =
                                 !ref.read(widgetToggleProvider.notifier).state,
                             child: Text(
-                              !signInToggled ? context.l10n.sign_in : context.l10n.sign_up,
+                              !signInToggled
+                                  ? context.l10n.sign_in
+                                  : context.l10n.sign_up,
                             ),
                           ),
                         ],

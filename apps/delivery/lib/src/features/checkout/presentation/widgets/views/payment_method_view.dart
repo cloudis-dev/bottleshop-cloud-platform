@@ -43,7 +43,6 @@ class PaymentMethodView extends HookConsumerWidget with UiLoggy {
         ),
         body: CupertinoScrollbar(
           controller: scrollController,
-          isAlwaysShown: true,
           child: SingleChildScrollView(
             controller: scrollController,
             padding: const EdgeInsets.symmetric(vertical: 10),

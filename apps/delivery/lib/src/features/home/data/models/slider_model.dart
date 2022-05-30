@@ -64,9 +64,11 @@ class SliderModel {
       imageUrl: data['imageUrl'],
       description: data['description'],
       descriptionLocalized: data['description_localized'],
-      imageUrlLocalized: data.containsKey(SliderModelFields.imageUrlLocalizedField)
-          ? LocalizedModel.fromMap(data[SliderModelFields.imageUrlLocalizedField])
-          : null,
+      imageUrlLocalized:
+          data.containsKey(SliderModelFields.imageUrlLocalizedField)
+              ? LocalizedModel.fromMap(
+                  data[SliderModelFields.imageUrlLocalizedField])
+              : null,
     );
   }
 }

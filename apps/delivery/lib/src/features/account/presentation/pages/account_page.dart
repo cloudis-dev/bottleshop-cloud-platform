@@ -85,7 +85,8 @@ class _Body extends HookConsumerWidget {
       DropdownListItem(label: context.l10n.dark),
     ];
 
-    final themeProvider = ref.watch(sharedPreferencesServiceProvider.select((value) => value.getThemeMode()));
+    final themeProvider = ref.watch(sharedPreferencesServiceProvider
+        .select((value) => value.getThemeMode()));
 
     return SingleChildScrollView(
       controller: scrollCtrl,
@@ -136,7 +137,8 @@ class _Body extends HookConsumerWidget {
                     borderRadius: BorderRadius.circular(6),
                     boxShadow: [
                       BoxShadow(
-                          color: Theme.of(context).primaryColor.withOpacity(0.3),
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.3),
                           offset: const Offset(0, 1),
                           blurRadius: 5)
                     ],
@@ -177,7 +179,9 @@ class _Body extends HookConsumerWidget {
                               initialValue: themeProvider,
                               customWidgets: themeWidgets,
                               onChanged: (value) async {
-                                await ref.read(sharedPreferencesServiceProvider).setThemeMode(value!);
+                                await ref
+                                    .read(sharedPreferencesServiceProvider)
+                                    .setThemeMode(value!);
                                 ref.refresh(sharedPreferencesServiceProvider);
                               },
                             ),

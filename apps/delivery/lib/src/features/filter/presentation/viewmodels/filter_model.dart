@@ -102,13 +102,16 @@ class FilterModel extends Equatable {
 
   List<CountryModel> get countries => List.unmodifiable(_countries);
 
-  List<String> get enabledExtraCategoriesIds => List.unmodifiable(_enabledExtraCategoriesIds);
+  List<String> get enabledExtraCategoriesIds =>
+      List.unmodifiable(_enabledExtraCategoriesIds);
 
   int get minAlcohol => alcoholRange.start.round();
 
   int get maxAlcohol => alcoholRange.end.round();
 
-  bool get isAlcoholActive => minAlcohol != FilterConstants.minAlcohol || maxAlcohol != FilterConstants.maxAlcohol;
+  bool get isAlcoholActive =>
+      minAlcohol != FilterConstants.minAlcohol ||
+      maxAlcohol != FilterConstants.maxAlcohol;
 
   bool get isQuantityActive => minQuantity != FilterConstants.minQuantity;
 
@@ -132,7 +135,8 @@ class FilterModel extends Equatable {
         FilterConstants.maxPrice.toDouble(),
       );
 
-  bool get isSpecialEditionActive => isSpecialEdition != FilterConstants.defaultIsSpecialEdition;
+  bool get isSpecialEditionActive =>
+      isSpecialEdition != FilterConstants.defaultIsSpecialEdition;
 
   bool get isCountriesActive => _countries.isNotEmpty;
 
@@ -228,7 +232,8 @@ class FilterModel extends Equatable {
   }
 
   FilterModel clearedExtraCategoriesFilter() {
-    return copyWith(enabledExtraCategoriesIds: FilterConstants.defaultExtraCategories);
+    return copyWith(
+        enabledExtraCategoriesIds: FilterConstants.defaultExtraCategories);
   }
 
   FilterQuery getQuery(
@@ -350,12 +355,15 @@ class FilterModel extends Equatable {
         (minQuantity == null || identical(minQuantity, this.minQuantity)) &&
         (volumeRange == null || identical(volumeRange, this.volumeRange)) &&
         (priceRange == null || identical(priceRange, this.priceRange)) &&
-        (isSpecialEdition == null || identical(isSpecialEdition, this.isSpecialEdition)) &&
+        (isSpecialEdition == null ||
+            identical(isSpecialEdition, this.isSpecialEdition)) &&
         (countries == null || identical(countries, _countries)) &&
-        (isFilterByAge == null || identical(isFilterByAge, this.isFilterByAge)) &&
+        (isFilterByAge == null ||
+            identical(isFilterByAge, this.isFilterByAge)) &&
         (minAge == null || identical(minAge, this.minAge)) &&
         (maxYear == null || identical(maxYear, this.maxYear)) &&
-        (enabledExtraCategoriesIds == null || identical(enabledExtraCategoriesIds, _enabledExtraCategoriesIds))) {
+        (enabledExtraCategoriesIds == null ||
+            identical(enabledExtraCategoriesIds, _enabledExtraCategoriesIds))) {
       return this;
     }
 
@@ -369,7 +377,8 @@ class FilterModel extends Equatable {
       isFilterByAge: isFilterByAge ?? this.isFilterByAge,
       minAge: minAge ?? this.minAge,
       maxYear: maxYear ?? this.maxYear,
-      enabledExtraCategoriesIds: enabledExtraCategoriesIds ?? _enabledExtraCategoriesIds,
+      enabledExtraCategoriesIds:
+          enabledExtraCategoriesIds ?? _enabledExtraCategoriesIds,
     );
   }
 }

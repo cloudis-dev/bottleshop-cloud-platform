@@ -27,7 +27,8 @@ class FilterFormattingUtils {
     return '$minQuantity - ${context.l10n.max}';
   }
 
-  static String getFilterVolumeRangeString(RangeValues volumeRange, BuildContext context) {
+  static String getFilterVolumeRangeString(
+      RangeValues volumeRange, BuildContext context) {
     if (FilterConstants.isVolumeMax(volumeRange.end)) {
       return '${FormattingUtils.getFilterVolumeNumberString(volumeRange.start)} - ${context.l10n.max}';
     } else {
@@ -36,7 +37,8 @@ class FilterFormattingUtils {
     }
   }
 
-  static String getPriceRangeString(RangeValues priceRange, BuildContext context) {
+  static String getPriceRangeString(
+      RangeValues priceRange, BuildContext context) {
     if (FilterConstants.isPriceMax(priceRange.end)) {
       return '${FormattingUtils.getPriceNumberString(priceRange.start)} - ${context.l10n.max}';
     } else {

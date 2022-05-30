@@ -34,7 +34,8 @@ class AuthenticationService {
     GoogleSignIn? googleSignIn,
     FacebookAuth? facebookLogin,
   })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn(scopes: kGoogleSignInScopes),
+        _googleSignIn =
+            googleSignIn ?? GoogleSignIn(scopes: kGoogleSignInScopes),
         _facebookLogin = facebookLogin ?? FacebookAuth.instance;
 
   User? get currentUser => _firebaseAuth.currentUser;
@@ -48,11 +49,14 @@ class AuthenticationService {
   }
 
   Future<void> signInWithEmailAndPassword(String email, String password) async {
-    await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
   }
 
-  Future<void> createUserWithEmailAndPassword(String email, String password) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+  Future<void> createUserWithEmailAndPassword(
+      String email, String password) async {
+    await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
@@ -69,16 +73,19 @@ class AuthenticationService {
       );
       await _signUserWithAuthCredential(credential);
     } else {
-      throw PlatformException(code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+      throw PlatformException(
+          code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
     }
   }
 
   Future<void> signInWithGoogleWeb() async {
     final googleAuthProvider = GoogleAuthProvider();
-    final userCredential = await FirebaseAuth.instance.signInWithPopup(googleAuthProvider);
+    final userCredential =
+        await FirebaseAuth.instance.signInWithPopup(googleAuthProvider);
     final authCredential = userCredential.credential;
     if (authCredential == null) {
-      throw PlatformException(code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+      throw PlatformException(
+          code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
     }
     await _signUserWithAuthCredential(authCredential);
   }
@@ -86,13 +93,18 @@ class AuthenticationService {
   Future<String> signInWithFacebook() async {
     var loginResult = await FacebookAuth.instance.login();
     if (loginResult.status == LoginStatus.success) {
-      final facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-      var credential = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+      final facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      var credential = await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
       return credential.credential!.providerId;
     } else if (loginResult.status == LoginStatus.cancelled) {
-      throw PlatformException(code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+      throw PlatformException(
+          code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
     } else {
-      throw PlatformException(code: 'ERROR_FACEBOOK_AUTH', message: 'Unable to sing in to Facebook');
+      throw PlatformException(
+          code: 'ERROR_FACEBOOK_AUTH',
+          message: 'Unable to sing in to Facebook');
     }
   }
 
@@ -105,7 +117,8 @@ class AuthenticationService {
       });
       await FirebaseAuth.instance.signInWithPopup(facebookProvider);
     } catch (err) {
-      throw PlatformException(code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+      throw PlatformException(
+          code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
     }
   }
 

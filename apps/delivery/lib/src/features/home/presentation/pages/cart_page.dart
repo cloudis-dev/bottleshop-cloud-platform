@@ -64,7 +64,11 @@ class _Body extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isCartEmpty = ref.watch(cartProvider).whenData((value) => value!.totalItems < 1).value ?? true;
+    final isCartEmpty = ref
+            .watch(cartProvider)
+            .whenData((value) => value!.totalItems < 1)
+            .value ??
+        true;
     return isCartEmpty
         ? EmptyTab(
             icon: Icons.shopping_cart_outlined,

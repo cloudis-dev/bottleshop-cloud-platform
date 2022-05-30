@@ -48,8 +48,9 @@ class _Body extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAnyFilterActive =
-        ref.watch(appliedFilterProvider(FilterType.allProducts).select<bool>((value) => value.isAnyFilterActive));
+    final isAnyFilterActive = ref.watch(
+        appliedFilterProvider(FilterType.allProducts)
+            .select<bool>((value) => value.isAnyFilterActive));
     final scrollCtrl = useScrollController();
 
     final children = [

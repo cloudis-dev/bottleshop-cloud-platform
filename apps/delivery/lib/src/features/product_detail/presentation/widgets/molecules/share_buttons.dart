@@ -79,7 +79,8 @@ class ShareProductDialog extends HookWidget {
                                 isCopied.value = true;
                               }
                             },
-                            child: Icon(isCopied.value ? Icons.check : Icons.link),
+                            child:
+                                Icon(isCopied.value ? Icons.check : Icons.link),
                           ),
                           Text(
                             'Copy URL',

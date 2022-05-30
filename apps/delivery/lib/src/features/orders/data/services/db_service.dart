@@ -17,5 +17,6 @@ import 'package:delivery/src/features/orders/data/models/order_model.dart';
 
 DatabaseService<OrderModel> ordersDbService = DatabaseService<OrderModel>(
   FirestoreCollections.ordersCollection,
-  fromMapAsync: (id, data) async => FirestoreJsonParsingUtil.parseOrderJson(id, data),
+  fromMapAsync: (id, data) async =>
+      FirestoreJsonParsingUtil.parseOrderJson(id, data),
 );

@@ -30,11 +30,14 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     useEffect(() {
       PushNotificationService.handleMessageOpenedApp(ref.read).then(
         (value) => loggy.info('handleMessageOpenedApp register'),
-        onError: (dynamic err, dynamic stack) => loggy.error('handleMessageOpenedApp', err, stack),
+        onError: (dynamic err, dynamic stack) =>
+            loggy.error('handleMessageOpenedApp', err, stack),
       );
       return null;
     }, const []);
 
-    return shouldUseMobileLayout(context) ? const HomeMobileScaffold() : const HomeWebScaffold();
+    return shouldUseMobileLayout(context)
+        ? const HomeMobileScaffold()
+        : const HomeWebScaffold();
   }
 }

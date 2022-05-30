@@ -10,6 +10,8 @@
 //
 //
 
+// ignore_for_file: unused_local_variable
+
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
@@ -23,6 +25,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchedCategoryListItem extends HookConsumerWidget {
   const SearchedCategoryListItem({
+    super.key,
     required this.categoryPlainModel,
     required this.navigationCategory,
     required this.heroTag,
@@ -35,9 +38,11 @@ class SearchedCategoryListItem extends HookConsumerWidget {
   final String heroTag;
 
   void onClick(WidgetRef ref, BuildContext context) {
-    final subcategoryId = navigationCategory.categoryDetails.id != categoryPlainModel.id
+    final subcategoryId = navigationCategory.categoryDetails.id !=
+            categoryPlainModel.id
         ? navigationCategory.subCategories
-            .map((e) => CategoriesTreeModel.getAllCategoryPlainModels(e).map((e) => e.id))
+            .map((e) => CategoriesTreeModel.getAllCategoryPlainModels(e)
+                .map((e) => e.id))
             .toList()
             .indexWhere((element) => element.contains(categoryPlainModel.id))
         : null;
@@ -71,7 +76,8 @@ class SearchedCategoryListItem extends HookConsumerWidget {
                       child: Hero(
                         tag: heroTag,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 8),
                           child: Image.asset(
                             categoryPlainModel.iconName!,
                             color: Theme.of(context).primaryIconTheme.color,
@@ -87,10 +93,15 @@ class SearchedCategoryListItem extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        navigationCategory.categoryDetails.getName(currentLocale),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                        navigationCategory.categoryDetails
+                            .getName(currentLocale),
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1!
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      if (categoryPlainModel.id == navigationCategory.categoryDetails.id)
+                      if (categoryPlainModel.id ==
+                          navigationCategory.categoryDetails.id)
                         Text(
                           context.l10n.all,
                           style: Theme.of(context).textTheme.bodyText1,

@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:collection/algorithms.dart';
+import 'package:collection/collection.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';

@@ -33,9 +33,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
-
-class ProductDetailPage extends HookConsumerWidget with UiLoggy{
+class ProductDetailPage extends HookConsumerWidget with UiLoggy {
   final ProductModel? product;
   final String? productUid;
 
@@ -146,6 +144,7 @@ class _BodyWeb extends HookConsumerWidget {
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
+                                    // ignore: deprecated_member_use
                                     launch(imgUrl);
                                   },
                                 ),
@@ -164,7 +163,6 @@ class _BodyWeb extends HookConsumerWidget {
                       children: [
                         Expanded(
                           child: Scrollbar(
-                            isAlwaysShown: true,
                             controller: scrollCtrl,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 12),

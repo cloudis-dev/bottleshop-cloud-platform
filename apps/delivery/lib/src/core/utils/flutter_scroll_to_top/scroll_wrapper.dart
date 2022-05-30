@@ -1,7 +1,8 @@
 import 'package:delivery/src/core/utils/flutter_scroll_to_top/size_expand_section.dart';
 import 'package:flutter/material.dart';
 
-typedef ReplacementBuilder = Widget Function(BuildContext context, Function function);
+typedef ReplacementBuilder = Widget Function(
+    BuildContext context, Function function);
 
 /// Wrap the widget to show a scroll to top prompt over when a certain scroll
 /// offset is reached.
@@ -85,19 +86,23 @@ class _ScrollWrapperState extends State<ScrollWrapper> {
   bool scrollTopAtOffset = false;
 
   void scrollToTop() {
-    widget.scrollController.animateTo(widget.scrollController.position.minScrollExtent,
-        duration: widget.scrollToTopDuration, curve: widget.scrollToTopCurve);
+    widget.scrollController.animateTo(
+        widget.scrollController.position.minScrollExtent,
+        duration: widget.scrollToTopDuration,
+        curve: widget.scrollToTopCurve);
   }
 
   @override
   Widget build(BuildContext context) {
     Widget child = NotificationListener<ScrollNotification>(
       onNotification: (notification) {
-        if (notification.metrics.pixels > widget.promptScrollOffset && !scrollTopAtOffset) {
+        if (notification.metrics.pixels > widget.promptScrollOffset &&
+            !scrollTopAtOffset) {
           setState(() {
             scrollTopAtOffset = true;
           });
-        } else if (notification.metrics.pixels <= widget.promptScrollOffset && scrollTopAtOffset) {
+        } else if (notification.metrics.pixels <= widget.promptScrollOffset &&
+            scrollTopAtOffset) {
           setState(() {
             scrollTopAtOffset = false;
           });

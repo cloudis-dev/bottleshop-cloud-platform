@@ -11,18 +11,25 @@ import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final cartQuantityStreamProvider = StreamProvider.autoDispose.family<int, ProductModel>(
+final cartQuantityStreamProvider =
+    StreamProvider.autoDispose.family<int, ProductModel>(
   (ref, product) {
-    return ref.watch(cartRepositoryProvider)!.getQuantityOfCartItemStream(product.uniqueId);
+    return ref
+        .watch(cartRepositoryProvider)!
+        .getQuantityOfCartItemStream(product.uniqueId);
   },
 );
 
 /// Returns null in case no user is logged in. So no cart can be fetched.
-final isInCartStreamProvider = StreamProvider.autoDispose.family<bool?, ProductModel>(
-  (ref, product) => ref.watch(cartRepositoryProvider)?.isInCartStream(product.uniqueId) ?? Stream.value(null),
+final isInCartStreamProvider =
+    StreamProvider.autoDispose.family<bool?, ProductModel>(
+  (ref, product) =>
+      ref.watch(cartRepositoryProvider)?.isInCartStream(product.uniqueId) ??
+      Stream.value(null),
 );
 
-final _cartServiceProvider = Provider.autoDispose.family<DatabaseService<CartModel>, UserModel>(
+final _cartServiceProvider =
+    Provider.autoDispose.family<DatabaseService<CartModel>, UserModel>(
   (_, user) => DatabaseService<CartModel>(
     FirestorePaths.userCart(user.uid),
     fromMapAsync: (id, map) async => CartModel.fromMap(map),
@@ -30,7 +37,8 @@ final _cartServiceProvider = Provider.autoDispose.family<DatabaseService<CartMod
   ),
 );
 
-final _cartContentServiceProvider = Provider.autoDispose.family<CartContentService, UserModel>(
+final _cartContentServiceProvider =
+    Provider.autoDispose.family<CartContentService, UserModel>(
   (_, user) => CartContentService(user),
 );
 

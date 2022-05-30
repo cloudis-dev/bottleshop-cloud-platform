@@ -71,7 +71,6 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
         return AlertDialog(
           title: buildDialogTitle(context, context.l10n.profileSettings),
           content: CupertinoScrollbar(
-            isAlwaysShown: true,
             controller: controller,
             child: SingleChildScrollView(
               controller: controller,

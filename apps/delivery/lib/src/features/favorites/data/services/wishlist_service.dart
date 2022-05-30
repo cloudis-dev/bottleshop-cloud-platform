@@ -12,14 +12,17 @@ class WishListService with NetworkLoggy {
 
   WishListService(this.read) {
     final uid = read(currentUserProvider)?.uid;
-    db = uid == null ? null : WishListDBService(FirestorePaths.userFavorites(uid));
+    db = uid == null
+        ? null
+        : WishListDBService(FirestorePaths.userFavorites(uid));
   }
 
   Future<void> add(String? id) async {
     if (db == null) return;
 
     loggy.info('adding $id');
-    var ref = db!.db.collection(FirestoreCollections.productsCollection).doc(id);
+    var ref =
+        db!.db.collection(FirestoreCollections.productsCollection).doc(id);
     var item = FavoriteItemModel(product: ref, addedAt: DateTime.now());
     await db!.create(item.toMap(), id: id);
   }
@@ -31,5 +34,6 @@ class WishListService with NetworkLoggy {
     await db!.removeItem(id);
   }
 
-  Stream<List<ProductModel>> get wishList => db == null ? const Stream.empty() : db!.getWishListStream();
+  Stream<List<ProductModel>> get wishList =>
+      db == null ? const Stream.empty() : db!.getWishListStream();
 }

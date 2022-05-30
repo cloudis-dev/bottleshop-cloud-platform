@@ -5,6 +5,7 @@ import 'package:delivery/src/core/data/services/streamed_items_state_management/
 import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state.dart';
 import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state_stream_batch.dart';
 import 'package:dartz/dartz.dart';
+import 'package:loggy/loggy.dart';
 
 class CreateStreamMustCreateNewInstanceException implements Exception {
   final String message;
@@ -104,7 +105,7 @@ class ItemsStreamHandler<T, E> {
       StreamSubscription<ItemsStateStreamBatch<T>> Function(bool shouldReplaceState) createSubscription,
     ) async {
       if (isInitialBatch) {
-        print('''An error occured when fetching the initial items batch.
+        logError('''An error occured when fetching the initial items batch.
             Error: $err.
             Stacktrace: $stacktrace
             ''');
@@ -118,7 +119,7 @@ class ItemsStreamHandler<T, E> {
         onErrorCallback(err, stacktrace);
       } else {
         if (remainingRecoveryAttempts <= 0) {
-          print('''There was an error when the items stream received updates.
+          logError('''There was an error when the items stream received updates.
                 No more recovery attempts remaining.
                 Stream will receive no updates anymore.
                 Error: $err
@@ -132,7 +133,7 @@ class ItemsStreamHandler<T, E> {
         remainingRecoveryAttempts--;
         await _streamSubscription.cancel();
 
-        print(
+        logError(
           '''There was an error when the items stream received updates.
             Trying to recover in $recoveryAttemptDelaySeconds seconds.
             Recovery attempts remaining $remainingRecoveryAttempts.

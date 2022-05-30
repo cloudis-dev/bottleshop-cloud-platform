@@ -46,7 +46,8 @@ extension IterableExtension<T> on Iterable<T> {
     return set
         .map(
           (e) => (firstOccurenceRemains ? firstWhere : lastWhere)(
-            (element) => const DeepCollectionEquality().equals(selectorForEqualityComparison(element), e),
+            (element) => const DeepCollectionEquality()
+                .equals(selectorForEqualityComparison(element), e),
           ),
         )
         .toList();

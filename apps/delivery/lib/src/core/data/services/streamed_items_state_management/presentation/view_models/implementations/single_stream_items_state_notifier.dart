@@ -10,7 +10,8 @@ import 'package:flutter/foundation.dart';
 ///
 /// [E] is the item unique selector type.
 /// The field's type based on which is the distinction of items preserved.
-class SingleStreamItemsStateNotifier<T, E> extends StreamedItemsStateNotifierBase<T, E> {
+class SingleStreamItemsStateNotifier<T, E>
+    extends StreamedItemsStateNotifierBase<T, E> {
   SingleStreamItemsStateNotifier(
     this._createStream,
     ItemsHandler<T, E> itemsHandler,
@@ -45,7 +46,8 @@ class SingleStreamItemsStateNotifier<T, E> extends StreamedItemsStateNotifierBas
     required bool hasError,
   }) {
     if (!hasError) {
-      newItemsState = newItemsState.copyWith(status: ItemsStateStatus.allLoaded);
+      newItemsState =
+          newItemsState.copyWith(status: ItemsStateStatus.allLoaded);
     }
 
     super.onDataUpdate(

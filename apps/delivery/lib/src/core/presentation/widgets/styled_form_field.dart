@@ -86,7 +86,11 @@ class StyledFormField extends StatelessWidget {
 }
 
 InputDecoration getInputFieldDecorator(
-    {required BuildContext context, String? hintText, String? labelText, Widget? prefixIcon, Widget? suffixIcon}) {
+    {required BuildContext context,
+    String? hintText,
+    String? labelText,
+    Widget? prefixIcon,
+    Widget? suffixIcon}) {
   return InputDecoration(
     hintText: hintText,
     labelText: labelText,
@@ -98,7 +102,8 @@ InputDecoration getInputFieldDecorator(
 MultiValidator createPasswordValidator(BuildContext context) {
   return MultiValidator([
     RequiredValidator(errorText: context.l10n.passwordIsRequired),
-    MinLengthValidator(6, errorText: context.l10n.passwordMinimumRequirementsHint),
+    MinLengthValidator(6,
+        errorText: context.l10n.passwordMinimumRequirementsHint),
   ]);
 }
 

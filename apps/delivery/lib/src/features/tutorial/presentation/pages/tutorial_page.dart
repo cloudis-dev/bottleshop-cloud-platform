@@ -37,7 +37,8 @@ class TutorialPage extends HookConsumerWidget {
               height: MediaQuery.of(context).size.height,
               disableCenter: true,
               viewportFraction: 1.0,
-              onPageChanged: ref.read(tutorialModelProvider.notifier).pageChanged,
+              onPageChanged:
+                  ref.read(tutorialModelProvider.notifier).pageChanged,
             ),
             items: TutorialAssets.assets
                 .map(
@@ -90,7 +91,9 @@ class TutorialPage extends HookConsumerWidget {
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
-                onPressed: () => ref.read(tutorialModelProvider.notifier).finishIntroScreen(ref, context),
+                onPressed: () => ref
+                    .read(tutorialModelProvider.notifier)
+                    .finishIntroScreen(ref, context),
                 child: Text(context.l10n.skip),
               ),
             ),
@@ -106,12 +109,14 @@ class TutorialPage extends HookConsumerWidget {
                     (boarding) => Container(
                       width: 25.0,
                       height: 3.0,
-                      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
-                        color: onBoardingViewModel == TutorialAssets.assets.indexOf(boarding)
+                        color: onBoardingViewModel ==
+                                TutorialAssets.assets.indexOf(boarding)
                             ? Theme.of(context).colorScheme.secondary
                             : Theme.of(context).primaryColor,
                       ),
@@ -127,7 +132,8 @@ class TutorialPage extends HookConsumerWidget {
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.secondary,
-                padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
@@ -136,7 +142,9 @@ class TutorialPage extends HookConsumerWidget {
                 ),
               ),
               onPressed: () => isLast
-                  ? ref.read(tutorialModelProvider.notifier).finishIntroScreen(ref, context)
+                  ? ref
+                      .read(tutorialModelProvider.notifier)
+                      .finishIntroScreen(ref, context)
                   : carouselController.nextPage(curve: Curves.easeOutCubic),
               child: isLast
                   ? Row(

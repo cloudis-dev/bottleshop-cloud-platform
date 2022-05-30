@@ -39,7 +39,8 @@ class SortMenuButton extends HookConsumerWidget {
           switch (option) {
             case _ButtonOptions.ascending:
             case _ButtonOptions.descending:
-              return sortModel.copyWith(ascending: option == _ButtonOptions.ascending);
+              return sortModel.copyWith(
+                  ascending: option == _ButtonOptions.ascending);
             case _ButtonOptions.name:
               return sortModel.copyWith(sortField: SortField.name);
             case _ButtonOptions.price:

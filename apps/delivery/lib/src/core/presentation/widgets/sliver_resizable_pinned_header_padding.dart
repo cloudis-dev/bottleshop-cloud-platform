@@ -33,6 +33,7 @@ class SliverResizablePinnedHeaderPadding extends SingleChildRenderObjectWidget {
   final double shiftDelay;
 
   @override
+  // ignore: library_private_types_in_public_api
   _RenderSliverResizablePinnedHeaderPadding createRenderObject(
       BuildContext context) {
     return _RenderSliverResizablePinnedHeaderPadding(maxShift, shiftDelay);

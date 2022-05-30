@@ -32,7 +32,12 @@ import 'package:intl/intl.dart';
 import 'package:loggy/loggy.dart';
 import 'package:rxdart/streams.dart';
 
-enum AuthStatus { uninitialized, authenticated, authenticating, unauthenticated }
+enum AuthStatus {
+  uninitialized,
+  authenticated,
+  authenticating,
+  unauthenticated
+}
 
 class UserRepository extends ChangeNotifier with NetworkLoggy {
   final AuthenticationService _auth;
@@ -127,14 +132,17 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
 
     if (userModel == null) return;
     if (!await userDb.exists(firebaseUser.uid)) {
-      final stripeId = await _cloudFunctionsService.createStripeCustomer(userModel);
+      final stripeId =
+          await _cloudFunctionsService.createStripeCustomer(userModel);
 
       if (stripeId == null) {
         loggy.error('Could not create stripe customer');
       } else {
         await userDb.create(
           userModel
-              .copyWith(stripeCustomerId: stripeId, preferredLanguage: Intl.getCurrentLocale().substring(0, 2))
+              .copyWith(
+                  stripeCustomerId: stripeId,
+                  preferredLanguage: Intl.getCurrentLocale().substring(0, 2))
               .toMap(),
           id: firebaseUser.uid,
         );
@@ -214,7 +222,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
     loggy.info('onTokenRefreshed: $token');
   }
 
-  Future<bool> sendResetPasswordEmail(BuildContext context, String email) async {
+  Future<bool> sendResetPasswordEmail(
+      BuildContext context, String email) async {
     try {
       _loading = true;
       notifyListeners();
@@ -223,7 +232,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('sendResetPasswordEmail FirebaseAuthException error', err, stack);
+      loggy.error(
+          'sendResetPasswordEmail FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       return false;
     } catch (err, stack) {
@@ -251,7 +261,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       await sendVerificationMail();
       _error = '';
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('signUpWithEmailAndPassword FirebaseAuthException error', err, stack);
+      loggy.error(
+          'signUpWithEmailAndPassword FirebaseAuthException error', err, stack);
 
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
@@ -271,7 +282,9 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
   Future<void> setUserIntroSeen() async {
     if (_fsUser == null) return;
 
-    if (_status == AuthStatus.authenticated && _fsUser!.uid != 'signed-out' && !_fsUser!.introSeen) {
+    if (_status == AuthStatus.authenticated &&
+        _fsUser!.uid != 'signed-out' &&
+        !_fsUser!.introSeen) {
       await userDb.updateData(_fsUser!.uid, {
         UserFields.lastLoggedIn: FieldValue.serverTimestamp(),
         UserFields.introSeen: true,
@@ -279,7 +292,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
     }
   }
 
-  Future<bool> signInWithEmailAndPassword(BuildContext context, String email, String password) async {
+  Future<bool> signInWithEmailAndPassword(
+      BuildContext context, String email, String password) async {
     try {
       _status = AuthStatus.authenticating;
       _loading = true;
@@ -288,7 +302,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('signInWithEmailAndPassword FirebaseAuthException error', err, stack);
+      loggy.error(
+          'signInWithEmailAndPassword FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
@@ -434,7 +449,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
     super.dispose();
   }
 
-  String _getAuthenticationErrorMessage(BuildContext context, String errorCode) {
+  String _getAuthenticationErrorMessage(
+      BuildContext context, String errorCode) {
     switch (errorCode) {
       case ('CANCELLED'):
       case ('FAILED'):

@@ -23,7 +23,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:meta/meta.dart';
 
-
 const aspect = 16 / 7.5;
 
 class HomeSlider extends HookWidget {
@@ -36,7 +35,7 @@ class HomeSlider extends HookWidget {
   }
 }
 
-class _Carousel extends HookConsumerWidget with UiLoggy{
+class _Carousel extends HookConsumerWidget with UiLoggy {
   @literal
   const _Carousel({Key? key}) : super(key: key);
 

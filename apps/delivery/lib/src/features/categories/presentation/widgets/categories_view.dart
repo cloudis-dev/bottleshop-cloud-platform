@@ -34,7 +34,8 @@ class CategoriesView extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(mainCategoriesWithoutExtraProvider.state).state;
+    final categories =
+        ref.watch(mainCategoriesWithoutExtraProvider.state).state;
     final productCounts = ref.watch(categoryProductCountsProvider);
 
     const maxSize = 200.0;

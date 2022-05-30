@@ -15,7 +15,7 @@ import 'package:delivery/src/features/orders/presentation/widgets/orders_widget.
 import 'package:flutter/material.dart';
 
 class OrderStateChip extends StatelessWidget {
-  const OrderStateChip({required this.order});
+  const OrderStateChip({super.key, required this.order});
 
   final OrderModel order;
 

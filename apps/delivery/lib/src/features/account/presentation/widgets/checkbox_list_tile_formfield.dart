@@ -35,7 +35,8 @@ class CheckboxListTileFormField extends FormField<bool> {
           initialValue: initialValue,
           autovalidateMode: autovalidateMode,
           builder: (state) {
-            errorColor ??= (context == null ? Colors.red : Theme.of(context).errorColor);
+            errorColor ??=
+                (context == null ? Colors.red : Theme.of(context).errorColor);
 
             return CheckboxListTile(
               contentPadding: EdgeInsetsDirectional.zero,

@@ -55,8 +55,10 @@ class CustomBottomTabBar extends CupertinoTabBar {
 
   @override
   bool opaque(BuildContext context) {
-    final backgroundColor = this.backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor;
-    return CupertinoDynamicColor.resolve(backgroundColor, context).alpha == 0xFF;
+    final backgroundColor =
+        this.backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor;
+    return CupertinoDynamicColor.resolve(backgroundColor, context).alpha ==
+        0xFF;
   }
 
   @override
@@ -70,7 +72,10 @@ class CustomBottomTabBar extends CupertinoTabBar {
     );
 
     BorderSide resolveBorderSide(BorderSide side) {
-      return side == BorderSide.none ? side : side.copyWith(color: CupertinoDynamicColor.resolve(side.color, context));
+      return side == BorderSide.none
+          ? side
+          : side.copyWith(
+              color: CupertinoDynamicColor.resolve(side.color, context));
     }
 
     final resolvedBorder = border == null || border.runtimeType != Border
@@ -94,7 +99,10 @@ class CustomBottomTabBar extends CupertinoTabBar {
           // Default with the inactive state.
           data: IconThemeData(color: inactive, size: iconSize),
           child: DefaultTextStyle(
-            style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle.copyWith(color: inactive),
+            style: CupertinoTheme.of(context)
+                .textTheme
+                .tabLabelTextStyle
+                .copyWith(color: inactive),
             child: Padding(
               padding: EdgeInsets.only(bottom: bottomPadding),
               child: Semantics(
@@ -172,7 +180,8 @@ class CustomBottomTabBar extends CupertinoTabBar {
     ];
   }
 
-  Widget _wrapActiveItem(BuildContext context, Widget item, {required bool active}) {
+  Widget _wrapActiveItem(BuildContext context, Widget item,
+      {required bool active}) {
     if (!active) {
       return item;
     }

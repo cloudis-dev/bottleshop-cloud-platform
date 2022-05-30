@@ -122,10 +122,12 @@ class OrderTypeModel extends Equatable {
       : _code = data[codeField],
         _name = data[nameField],
         _localizedName = LocalizedModel.fromMap(data[localizedNameField]),
-        _orderStepsIds = List.unmodifiable(data[orderStepsIdsField].cast<int>()),
+        _orderStepsIds =
+            List.unmodifiable(data[orderStepsIdsField].cast<int>()),
         shippingFeeNoVat = data[shippingFeeField].toDouble(),
         _description = data[descriptionField],
-        _localizedDescription = LocalizedModel.fromMap(data[localizedDescriptionField]);
+        _localizedDescription =
+            LocalizedModel.fromMap(data[localizedDescriptionField]);
 
   @override
   List<Object?> get props => [

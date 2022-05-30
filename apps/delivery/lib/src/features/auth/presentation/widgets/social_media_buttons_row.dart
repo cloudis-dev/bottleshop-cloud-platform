@@ -38,7 +38,9 @@ class SocialMediaButtonsRow extends HookConsumerWidget {
             onTap: () async {
               if (enabled) {
                 try {
-                  final result = await ref.read(userRepositoryProvider).signUpWithFacebook(context);
+                  final result = await ref
+                      .read(userRepositoryProvider)
+                      .signUpWithFacebook(context);
                   authCallback(result);
                 } catch (e) {
                   authCallback(false);
@@ -54,7 +56,9 @@ class SocialMediaButtonsRow extends HookConsumerWidget {
           child: InkWell(
             onTap: () async {
               if (enabled) {
-                final result = await ref.read(userRepositoryProvider).signUpWithGoogle(context);
+                final result = await ref
+                    .read(userRepositoryProvider)
+                    .signUpWithGoogle(context);
                 authCallback(result);
               } else {
                 _notifyTermsNotAgreed(context);
@@ -69,7 +73,9 @@ class SocialMediaButtonsRow extends HookConsumerWidget {
               builder: (context) => InkWell(
                 onTap: () async {
                   if (enabled) {
-                    final result = await ref.read(userRepositoryProvider).signUpWithApple(context);
+                    final result = await ref
+                        .read(userRepositoryProvider)
+                        .signUpWithApple(context);
                     authCallback(result);
                   } else {
                     _notifyTermsNotAgreed(context);
@@ -84,7 +90,9 @@ class SocialMediaButtonsRow extends HookConsumerWidget {
           child: InkWell(
             onTap: () async {
               if (enabled) {
-                final result = await ref.read(userRepositoryProvider).signUpAnonymously(context);
+                final result = await ref
+                    .read(userRepositoryProvider)
+                    .signUpAnonymously(context);
                 authCallback(result);
               } else {
                 _notifyTermsNotAgreed(context);

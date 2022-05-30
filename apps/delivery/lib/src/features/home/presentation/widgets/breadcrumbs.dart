@@ -33,7 +33,8 @@ class Breadcrumbs extends HookConsumerWidget {
                                       height: 12,
                                       child: AspectRatio(
                                         aspectRatio: 1,
-                                        child: CircularProgressIndicator(strokeWidth: 2.5),
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2.5),
                                       ),
                                     );
                                   },

@@ -29,12 +29,15 @@ class YearFilter extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final maxYear = ref.watch(filterModelProvider(filterType).select<int>((value) => value.maxYear));
-    final isYearActive = ref.watch(filterModelProvider(filterType).select<bool>((value) => value.isYearActive));
+    final maxYear = ref.watch(
+        filterModelProvider(filterType).select<int>((value) => value.maxYear));
+    final isYearActive = ref.watch(filterModelProvider(filterType)
+        .select<bool>((value) => value.isYearActive));
 
     return Offstage(
       offstage: ref.watch(
-        filterModelProvider(filterType).select<bool>((value) => value.isFilterByAge),
+        filterModelProvider(filterType)
+            .select<bool>((value) => value.isFilterByAge),
       ),
       child: ref.watch(filterAggregationsProvider).when(
             data: (aggs) => Column(
@@ -44,15 +47,20 @@ class YearFilter extends HookConsumerWidget with UiLoggy {
                   children: [
                     Text(context.l10n.year),
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 6),
                       decoration: BoxDecoration(
                         color: isYearActive
                             ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                            : Theme.of(context)
+                                .colorScheme
+                                .secondary
+                                .withOpacity(0.2),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        FilterFormattingUtils.getYearRangeString(aggs.minYear, maxYear),
+                        FilterFormattingUtils.getYearRangeString(
+                            aggs.minYear, maxYear),
                         textAlign: TextAlign.right,
                       ),
                     )
@@ -63,10 +71,14 @@ class YearFilter extends HookConsumerWidget with UiLoggy {
                   max: FilterConstants.maxYear.toDouble(),
                   divisions: FilterConstants.maxYear - aggs.minYear!,
                   value: maxYear.toDouble(),
-                  onChanged: (value) => ref.read(filterModelProvider(filterType).state).state =
-                      ref.read(filterModelProvider(filterType).state).state.copyWith(
-                            maxYear: value.round(),
-                          ),
+                  onChanged: (value) =>
+                      ref.read(filterModelProvider(filterType).state).state =
+                          ref
+                              .read(filterModelProvider(filterType).state)
+                              .state
+                              .copyWith(
+                                maxYear: value.round(),
+                              ),
                   label: maxYear.toString(),
                   activeColor: Theme.of(context).colorScheme.secondary,
                 )

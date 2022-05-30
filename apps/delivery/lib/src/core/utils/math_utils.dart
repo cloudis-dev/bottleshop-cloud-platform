@@ -17,7 +17,8 @@ class MathUtils {
 
   static const double epsilon = 0.0001;
 
-  static bool approximately(double a, double b, {double epsilon = epsilon}) => (a - b).abs() < epsilon;
+  static bool approximately(double a, double b, {double epsilon = epsilon}) =>
+      (a - b).abs() < epsilon;
 
   static double roundDouble(double value, int places) {
     var mod = pow(10.0, places) as double;

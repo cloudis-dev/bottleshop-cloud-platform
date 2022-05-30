@@ -35,7 +35,9 @@ class CupertinoBottomNavigationScaffold extends HookConsumerWidget {
         activeColor: kBottleshopSecondaryVariantColor,
         backgroundColor: Colors.transparent,
         iconSize: 30,
-        items: navigationBarItems.map((item) => item.bottomNavigationBarItem).toList(),
+        items: navigationBarItems
+            .map((item) => item.bottomNavigationBarItem)
+            .toList(),
         onTap: (id) {},
       ),
       tabBuilder: (BuildContext context, int index) {

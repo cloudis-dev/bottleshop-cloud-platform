@@ -16,6 +16,7 @@ class HomePageTemplate extends HookConsumerWidget {
   final PreferredSizeWidget? appBarBottom;
 
   const HomePageTemplate({
+    super.key,
     this.scaffoldKey,
     required this.body,
     this.appBarBottom,

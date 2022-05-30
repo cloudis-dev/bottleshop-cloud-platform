@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-final _quantityUpdateButtonStateProvider = StateProvider.autoDispose.family<ButtonState, ProductModel>(
+final _quantityUpdateButtonStateProvider =
+    StateProvider.autoDispose.family<ButtonState, ProductModel>(
   (ref, product) {
     return ref.watch(cartQuantityStreamProvider(product)).maybeWhen(
           data: (_) => ButtonState.idle,
@@ -29,9 +30,11 @@ class QuantityUpdateWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final buttonState = ref.watch(_quantityUpdateButtonStateProvider(product).state).state;
-    final currentQuantity =
-        ref.watch(cartQuantityStreamProvider(product)).maybeWhen(data: (quantity) => quantity, orElse: () => 0);
+    final buttonState =
+        ref.watch(_quantityUpdateButtonStateProvider(product).state).state;
+    final currentQuantity = ref
+        .watch(cartQuantityStreamProvider(product))
+        .maybeWhen(data: (quantity) => quantity, orElse: () => 0);
 
     return ProgressButton(
       onPressed: () {},
@@ -52,19 +55,24 @@ class QuantityUpdateWidget extends HookConsumerWidget {
                       () async {
                         try {
                           if (currentQuantity == 1) {
-                            return ref.read(cartRepositoryProvider)!.removeItem(product.uniqueId);
+                            return ref
+                                .read(cartRepositoryProvider)!
+                                .removeItem(product.uniqueId);
                           }
-                          return ref.read(cartRepositoryProvider)!.setItemQty(product.uniqueId, currentQuantity - 1);
+                          return ref.read(cartRepositoryProvider)!.setItemQty(
+                              product.uniqueId, currentQuantity - 1);
                         } catch (e) {
                           showSimpleNotification(
-                            Text(context.l10n.couldntChangeQuantityOfTheProductInTheCart),
+                            Text(context.l10n
+                                .couldntChangeQuantityOfTheProductInTheCart),
                             duration: const Duration(seconds: 1),
                             slideDismissDirection: DismissDirection.horizontal,
                             context: context,
                           );
                         }
                       },
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   icon: const Icon(
                     Icons.remove_circle_outline,
                   ),
@@ -84,23 +92,35 @@ class QuantityUpdateWidget extends HookConsumerWidget {
                       (currentQuantity >= product.count
                           ? null
                           : () async {
-                              ref.read(_quantityUpdateButtonStateProvider(product).state).state = ButtonState.loading;
+                              ref
+                                  .read(_quantityUpdateButtonStateProvider(
+                                          product)
+                                      .state)
+                                  .state = ButtonState.loading;
                               try {
                                 return ref
                                     .read(cartRepositoryProvider)!
-                                    .setItemQty(product.uniqueId, currentQuantity + 1);
+                                    .setItemQty(
+                                        product.uniqueId, currentQuantity + 1);
                               } catch (e) {
                                 showSimpleNotification(
-                                  Text(context.l10n.couldntChangeQuantityOfTheProductInTheCart),
+                                  Text(context.l10n
+                                      .couldntChangeQuantityOfTheProductInTheCart),
                                   duration: const Duration(seconds: 1),
-                                  slideDismissDirection: DismissDirection.horizontal,
+                                  slideDismissDirection:
+                                      DismissDirection.horizontal,
                                   context: context,
                                 );
                               } finally {
-                                ref.read(_quantityUpdateButtonStateProvider(product).state).state = ButtonState.idle;
+                                ref
+                                    .read(_quantityUpdateButtonStateProvider(
+                                            product)
+                                        .state)
+                                    .state = ButtonState.idle;
                               }
                             }),
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   icon: const Icon(
                     Icons.add_circle_outline,
                   ),
@@ -116,7 +136,8 @@ class QuantityUpdateWidget extends HookConsumerWidget {
         ButtonState.fail: const SizedBox.shrink(),
       },
       stateColors: Map.fromEntries(
-        ButtonState.values.map((e) => MapEntry(e, Theme.of(context).colorScheme.secondary)),
+        ButtonState.values
+            .map((e) => MapEntry(e, Theme.of(context).colorScheme.secondary)),
       ),
     );
   }

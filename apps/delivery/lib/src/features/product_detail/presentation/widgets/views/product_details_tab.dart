@@ -49,7 +49,8 @@ class ProductDetailsTab extends HookConsumerWidget {
             children: [
               DetailRowItem(
                 title: context.l10n.alcoholContent,
-                value: FormattingUtils.getAlcoholNumberString(product.alcohol ?? 0),
+                value: FormattingUtils.getAlcoholNumberString(
+                    product.alcohol ?? 0),
               ),
               DetailRowItem(
                 title: context.l10n.volume,
@@ -67,10 +68,8 @@ class ProductDetailsTab extends HookConsumerWidget {
                     Expanded(
                       child: Text(
                         context.l10n.flashSales,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle2!
-                            .copyWith(color: Theme.of(context).colorScheme.secondary),
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -88,10 +87,8 @@ class ProductDetailsTab extends HookConsumerWidget {
                     Expanded(
                       child: Text(
                         context.l10n.newAdditionToOurStock,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle2!
-                            .copyWith(color: Theme.of(context).colorScheme.secondary),
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -109,10 +106,8 @@ class ProductDetailsTab extends HookConsumerWidget {
                     Expanded(
                       child: Text(
                         context.l10n.recommendedByOurStaff,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle2!
-                            .copyWith(color: Theme.of(context).colorScheme.secondary),
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -123,7 +118,8 @@ class ProductDetailsTab extends HookConsumerWidget {
               if (product.isFlashSale)
                 DetailRowItem(
                   title: context.l10n.flashsaleUntil,
-                  value: FormattingUtils.getDateTimeFormatter(currentLocalel10n.format(product.flashSale!.flashSaleUntil),
+                  value: FormattingUtils.getDateTimeFormatter(currentLocale)
+                      .format(product.flashSale!.flashSaleUntil),
                 ),
               if (product.isSpecialEdition)
                 DetailRowItem(

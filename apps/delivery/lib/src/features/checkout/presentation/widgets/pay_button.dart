@@ -47,7 +47,10 @@ class PayButton extends HookConsumerWidget with NetworkLoggy {
                 shape: const RoundedRectangleBorder()),
             onPressed: () async {
               try {
-                await ref.read(checkoutStateProvider).payByCreditCard(paymentData).then(
+                await ref
+                    .read(checkoutStateProvider)
+                    .payByCreditCard(paymentData)
+                    .then(
                   (value) async {
                     await logPurchase(ref, context, this.value);
 
@@ -55,7 +58,8 @@ class PayButton extends HookConsumerWidget with NetworkLoggy {
                   },
                 );
               } on PlatformException catch (err, stack) {
-                if (err.code != 'cancelled' || err.code != 'purchaseCancelled') {
+                if (err.code != 'cancelled' ||
+                    err.code != 'purchaseCancelled') {
                   rethrow;
                 } else {
                   loggy.error('Failed to pay by credit card', err, stack);

@@ -10,16 +10,20 @@ import 'package:loggy/loggy.dart';
 class CloudFunctionsService with NetworkLoggy {
   final FirebaseFunctions _firebaseFunctions;
 
-  CloudFunctionsService(FirebaseFunctions instance) : _firebaseFunctions = instance;
+  CloudFunctionsService(FirebaseFunctions instance)
+      : _firebaseFunctions = instance;
 
   Future<bool> deleteAccount() async {
-    final res = await _firebaseFunctions.httpsCallable(FirebaseCallableFunctions.deleteAccount).call<dynamic>();
+    final res = await _firebaseFunctions
+        .httpsCallable(FirebaseCallableFunctions.deleteAccount)
+        .call<dynamic>();
 
     return res.data['success'] as bool;
   }
 
   HttpsCallable createPaymentIntent() {
-    return _firebaseFunctions.httpsCallable(FirebaseCallableFunctions.createPaymentIntent);
+    return _firebaseFunctions
+        .httpsCallable(FirebaseCallableFunctions.createPaymentIntent);
   }
 
   Future<String?> createStripeCustomer(UserModel user) async {
@@ -88,7 +92,9 @@ class CloudFunctionsService with NetworkLoggy {
 
   Future<CartStatus> validateCart() async {
     try {
-      final response = await _firebaseFunctions.httpsCallable(FirebaseCallableFunctions.validateCart).call<dynamic>();
+      final response = await _firebaseFunctions
+          .httpsCallable(FirebaseCallableFunctions.validateCart)
+          .call<dynamic>();
       switch (response.data['status']) {
         case 'ok':
           return CartStatus.ok;
@@ -121,4 +127,5 @@ class CloudFunctionsService with NetworkLoggy {
 
 enum CartStatus { ok, unavailableProducts, invalidPromo, error }
 
-final cloudFunctionsProvider = Provider<CloudFunctionsService>(((ref) => throw UnimplementedError()));
+final cloudFunctionsProvider =
+    Provider<CloudFunctionsService>(((ref) => throw UnimplementedError()));

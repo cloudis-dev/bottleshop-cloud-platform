@@ -10,6 +10,8 @@
 //
 //
 
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/wallets_availability_service.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
@@ -41,7 +43,8 @@ class SignUpForm extends HookConsumerWidget {
     final password = useTextEditingController();
     final passwordRepeat = useTextEditingController();
     final showPassword = useState<bool>(false);
-    final isAppleAvailable = ref.watch(walletsAvailableProvider.select((value) => value.appleSignInAvailable));
+    final isAppleAvailable = ref.watch(
+        walletsAvailableProvider.select((value) => value.appleSignInAvailable));
 
     return Material(
       color: backgroundColor,
@@ -52,9 +55,12 @@ class SignUpForm extends HookConsumerWidget {
           key: _formKey,
           autovalidateMode: AutovalidateMode.disabled,
           onChanged: () {
-            if (email.text.isNotEmpty && password.text.isNotEmpty && passwordRepeat.text.isNotEmpty) {
+            if (email.text.isNotEmpty &&
+                password.text.isNotEmpty &&
+                passwordRepeat.text.isNotEmpty) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                ref.read(signUpFormValidProvider.notifier).state = _formKey.currentState!.validate();
+                ref.read(signUpFormValidProvider.notifier).state =
+                    _formKey.currentState!.validate();
               });
             }
           },
@@ -80,7 +86,9 @@ class SignUpForm extends HookConsumerWidget {
                 prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
                   onPressed: () => showPassword.value = !showPassword.value,
-                  icon: Icon(showPassword.value ? Icons.visibility : Icons.visibility_off),
+                  icon: Icon(showPassword.value
+                      ? Icons.visibility
+                      : Icons.visibility_off),
                 ),
                 controller: password,
                 validator: createPasswordValidator(context),
@@ -92,11 +100,14 @@ class SignUpForm extends HookConsumerWidget {
                 prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
                   onPressed: () => showPassword.value = !showPassword.value,
-                  icon: Icon(showPassword.value ? Icons.visibility : Icons.visibility_off),
+                  icon: Icon(showPassword.value
+                      ? Icons.visibility
+                      : Icons.visibility_off),
                 ),
                 controller: passwordRepeat,
                 validator: (val) =>
-                    MatchValidator(errorText: context.l10n.passwordsDontMatch).validateMatch(val!, password.value.text),
+                    MatchValidator(errorText: context.l10n.passwordsDontMatch)
+                        .validateMatch(val!, password.value.text),
                 obscureText: !showPassword.value,
                 maxLines: 1,
                 onSaved: (value) => password.text = value!,
@@ -105,10 +116,13 @@ class SignUpForm extends HookConsumerWidget {
                 onPressed: ref.watch<bool>(signUpButtonEnabledProvider)
                     ? () async {
                         var currentFocus = FocusScope.of(context);
-                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                        if (!currentFocus.hasPrimaryFocus &&
+                            currentFocus.focusedChild != null) {
                           FocusManager.instance.primaryFocus!.unfocus();
                         }
-                        final result = await ref.read(userRepositoryProvider).signUpWithEmailAndPassword(
+                        final result = await ref
+                            .read(userRepositoryProvider)
+                            .signUpWithEmailAndPassword(
                               context,
                               email.text,
                               password.text,
@@ -116,13 +130,13 @@ class SignUpForm extends HookConsumerWidget {
                         authCallback(result);
                       }
                     : null,
-                child: Text(
-                  context.l10n.sign_up,
-                ),
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
                   primary: Theme.of(context).colorScheme.secondary,
                   padding: const EdgeInsets.symmetric(vertical: 10),
+                ),
+                child: Text(
+                  context.l10n.sign_up,
                 ),
               ),
               SocialMediaButtonsRow(

@@ -26,14 +26,13 @@ class MaterialBottomNavigationScaffold extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final routerKey = useMemoized(() => GlobalKey());
     final scaffoldKey = useMemoized(() => GlobalKey());
 
     final currentId = useState(0).value;
 
     return Scaffold(
       key: scaffoldKey,
-      body: IndexedStack(index: currentId, children: []),
+      body: IndexedStack(index: currentId, children: const []),
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.transparent,
           selectedFontSize: 14,

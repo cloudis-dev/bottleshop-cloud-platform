@@ -34,7 +34,8 @@ class FilterDrawerHeader extends HookConsumerWidget {
           Text(context.l10n.filter),
           MaterialButton(
             onPressed: () {
-              ref.read(appliedFilterProvider(filterType).state).state = FilterModel.empty();
+              ref.read(appliedFilterProvider(filterType).state).state =
+                  FilterModel.empty();
 
               Navigator.pop(context);
             },

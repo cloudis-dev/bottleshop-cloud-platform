@@ -42,14 +42,20 @@ class VerifyEmailView extends HookConsumerWidget {
             children: [
               Text(
                 context.l10n.pleaseVerifyYourEmail,
-                style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
               Expanded(child: Image.asset(kLogo)),
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    await ref.read(userRepositoryProvider).sendVerificationMail().whenComplete(
+                    await ref
+                        .read(userRepositoryProvider)
+                        .sendVerificationMail()
+                        .whenComplete(
                           () => showSimpleNotification(
                             Text(context.l10n.confirmationEmailSent),
                             position: NotificationPosition.bottom,

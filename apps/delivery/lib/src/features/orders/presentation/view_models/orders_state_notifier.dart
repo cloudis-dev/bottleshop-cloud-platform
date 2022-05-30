@@ -17,14 +17,17 @@ import 'package:delivery/src/core/data/services/streamed_items_state_management/
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
 import 'package:loggy/loggy.dart';
 
-class OrdersStateNotifier extends PagedStreamsItemsStateNotifier<OrderModel, DocumentSnapshot, String> {
+class OrdersStateNotifier extends PagedStreamsItemsStateNotifier<OrderModel,
+    DocumentSnapshot, String> {
   OrdersStateNotifier(
-    Stream<PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>> Function(DocumentSnapshot? fromPageKey)
+    Stream<PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>> Function(
+            DocumentSnapshot? fromPageKey)
         createStream,
   ) : super(
           createStream,
           OrdersItemsHandler(),
-          (err, stack) async => logError('OrdersStateNotifier error', err, stack),
+          (err, stack) async =>
+              logError('OrdersStateNotifier error', err, stack),
         );
 }
 

@@ -77,7 +77,9 @@ class _SearchIconButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
-        tooltip: MaterialLocalizations.of(context).searchFieldLabel, icon: const Icon(Icons.search), onPressed: () {});
+        tooltip: MaterialLocalizations.of(context).searchFieldLabel,
+        icon: const Icon(Icons.search),
+        onPressed: () {});
   }
 }
 
@@ -99,7 +101,8 @@ class _Body extends HookConsumerWidget with UiLoggy {
                 icon: Icons.login,
                 message: context.l10n.youNeedToLoginFirst,
                 buttonMessage: context.l10n.login,
-                onButtonPressed: () => authButtonKey!.currentState!.showAccountMenu(),
+                onButtonPressed: () =>
+                    authButtonKey!.currentState!.showAccountMenu(),
               );
             } else {
               return EmptyTab(
@@ -149,7 +152,10 @@ class _FavoritesListLayout extends HookConsumerWidget with UiLoggy {
           product: favorites.elementAt(index),
           onDismissed: (direction) {
             loggy.info('dismissing direction: ${direction.toString()}');
-            ref.read(wishListProvider)!.remove(favorites.elementAt(index).uniqueId).then(
+            ref
+                .read(wishListProvider)!
+                .remove(favorites.elementAt(index).uniqueId)
+                .then(
                   (value) => showSimpleNotification(
                     Text(messageRemoved),
                     position: NotificationPosition.bottom,

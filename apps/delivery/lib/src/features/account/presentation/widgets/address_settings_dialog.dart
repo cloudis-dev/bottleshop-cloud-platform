@@ -43,7 +43,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
                         profileData: profileData,
                       );
                     },
-              style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.secondary),
               child: Text(
                 context.l10n.edit,
               ),
@@ -111,7 +112,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
 
                 }
               },
-              style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.secondary),
               child: Text(context.l10n.saveButton),
             ),
           ],
@@ -125,14 +127,17 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
     required UserModel user,
     required Map<String, dynamic> profileData,
   }) {
-    final address = addressType == AddressType.billing ? user.billingAddress : user.shippingAddress;
+    final address = addressType == AddressType.billing
+        ? user.billingAddress
+        : user.shippingAddress;
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.disabled,
       child: ListBody(
         children: <Widget>[
           StyledFormField(
-            validator: RequiredValidator(errorText: context.l10n.streetIsRequired),
+            validator:
+                RequiredValidator(errorText: context.l10n.streetIsRequired),
             style: TextStyle(color: Theme.of(context).focusColor),
             keyboardType: TextInputType.streetAddress,
             hintText: context.l10n.bajkalska,
@@ -142,12 +147,14 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['streetName'] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData['streetName']}');
+              loggy.info(
+                  'field saved $input, profile: ${profileData['streetName']}');
             },
           ),
           StyledFormField(
             style: TextStyle(color: Theme.of(context).focusColor),
-            validator: RequiredValidator(errorText: context.l10n.streetNumberIsRequired),
+            validator: RequiredValidator(
+                errorText: context.l10n.streetNumberIsRequired),
             keyboardType: TextInputType.streetAddress,
             hintText: '12/45',
             labelText: context.l10n.streetNumber,
@@ -156,12 +163,14 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['streetNumber'] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData['streetNumber']}');
+              loggy.info(
+                  'field saved $input, profile: ${profileData['streetNumber']}');
             },
           ),
           StyledFormField(
             style: TextStyle(color: Theme.of(context).focusColor),
-            validator: RequiredValidator(errorText: context.l10n.cityIsRequired),
+            validator:
+                RequiredValidator(errorText: context.l10n.cityIsRequired),
             keyboardType: TextInputType.text,
             hintText: context.l10n.bratislava,
             labelText: context.l10n.city,
@@ -179,7 +188,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
             validator: MultiValidator(
               [
                 RequiredValidator(errorText: context.l10n.zipCodeIsRequired),
-                LengthRangeValidator(min: 5, max: 6, errorText: context.l10n.enterAValidZipCode)
+                LengthRangeValidator(
+                    min: 5, max: 6, errorText: context.l10n.enterAValidZipCode)
               ],
             ),
             keyboardType: TextInputType.number,
@@ -190,7 +200,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['zipCode'] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData['zipCode']}');
+              loggy.info(
+                  'field saved $input, profile: ${profileData['zipCode']}');
             },
           ),
           StyledFormField(
@@ -217,7 +228,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
                 if (value != null) {
                   profileData['billingOnly'] = value;
                 }
-                loggy.info('check saved $value, profile: ${profileData['billingOnly']}');
+                loggy.info(
+                    'check saved $value, profile: ${profileData['billingOnly']}');
               },
             ),
         ],

@@ -62,9 +62,12 @@ class UserModel extends Equatable {
       registrationDate: map[UserFields.registrationDate]?.toDate() as DateTime?,
       introSeen: map[UserFields.introSeen] as bool? ?? false,
       phoneNumber: map[UserFields.phoneNumber] as String?,
-      shippingAddress:
-          map[UserFields.shippingAddress] != null ? Address.fromMap(map[UserFields.shippingAddress]) : null,
-      billingAddress: map[UserFields.billingAddress] != null ? Address.fromMap(map[UserFields.billingAddress]) : null,
+      shippingAddress: map[UserFields.shippingAddress] != null
+          ? Address.fromMap(map[UserFields.shippingAddress])
+          : null,
+      billingAddress: map[UserFields.billingAddress] != null
+          ? Address.fromMap(map[UserFields.billingAddress])
+          : null,
       stripeCustomerId: map[UserFields.stripeCustomerId] as String?,
       isAnonymous: map[UserFields.anonymousUser] as bool? ?? false,
       isEmailVerified: map[UserFields.isEmailVerified] as bool? ?? false,
@@ -115,15 +118,21 @@ class UserModel extends Equatable {
         (avatar == null || identical(avatar, this.avatar)) &&
         (dayOfBirth == null || identical(dayOfBirth, this.dayOfBirth)) &&
         (lastLoggedIn == null || identical(lastLoggedIn, this.lastLoggedIn)) &&
-        (registrationDate == null || identical(registrationDate, this.registrationDate)) &&
+        (registrationDate == null ||
+            identical(registrationDate, this.registrationDate)) &&
         (introSeen == null || identical(introSeen, this.introSeen)) &&
         (phoneNumber == null || identical(phoneNumber, this.phoneNumber)) &&
-        (shippingAddress == null || identical(shippingAddress, this.shippingAddress)) &&
-        (billingAddress == null || identical(billingAddress, this.billingAddress)) &&
-        (stripeCustomerId == null || identical(stripeCustomerId, this.stripeCustomerId)) &&
+        (shippingAddress == null ||
+            identical(shippingAddress, this.shippingAddress)) &&
+        (billingAddress == null ||
+            identical(billingAddress, this.billingAddress)) &&
+        (stripeCustomerId == null ||
+            identical(stripeCustomerId, this.stripeCustomerId)) &&
         (isAnonymous == null || identical(isAnonymous, this.isAnonymous)) &&
-        (isEmailVerified == null || identical(isEmailVerified, this.isEmailVerified)) &&
-        (preferredLanguage == null || identical(preferredLanguage, this.preferredLanguage))) {
+        (isEmailVerified == null ||
+            identical(isEmailVerified, this.isEmailVerified)) &&
+        (preferredLanguage == null ||
+            identical(preferredLanguage, this.preferredLanguage))) {
       return this;
     }
 
@@ -163,7 +172,9 @@ class UserModel extends Equatable {
     } else {
       email = user.email;
     }
-    var isFb = user.providerData.where((element) => element.providerId == 'facebook.com').isNotEmpty;
+    var isFb = user.providerData
+        .where((element) => element.providerId == 'facebook.com')
+        .isNotEmpty;
 
     return UserModel._(
       uid: user.uid,
@@ -229,7 +240,8 @@ class StripeCustomer {
   });
 
   factory StripeCustomer.fromUser(UserModel user) {
-    return StripeCustomer(metadata: StripeMetadata(uid: user.uid), email: user.email);
+    return StripeCustomer(
+        metadata: StripeMetadata(uid: user.uid), email: user.email);
   }
 
   Map<String, dynamic> toMap() {

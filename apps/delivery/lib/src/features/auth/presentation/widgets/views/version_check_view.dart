@@ -8,8 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
-class VersionCheckView extends HookConsumerWidget with UiLoggy{
+class VersionCheckView extends HookConsumerWidget with UiLoggy {
   final WidgetBuilder checkSuccessWidgetBuilder;
 
   const VersionCheckView({
@@ -21,7 +20,9 @@ class VersionCheckView extends HookConsumerWidget with UiLoggy{
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: ref.watch(isAppVersionCompatible).when(
-            data: (isCompatible) => isCompatible ? checkSuccessWidgetBuilder(context) : const _WrongAppVersionView(),
+            data: (isCompatible) => isCompatible
+                ? checkSuccessWidgetBuilder(context)
+                : const _WrongAppVersionView(),
             loading: () => const SplashView(),
             error: (err, stack) {
               loggy.error('Failed to check app version compatible', err, stack);
@@ -32,7 +33,7 @@ class VersionCheckView extends HookConsumerWidget with UiLoggy{
   }
 }
 
-class _WrongAppVersionView extends HookConsumerWidget with UiLoggy{
+class _WrongAppVersionView extends HookConsumerWidget with UiLoggy {
   const _WrongAppVersionView({Key? key}) : super(key: key);
 
   @override
@@ -47,7 +48,10 @@ class _WrongAppVersionView extends HookConsumerWidget with UiLoggy{
         children: [
           Text(
             context.l10n.youreUsingAnIncompatibleVersionOfTheApp,
-            style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+            style: Theme.of(context)
+                .textTheme
+                .headline6!
+                .copyWith(color: Colors.white),
             textAlign: TextAlign.center,
           ),
           const SizedBox(
@@ -61,6 +65,7 @@ class _WrongAppVersionView extends HookConsumerWidget with UiLoggy{
                       primary: Theme.of(context).colorScheme.secondary,
                       shape: const StadiumBorder(),
                     ),
+                    // ignore: deprecated_member_use
                     onPressed: () => launch(url),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),

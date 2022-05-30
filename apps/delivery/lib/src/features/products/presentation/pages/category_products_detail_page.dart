@@ -92,11 +92,13 @@ class _Body extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
-    final drawerAcquirerKey = useMemoized(() => GlobalKey<DrawerStateAcquirerState>());
+    final drawerAcquirerKey =
+        useMemoized(() => GlobalKey<DrawerStateAcquirerState>());
     final tabController = subcategoryId == null && !category.hasSubcategories
         ? null
         : useTabController(
-            initialLength: category.subCategories.length + 1, // Adding the 'all' tab
+            initialLength:
+                category.subCategories.length + 1, // Adding the 'all' tab
             initialIndex: subcategoryId ?? 0,
           );
     final currentLocale = ref.watch(currentLocaleProvider);
@@ -115,10 +117,14 @@ class _Body extends HookConsumerWidget {
               sliver: SliverCategoryDetailAppBar(
                 category: category,
                 tabController: tabController,
-                categoryImgHeroTag: categoryImgHeroTag ?? category.categoryDetails.id,
+                categoryImgHeroTag:
+                    categoryImgHeroTag ?? category.categoryDetails.id,
                 actions: [
                   FilterIconButton(scaffoldKey, drawerAcquirerKey),
-                  IconButton(icon: Hero(tag: UniqueKey(), child: const Icon(Icons.search)), onPressed: null),
+                  IconButton(
+                      icon: Hero(
+                          tag: UniqueKey(), child: const Icon(Icons.search)),
+                      onPressed: null),
                   AuthPopupButton(scaffoldKey: scaffoldKey),
                 ],
               ),
@@ -147,7 +153,9 @@ class _Body extends HookConsumerWidget {
             : SubcategoriesTabBar(
                 category,
                 Tab(child: Text(context.l10n.all.toUpperCase())),
-                (e) => Tab(text: e.categoryDetails.getName(currentLocale).toUpperCase()),
+                (e) => Tab(
+                    text:
+                        e.categoryDetails.getName(currentLocale).toUpperCase()),
                 controller: tabController,
               ),
         body: Scaffold(
@@ -160,7 +168,8 @@ class _Body extends HookConsumerWidget {
             child: NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverOverlapAbsorber(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: const SliverToBoxAdapter(),
                 )
               ],

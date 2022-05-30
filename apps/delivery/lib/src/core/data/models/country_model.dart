@@ -51,7 +51,9 @@ class CountryModel extends Equatable {
   CountryModel.fromMap(this.id, Map<String, dynamic> data)
       : _name = data[nameField] as String,
         flagUrl = data[flagField] as String,
-        _localizedName = data[localizedNameField] != null ? LocalizedModel.fromMap(data[localizedNameField]) : null;
+        _localizedName = data[localizedNameField] != null
+            ? LocalizedModel.fromMap(data[localizedNameField])
+            : null;
 
   @override
   List<Object?> get props {

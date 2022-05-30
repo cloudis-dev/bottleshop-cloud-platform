@@ -32,7 +32,8 @@ class CartContentService extends DatabaseService<CartRecord> {
           var data = await item.productRef.get();
           var content = data.data();
           if (content != null) {
-            var product = await FirestoreJsonParsingUtil.parseProductJson(content as Map<String, dynamic>);
+            var product = await FirestoreJsonParsingUtil.parseProductJson(
+                content as Map<String, dynamic>);
             list.add(CartItemModel(
               count: item.quantity,
               product: product,
@@ -50,8 +51,12 @@ class CartContentService extends DatabaseService<CartRecord> {
       final list = <CartItemModel>[];
       for (var item in event) {
         var data = await item.productRef.get();
-        var product = await FirestoreJsonParsingUtil.parseProductJson(data.data() as Map<String, dynamic>);
-        list.add(CartItemModel(count: item.quantity, product: product, paidPrice: product.finalPrice));
+        var product = await FirestoreJsonParsingUtil.parseProductJson(
+            data.data() as Map<String, dynamic>);
+        list.add(CartItemModel(
+            count: item.quantity,
+            product: product,
+            paidPrice: product.finalPrice));
       }
       return list;
     });

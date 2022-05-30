@@ -67,7 +67,7 @@ class OrdersWidget extends HookConsumerWidget {
             itemBuilder: (context, dynamic item, _) => OrderListItem(
               order: item,
             ),
-            errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onPressed),
+            errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onButtonPressed: onPressed),
             loadingWidgetBuilder: (_) => const ListLoadingWidget(),
           ),
         ],

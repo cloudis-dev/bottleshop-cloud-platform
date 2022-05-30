@@ -35,7 +35,8 @@ class ProductsSectionCarousel extends HookWidget {
 
       if (shouldUseMobileLayout(context)) {
         child = SizedBox(
-          height: 320 + (data.any((element) => element.isFlashSale) ? 40 : 0l10n.toDouble(),
+          height: 320 +
+              (data.any((element) => element.isFlashSale) ? 40 : 0).toDouble(),
           child: ListView.builder(
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
@@ -44,11 +45,12 @@ class ProductsSectionCarousel extends HookWidget {
             itemCount: data.length,
             itemBuilder: (context, id) {
               const spacing = 20.0;
-              final _marginLeft = (id == 0) ? spacing : 0;
+              final marginLeft = (id == 0) ? spacing : 0;
 
               return SectionProductItem(
                 product: data[id],
-                margin: EdgeInsets.only(left: _marginLeft.toDouble(), right: spacing),
+                margin: EdgeInsets.only(
+                    left: marginLeft.toDouble(), right: spacing),
               );
             },
           ),

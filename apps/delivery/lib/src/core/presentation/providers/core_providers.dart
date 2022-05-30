@@ -9,33 +9,45 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final pushNotificationsProvider = Provider<PushNotificationService>((ref) => PushNotificationService(ref));
+final pushNotificationsProvider =
+    Provider<PushNotificationService>((ref) => PushNotificationService(ref));
 
-final stripeProvider = Provider<StripeService>((ref) => StripeService(ref.read));
+final stripeProvider =
+    Provider<StripeService>((ref) => StripeService(ref.read));
 
-final analyticsProvider = Provider<FirebaseAnalytics>((ref) => FirebaseAnalytics.instance);
+final analyticsProvider =
+    Provider<FirebaseAnalytics>((ref) => FirebaseAnalytics.instance);
 
 final storageProvider = Provider<StorageService>((_) => StorageService());
 
-final downloadUrlProvider = FutureProvider.autoDispose.family<String?, String>((ref, path) async {
+final downloadUrlProvider =
+    FutureProvider.autoDispose.family<String?, String>((ref, path) async {
   final storage = ref.watch(storageProvider);
   return storage.getDownloadURL(path);
 });
 
 final defaultProductImage = Provider.autoDispose<String>((ref) {
   final currentMode = ref.watch(currentThemeModeProvider);
-  return currentMode == ThemeMode.dark ? kDefaultProductPicDark : kDefaultProductPic;
+  return currentMode == ThemeMode.dark
+      ? kDefaultProductPicDark
+      : kDefaultProductPic;
 });
 
 final currentThemeModeProvider = Provider<ThemeMode>((ref) {
-  final themeMode = ref.watch(sharedPreferencesServiceProvider.select((value) => value.getThemeMode()));
+  final themeMode = ref.watch(
+      sharedPreferencesServiceProvider.select((value) => value.getThemeMode()));
   return themeMode;
 });
 
 final currentLocaleProvider = Provider<Locale>((ref) {
-  final mode = ref.watch(sharedPreferencesServiceProvider.select((value) => value.getAppLanguage()));
-  final systemLanguage = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
-  if (!AppLocalizations.supportedLocales.map((e) => e.languageCode).toList().contains(mode.name)) {
+  final mode = ref.watch(sharedPreferencesServiceProvider
+      .select((value) => value.getAppLanguage()));
+  final systemLanguage =
+      WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+  if (!AppLocalizations.supportedLocales
+      .map((e) => e.languageCode)
+      .toList()
+      .contains(mode.name)) {
     return AppLocalizations.supportedLocales.firstWhere(
       (element) => element.languageCode == systemLanguage,
       orElse: () => AppLocalizations.supportedLocales.first,
@@ -47,7 +59,8 @@ final currentLocaleProvider = Provider<Locale>((ref) {
   );
 });
 
-final appOrientationProvider = Provider.autoDispose.family<Orientation, BuildContext>((ref, context) {
+final appOrientationProvider =
+    Provider.autoDispose.family<Orientation, BuildContext>((ref, context) {
   final orientation = AppConfig(context).appOrientation();
   return orientation ?? Orientation.portrait;
 });

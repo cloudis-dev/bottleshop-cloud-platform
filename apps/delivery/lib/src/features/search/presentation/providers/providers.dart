@@ -36,10 +36,14 @@ enum SearchState {
 }
 
 final searchResultsProvider = StateProvider.autoDispose<
-    Tuple3<SearchState, List<Tuple2<Map<SearchMatchField, String>, ProductModel>>, List<CategoryPlainModel>>>(
+    Tuple3<
+        SearchState,
+        List<Tuple2<Map<SearchMatchField, String>, ProductModel>>,
+        List<CategoryPlainModel>>>(
   (_) => const Tuple3(SearchState.cleaned, [], []),
 );
 
 final debounceTimerProvider = StateProvider.autoDispose<Timer?>(((_) => null));
-final lastQueriedSearchTimeProvider = StateProvider.autoDispose<DateTime?>(((ref) => null));
+final lastQueriedSearchTimeProvider =
+    StateProvider.autoDispose<DateTime?>(((ref) => null));
 final previousQuery = StateProvider.autoDispose<String?>(((_) => null));

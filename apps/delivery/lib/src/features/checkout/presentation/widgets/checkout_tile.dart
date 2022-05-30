@@ -29,9 +29,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-final _proceedButtonStateProvider = StateProvider.family<ButtonState, String>((ref, _) => ButtonState.idle);
+final _proceedButtonStateProvider =
+    StateProvider.family<ButtonState, String>((ref, _) => ButtonState.idle);
 
-final _promoButtonStateProvider = StateProvider<ButtonState>((ref) => ButtonState.idle);
+final _promoButtonStateProvider =
+    StateProvider<ButtonState>((ref) => ButtonState.idle);
 
 class CheckoutTile extends HookConsumerWidget {
   final String actionLabel;
@@ -64,7 +66,9 @@ class CheckoutTile extends HookConsumerWidget {
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
                 decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: const BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+                    borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(20)),
                     boxShadow: [
                       BoxShadow(
                           color: Theme.of(context).hintColor.withOpacity(0.2),
@@ -80,7 +84,8 @@ class CheckoutTile extends HookConsumerWidget {
                     children: <Widget>[
                       Row(children: <Widget>[
                         Expanded(
-                          child: Text(context.l10n.subtotal, style: Theme.of(context).textTheme.bodyText1),
+                          child: Text(context.l10n.subtotal,
+                              style: Theme.of(context).textTheme.bodyText1),
                         ),
                         Text(
                             FormattingUtils.getPriceNumberString(
@@ -91,7 +96,8 @@ class CheckoutTile extends HookConsumerWidget {
                       ]),
                       Row(children: <Widget>[
                         Expanded(
-                          child: Text(context.l10n.vat20, style: Theme.of(context).textTheme.bodyText1),
+                          child: Text(context.l10n.vat20,
+                              style: Theme.of(context).textTheme.bodyText1),
                         ),
                         Text(
                             FormattingUtils.getPriceNumberString(
@@ -103,7 +109,8 @@ class CheckoutTile extends HookConsumerWidget {
                       if (cart.promoCode != null)
                         Row(children: <Widget>[
                           Expanded(
-                            child: Text(context.l10n.promoCodeLabel, style: Theme.of(context).textTheme.bodyText1),
+                            child: Text(context.l10n.promoCodeLabel,
+                                style: Theme.of(context).textTheme.bodyText1),
                           ),
                           Text(
                               '- ${FormattingUtils.getPriceNumberString(
@@ -114,7 +121,9 @@ class CheckoutTile extends HookConsumerWidget {
                         ]),
                       const Spacer(flex: 1),
                       Row(children: <Widget>[
-                        Expanded(child: Text(context.l10n.checkout, style: Theme.of(context).textTheme.headline6)),
+                        Expanded(
+                            child: Text(context.l10n.checkout,
+                                style: Theme.of(context).textTheme.headline6)),
                         Text(
                           FormattingUtils.getPriceNumberString(
                             cart.totalCartValue,
@@ -128,57 +137,76 @@ class CheckoutTile extends HookConsumerWidget {
                         children: [
                           if (showPromoButton)
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 14.0) + const EdgeInsets.only(right: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 14.0) +
+                                      const EdgeInsets.only(right: 12),
                               child: ProgressButton(
                                 onPressed: () async {
                                   try {
                                     if (cart.promoCode != null) {
                                       ref.read(_promoButtonStateProvider.state);
-                                      var res = await ref.read(cloudFunctionsProvider).removePromoCode();
+                                      var res = await ref
+                                          .read(cloudFunctionsProvider)
+                                          .removePromoCode();
                                       if (res) {
                                         showSimpleNotification(
                                           Text(context.l10n.promoCodeRemoved),
                                           duration: const Duration(seconds: 5),
-                                          slideDismissDirection: DismissDirection.horizontal,
+                                          slideDismissDirection:
+                                              DismissDirection.horizontal,
                                           context: context,
                                         );
                                       }
                                     } else {
-                                      var promo = await showAddPromoDialog(context, promoCodeTextController);
-                                      ref.read(_promoButtonStateProvider.state).state = ButtonState.loading;
+                                      var promo = await showAddPromoDialog(
+                                          context, promoCodeTextController);
+                                      ref
+                                          .read(_promoButtonStateProvider.state)
+                                          .state = ButtonState.loading;
                                       if (promo != null || promo!.isNotEmpty) {
-                                        final res = await ref.read(cartRepositoryProvider)!.promoApplied(promo);
+                                        final res = await ref
+                                            .read(cartRepositoryProvider)!
+                                            .promoApplied(promo);
                                         if (res) {
                                           showSimpleNotification(
                                             Text(context.l10n.promoCodeApplied),
-                                            duration: const Duration(seconds: 5),
-                                            slideDismissDirection: DismissDirection.horizontal,
+                                            duration:
+                                                const Duration(seconds: 5),
+                                            slideDismissDirection:
+                                                DismissDirection.horizontal,
                                             context: context,
                                           );
                                         } else {
                                           showSimpleNotification(
                                             Text(context.l10n.promoCodeInvalid),
-                                            duration: const Duration(seconds: 5),
-                                            slideDismissDirection: DismissDirection.horizontal,
+                                            duration:
+                                                const Duration(seconds: 5),
+                                            slideDismissDirection:
+                                                DismissDirection.horizontal,
                                             context: context,
                                           );
                                         }
                                       }
                                     }
                                   } finally {
-                                    ref.read(_promoButtonStateProvider.state).state = ButtonState.idle;
+                                    ref
+                                        .read(_promoButtonStateProvider.state)
+                                        .state = ButtonState.idle;
                                   }
                                 },
                                 minWidth: AppConfig(context).appWidth(20),
                                 maxWidth: AppConfig(context).appWidth(20),
                                 state: ref.watch(
-                                  _promoButtonStateProvider.select<ButtonState>((value) => value),
+                                  _promoButtonStateProvider
+                                      .select<ButtonState>((value) => value),
                                 ),
                                 stateWidgets: {
                                   ButtonState.idle: InkResponse(
-                                    splashColor: Colors.deepOrangeAccent, // splash color
+                                    splashColor:
+                                        Colors.deepOrangeAccent, // splash color
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         cart.promoCode == null
                                             ? Text(context.l10n.promoCodeLabel)
@@ -186,19 +214,24 @@ class CheckoutTile extends HookConsumerWidget {
                                                 Icons.receipt_long_outlined,
                                                 color: cart.promoCode != null
                                                     ? Colors.white
-                                                    : Theme.of(context).colorScheme.secondary,
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
                                               ), // icon
                                         // text
                                       ],
                                     ),
                                   ),
-                                  ButtonState.loading: Loader(valueColor: Theme.of(context).primaryColor),
+                                  ButtonState.loading: Loader(
+                                      valueColor:
+                                          Theme.of(context).primaryColor),
                                   ButtonState.success: const SizedBox.shrink(),
                                   ButtonState.fail: const SizedBox.shrink(),
                                 },
                                 stateColors: {
-                                  for (var e
-                                      in ButtonState.values.map((e) => Tuple2(e, Theme.of(context).primaryColor)))
+                                  for (var e in ButtonState.values.map((e) =>
+                                      Tuple2(
+                                          e, Theme.of(context).primaryColor)))
                                     e.value1: e.value2
                                 },
                               ),
@@ -209,32 +242,44 @@ class CheckoutTile extends HookConsumerWidget {
                               alignment: AlignmentDirectional.centerEnd,
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
                                   child: ProgressButton(
                                     maxWidth: double.infinity,
                                     minWidth: double.infinity,
-                                    onPressed: actionCallback == null ? null : () => onPrimaryButtonClick(ref, context),
+                                    onPressed: actionCallback == null
+                                        ? null
+                                        : () =>
+                                            onPrimaryButtonClick(ref, context),
                                     state: ref.watch(
-                                        _proceedButtonStateProvider(actionLabel).select<ButtonState>((value) => value)),
+                                        _proceedButtonStateProvider(actionLabel)
+                                            .select<ButtonState>(
+                                                (value) => value)),
                                     stateWidgets: {
                                       ButtonState.idle: Text(
                                         actionLabel,
                                         textAlign: TextAlign.start,
                                       ),
                                       ButtonState.loading: const Loader(),
-                                      ButtonState.success: const SizedBox.shrink(),
+                                      ButtonState.success:
+                                          const SizedBox.shrink(),
                                       ButtonState.fail: const SizedBox.shrink(),
                                     },
                                     stateColors: {
-                                      for (var e in ButtonState.values
-                                          .map((e) => Tuple2(e, Theme.of(context).colorScheme.secondary)))
+                                      for (var e in ButtonState.values.map(
+                                          (e) => Tuple2(
+                                              e,
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary)))
                                         e.value1: e.value2
                                     },
                                   ),
                                 ),
                                 if (!isLastStep)
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
                                     child: Icon(
                                       Icons.arrow_forward_ios,
                                       color: Theme.of(context).primaryColor,
@@ -289,11 +334,13 @@ class CheckoutTile extends HookConsumerWidget {
           break;
       }
     } finally {
-      ref.read(_proceedButtonStateProvider(actionLabel).notifier).state = ButtonState.idle;
+      ref.read(_proceedButtonStateProvider(actionLabel).notifier).state =
+          ButtonState.idle;
     }
   }
 
-  Future<String?> showAddPromoDialog(BuildContext context, TextEditingController controller) {
+  Future<String?> showAddPromoDialog(
+      BuildContext context, TextEditingController controller) {
     controller.clear();
     return showDialog<String>(
         context: context,

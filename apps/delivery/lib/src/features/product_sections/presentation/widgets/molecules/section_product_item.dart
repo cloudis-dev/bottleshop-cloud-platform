@@ -20,9 +20,7 @@ import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
-
-final  = Logger((SectionProductIteml10n.toString());
+import 'package:loggy/loggy.dart';
 
 class SectionProductItem extends HookConsumerWidget {
   static const double imageWidth = 160;
@@ -76,13 +74,15 @@ class SectionProductItem extends HookConsumerWidget {
               right: 5,
               child: IgnorePointer(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(100)),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(100)),
                       color: Theme.of(context).colorScheme.secondary),
                   alignment: AlignmentDirectional.topEnd,
                   child: Text(
-                    '- ${(product.discount! * 100l10n.toStringAsFixed(2)}%',
+                    '- ${(product.discount! * 100).toStringAsFixed(2)}%',
                     style: Theme.of(context).textTheme.overline,
                   ),
                 ),
@@ -97,7 +97,8 @@ class SectionProductItem extends HookConsumerWidget {
                   width: 70,
                   height: 70,
                   decoration: const BoxDecoration(
-                    image: DecorationImage(image: AssetImage('assets/images/special.png')),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/special.png')),
                   ),
                 ),
               ),
@@ -111,14 +112,17 @@ class SectionProductItem extends HookConsumerWidget {
                     if (product.isFlashSale)
                       Container(
                         margin: const EdgeInsets.only(bottom: 4),
-                        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 6, horizontal: 6),
                         width: imageWidth - 20,
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
                           borderRadius: ProductImage.borderRadius,
                           boxShadow: [
                             BoxShadow(
-                                color: Theme.of(context).hintColor.withOpacity(0.15),
+                                color: Theme.of(context)
+                                    .hintColor
+                                    .withOpacity(0.15),
                                 offset: const Offset(0, 3),
                                 blurRadius: 10)
                           ],
@@ -126,7 +130,8 @@ class SectionProductItem extends HookConsumerWidget {
                         child: _FlashSaleItem(product),
                       ),
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 12),
                       width: imageWidth - 20,
                       height: 120,
                       decoration: BoxDecoration(
@@ -134,7 +139,8 @@ class SectionProductItem extends HookConsumerWidget {
                         borderRadius: ProductImage.borderRadius,
                         boxShadow: [
                           BoxShadow(
-                              color: Theme.of(context).hintColor.withOpacity(0.1),
+                              color:
+                                  Theme.of(context).hintColor.withOpacity(0.1),
                               offset: const Offset(0, 3),
                               blurRadius: 10)
                         ],
@@ -160,7 +166,8 @@ class SectionProductItem extends HookConsumerWidget {
                                 ),
                                 if (product.alcohol != null)
                                   Text(
-                                    FormattingUtils.getAlcoholNumberString(product.alcohol),
+                                    FormattingUtils.getAlcoholNumberString(
+                                        product.alcohol),
                                     style: Theme.of(context).textTheme.caption,
                                   ),
                               ],
@@ -169,9 +176,12 @@ class SectionProductItem extends HookConsumerWidget {
                               product.count > 0
                                   ? '${product.count} ${context.l10n.inStock}'
                                   : context.l10n.outOfStock,
-                              style: Theme.of(context).textTheme.caption!.copyWith(
-                                    color: product.count > 0 ? Colors.green : Colors.red,
-                                  ),
+                              style:
+                                  Theme.of(context).textTheme.caption!.copyWith(
+                                        color: product.count > 0
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,7 +203,9 @@ class SectionProductItem extends HookConsumerWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .caption!
-                                          .copyWith(decoration: TextDecoration.lineThrough),
+                                          .copyWith(
+                                              decoration:
+                                                  TextDecoration.lineThrough),
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.end,
                                     ),
@@ -224,7 +236,7 @@ class SectionProductItem extends HookConsumerWidget {
   }
 }
 
-class _FlashSaleItem extends HookConsumerWidget {
+class _FlashSaleItem extends HookConsumerWidget with UiLoggy {
   final ProductModel product;
 
   const _FlashSaleItem(this.product);
@@ -254,7 +266,8 @@ class _FlashSaleItem extends HookConsumerWidget {
                   height: 4,
                 ),
                 AvailableProgressBar(
-                  remainingDurationInHours: flashSaleEndsIn.inHours.roundToDouble(),
+                  remainingDurationInHours:
+                      flashSaleEndsIn.inHours.roundToDouble(),
                 ),
               ],
             );
@@ -269,7 +282,8 @@ class _FlashSaleItem extends HookConsumerWidget {
         orElse: () => const SizedBox.shrink());
   }
 
-  List<TextSpan> _getFlashSaleProgressLabelTexts(BuildContext context, Duration flashSaleEndsIn) {
+  List<TextSpan> _getFlashSaleProgressLabelTexts(
+      BuildContext context, Duration flashSaleEndsIn) {
     const highlightStyle = TextStyle(fontWeight: FontWeight.bold);
 
     if (flashSaleEndsIn.inSeconds <= 0) {
