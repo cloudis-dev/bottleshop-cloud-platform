@@ -24,3 +24,4 @@ linter:
     no_default_cases: false
     prefer_mixin: false
     library_private_types_in_public: false
+    no_leading_underscores_for_local_identifiers: false

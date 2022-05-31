@@ -9,7 +9,7 @@
 
 import 'dart:async';
 
-import 'package:delivery/src/app/app.dart';
+import 'package:delivery/src/app.dart';
 import 'package:delivery/src/config/firebase_options_production.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';

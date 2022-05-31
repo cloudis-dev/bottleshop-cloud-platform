@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:delivery/src/app/app.dart';
+import 'package:delivery/src/app.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/config/environment.dart';
 import 'package:delivery/src/config/firebase_options_dev.dart';

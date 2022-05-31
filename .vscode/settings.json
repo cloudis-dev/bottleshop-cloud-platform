@@ -25,7 +25,7 @@
   "editor.snippetSuggestions": "bottom",
   "audioCues.lineHasInlineSuggestion": "off",
   "dart.analysisExcludedFolders": [
-    "lib/generated, lib/l10n, build"
+    "lib/generated, lib/l10n, build,  **/**/*generated_plugin*.dart"
   ],
   "dart.onlyAnalyzeProjectsWithOpenFiles": true,
   "dart.lineLength": 120,
