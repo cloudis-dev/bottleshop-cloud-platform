@@ -20,7 +20,8 @@ class IsSpecialEditionFilterChip extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isSpecialEditionFilterValue = ref.watch(isSpecialEditionScopedProvider);
+    final isSpecialEditionFilterValue =
+        ref.watch(isSpecialEditionScopedProvider);
 
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,

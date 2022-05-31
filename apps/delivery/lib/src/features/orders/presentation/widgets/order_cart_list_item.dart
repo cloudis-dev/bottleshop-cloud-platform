@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderCartListItem extends HookConsumerWidget {
-  const OrderCartListItem(this.cartItem);
+  const OrderCartListItem({super.key, required this.cartItem});
 
   final CartItemModel cartItem;
 

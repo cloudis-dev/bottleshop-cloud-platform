@@ -74,8 +74,10 @@ class DefaultFirebaseOptions {
     projectId: 'bottleshop3veze-delivery',
     databaseURL: 'https://bottleshop3veze-delivery.firebaseio.com',
     storageBucket: 'bottleshop3veze-delivery.appspot.com',
-    androidClientId: '540936468411-2bef528sv3kf6pvnchcggc1aoqolbpsc.apps.googleusercontent.com',
-    iosClientId: '540936468411-32eqnks9pqj6tamosjq8t2uik97q2fth.apps.googleusercontent.com',
-    iosBundleId: 'sk.bottleshop3veze.bottleshopdeliveryapp',
+    androidClientId:
+        '540936468411-2bef528sv3kf6pvnchcggc1aoqolbpsc.apps.googleusercontent.com',
+    iosClientId:
+        '540936468411-32eqnks9pqj6tamosjq8t2uik97q2fth.apps.googleusercontent.com',
+    iosBundleId: 'sk.bottleshop3veze.delivery',
   );
 }

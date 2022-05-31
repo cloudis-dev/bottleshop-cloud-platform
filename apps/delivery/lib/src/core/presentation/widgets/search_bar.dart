@@ -68,8 +68,10 @@ class SearchBar extends StatelessWidget {
                   ),
                 ),
                 border: const UnderlineInputBorder(borderSide: BorderSide.none),
-                enabledBorder: const UnderlineInputBorder(borderSide: BorderSide.none),
-                focusedBorder: const UnderlineInputBorder(borderSide: BorderSide.none),
+                enabledBorder:
+                    const UnderlineInputBorder(borderSide: BorderSide.none),
+                focusedBorder:
+                    const UnderlineInputBorder(borderSide: BorderSide.none),
               ),
             ),
           ],

@@ -30,12 +30,10 @@ import 'package:delivery/src/features/products/presentation/widgets/product_imag
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final _logger = Logger((ProductDetailPagel10n.toString());
-
-class ProductDetailPage extends HookConsumerWidget {
+class ProductDetailPage extends HookConsumerWidget with UiLoggy {
   final ProductModel? product;
   final String? productUid;
 
@@ -48,7 +46,7 @@ class ProductDetailPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (product == null) {
-      return ref.watch(productProvider(productUid!)l10n.when(
+      return ref.watch(productProvider(productUid!)).when(
             data: (product) => product == null
                 ? EmptyTab(
                     icon: Icons.info,
@@ -146,6 +144,7 @@ class _BodyWeb extends HookConsumerWidget {
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
+                                    // ignore: deprecated_member_use
                                     launch(imgUrl);
                                   },
                                 ),
@@ -164,7 +163,6 @@ class _BodyWeb extends HookConsumerWidget {
                       children: [
                         Expanded(
                           child: Scrollbar(
-                            isAlwaysShown: true,
                             controller: scrollCtrl,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 12),

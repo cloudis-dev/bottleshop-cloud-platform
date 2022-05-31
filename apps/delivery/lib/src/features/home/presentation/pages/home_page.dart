@@ -12,7 +12,7 @@
 
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
-import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
+
 import 'package:delivery/src/features/home/presentation/widgets/home_mobile_scaffold.dart';
 import 'package:delivery/src/features/home/presentation/widgets/home_web_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -27,20 +27,17 @@ class HomePage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentUser = ref.watch(currentUserProvider);
-
     useEffect(() {
       PushNotificationService.handleMessageOpenedApp(ref.read).then(
         (value) => loggy.info('handleMessageOpenedApp register'),
-        onError: (dynamic err, dynamic stack) => loggy.error('handleMessageOpenedApp', err, stack),
+        onError: (dynamic err, dynamic stack) =>
+            loggy.error('handleMessageOpenedApp', err, stack),
       );
-
-      if (currentUser != null && !currentUser.isAnonymous) {
-        setUserId(ref, context, currentUser.uid).then((value) => loggy.info('userID set'));
-      }
-      return;
+      return null;
     }, const []);
 
-    return shouldUseMobileLayout(context) ? const HomeMobileScaffold() : const HomeWebScaffold();
+    return shouldUseMobileLayout(context)
+        ? const HomeMobileScaffold()
+        : const HomeWebScaffold();
   }
 }

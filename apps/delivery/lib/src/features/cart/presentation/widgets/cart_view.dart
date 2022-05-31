@@ -21,9 +21,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:overlay_support/overlay_support.dart';
 
-
-class CartView extends HookConsumerWidget with UiLoggy{
+class CartView extends HookConsumerWidget with UiLoggy {
   const CartView({
     Key? key,
   }) : super(key: key);
@@ -36,12 +36,12 @@ class CartView extends HookConsumerWidget with UiLoggy{
       fit: StackFit.expand,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 120),
+          margin: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom + 120),
           padding: const EdgeInsets.only(bottom: 30),
           child: CupertinoScrollbar(
             controller: scrollController,
-            isAlwaysShown: false,
-            child: ref.watch(cartContentProviderl10n.when(
+            child: ref.watch(cartContentProvider).when(
                   data: (cart) {
                     return ListView.builder(
                       physics: const BouncingScrollPhysics(
@@ -67,7 +67,8 @@ class CartView extends HookConsumerWidget with UiLoggy{
                           ),
                         ),
                         onDismissed: (direction) async {
-                          await ref.read(cartRepositoryProvider)!.removeItem(cart.elementAt(indexl10n.product.uniqueId);
+                          await ref.read(cartRepositoryProvider)!.removeItem(
+                              cart.elementAt(index).product.uniqueId);
                           showSimpleNotification(
                             Text(context.l10n.itemRemovedFromCart),
                             position: NotificationPosition.bottom,
@@ -77,8 +78,8 @@ class CartView extends HookConsumerWidget with UiLoggy{
                           );
                         },
                         child: CartListItem(
-                          product: cart.elementAt(indexl10n.product,
-                          quantity: cart.elementAt(indexl10n.count,
+                          product: cart.elementAt(index).product,
+                          quantity: cart.elementAt(index).count,
                         ),
                       ),
                     );
@@ -93,7 +94,7 @@ class CartView extends HookConsumerWidget with UiLoggy{
                 ),
           ),
         ),
-        ref.watch(cartProviderl10n.when(
+        ref.watch(cartProvider).when(
               data: (cart) {
                 return CheckoutTile(
                   showPromoButton: !kIsWeb,

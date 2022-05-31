@@ -9,7 +9,6 @@ import 'package:delivery/src/features/home/presentation/widgets/menu_button.dart
 import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/search_icon_button.dart';
 import 'package:delivery/src/features/product_sections/presentation/widgets/views/sale_section.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

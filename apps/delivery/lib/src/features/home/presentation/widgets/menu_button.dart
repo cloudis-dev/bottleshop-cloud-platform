@@ -7,11 +7,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class MenuButton extends HookConsumerWidget {
   final GlobalKey<ScaffoldState> drawerScaffoldKey;
 
-  const MenuButton({Key? key, required this.drawerScaffoldKey}) : super(key: key);
+  const MenuButton({Key? key, required this.drawerScaffoldKey})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showBadge = ref.watch(activeOrdersCountProviderl10n.whenData((value) => value > 0l10n.value ?? false;
+    final showBadge = ref
+            .watch(activeOrdersCountProvider)
+            .whenData((value) => value > 0)
+            .value ??
+        false;
 
     return IconButton(
       icon: BottleshopBadge(

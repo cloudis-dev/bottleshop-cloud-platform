@@ -14,6 +14,7 @@ import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/repositories/repository_base.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
+import 'package:delivery/src/core/data/services/streamed_items_state_management/data/change_status.dart';
 import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state_stream_batch.dart';
 import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/paged_streams_items_state_notifier.dart';
 import 'package:delivery/src/core/utils/change_status_util.dart';
@@ -33,7 +34,8 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
   }
 
   Stream<ItemsStateStreamBatch<ProductModel>> getFlashSaleProductsStream() {
-    final currentTimestamp = Timestamp.fromMillisecondsSinceEpoch(DateTime.now(l10n.millisecondsSinceEpoch);
+    final currentTimestamp = Timestamp.fromMillisecondsSinceEpoch(
+        DateTime.now().millisecondsSinceEpoch);
 
     final flashSaleUntilPath = FieldPath(
       const [
@@ -42,26 +44,29 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
       ],
     );
 
-    var query = <QueryArgs>[QueryArgs(flashSaleUntilPath, isGreaterThanOrEqualTo: currentTimestamp)];
+    var query = <QueryArgs>[
+      QueryArgs(flashSaleUntilPath, isGreaterThanOrEqualTo: currentTimestamp)
+    ];
 
     final orderBy = <OrderBy>[
       OrderBy(flashSaleUntilPath),
       OrderBy(ProductModel.unaccentedNameSortField),
     ];
 
-    return db.streamQueryListWithChangesAll(args: query, orderBy: orderByl10n.map(
+    return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
             event
                 .map((e) => Tuple2(
                       ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                      e.value2,
+                      e.value2 as ProductModel,
                     ))
                 .toList(),
           ),
         );
   }
 
-  Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>> getAllProductsStream(
+  Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>>
+      getAllProductsStream(
     DocumentSnapshot? lastDoc,
     SortModel sortModel,
   ) {
@@ -95,13 +100,13 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
       OrderBy(ProductModel.unaccentedNameSortField),
     ];
 
-    return db.streamQueryListWithChangesAll(args: query, orderBy: orderByl10n.map(
+    return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
             event
                 .map(
                   (e) => Tuple2(
                     ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                    e.value2,
+                    e.value2 as ProductModel,
                   ),
                 )
                 .toList(),
@@ -117,13 +122,13 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
       OrderBy(ProductModel.unaccentedNameSortField),
     ];
 
-    return db.streamQueryListWithChangesAll(args: query, orderBy: orderByl10n.map(
+    return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
             event
                 .map(
                   (e) => Tuple2(
                     ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                    e.value2,
+                    e.value2 as ProductModel,
                   ),
                 )
                 .toList(),
@@ -139,13 +144,13 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
       OrderBy(ProductModel.unaccentedNameSortField),
     ];
 
-    return db.streamQueryListWithChangesAll(args: query, orderBy: orderByl10n.map(
+    return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
             event
                 .map(
-                  (e) => Tuple2(
+                  (e) => Tuple2<ChangeStatus, ProductModel>(
                     ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                    e.value2,
+                    e.value2 as ProductModel,
                   ),
                 )
                 .toList(),
@@ -153,7 +158,8 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
         );
   }
 
-  Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>> getProductsByCategoryStream(
+  Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>>
+      getProductsByCategoryStream(
     CategoryPlainModel category,
     DocumentSnapshot? lastDocument,
     SortModel sortModel,
@@ -161,8 +167,9 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
     final query = [
       QueryArgs(
         ProductModel.categoryRefsField,
-        arrayContains:
-            FirebaseFirestore.instance.collection(FirestoreCollections.categoriesCollectionl10n.doc(category.id),
+        arrayContains: FirebaseFirestore.instance
+            .collection(FirestoreCollections.categoriesCollection)
+            .doc(category.id),
       )
     ];
 

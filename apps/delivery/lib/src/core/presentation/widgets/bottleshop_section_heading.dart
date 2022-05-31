@@ -21,7 +21,7 @@ class BottleshopSectionHeading extends StatelessWidget {
         leading: leading,
         title: Text(
           label,
-          style: Theme.of(context.textTheme.headline6),
+          style: Theme.of(context).textTheme.headline6,
         ),
         trailing: trailingWidgets != null
             ? Row(

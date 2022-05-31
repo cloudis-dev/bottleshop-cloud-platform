@@ -17,7 +17,10 @@ class CategoryContainerDecoration extends BoxDecoration {
       : super(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           boxShadow: [
-            BoxShadow(color: Theme.of(context).hintColor.withOpacity(0.10), offset: const Offset(0, 4), blurRadius: 10)
+            BoxShadow(
+                color: Theme.of(context).hintColor.withOpacity(0.10),
+                offset: const Offset(0, 4),
+                blurRadius: 10)
           ],
           gradient: LinearGradient(
             begin: Alignment.bottomLeft,

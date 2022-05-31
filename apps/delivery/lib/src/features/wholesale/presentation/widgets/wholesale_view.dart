@@ -1,4 +1,3 @@
-
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:flutter/material.dart';

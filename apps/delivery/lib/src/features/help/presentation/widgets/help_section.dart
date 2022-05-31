@@ -37,7 +37,10 @@ class HelpSection extends HookWidget {
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(6),
         boxShadow: [
-          BoxShadow(color: Theme.of(context).hintColor.withOpacity(0.3), offset: const Offset(0, 1), blurRadius: 5)
+          BoxShadow(
+              color: Theme.of(context).hintColor.withOpacity(0.3),
+              offset: const Offset(0, 1),
+              blurRadius: 5)
         ],
       ),
       child: ListView(
@@ -55,7 +58,8 @@ class HelpSection extends HookWidget {
               subTitle,
               style: Theme.of(context).textTheme.caption,
             ),
-            childrenPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            childrenPadding:
+                const EdgeInsets.only(left: 10, right: 10, bottom: 10),
             children: [
               MarkdownBody(
                 onTapLink: (title, href, text) async {
@@ -65,7 +69,10 @@ class HelpSection extends HookWidget {
                 data: mdString,
                 extensionSet: md.ExtensionSet(
                   md.ExtensionSet.gitHubFlavored.blockSyntaxes,
-                  [md.EmojiSyntax(), ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes],
+                  [
+                    md.EmojiSyntax(),
+                    ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes
+                  ],
                 ),
               ),
             ],

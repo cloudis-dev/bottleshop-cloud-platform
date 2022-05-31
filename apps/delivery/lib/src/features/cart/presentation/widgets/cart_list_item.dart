@@ -94,7 +94,9 @@ class CartListItem extends HookConsumerWidget {
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Text(
-                  product.count > 0 ? '${product.count} ${context.l10n.inStock}' : context.l10n.outOfStock,
+                  product.count > 0
+                      ? '${product.count} ${context.l10n.inStock}'
+                      : context.l10n.outOfStock,
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
                         color: product.count > 0 ? Colors.green : Colors.red,
                       ),
@@ -105,24 +107,33 @@ class CartListItem extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 28),
             child: Column(
-              mainAxisAlignment: qtyState.value > 1 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+              mainAxisAlignment: qtyState.value > 1
+                  ? MainAxisAlignment.spaceBetween
+                  : MainAxisAlignment.center,
               children: [
                 Text(
-                    FormattingUtils.getPriceNumberString(double.parse(product.finalPrice.toStringAsFixed(2)),
+                    FormattingUtils.getPriceNumberString(
+                        double.parse(product.finalPrice.toStringAsFixed(2)),
                         withCurrency: true),
                     style: Theme.of(context).textTheme.subtitle1),
                 if (product.discount != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                        FormattingUtils.getPriceNumberString(double.parse(product.priceWithVat.toStringAsFixed(2)),
+                        FormattingUtils.getPriceNumberString(
+                            double.parse(
+                                product.priceWithVat.toStringAsFixed(2)),
                             withCurrency: true),
-                        style: Theme.of(context).textTheme.caption!.copyWith(decoration: TextDecoration.lineThrough)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption!
+                            .copyWith(decoration: TextDecoration.lineThrough)),
                   ),
                 if (qtyState.value > 1)
                   Text(
                       FormattingUtils.getPriceNumberString(
-                          double.parse(product.finalPrice.toStringAsFixed(2)) * int.parse(qtyState.value.toString()),
+                          double.parse(product.finalPrice.toStringAsFixed(2)) *
+                              int.parse(qtyState.value.toString()),
                           withCurrency: true),
                       style: Theme.of(context).textTheme.bodyText2),
               ],
@@ -141,13 +152,16 @@ class CartListItem extends HookConsumerWidget {
                   onPressed: product.count <= qtyState.value
                       ? null
                       : () async {
-                          return ref.read(cartRepositoryProvider)!.setItemQty(product.uniqueId, qtyState.value + 1);
+                          return ref
+                              .read(cartRepositoryProvider)!
+                              .setItemQty(product.uniqueId, qtyState.value + 1);
                         },
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   icon: const Icon(Icons.add_circle_outline),
                 ),
               ),
-              Text(qtyState.value.toString(), style: Theme.of(context).textTheme.bodyText1),
+              Text(qtyState.value.toString(),
+                  style: Theme.of(context).textTheme.bodyText1),
               Material(
                 color: Theme.of(context).primaryColor,
                 child: IconButton(
@@ -156,10 +170,14 @@ class CartListItem extends HookConsumerWidget {
                   color: Theme.of(context).colorScheme.secondary,
                   onPressed: () async {
                     if (qtyState.value == 1) {
-                      await ref.read(cartRepositoryProvider)!.removeItem(product.uniqueId);
+                      await ref
+                          .read(cartRepositoryProvider)!
+                          .removeItem(product.uniqueId);
                     } else {
                       //qtyState.value = qtyState.value - 1;
-                      return ref.read(cartRepositoryProvider)!.setItemQty(product.uniqueId, qtyState.value - 1);
+                      return ref
+                          .read(cartRepositoryProvider)!
+                          .setItemQty(product.uniqueId, qtyState.value - 1);
                     }
                   },
                   padding: const EdgeInsets.symmetric(horizontal: 5),

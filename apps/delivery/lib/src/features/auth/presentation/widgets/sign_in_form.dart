@@ -39,9 +39,11 @@ class SignInForm extends HookConsumerWidget {
     final password = useTextEditingController();
     final showPassword = useState<bool>(false);
     final formValid = useState<bool>(true);
-    final termsAgreed = ref.watch(termsAcceptanceProvider.notifierl10n.termsAccepted;
-    final isAppleAvailable = ref.watch(walletsAvailableProvider.select((value) => value.appleSignInAvailable));
-    final _formKey = useMemoized(() => GlobalKey<FormState>());
+    final termsAgreed =
+        ref.watch(termsAcceptanceProvider.notifier).termsAccepted;
+    final isAppleAvailable = ref.watch(
+        walletsAvailableProvider.select((value) => value.appleSignInAvailable));
+    final formKey = useMemoized(() => GlobalKey<FormState>());
 
     return Material(
       color: backgroundColor,
@@ -49,12 +51,12 @@ class SignInForm extends HookConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Form(
-          key: _formKey,
+          key: formKey,
           autovalidateMode: AutovalidateMode.disabled,
           onChanged: () {
             if (email.text.isNotEmpty && password.text.isNotEmpty) {
-              WidgetsBinding.instance?.addPostFrameCallback((_) {
-                formValid.value = _formKey.currentState?.validate() ?? false;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                formValid.value = formKey.currentState?.validate() ?? false;
               });
             }
           },
@@ -86,7 +88,9 @@ class SignInForm extends HookConsumerWidget {
                   suffixIcon: IconButton(
                     onPressed: () => showPassword.value = !showPassword.value,
                     icon: Icon(
-                      showPassword.value ? Icons.visibility : Icons.visibility_off,
+                      showPassword.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                   ),
                   controller: password,
@@ -103,7 +107,8 @@ class SignInForm extends HookConsumerWidget {
               ),
               Flexible(
                 child: TextButton(
-                  onPressed: () => Navigator.pushNamed(context, ResetPasswordView.routeName),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, ResetPasswordView.routeName),
                   child: Text(
                     context.l10n.reset,
                   ),
@@ -114,7 +119,8 @@ class SignInForm extends HookConsumerWidget {
                   onPressed: termsAgreed && formValid.value
                       ? () async {
                           var currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                          if (!currentFocus.hasPrimaryFocus &&
+                              currentFocus.focusedChild != null) {
                             FocusManager.instance.primaryFocus!.unfocus();
                           }
                           ref
@@ -127,11 +133,11 @@ class SignInForm extends HookConsumerWidget {
                               .then((value) => authCallback(value));
                         }
                       : null,
-                  child: Text(context.l10n.login),
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
+                  child: Text(context.l10n.login),
                 ),
               ),
               Flexible(

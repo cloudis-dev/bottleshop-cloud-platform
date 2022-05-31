@@ -10,22 +10,24 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_handler.dart';
 import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/paged_streams_items_state_notifier.dart';
+
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
-final _logger = Logger((OrdersStateNotifierl10n.toString());
-
-class OrdersStateNotifier extends PagedStreamsItemsStateNotifier<OrderModel, DocumentSnapshot, String> {
+class OrdersStateNotifier extends PagedStreamsItemsStateNotifier<OrderModel,
+    DocumentSnapshot, String> {
   OrdersStateNotifier(
-    Stream<PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>> Function(DocumentSnapshot? fromPageKey)
+    Stream<PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>> Function(
+            DocumentSnapshot? fromPageKey)
         createStream,
   ) : super(
           createStream,
           OrdersItemsHandler(),
-          (err, stack) async => loggy.error('OrdersStateNotifier error', err, stack),
+          (err, stack) async =>
+              logError('OrdersStateNotifier error', err, stack),
         );
 }
 

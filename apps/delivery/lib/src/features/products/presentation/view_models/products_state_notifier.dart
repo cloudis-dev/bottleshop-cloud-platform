@@ -17,32 +17,35 @@ import 'package:delivery/src/core/data/services/streamed_items_state_management/
 import 'package:delivery/src/core/utils/sorting_util.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
-final _logger = Logger((ProductsStateNotifierl10n.toString());
-
-class ProductsStateNotifier extends SingleStreamItemsStateNotifier<ProductModel, String?> {
+class ProductsStateNotifier
+    extends SingleStreamItemsStateNotifier<ProductModel, String?> {
   ProductsStateNotifier(
     Stream<ItemsStateStreamBatch<ProductModel>> Function() requestItems,
     SortModel sortModel,
   ) : super(
           requestItems,
           ProductItemsHandler(sortModel),
-          (err, stack) async => loggy.error('ProductsStateNotifier error', err, stack),
+          (err, stack) async =>
+              logError('ProductsStateNotifier error', err, stack),
         );
 }
 
 /// The generic [T] parameter is the paging key.
 /// It is used to know from which point to request more items.
 /// E.g. When using Firestore it will be `DocumentSnapshot`.
-class PagedProductsStateNotifier<T> extends PagedStreamsItemsStateNotifier<ProductModel, T, String?> {
+class PagedProductsStateNotifier<T>
+    extends PagedStreamsItemsStateNotifier<ProductModel, T, String?> {
   PagedProductsStateNotifier(
-    Stream<PagedItemsStateStreamBatch<ProductModel, T>> Function(T? lastPageKey) requestMoreItemsStream,
+    Stream<PagedItemsStateStreamBatch<ProductModel, T>> Function(T? lastPageKey)
+        requestMoreItemsStream,
     SortModel sortModel,
   ) : super(
           requestMoreItemsStream,
           ProductItemsHandler(sortModel),
-          (err, stack) async => loggy.error('PagedProductsStateNotifier error', err, stack),
+          (err, stack) async =>
+              logError('PagedProductsStateNotifier error', err, stack),
         );
 }
 

@@ -31,11 +31,13 @@ class OrderRepository {
         isEqualTo: user.uid,
       ),
     ];
-    return ordersDbService.streamList(args: argsl10n.map((event) => event.where((element) => !element.isCompletel10n.length);
+    return ordersDbService
+        .streamList(args: args)
+        .map((event) => event.where((element) => !element.isComplete).length);
   }
 
-  Stream<PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>> getUserOrdersStream(
-      DocumentSnapshot? lastDoc, UserModel? user) {
+  Stream<PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>>
+      getUserOrdersStream(DocumentSnapshot? lastDoc, UserModel? user) {
     if (user == null) {
       return const Stream.empty();
     }
@@ -44,13 +46,14 @@ class OrderRepository {
       '${OrderModelFields.userField}.${UserFields.uid}',
       isEqualTo: user.uid,
     );
-    final orderBy = OrderBy(OrderModelFields.createdAtTimestampField, descending: true);
+    final orderBy =
+        OrderBy(OrderModelFields.createdAtTimestampField, descending: true);
 
     return ordersDbService.streamQueryListWithChanges(
       orderBy: [orderBy],
       args: [query],
       startAfterDocument: lastDoc,
-    l10n.map(
+    ).map(
       (event) => PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>(
         event
             .map(

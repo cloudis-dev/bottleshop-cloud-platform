@@ -30,7 +30,8 @@ class PushNotificationService with NetworkLoggy {
     FirebaseMessaging? firebaseMessaging,
     FlutterLocalNotificationsPlugin? localNotificationsPlugin,
   })  : _firebaseMessaging = firebaseMessaging ?? FirebaseMessaging.instance,
-        _flutterLocalNotificationsPlugin = localNotificationsPlugin ?? FlutterLocalNotificationsPlugin();
+        _flutterLocalNotificationsPlugin =
+            localNotificationsPlugin ?? FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
     try {
@@ -45,22 +46,26 @@ class PushNotificationService with NetworkLoggy {
       );
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
         loggy.debug('User granted push permission');
-      } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      } else if (settings.authorizationStatus ==
+          AuthorizationStatus.provisional) {
         loggy.debug('User granted provisional permission');
       } else {
         loggy.debug('User declined or has not accepted permission');
       }
       if (defaultTargetPlatform == TargetPlatform.android) {
         const initSettings = InitializationSettings(android: settingsAndroid);
-        await _flutterLocalNotificationsPlugin!.initialize(initSettings, onSelectNotification: (orderId) async {
+        await _flutterLocalNotificationsPlugin!.initialize(initSettings,
+            onSelectNotification: (orderId) async {
           loggy.debug('foreground clicked: $orderId');
           if (orderId!.isNotEmpty && orderId.split('__').length == 2) {}
         });
         await _flutterLocalNotificationsPlugin!
-            .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
             ?.createNotificationChannel(channel);
       }
-      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
         alert: true,
         badge: true,
         sound: true,
@@ -131,7 +136,8 @@ class PushNotificationService with NetworkLoggy {
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
-  description: 'This channel is used for important notifications.', // description
+  description:
+      'This channel is used for important notifications.', // description
   importance: Importance.high,
   showBadge: true,
   enableVibration: true,
@@ -140,4 +146,5 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 const settingsAndroid = AndroidInitializationSettings('ic_stat_name');
 
-final pnServiceProvider = Provider<PushNotificationService>((ref) => throw UnimplementedError());
+final pnServiceProvider =
+    Provider<PushNotificationService>((ref) => throw UnimplementedError());

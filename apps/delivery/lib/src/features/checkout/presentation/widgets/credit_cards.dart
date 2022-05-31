@@ -34,7 +34,9 @@ class CreditCards extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                  color: Theme.of(context).hintColor.withOpacity(0.3), blurRadius: 5, offset: const Offset(0, -1)),
+                  color: Theme.of(context).hintColor.withOpacity(0.3),
+                  blurRadius: 5,
+                  offset: const Offset(0, -1)),
             ],
           ),
           child: Padding(
@@ -50,8 +52,13 @@ class CreditCards extends StatelessWidget {
                       height: 50,
                       width: 70,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Theme.of(context).hintColor.withOpacity(0.2)),
-                        color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                        border: Border.all(
+                            color:
+                                Theme.of(context).hintColor.withOpacity(0.2)),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.5),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Image.asset(
@@ -64,8 +71,13 @@ class CreditCards extends StatelessWidget {
                       height: 50,
                       width: 70,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Theme.of(context).hintColor.withOpacity(0.2)),
-                        color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                        border: Border.all(
+                            color:
+                                Theme.of(context).hintColor.withOpacity(0.2)),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.5),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Image.asset(
@@ -78,8 +90,13 @@ class CreditCards extends StatelessWidget {
                       height: 50,
                       width: 70,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Theme.of(context).hintColor.withOpacity(0.2)),
-                        color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                        border: Border.all(
+                            color:
+                                Theme.of(context).hintColor.withOpacity(0.2)),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.5),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Image.asset(
@@ -99,12 +116,9 @@ class CreditCards extends StatelessWidget {
                       width: 70,
                     ),
                     Image.asset(
-                      kDinersBtn,
-                      height: 42,
-                      width: 70,
-                    ),
-                    Image.asset(
-                      defaultTargetPlatform == TargetPlatform.iOS ? kApplePayMark : kGooglePayMark,
+                      defaultTargetPlatform == TargetPlatform.iOS
+                          ? kApplePayMark
+                          : kGooglePayMark,
                       height: 50,
                       width: 70,
                     ),

@@ -25,7 +25,8 @@ class ProductsSortingUtil {
       );
     }
 
-    final timeCompare = a.flashSale!.flashSaleUntil.compareTo(b.flashSale!.flashSaleUntil);
+    final timeCompare =
+        a.flashSale!.flashSaleUntil.compareTo(b.flashSale!.flashSaleUntil);
     if (timeCompare == 0) {
       return SortingUtil.stringSortCompare(
         a.name,

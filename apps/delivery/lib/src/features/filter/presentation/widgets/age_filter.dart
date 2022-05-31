@@ -20,8 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
-
-class AgeFilter extends HookConsumerWidget with UiLoggy{
+class AgeFilter extends HookConsumerWidget with UiLoggy {
   const AgeFilter({
     Key? key,
   }) : super(key: key);
@@ -30,12 +29,15 @@ class AgeFilter extends HookConsumerWidget with UiLoggy{
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final minAge = ref.watch(filterModelProvider(filterType).select<int>((value) => value.minAge));
-    final isAgeActive = ref.watch(filterModelProvider(filterType).select<bool>((value) => value.isAgeActive));
+    final minAge = ref.watch(
+        filterModelProvider(filterType).select<int>((value) => value.minAge));
+    final isAgeActive = ref.watch(filterModelProvider(filterType)
+        .select<bool>((value) => value.isAgeActive));
 
     return Offstage(
       offstage: !ref.watch(
-        filterModelProvider(filterType).select<bool>((value) => value.isFilterByAge),
+        filterModelProvider(filterType)
+            .select<bool>((value) => value.isFilterByAge),
       ),
       child: ref.watch(filterAggregationsProvider).when(
             data: (args) => Column(
@@ -45,15 +47,20 @@ class AgeFilter extends HookConsumerWidget with UiLoggy{
                   children: [
                     Text(context.l10n.ageYears),
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 6),
                       decoration: BoxDecoration(
                         color: isAgeActive
                             ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                            : Theme.of(context)
+                                .colorScheme
+                                .secondary
+                                .withOpacity(0.2),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        FilterFormattingUtils.getAgeRangeString(minAge, args.maxAge),
+                        FilterFormattingUtils.getAgeRangeString(
+                            minAge, args.maxAge),
                         textAlign: TextAlign.right,
                       ),
                     )
@@ -66,10 +73,14 @@ class AgeFilter extends HookConsumerWidget with UiLoggy{
                     max: args.maxAge!.toDouble(),
                     divisions: args.maxAge! - FilterConstants.minAge,
                     value: args.maxAge! - minAge.toDouble(),
-                    onChanged: (value) => ref.read(filterModelProvider(filterType.state.state =
-                        ref.read(filterModelProvider(filterType.state.state.copyWith(
-                              minAge: args.maxAge! - value.round(),
-                            ),
+                    onChanged: (value) =>
+                        ref.read(filterModelProvider(filterType).state).state =
+                            ref
+                                .read(filterModelProvider(filterType).state)
+                                .state
+                                .copyWith(
+                                  minAge: args.maxAge! - value.round(),
+                                ),
                     label: minAge.toString(),
                     activeColor: Theme.of(context).colorScheme.secondary,
                   ),

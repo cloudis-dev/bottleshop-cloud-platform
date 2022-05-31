@@ -12,6 +12,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
@@ -19,25 +20,41 @@ import 'package:delivery/src/core/data/services/shared_preferences_service.dart'
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/repositories/user_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
-final authProvider = Provider<AuthenticationService>(((ref) => throw UnimplementedError()));
+final authProvider =
+    Provider<AuthenticationService>(((ref) => throw UnimplementedError()));
 
-final authStateChangesProvider =
-    StreamProvider.autoDispose<User?>((ref) => ref.watch(authProvider.select((value) => value.authStateChanges)));
+final authStateChangesProvider = StreamProvider.autoDispose<User?>(
+    (ref) => ref.watch(authProvider.select((value) => value.authStateChanges)));
 
 final currentUserProvider = Provider<UserModel?>((ref) {
   final user = ref.watch(userRepositoryProvider.select((value) => value.user));
   return user;
 });
 
+final currentUserAsStream = StreamProvider.autoDispose<UserModel?>(
+  (ref) {
+    var controller = StreamController<UserModel?>();
+    var user = ref.watch(userRepositoryProvider).user;
+    controller.add(user);
+
+    ref.onDispose(() async {
+      await controller.close();
+    });
+
+    return controller.stream.distinct().asBroadcastStream();
+  },
+  name: 'currentUserAsStream',
+);
+
 final authStatusProvider = Provider<AuthStatus>((ref) {
-  final authState = ref.watch(userRepositoryProvider.select((value) => value.status));
+  final authState =
+      ref.watch(userRepositoryProvider.select((value) => value.status));
   return authState;
 });
 
@@ -51,7 +68,8 @@ final userRepositoryProvider = ChangeNotifierProvider<UserRepository>((ref) {
 class TermsAcceptedState extends StateNotifier<bool> {
   final Ref ref;
 
-  TermsAcceptedState(this.ref, {required bool initialState}) : super(initialState);
+  TermsAcceptedState(this.ref, {required bool initialState})
+      : super(initialState);
 
   void _storeState() {
     final preferences = ref.read(sharedPreferencesServiceProvider);
@@ -71,15 +89,18 @@ class TermsAcceptedState extends StateNotifier<bool> {
   bool get termsAccepted => state;
 }
 
-final termsAcceptanceProvider = StateNotifierProvider<TermsAcceptedState, bool>((ref) {
+final termsAcceptanceProvider =
+    StateNotifierProvider<TermsAcceptedState, bool>((ref) {
   final preferences = ref.watch(sharedPreferencesServiceProvider);
   final initialState = preferences.getTermsAgreed();
   return TermsAcceptedState(ref, initialState: initialState);
 });
 
-final widgetToggleProvider = StateProvider<bool>((ref) => true, name: 'widgetToggleProvider');
+final widgetToggleProvider =
+    StateProvider<bool>((ref) => true, name: 'widgetToggleProvider');
 
-final formValidProvider = StateProvider<bool>((ref) => true, name: 'formValidProvider');
+final formValidProvider =
+    StateProvider<bool>((ref) => true, name: 'formValidProvider');
 
 final isAppVersionCompatible = StreamProvider.autoDispose<bool>(
   (ref) {
@@ -100,14 +121,16 @@ final isAppVersionCompatible = StreamProvider.autoDispose<bool>(
 );
 
 final appDownloadRedirectUrlProvider = FutureProvider.autoDispose<String>(
-  (_) {
+  (_) async {
     return FirebaseFirestore.instance
         .collection(FirestoreCollections.versionConstraintsCollection)
         .doc('main_app')
         .get()
         .then(
-          (value) => value
-              .data()![defaultTargetPlatform == TargetPlatform.android ? 'download_url_android' : 'download_url_ios'],
+          (value) => value.data()![
+              defaultTargetPlatform == TargetPlatform.android
+                  ? 'download_url_android'
+                  : 'download_url_ios'],
         );
   },
 );

@@ -41,11 +41,13 @@ class OrderModel extends Equatable {
 
   bool get isComplete => statusStepId == orderType.orderStepsIds.last;
 
-  bool get isFollowingStatusIdComplete => isComplete || getFollowingStatusId == orderType.orderStepsIds.last;
+  bool get isFollowingStatusIdComplete =>
+      isComplete || getFollowingStatusId == orderType.orderStepsIds.last;
 
   int? get getFollowingStatusId {
     assert(!isComplete);
-    return orderType.orderStepsIds[orderType.orderStepsIds.indexOf(statusStepId) + 1];
+    return orderType
+        .orderStepsIds[orderType.orderStepsIds.indexOf(statusStepId) + 1];
   }
 
   OrderModel({
@@ -76,17 +78,22 @@ class OrderModel extends Equatable {
                 1 ==
             json[OrderModelFields.statusTimestampsField].length),
         orderId = json[OrderModelFields.idField],
-        customer =
-            UserModel.fromMap(json[OrderModelFields.userField][UserFields.uid], json[OrderModelFields.userField]),
+        customer = UserModel.fromMap(
+            json[OrderModelFields.userField][UserFields.uid],
+            json[OrderModelFields.userField]),
         orderType = json[OrderModelFields.orderTypeField],
         note = json[OrderModelFields.noteField],
         _cartItems = List<CartItemModel>.unmodifiable(
-            json[OrderModelFields.cartItemsField].map((dynamic e) => CartItemModel.fromMap(e))),
-        totalPaid = double.parse(json[OrderModelFields.totalPaidField].toString()),
+            json[OrderModelFields.cartItemsField]
+                .map((dynamic e) => CartItemModel.fromMap(e))),
+        totalPaid =
+            double.parse(json[OrderModelFields.totalPaidField].toString()),
         statusStepId = json[OrderModelFields.statusStepIdField],
-        _statusStepsDates = List<DateTime>.unmodifiable(json[OrderModelFields.statusTimestampsField]
-            .map((dynamic e) => DateTime.fromMillisecondsSinceEpoch(e.seconds * 1000))),
-        createdAt = DateTime.fromMillisecondsSinceEpoch(json[OrderModelFields.createdAtTimestampField].seconds * 1000),
+        _statusStepsDates = List<DateTime>.unmodifiable(
+            json[OrderModelFields.statusTimestampsField].map((dynamic e) =>
+                DateTime.fromMillisecondsSinceEpoch(e.seconds * 1000))),
+        createdAt = DateTime.fromMillisecondsSinceEpoch(
+            json[OrderModelFields.createdAtTimestampField].seconds * 1000),
         promoCode = json[OrderModelFields.promoCodeField],
         promoCodeValue = json[OrderModelFields.promoCodeValueField]?.toDouble();
 

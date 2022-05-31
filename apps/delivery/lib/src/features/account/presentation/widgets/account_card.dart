@@ -38,7 +38,8 @@ class AccountCard extends HookConsumerWidget {
         childrenPadding: const EdgeInsets.only(bottom: 8),
         initiallyExpanded: true,
         leading: const Icon(Icons.supervised_user_circle_outlined),
-        title: Text(context.l10n.contactDetails, style: Theme.of(context).textTheme.bodyText1),
+        title: Text(context.l10n.contactDetails,
+            style: Theme.of(context).textTheme.bodyText1),
         subtitle: const Text(''),
         children: [
           ListTile(
@@ -101,7 +102,8 @@ class AccountCard extends HookConsumerWidget {
               ),
               subtitle: Text(
                 user?.dayOfBirth != null
-                    ? FormattingUtils.getDateFormatter(currentLocale).format(user!.dayOfBirth!)
+                    ? FormattingUtils.getDateFormatter(currentLocale)
+                        .format(user!.dayOfBirth!)
                     : context.l10n.tellUsYourBirthdayToGetASpecialGift,
                 style: Theme.of(context).textTheme.caption,
               ),
@@ -146,7 +148,8 @@ class AccountCard extends HookConsumerWidget {
               style: Theme.of(context).textTheme.subtitle1,
             ),
             subtitle: Text(
-              user?.shippingAddress?.getAddressAsString() ?? context.l10n.notSet,
+              user?.shippingAddress?.getAddressAsString() ??
+                  context.l10n.notSet,
               style: Theme.of(context).textTheme.caption,
             ),
             trailing: ButtonTheme(

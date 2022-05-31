@@ -34,8 +34,13 @@ class ProductHomeTab extends HookConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          product.count > 0 ? '${product.count} ${context.l10n.inStock}' : context.l10n.outOfStock,
-          style: Theme.of(context).textTheme.subtitle2!.copyWith(color: product.count > 0 ? Colors.green : Colors.red),
+          product.count > 0
+              ? '${product.count} ${context.l10n.inStock}'
+              : context.l10n.outOfStock,
+          style: Theme.of(context)
+              .textTheme
+              .subtitle2!
+              .copyWith(color: product.count > 0 ? Colors.green : Colors.red),
           textAlign: TextAlign.right,
         ),
         // const SizedBox(height: 10),
@@ -45,14 +50,20 @@ class ProductHomeTab extends HookConsumerWidget {
               product.priceWithVat,
               withCurrency: true,
             ),
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(decoration: TextDecoration.lineThrough),
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1!
+                .copyWith(decoration: TextDecoration.lineThrough),
           ),
         Text(
           FormattingUtils.getPriceNumberString(
             product.finalPrice,
             withCurrency: true,
           ),
-          style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white),
+          style: Theme.of(context)
+              .textTheme
+              .headline3!
+              .copyWith(color: Colors.white),
         ),
         const SizedBox(height: 10),
         ListTile(
@@ -73,7 +84,8 @@ class ProductHomeTab extends HookConsumerWidget {
             style: Theme.of(context).textTheme.subtitle2,
           ),
         ),
-        if (_buildExtraCategoryString(product.extraCategories, currentLocalel10n.isNotEmpty) ...[
+        if (_buildExtraCategoryString(product.extraCategories, currentLocale)
+            .isNotEmpty) ...[
           const SizedBox(height: 20),
           ListTile(
             dense: true,
@@ -101,18 +113,25 @@ class ProductHomeTab extends HookConsumerWidget {
     Locale currentLocale,
   ) {
     var result = '';
-    categories.where((category) => !category.categoryDetails.isExtraCategoryl10n.forEach((category) {
-      result += CategoryModel.allCategoryDetails(categoryl10n.map((e) => e.getName(currentLocale)l10n.join(' - ');
+    categories
+        .where((category) => !category.categoryDetails.isExtraCategory)
+        .forEach((category) {
+      result += CategoryModel.allCategoryDetails(category)
+          .map((e) => e.getName(currentLocale))
+          .join(' - ');
     });
     return result;
   }
 
-  String _buildExtraCategoryString(List<CategoryModel>? extraCategories, Locale currentLocale) {
+  String _buildExtraCategoryString(
+      List<CategoryModel>? extraCategories, Locale currentLocale) {
     var result = '';
     if (extraCategories != null) {
       extraCategories.forEach(
         (category) {
-          result += CategoryModel.allCategoryDetails(categoryl10n.map((e) => e.getName(currentLocale)l10n.join(' - ');
+          result += CategoryModel.allCategoryDetails(category)
+              .map((e) => e.getName(currentLocale))
+              .join(' - ');
         },
       );
     }

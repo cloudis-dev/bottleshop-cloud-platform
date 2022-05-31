@@ -48,7 +48,7 @@ class FormattingUtils {
   }
 
   static DateFormat getDateTimeFormatter(Locale locale) {
-    return getDateFormatter(localel10n.add_Hms();
+    return getDateFormatter(locale).add_Hms();
   }
 
   static DateFormat getDateFormatter(Locale locale) {

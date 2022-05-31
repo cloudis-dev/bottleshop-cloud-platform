@@ -27,7 +27,10 @@ class SliverProductsHeadingTile extends StatelessWidget {
         title: Text(title!, style: Theme.of(context).textTheme.headline6),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
-          children: const <Widget>[ProductsLayoutModeToggle(), SortMenuButton()],
+          children: const <Widget>[
+            ProductsLayoutModeToggle(),
+            SortMenuButton()
+          ],
         ),
       ),
     );

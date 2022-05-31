@@ -30,8 +30,8 @@ class DatabaseService<T> {
   FirebaseFirestore get db => _db;
 
   Future<bool> exists(String id) async {
-    final value = await  _db.collection(collection).doc(id).get();
-    return value.;
+    final value = await _db.collection(collection).doc(id).get();
+    return value.exists;
   }
 
   /// Gets a single record.
@@ -45,7 +45,9 @@ class DatabaseService<T> {
 
   Stream<T?> streamSingle(String id) {
     return _db.collection(collection).doc(id).snapshots().asyncMap((snap) {
-      return snap.exists ? fromMapAsync(snap.id, snap.data()!) : Future.value(null);
+      return snap.exists
+          ? fromMapAsync(snap.id, snap.data()!)
+          : Future.value(null);
     });
   }
 
@@ -66,7 +68,9 @@ class DatabaseService<T> {
     return Future.wait(
       docs
           .map(
-            (doc) => doc.exists ? fromMapAsync(doc.id, doc.data()! as Map<String, dynamic>) : null,
+            (doc) => doc.exists
+                ? fromMapAsync(doc.id, doc.data()! as Map<String, dynamic>)
+                : null,
           )
           .whereType(),
     );
@@ -81,7 +85,9 @@ class DatabaseService<T> {
           (event) => Future.wait(
             event.docs
                 .map(
-                  (e) => e.exists ? fromMapAsync(e.id, e.data()! as Map<String, dynamic>) : null,
+                  (e) => e.exists
+                      ? fromMapAsync(e.id, e.data()! as Map<String, dynamic>)
+                      : null,
                 )
                 .whereType(),
           ),
@@ -89,16 +95,18 @@ class DatabaseService<T> {
   }
 
   /// This is a convenience function when we don't need the [DocumentSnapshot].
-  Stream<List<Tuple2<DocumentChangeType, T>>> streamQueryListWithChangesAll({
+  Stream<Iterable<Tuple2<DocumentChangeType, DocumentSnapshot>>>
+      streamQueryListWithChangesAll({
     List<OrderBy>? orderBy,
     List<QueryArgs>? args,
   }) {
     return streamQueryListWithChanges(orderBy: orderBy, args: args).map(
-      (event) => event.map((e) => Tuple2(e.value1, e.value3).toList()),
-    );
+        (event) => event.map((e) =>
+            Tuple2<DocumentChangeType, DocumentSnapshot>(e.value1, e.value2)));
   }
 
-  Stream<List<Tuple3<DocumentChangeType, DocumentSnapshot, T>>> streamQueryListWithChanges({
+  Stream<List<Tuple3<DocumentChangeType, DocumentSnapshot, T>>>
+      streamQueryListWithChanges({
     List<OrderBy>? orderBy,
     List<QueryArgs>? args,
     int? limit,
@@ -111,7 +119,8 @@ class DatabaseService<T> {
       startAfterDocument: startAfterDocument,
     );
 
-    final streamCtrl = StreamController<List<Tuple3<DocumentChangeType, DocumentSnapshot, T>>>();
+    final streamCtrl = StreamController<
+        List<Tuple3<DocumentChangeType, DocumentSnapshot, T>>>();
 
     streamCtrl.onCancel = () async {
       return streamCtrl.close();
@@ -119,18 +128,23 @@ class DatabaseService<T> {
 
     // ignore: cascade_invocations
     streamCtrl.onListen = () async {
-      StreamController<List<Tuple3<DocumentChangeType, DocumentSnapshot, T>>>? _getStreamCtrl() =>
-          streamCtrl.isClosed ? null : streamCtrl;
+      StreamController<List<Tuple3<DocumentChangeType, DocumentSnapshot, T>>>?
+          _getStreamCtrl() => streamCtrl.isClosed ? null : streamCtrl;
 
       try {
         // The initial batch have to be first awaited and fully added to the stream
         // Just after that the changes stream is added.
-        final initialBatch = await query.get(const GetOptions(source: Source.server))then(
+        final initialBatch = await query
+            .get(const GetOptions(source: Source.server))
+            .then(
               (event) => Future.wait(
                 event.docs.map(
                   (queryDocSnapshot) => queryDocSnapshot.exists
-                      ? fromMapAsync(queryDocSnapshot.id, queryDocSnapshot.data()! as Map<String, dynamic>)then(
-                          (value) => Tuple3<DocumentChangeType, DocumentSnapshot, T>(
+                      ? fromMapAsync(queryDocSnapshot.id,
+                              queryDocSnapshot.data()! as Map<String, dynamic>)
+                          .then(
+                          (value) =>
+                              Tuple3<DocumentChangeType, DocumentSnapshot, T>(
                             DocumentChangeType.added,
                             queryDocSnapshot,
                             value,
@@ -138,21 +152,25 @@ class DatabaseService<T> {
                         )
                       : Future.value(null),
                 ),
-              )then(
-                (value) => value.whereType<Tuple3<DocumentChangeType, DocumentSnapshot<Object?>, T>>()toList(),
+              ).then(
+                (value) => value
+                    .whereType<
+                        Tuple3<DocumentChangeType, DocumentSnapshot<Object?>,
+                            T>>()
+                    .toList(),
               ),
             );
 
         _getStreamCtrl()?.add(initialBatch);
 
-        final snapshotsStream = query.snapshots()asyncMap(
+        final snapshotsStream = query.snapshots().asyncMap(
           (snap) {
             return Future.wait(
               snap.docChanges.map(
                 (docChange) => fromMapAsync(
                   docChange.doc.id,
                   docChange.doc.data()! as Map<String, dynamic>,
-                )then(
+                ).then(
                   (value) => Tuple3(docChange.type, docChange.doc, value),
                 ),
               ),
@@ -169,20 +187,26 @@ class DatabaseService<T> {
     return streamCtrl.stream;
   }
 
-  Future<dynamic> create(Map<String, dynamic> data, {String? id}) {
+  Future<void> create(Map<String, dynamic> data, {String? id}) {
     if (id != null) {
-      return _db.collection(collection)doc(id)set(data, SetOptions(merge: true));
+      return _db
+          .collection(collection)
+          .doc(id)
+          .set(data, SetOptions(merge: true));
     } else {
-      return _db.collection(collection)add(data);
+      return _db.collection(collection).add(data);
     }
   }
 
   Future<void> updateData(String id, Map<String, dynamic> data) {
-    return _db.collection(collection)doc(id)set(data, SetOptions(merge: true));
+    return _db
+        .collection(collection)
+        .doc(id)
+        .set(data, SetOptions(merge: true));
   }
 
   Future<void> removeItem(String id) {
-    return _db.collection(collection)doc(id)delete();
+    return _db.collection(collection).doc(id).delete();
   }
 
   Query _createQuery({

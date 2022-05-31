@@ -25,14 +25,15 @@ class CartContentService extends DatabaseService<CartRecord> {
         );
 
   Stream<List<CartItemModel>> getCartItemsStream() {
-    return streamList(l10n.asyncMap(
+    return streamList().asyncMap(
       (event) async {
         final list = <CartItemModel>[];
         for (final item in event) {
           var data = await item.productRef.get();
           var content = data.data();
           if (content != null) {
-            var product = await FirestoreJsonParsingUtil.parseProductJson(content as Map<String, dynamic>);
+            var product = await FirestoreJsonParsingUtil.parseProductJson(
+                content as Map<String, dynamic>);
             list.add(CartItemModel(
               count: item.quantity,
               product: product,
@@ -46,12 +47,16 @@ class CartContentService extends DatabaseService<CartRecord> {
   }
 
   Future<List<CartItemModel>> getCartItems() async {
-    return getQueryList(l10n.then((event) async {
+    return getQueryList().then((event) async {
       final list = <CartItemModel>[];
       for (var item in event) {
         var data = await item.productRef.get();
-        var product = await FirestoreJsonParsingUtil.parseProductJson(data.data() as Map<String, dynamic>);
-        list.add(CartItemModel(count: item.quantity, product: product, paidPrice: product.finalPrice));
+        var product = await FirestoreJsonParsingUtil.parseProductJson(
+            data.data() as Map<String, dynamic>);
+        list.add(CartItemModel(
+            count: item.quantity,
+            product: product,
+            paidPrice: product.finalPrice));
       }
       return list;
     });

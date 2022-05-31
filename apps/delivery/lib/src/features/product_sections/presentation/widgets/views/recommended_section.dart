@@ -26,8 +26,8 @@ class RecommendedSection extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productsState =
-        ref.watch(recommendedProductsProvider.select<ItemsState<ProductModel>>((value) => value.itemsState));
+    final productsState = ref.watch(recommendedProductsProvider
+        .select<ItemsState<ProductModel>>((value) => value.itemsState));
 
     return ProductsSectionCarousel(
       data: productsState.items,

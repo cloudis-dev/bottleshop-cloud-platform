@@ -7,19 +7,23 @@ import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
-class CloudFunctionsService with {
+class CloudFunctionsService with NetworkLoggy {
   final FirebaseFunctions _firebaseFunctions;
 
-  CloudFunctionsService(FirebaseFunctions instance) : _firebaseFunctions = instance;
+  CloudFunctionsService(FirebaseFunctions instance)
+      : _firebaseFunctions = instance;
 
   Future<bool> deleteAccount() async {
-    final res = await _firebaseFunctions.httpsCallable(FirebaseCallableFunctions.deleteAccount).call<dynamic>();
+    final res = await _firebaseFunctions
+        .httpsCallable(FirebaseCallableFunctions.deleteAccount)
+        .call<dynamic>();
 
     return res.data['success'] as bool;
   }
 
   HttpsCallable createPaymentIntent() {
-    return _firebaseFunctions.httpsCallable(FirebaseCallableFunctions.createPaymentIntent);
+    return _firebaseFunctions
+        .httpsCallable(FirebaseCallableFunctions.createPaymentIntent);
   }
 
   Future<String?> createStripeCustomer(UserModel user) async {
@@ -28,9 +32,10 @@ class CloudFunctionsService with {
       final response = await _firebaseFunctions
           .httpsCallable(FirebaseCallableFunctions.createStripeCustomer)
           .call<dynamic>(stripeCustomer.toMap());
+      loggy.debug('createStripeCustomer: ${response.data}');
       return response.data['stripeCustomerId'];
     } catch (e, stack) {
-      logDebug('Failed to create stripe customer', e, stack);
+      loggy.error('Failed to create stripe customer', e, stack);
       return null;
     }
   }
@@ -40,7 +45,7 @@ class CloudFunctionsService with {
       final response = await _firebaseFunctions
           .httpsCallable(FirebaseCallableFunctions.createCashOnDeliveryOrder)
           .call<dynamic>(paymentData.toMap());
-      logError('createOrder: ${response.data}');
+      loggy.debug('createOrder: ${response.data}');
       return response.data['orderId'];
     } catch (e, stack) {
       logError('Failed to create cash on delivery order', e, stack);
@@ -54,9 +59,9 @@ class CloudFunctionsService with {
       final response = await _firebaseFunctions
           .httpsCallable(FirebaseCallableFunctions.setShippingFee)
           .call<dynamic>(shippingFee.toMap());
-      logDebug('chargeShipping: ${response.data}');
+      loggy.debug('chargeShipping: ${response.data}');
     } catch (e, stack) {
-      logError('unable to set shipping fee', e, stack);
+      loggy.error('unable to set shipping fee', e, stack);
     }
   }
 
@@ -66,9 +71,9 @@ class CloudFunctionsService with {
       final response = await _firebaseFunctions
           .httpsCallable(FirebaseCallableFunctions.removeShippingFee)
           .call<dynamic>({'shipping': false});
-      logInfo('removeShipping: ${response.data}');
+      loggy.debug('removeShipping: ${response.data}');
     } catch (e, stack) {
-      logError('unable to remove shipping fee', e, stack);
+      loggy.error('unable to remove shipping fee', e, stack);
     }
   }
 
@@ -87,7 +92,9 @@ class CloudFunctionsService with {
 
   Future<CartStatus> validateCart() async {
     try {
-      final response = await _firebaseFunctions.httpsCallable(FirebaseCallableFunctions.validateCart).call<dynamic>();
+      final response = await _firebaseFunctions
+          .httpsCallable(FirebaseCallableFunctions.validateCart)
+          .call<dynamic>();
       switch (response.data['status']) {
         case 'ok':
           return CartStatus.ok;
@@ -120,4 +127,5 @@ class CloudFunctionsService with {
 
 enum CartStatus { ok, unavailableProducts, invalidPromo, error }
 
-final cloudFunctionsProvider = Provider<CloudFunctionsService>(((ref) => throw UnimplementedError()));
+final cloudFunctionsProvider =
+    Provider<CloudFunctionsService>(((ref) => throw UnimplementedError()));

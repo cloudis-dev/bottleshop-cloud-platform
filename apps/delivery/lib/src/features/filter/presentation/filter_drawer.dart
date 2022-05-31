@@ -10,9 +10,9 @@
 //
 //
 
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/presentation/widgets/drawer_state_acquirer.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/widgets/age_filter.dart';
 import 'package:delivery/src/features/filter/presentation/widgets/age_year_filter_toggle.dart';
@@ -47,7 +47,7 @@ class FilterDrawer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final algoliaImage = AppConfig(context.l10n.platformBrightness() == Brightness.light ? kAlgoliaLogo : kAlgoliaLogoDark;
+    final algoliaImage = AppConfig(context).platformBrightness() == Brightness.light ? kAlgoliaLogo : kAlgoliaLogoDark;
 
     return SizedBox(
       width: 350,
@@ -65,7 +65,6 @@ class FilterDrawer extends HookConsumerWidget {
                   const Divider(),
                   Expanded(
                     child: CupertinoScrollbar(
-                      isAlwaysShown: true,
                       controller: scrollController,
                       child: ListView(
                         controller: scrollController,

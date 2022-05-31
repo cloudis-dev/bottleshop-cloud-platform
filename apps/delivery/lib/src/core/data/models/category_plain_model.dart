@@ -51,7 +51,9 @@ class CategoryPlainModel extends Equatable {
       : _name = json[nameField],
         _localizedName = LocalizedModel.fromMap(json[localizedNameField]),
         isExtraCategory = json[extraCategoryField] ?? false,
-        iconName = json[iconNameField] != null ? 'assets/images/${json[iconNameField]}.png' : null;
+        iconName = json[iconNameField] != null
+            ? 'assets/images/${json[iconNameField]}.png'
+            : null;
 
   Map<String, dynamic> toJson() {
     return {

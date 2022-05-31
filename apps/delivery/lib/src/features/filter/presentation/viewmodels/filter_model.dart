@@ -74,7 +74,7 @@ class FilterConstants {
   static const int defaultAge = 0;
   static const int minAge = defaultAge;
 
-  static int get defaultYear => DateTime.now(l10n.year;
+  static int get defaultYear => DateTime.now().year;
 
   static int get maxYear => defaultYear;
 
@@ -297,7 +297,7 @@ class FilterModel extends Equatable {
             if (isSpecialEditionActive)
               FilterFieldQuery(
                 ProductModel.isSpecialEditionField,
-                eq: (isSpecialEdition ? 1 : 0l10n.toString(),
+                eq: (isSpecialEdition ? 1 : 0).toString(),
               ),
             if (isAgeActive)
               FilterFieldQuery(

@@ -12,7 +12,7 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/core/data/services/analytics_service.dart';
+
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
@@ -52,7 +52,8 @@ class ProductGridItem extends HookConsumerWidget {
         aspectRatio: widgetAspectRatio,
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).hintColor.withOpacity(0.2)),
+            border:
+                Border.all(color: Theme.of(context).hintColor.withOpacity(0.2)),
             color: Theme.of(context).primaryColor,
             borderRadius: ProductImage.borderRadius,
             boxShadow: [
@@ -88,12 +89,13 @@ class ProductGridItem extends HookConsumerWidget {
                                 vertical: 3,
                               ),
                               decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(100)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(100)),
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               alignment: AlignmentDirectional.topEnd,
                               child: Text(
-                                '- ${(product.discount! * 100l10n.toStringAsFixed(2)} %',
+                                '- ${(product.discount! * 100).toStringAsFixed(2)} %',
                                 style: Theme.of(context).textTheme.overline,
                               ),
                             ),
@@ -120,7 +122,7 @@ class ProductGridItem extends HookConsumerWidget {
                   ),
                   const AspectRatio(aspectRatio: 20),
                   Expanded(
-                    flex: (subtitleTheme.fontSize! * 2.2l10n.toInt(),
+                    flex: (subtitleTheme.fontSize! * 2.2).toInt(),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: LayoutBuilder(
@@ -153,7 +155,8 @@ class ProductGridItem extends HookConsumerWidget {
                           FittedBox(
                             fit: fit,
                             child: Text(
-                              FormattingUtils.getAlcoholNumberString(product.alcohol ?? 0),
+                              FormattingUtils.getAlcoholNumberString(
+                                  product.alcohol ?? 0),
                               style: body1Theme,
                             ),
                           ),
@@ -192,7 +195,9 @@ class ProductGridItem extends HookConsumerWidget {
                                     style: Theme.of(context)
                                         .textTheme
                                         .caption!
-                                        .copyWith(decoration: TextDecoration.lineThrough),
+                                        .copyWith(
+                                            decoration:
+                                                TextDecoration.lineThrough),
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.end,
                                   ),
@@ -210,7 +215,9 @@ class ProductGridItem extends HookConsumerWidget {
                       child: FittedBox(
                         fit: fit,
                         child: Text(
-                          product.count > 0 ? '${product.count} ${context.l10n.inStock}' : context.l10n.outOfStock,
+                          product.count > 0
+                              ? '${product.count} ${context.l10n.inStock}'
+                              : context.l10n.outOfStock,
                           style: stockTextTheme,
                         ),
                       ),
@@ -224,8 +231,6 @@ class ProductGridItem extends HookConsumerWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () async {
-                      await logViewItem(context, product.uniqueId, product.name,
-                          product.allCategories.first.categoryDetails.getName(currentLocale));
                       onClick(ref, context);
                     },
                     borderRadius: ProductImage.borderRadius,

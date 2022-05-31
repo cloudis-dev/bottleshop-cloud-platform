@@ -1,4 +1,4 @@
-import 'package:delivery/src/core/data/services/flutter_scroll_to_top/scroll_wrapper.dart';
+import 'package:delivery/src/core/utils/flutter_scroll_to_top/scroll_wrapper.dart';
 import 'package:delivery/src/core/presentation/widgets/drawer_state_acquirer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
@@ -48,8 +48,9 @@ class _Body extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAnyFilterActive =
-        ref.watch(appliedFilterProvider(FilterType.allProductsl10n.select<bool>((value) => value.isAnyFilterActive));
+    final isAnyFilterActive = ref.watch(
+        appliedFilterProvider(FilterType.allProducts)
+            .select<bool>((value) => value.isAnyFilterActive));
     final scrollCtrl = useScrollController();
 
     final children = [

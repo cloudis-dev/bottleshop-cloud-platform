@@ -13,7 +13,8 @@
 import 'package:delivery/src/features/products/presentation/widgets/product_grid_item.dart';
 import 'package:flutter/cupertino.dart';
 
-class ProductSliverGridDelegate extends SliverGridDelegateWithMaxCrossAxisExtent {
+class ProductSliverGridDelegate
+    extends SliverGridDelegateWithMaxCrossAxisExtent {
   const ProductSliverGridDelegate()
       : super(
           mainAxisSpacing: 15,

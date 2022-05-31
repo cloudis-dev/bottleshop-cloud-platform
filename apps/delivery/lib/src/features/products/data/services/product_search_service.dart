@@ -12,12 +12,12 @@
 
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/utils/firestore_json_parsing_util.dart';
 import 'package:delivery/src/features/products/data/models/filter_query.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
-import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 enum SearchMatchField { name }
@@ -61,7 +61,9 @@ class ProductsSearchService {
 
   static const encoding = 'utf-8';
 
-  static Future<Tuple2<List<Tuple2<Map<SearchMatchField, String>, ProductModel>>, List<CategoryPlainModel>>> search(
+  static Future<
+      Tuple2<List<Tuple2<Map<SearchMatchField, String>, ProductModel>>,
+          List<CategoryPlainModel>>> search(
     String searchQuery, {
     required int productsLength,
     required int categoriesLength,
@@ -71,8 +73,14 @@ class ProductsSearchService {
       headers: headers,
       body: jsonEncode({
         'requests': [
-          {'indexName': searchProductsIndexName, 'params': 'query=$searchQuery&length=$productsLength&offset=0'},
-          {'indexName': searchCategoriesIndexName, 'params': 'query=$searchQuery&length=$categoriesLength&offset=0'}
+          {
+            'indexName': searchProductsIndexName,
+            'params': 'query=$searchQuery&length=$productsLength&offset=0'
+          },
+          {
+            'indexName': searchCategoriesIndexName,
+            'params': 'query=$searchQuery&length=$categoriesLength&offset=0'
+          }
         ],
         'strategy': 'none'
       }),
@@ -83,7 +91,8 @@ class ProductsSearchService {
     final productsResult = decodedResult['results'][0];
     final categoriesResult = decodedResult['results'][1];
 
-    final List<Map<String, dynamic>> productJsons = productsResult['hits'].cast<Map<String, dynamic>>();
+    final List<Map<String, dynamic>> productJsons =
+        productsResult['hits'].cast<Map<String, dynamic>>();
 
     final parsedProducts = await Future.wait(
       productJsons.map(
@@ -101,9 +110,12 @@ class ProductsSearchService {
       ),
     );
 
-    final List<Map<String, dynamic>> categoriesJsons = categoriesResult['hits'].cast<Map<String, dynamic>>();
-    final parsedCategories =
-        categoriesJsons.map((e) => CategoryPlainModel.fromJson(e, e[CategoryPlainModel.uidField])).toList();
+    final List<Map<String, dynamic>> categoriesJsons =
+        categoriesResult['hits'].cast<Map<String, dynamic>>();
+    final parsedCategories = categoriesJsons
+        .map((e) =>
+            CategoryPlainModel.fromJson(e, e[CategoryPlainModel.uidField]))
+        .toList();
 
     return Tuple2(parsedProducts, parsedCategories);
   }
@@ -117,11 +129,14 @@ class ProductsSearchService {
     final res = await http.post(
       Uri.parse(getFilterUrl(sortModel)),
       headers: headers,
-      body: jsonEncode({'params': 'filters=${query.toString()}&hitsPerPage=$count&page=$pageId'}),
+      body: jsonEncode({
+        'params': 'filters=${query.toString()}&hitsPerPage=$count&page=$pageId'
+      }),
       encoding: Encoding.getByName(encoding),
     );
 
-    final List<Map<String, dynamic>> productJsons = json.decode(res.body)['hits'].cast<Map<String, dynamic>>();
+    final List<Map<String, dynamic>> productJsons =
+        json.decode(res.body)['hits'].cast<Map<String, dynamic>>();
     final parsedProducts = await Future.wait(
       productJsons.map(FirestoreJsonParsingUtil.parseProductRaw),
     );

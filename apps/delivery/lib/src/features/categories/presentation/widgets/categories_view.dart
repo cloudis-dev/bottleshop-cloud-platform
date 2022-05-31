@@ -18,8 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
-
-class CategoriesView extends HookConsumerWidget with UiLoggy{
+class CategoriesView extends HookConsumerWidget with UiLoggy {
   final ScrollController? scrollCtrl;
 
   const CategoriesView({
@@ -35,7 +34,8 @@ class CategoriesView extends HookConsumerWidget with UiLoggy{
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(mainCategoriesWithoutExtraProvider.statel10n.state;
+    final categories =
+        ref.watch(mainCategoriesWithoutExtraProvider.state).state;
     final productCounts = ref.watch(categoryProductCountsProvider);
 
     const maxSize = 200.0;

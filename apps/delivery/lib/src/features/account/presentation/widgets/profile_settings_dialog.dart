@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
@@ -17,7 +18,6 @@ import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -51,10 +51,10 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
                 formatter: FormattingUtils.getDateFormatter(currentLocale),
               );
             },
+      style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
       child: Text(
         context.l10n.edit,
       ),
-      style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
     );
   }
 
@@ -71,7 +71,6 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
         return AlertDialog(
           title: buildDialogTitle(context, context.l10n.profileSettings),
           content: CupertinoScrollbar(
-            isAlwaysShown: true,
             controller: controller,
             child: SingleChildScrollView(
               controller: controller,
@@ -91,23 +90,23 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
               },
             ),
             TextButton(
-              child: Text(context.l10n.save),
               style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
               onPressed: () {
                 var isValid = _formKey.currentState!.validate();
                 if (isValid) {
                   _formKey.currentState!.save();
                   userDb.updateData(user.uid, profileData!);
-                  showSimpleNotification(
-                    Text(context.l10n.profileUpdated),
-                    position: NotificationPosition.top,
-                    duration: const Duration(seconds: 2),
-                    slideDismissDirection: DismissDirection.horizontal,
-                    context: context,
-                  );
-                  Navigator.of(context).pop();
+                  // showSimpleNotification(
+                  //   Text(context.l10n.profileUpdated),
+                  //   position: NotificationPosition.top,
+                  //   duration: const Duration(seconds: 2),
+                  //   slideDismissDirection: DismissDirection.horizontal,
+                  //   context: context,
+                  // );
+                  // Navigator.of(context).pop();
                 }
               },
+              child: Text(context.l10n.save),
             ),
           ],
         );

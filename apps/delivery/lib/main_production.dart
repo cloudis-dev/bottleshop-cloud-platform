@@ -9,25 +9,27 @@
 
 import 'dart:async';
 
-import 'package:delivery/src/app/app.dart';
+import 'package:delivery/src/app.dart';
 import 'package:delivery/src/config/firebase_options_production.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
-import 'package:bottleshop_delivery_flavors/l10n/l10n.dart';
 
 void main() async {
   await runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
       await FirebaseAppCheck.instance.activate(
         webRecaptchaSiteKey: '6LdIPtUfAAAAACEZhCIe8TEdRDcltugVuPqTS8RY',
       );
-      runApp(const MyApp());
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      runApp(const App());
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
     },
-    (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
+    (error, stack) =>
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
   );
 }

@@ -36,7 +36,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filter = ref.watch(appliedFilterProvider(filterTypel10n.statel10n.state;
+    final filter = ref.watch(appliedFilterProvider(filterType).state).state;
 
     return SizedBox(
       height: 52,
@@ -57,7 +57,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
               child: Ink(
                 child: IconButton(
                   onPressed: () {
-                    ref.read(appliedFilterProvider(filterTypel10n.statel10n.state = FilterModel.empty();
+                    ref.read(appliedFilterProvider(filterType).state).state =
+                        FilterModel.empty();
                   },
                   icon: const Icon(
                     Icons.cancel,
@@ -84,7 +85,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.alcoholRange,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        var val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedAlcoholFilter();
                       },
                     ),
@@ -93,7 +95,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.minQuantity,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        final val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedQuantityFilter();
                       },
                     ),
@@ -102,7 +105,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.volumeRange,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        final val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedVolumeFilter();
                       },
                     ),
@@ -111,7 +115,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.priceRange,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        final val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedPriceFilter();
                       },
                     ),
@@ -120,7 +125,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.isSpecialEdition,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        final val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedSpecialEditionFilter();
                       },
                     ),
@@ -129,7 +135,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.countries,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        final val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedCountriesFilter();
                       },
                     ),
@@ -138,7 +145,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.minAge,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        final val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedAgeFilter();
                       },
                     ),
@@ -147,7 +155,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.maxYear,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        final val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedYearFilter();
                       },
                     ),
@@ -156,7 +165,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.enabledExtraCategoriesIds,
                       onDeleteFilter: () {
-                        final val = ref.read(appliedFilterProvider(filterTypel10n.state);
+                        final val =
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedExtraCategoriesFilter();
                       },
                     ),
@@ -173,12 +183,14 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     if (filter.isQuantityActive) const QuantityFilterChip(),
                     if (filter.isVolumeActive) const VolumeFilterChip(),
                     if (filter.isPriceActive) const PriceFilterChip(),
-                    if (filter.isSpecialEditionActive) const IsSpecialEditionFilterChip(),
+                    if (filter.isSpecialEditionActive)
+                      const IsSpecialEditionFilterChip(),
                     if (filter.isCountriesActive) const CountriesFilterChip(),
                     if (filter.isAgeActive) const AgeFilterChip(),
                     if (filter.isYearActive) const YearFilterChip(),
-                    if (filter.isExtraCategoriesActive) const ExtraCategoriesFilterChip(),
-                  ].interleave(const SizedBox(width: 10)l10n.toList(),
+                    if (filter.isExtraCategoriesActive)
+                      const ExtraCategoriesFilterChip(),
+                  ].interleave(const SizedBox(width: 10)).toList(),
                 ),
               ),
             ),

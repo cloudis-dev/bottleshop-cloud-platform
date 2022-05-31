@@ -32,7 +32,8 @@ class CategoriesTreeModel {
     Locale currentLocale,
   )   : categoryDetails = CategoryPlainModel.fromJson(documentJson, documentId),
         subCategories = List.unmodifiable(
-          _parseSubcategories(currentLocale, documentJson, documentIdsToData).toList()
+          _parseSubcategories(currentLocale, documentJson, documentIdsToData)
+              .toList()
             ..sort(
               (a, b) => SortingUtil.categoryCompare(
                 a.categoryDetails,

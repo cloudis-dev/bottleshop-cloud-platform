@@ -70,8 +70,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '525277285012',
     projectId: 'bottleshop-3-veze-dev-54908',
     storageBucket: 'bottleshop-3-veze-dev-54908.appspot.com',
-    androidClientId: '525277285012-6qj6rf3lr3o7sdkovn4qoefhhd31686h.apps.googleusercontent.com',
-    iosClientId: '525277285012-ls21r8r70es1jbav55094lohidfrtrqr.apps.googleusercontent.com',
-    iosBundleId: 'sk.bottleshop3veze.bottleshopdeliveryapp.dev',
+    androidClientId:
+        '525277285012-6qj6rf3lr3o7sdkovn4qoefhhd31686h.apps.googleusercontent.com',
+    iosClientId:
+        '525277285012-ls21r8r70es1jbav55094lohidfrtrqr.apps.googleusercontent.com',
+    iosBundleId: 'sk.bottleshop3veze.delivery.dev',
   );
 }

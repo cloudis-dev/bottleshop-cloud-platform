@@ -4,11 +4,9 @@ import 'package:delivery/src/features/auth/presentation/providers/auth_providers
 import 'package:delivery/src/features/home/data/models/favorite_item_model.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
-final _logger = Logger((WishListServicel10n.toString());
-
-class WishListService {
+class WishListService with NetworkLoggy {
   final Reader read;
   late WishListDBService? db;
 
@@ -22,9 +20,9 @@ class WishListService {
   Future<void> add(String? id) async {
     if (db == null) return;
 
-    _logger.info('adding $id');
+    loggy.info('adding $id');
     var ref =
-        db!.db.collection(FirestoreCollections.productsCollectionl10n.doc(id);
+        db!.db.collection(FirestoreCollections.productsCollection).doc(id);
     var item = FavoriteItemModel(product: ref, addedAt: DateTime.now());
     await db!.create(item.toMap(), id: id);
   }
@@ -32,7 +30,7 @@ class WishListService {
   Future<void> remove(String id) async {
     if (db == null) return;
 
-    _logger.info('removing $id');
+    loggy.info('removing $id');
     await db!.removeItem(id);
   }
 

@@ -12,16 +12,17 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
+import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:delivery/src/features/auth/data/models/device_model.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -31,10 +32,14 @@ import 'package:intl/intl.dart';
 import 'package:loggy/loggy.dart';
 import 'package:rxdart/streams.dart';
 
-enum AuthStatus { uninitialized, authenticated, authenticating, unauthenticated }
+enum AuthStatus {
+  uninitialized,
+  authenticated,
+  authenticating,
+  unauthenticated
+}
 
-
-class UserRepository extends ChangeNotifier with NetworkLoggy{
+class UserRepository extends ChangeNotifier with NetworkLoggy {
   final AuthenticationService _auth;
   final PushNotificationService _notificationService;
   final CloudFunctionsService _cloudFunctionsService;
@@ -83,7 +88,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
       notifyListeners();
     } else {
       _error = '';
-      _userListener = userDb.streamSingle(firebaseUser.uidl10n.listen((user) {
+      _userListener = userDb.streamSingle(firebaseUser.uid).listen((user) {
         if (user != null) {
           _fsUser = user;
           _loading = false;
@@ -105,7 +110,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
   }
 
   Future<void> onUserChangedPreferredLanguage(LanguageMode mode) async {
-    return setPreferredLanguage(language2Locale(model10n.languageCode);
+    return setPreferredLanguage(language2locale(mode).languageCode);
   }
 
   Future<void> sendVerificationMail() async {
@@ -127,14 +132,17 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
 
     if (userModel == null) return;
     if (!await userDb.exists(firebaseUser.uid)) {
-      final stripeId = await _cloudFunctionsService.createStripeCustomer(userModel);
+      final stripeId =
+          await _cloudFunctionsService.createStripeCustomer(userModel);
 
       if (stripeId == null) {
         loggy.error('Could not create stripe customer');
       } else {
         await userDb.create(
           userModel
-              .copyWith(stripeCustomerId: stripeId, preferredLanguage: Intl.getCurrentLocale(l10n.substring(0, 2))
+              .copyWith(
+                  stripeCustomerId: stripeId,
+                  preferredLanguage: Intl.getCurrentLocale().substring(0, 2))
               .toMap(),
           id: firebaseUser.uid,
         );
@@ -190,14 +198,14 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
     if (existing != null) {
       if (token != null) {
         await userDeviceDb.updateData(deviceId, {
-          DeviceFields.lastUpdatedAt: DateTime.now(l10n.toUtc(),
+          DeviceFields.lastUpdatedAt: DateTime.now().toUtc(),
           DeviceFields.token: token,
         });
       }
     } else {
       var device = Device(
-        createdAt: DateTime.now(l10n.toUtc(),
-        lastUpdatedAt: DateTime.now(l10n.toUtc(),
+        createdAt: DateTime.now().toUtc(),
+        lastUpdatedAt: DateTime.now().toUtc(),
         deviceInfo: deviceDescription,
         id: deviceId,
         token: token,
@@ -214,16 +222,18 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
     loggy.info('onTokenRefreshed: $token');
   }
 
-  Future<bool> sendResetPasswordEmail(BuildContext context, String email) async {
+  Future<bool> sendResetPasswordEmail(
+      BuildContext context, String email) async {
     try {
       _loading = true;
       notifyListeners();
-      await _auth.setLanguage(Intl.getCurrentLocale(l10n.substring(0, 2));
+      await _auth.setLanguage(Intl.getCurrentLocale().substring(0, 2));
       await _auth.sendPasswordResetEmail(email);
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('sendResetPasswordEmail FirebaseAuthException error', err, stack);
+      loggy.error(
+          'sendResetPasswordEmail FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       return false;
     } catch (err, stack) {
@@ -251,7 +261,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
       await sendVerificationMail();
       _error = '';
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('signUpWithEmailAndPassword FirebaseAuthException error', err, stack);
+      loggy.error(
+          'signUpWithEmailAndPassword FirebaseAuthException error', err, stack);
 
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
@@ -271,7 +282,9 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
   Future<void> setUserIntroSeen() async {
     if (_fsUser == null) return;
 
-    if (_status == AuthStatus.authenticated && _fsUser!.uid != 'signed-out' && !_fsUser!.introSeen) {
+    if (_status == AuthStatus.authenticated &&
+        _fsUser!.uid != 'signed-out' &&
+        !_fsUser!.introSeen) {
       await userDb.updateData(_fsUser!.uid, {
         UserFields.lastLoggedIn: FieldValue.serverTimestamp(),
         UserFields.introSeen: true,
@@ -279,7 +292,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
     }
   }
 
-  Future<bool> signInWithEmailAndPassword(BuildContext context, String email, String password) async {
+  Future<bool> signInWithEmailAndPassword(
+      BuildContext context, String email, String password) async {
     try {
       _status = AuthStatus.authenticating;
       _loading = true;
@@ -288,7 +302,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('signInWithEmailAndPassword FirebaseAuthException error', err, stack);
+      loggy.error(
+          'signInWithEmailAndPassword FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
@@ -434,7 +449,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy{
     super.dispose();
   }
 
-  String _getAuthenticationErrorMessage(BuildContext context, String errorCode) {
+  String _getAuthenticationErrorMessage(
+      BuildContext context, String errorCode) {
     switch (errorCode) {
       case ('CANCELLED'):
       case ('FAILED'):

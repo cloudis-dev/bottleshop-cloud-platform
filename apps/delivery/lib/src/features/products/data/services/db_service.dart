@@ -10,13 +10,15 @@
 //
 //
 
-import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
 import 'package:delivery/src/features/products/data/models/flash_sale_model.dart';
 
 DatabaseService<CategoryPlainModel> categoryDb =
-    DatabaseService<CategoryPlainModel>(FirestoreCollections.categoriesCollection, fromMapAsync: (id, data) async {
+    DatabaseService<CategoryPlainModel>(
+        FirestoreCollections.categoriesCollection,
+        fromMapAsync: (id, data) async {
   return CategoryPlainModel.fromJson(data, id);
 });
 

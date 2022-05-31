@@ -10,16 +10,16 @@
 //
 //
 
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:badges/badges.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
 import 'package:delivery/src/core/presentation/widgets/side_menu_header.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/views/terms_conditions_view.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -38,13 +38,12 @@ class MenuDrawer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final orderBadge = ref.watch(activeOrdersCountProviderl10n.whenData((value) => valuel10n.value ?? 0;
+    final orderBadge = ref.watch(activeOrdersCountProvider).whenData((value) => value).value ?? 0;
 
     final hasUser = ref.watch(currentUserProvider.select<bool>((value) => value != null));
 
     return Drawer(
       child: CupertinoScrollbar(
-        isAlwaysShown: true,
         controller: scrollController,
         child: Theme(
           data: Theme.of(context).copyWith(
@@ -56,74 +55,71 @@ class MenuDrawer extends HookConsumerWidget {
             controller: scrollController,
             children: <Widget>[
               if (hasUser) const SideMenuHeader(),
-              _SideMenuItem(
+              SideMenuItem(
                 isSelected: false,
                 leading: Icons.home,
                 title: context.l10n.homeTabLabel,
                 handler: () {},
               ),
-              _SideMenuItem(
+              SideMenuItem(
                 isSelected: false,
                 leading: Icons.liquor,
                 title: context.l10n.categories,
                 handler: () {},
               ),
-              _SideMenuItem(
+              SideMenuItem(
                 isSelected: false,
                 leading: Icons.favorite,
                 title: context.l10n.favoriteTabLabel,
                 handler: () {},
               ),
               if (hasUser)
-                _SideMenuItem(
+                SideMenuItem(
                   isSelected: false,
                   leading: Icons.shopping_cart,
                   title: context.l10n.shopping_cart,
                   handler: () {},
                 ),
-              _SideMenuItem(
+              SideMenuItem(
                 isSelected: false,
                 leading: Icons.fact_check_outlined,
                 handler: () {},
                 title: context.l10n.orderTabLabel,
                 badgeValue: orderBadge,
               ),
-              _SideMenuItem(
+              SideMenuItem(
                 isSelected: false,
                 leading: Icons.store,
                 title: context.l10n.wholesale,
                 handler: () {},
               ),
-              _SideMenuItem(
+              SideMenuItem(
                 dense: true,
                 title: context.l10n.applicationPreferences,
                 titleStyle: Theme.of(context).textTheme.overline,
               ),
-              _SideMenuItem(
+              SideMenuItem(
                 isSelected: false,
                 leading: Icons.settings,
                 title: context.l10n.settings,
-                handler: () {
-
-
-                },
+                handler: () {},
               ),
-              _SideMenuItem(
+              SideMenuItem(
                 isSelected: false,
                 leading: Icons.help_outlined,
                 title: context.l10n.helpSupport,
                 handler: () {},
               ),
               const BottleshopAboutTile(),
-              _SideMenuItem(
+              SideMenuItem(
                 leading: Icons.gavel,
                 handler: () {},
                 title: context.l10n.menuTerms,
               ),
               if (hasUser)
-                _SideMenuItem(
+                SideMenuItem(
                   handler: () async {
-                    await ref.read(userRepositoryProviderl10n.signOut();
+                    await ref.read(userRepositoryProvider).signOut();
                   },
                   leading: Icons.exit_to_app,
                   title: context.l10n.logOut,
@@ -136,7 +132,7 @@ class MenuDrawer extends HookConsumerWidget {
   }
 }
 
-class _SideMenuItem extends StatelessWidget {
+class SideMenuItem extends StatelessWidget {
   final IconData? leading;
   final String? title;
   final TextStyle? titleStyle;
@@ -146,8 +142,8 @@ class _SideMenuItem extends StatelessWidget {
   final int badgeValue;
   final bool isSelected;
 
-  const _SideMenuItem({
-    Key? key,
+  const SideMenuItem({
+    super.key,
     this.leading,
     this.title,
     this.titleStyle,
@@ -156,7 +152,7 @@ class _SideMenuItem extends StatelessWidget {
     this.dense = false,
     this.badgeValue = 0,
     this.isSelected = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -182,13 +178,13 @@ class _SideMenuItem extends StatelessWidget {
 
   Widget _buildBadgeIcon(BuildContext context) {
     return BottleshopBadge(
+      badgeText: badgeValue.toString(),
+      showBadge: badgeValue > 0,
+      position: BadgePosition.topEnd(top: -5, end: -5),
       child: Icon(
         leading,
         color: IconTheme.of(context).color,
       ),
-      badgeText: badgeValue.toString(),
-      showBadge: badgeValue > 0,
-      position: BadgePosition.topEnd(top: -5, end: -5),
     );
   }
 }

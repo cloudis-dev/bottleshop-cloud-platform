@@ -62,7 +62,8 @@ class UnitModel extends Equatable {
   UnitModel.fromMap(this.id, Map<String, dynamic> data)
       : _abbreviation = data[abbreviationField],
         _unit = data[unitField],
-        _localizedAbbreviation = LocalizedModel.fromMap(data[localizedAbbreviationField]),
+        _localizedAbbreviation =
+            LocalizedModel.fromMap(data[localizedAbbreviationField]),
         _localizedUnit = LocalizedModel.fromMap(data[localizedUnitField]);
 
   @override

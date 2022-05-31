@@ -10,8 +10,8 @@
 //
 //
 
-import 'package:delivery/src/core/data/models/localized_model.dart';
 import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/models/localized_model.dart';
 import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -122,10 +122,12 @@ class OrderTypeModel extends Equatable {
       : _code = data[codeField],
         _name = data[nameField],
         _localizedName = LocalizedModel.fromMap(data[localizedNameField]),
-        _orderStepsIds = List.unmodifiable(data[orderStepsIdsField].cast<int>()),
+        _orderStepsIds =
+            List.unmodifiable(data[orderStepsIdsField].cast<int>()),
         shippingFeeNoVat = data[shippingFeeField].toDouble(),
         _description = data[descriptionField],
-        _localizedDescription = LocalizedModel.fromMap(data[localizedDescriptionField]);
+        _localizedDescription =
+            LocalizedModel.fromMap(data[localizedDescriptionField]);
 
   @override
   List<Object?> get props => [

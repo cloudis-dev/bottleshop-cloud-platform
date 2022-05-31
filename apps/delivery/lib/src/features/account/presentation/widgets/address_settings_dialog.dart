@@ -1,17 +1,7 @@
-// Copyright 2020 cloudis.dev
-//
-// info@cloudis.dev
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-//
-
+import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/widgets/checkbox_list_tile_formfield.dart';
+import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
-import 'package:delivery/src/features/account/presentation/widgets/checkbox_list_tile_formfield.dart';
 import 'package:delivery/src/features/auth/data/models/address_model.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
@@ -39,24 +29,35 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final profileData = useState(<String, dynamic>{});
-    final user = ref.watch(currentUserProvider);
-    return TextButton(
-      onPressed: user == null
-          ? null
-          : () async {
-              await showAddressDialog(
-                context: context,
-                controller: scrollController,
-                user: user,
-                profileData: profileData.value,
-              );
-            },
-      child: Text(
-        context.edit,
-      ),
-      style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
-    );
+    return ref.watch(currentUserAsStream).when(
+          data: (user) {
+            var profileData = <String, dynamic>{};
+            return TextButton(
+              onPressed: user == null
+                  ? null
+                  : () async {
+                      await showAddressDialog(
+                        context: context,
+                        controller: scrollController,
+                        user: user,
+                        profileData: profileData,
+                      );
+                    },
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.secondary),
+              child: Text(
+                context.l10n.edit,
+              ),
+            );
+          },
+          loading: () => const Loader(),
+          error: (err, stack) {
+            loggy.error('Failed to stream current user', err, stack);
+            return Center(
+              child: Text(context.l10n.error),
+            );
+          },
+        );
   }
 
   Future<void> showAddressDialog({
@@ -72,7 +73,6 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
           title: buildDialogTitle(context),
           content: CupertinoScrollbar(
             controller: controller,
-            isAlwaysShown: true,
             child: SingleChildScrollView(
               controller: controller,
               child: buildAddressForm(
@@ -86,11 +86,10 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
             TextButton(
               child: Text(context.l10n.cancelButton),
               onPressed: () {
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text(context.l10n.saveButton),
               onPressed: () {
                 var isValid = _formKey.currentState!.validate();
                 loggy.info('form valid: $isValid');
@@ -109,16 +108,13 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
                     userData['shipping_address'] = profileData;
                   }
                   userDb.updateData(user.uid, userData);
-                  /*showSimpleNotification(
-                    Text(context.l10n.profileUpdatedMsg),
-                    position: NotificationPosition.bottom,
-                    slideDismissDirection: DismissDirection.horizontal,
-                    context: context,
-                  );*/
-                  Navigator.of(context).pop();
+                  // TODO: Notify result go back
+
                 }
               },
-              style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.secondary),
+              child: Text(context.l10n.saveButton),
             ),
           ],
         );
@@ -131,14 +127,17 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
     required UserModel user,
     required Map<String, dynamic> profileData,
   }) {
-    final address = addressType == AddressType.billing ? user.billingAddress : user.shippingAddress;
+    final address = addressType == AddressType.billing
+        ? user.billingAddress
+        : user.shippingAddress;
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.disabled,
       child: ListBody(
         children: <Widget>[
           StyledFormField(
-            validator: RequiredValidator(errorText: context.l10n.streetIsRequired),
+            validator:
+                RequiredValidator(errorText: context.l10n.streetIsRequired),
             style: TextStyle(color: Theme.of(context).focusColor),
             keyboardType: TextInputType.streetAddress,
             hintText: context.l10n.bajkalska,
@@ -148,12 +147,14 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['streetName'] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData['streetName']}');
+              loggy.info(
+                  'field saved $input, profile: ${profileData['streetName']}');
             },
           ),
           StyledFormField(
             style: TextStyle(color: Theme.of(context).focusColor),
-            validator: RequiredValidator(errorText: context.l10n.streetNumberIsRequired),
+            validator: RequiredValidator(
+                errorText: context.l10n.streetNumberIsRequired),
             keyboardType: TextInputType.streetAddress,
             hintText: '12/45',
             labelText: context.l10n.streetNumber,
@@ -162,12 +163,14 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['streetNumber'] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData['streetNumber']}');
+              loggy.info(
+                  'field saved $input, profile: ${profileData['streetNumber']}');
             },
           ),
           StyledFormField(
             style: TextStyle(color: Theme.of(context).focusColor),
-            validator: RequiredValidator(errorText: context.l10n.cityIsRequired),
+            validator:
+                RequiredValidator(errorText: context.l10n.cityIsRequired),
             keyboardType: TextInputType.text,
             hintText: context.l10n.bratislava,
             labelText: context.l10n.city,
@@ -185,7 +188,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
             validator: MultiValidator(
               [
                 RequiredValidator(errorText: context.l10n.zipCodeIsRequired),
-                LengthRangeValidator(min: 5, max: 6, errorText: context.l10n.enterAValidZipCode)
+                LengthRangeValidator(
+                    min: 5, max: 6, errorText: context.l10n.enterAValidZipCode)
               ],
             ),
             keyboardType: TextInputType.number,
@@ -196,7 +200,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['zipCode'] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData['zipCode']}');
+              loggy.info(
+                  'field saved $input, profile: ${profileData['zipCode']}');
             },
           ),
           StyledFormField(
@@ -223,7 +228,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
                 if (value != null) {
                   profileData['billingOnly'] = value;
                 }
-                loggy.info('check saved $value, profile: ${profileData['billingOnly']}');
+                loggy.info(
+                    'check saved $value, profile: ${profileData['billingOnly']}');
               },
             ),
         ],

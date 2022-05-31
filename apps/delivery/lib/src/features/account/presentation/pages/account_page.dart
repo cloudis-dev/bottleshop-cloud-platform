@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/widgets/dropdown.dart';
 import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
@@ -27,7 +28,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:delivery/l10n/l10n.dart';
 
 class AccountPageView extends HookConsumerWidget {
   const AccountPageView({Key? key}) : super(key: key);
@@ -85,7 +85,8 @@ class _Body extends HookConsumerWidget {
       DropdownListItem(label: context.l10n.dark),
     ];
 
-    final themeProvider = ref.watch(sharedPreferencesServiceProvider.select((value) => value.getThemeMode()));
+    final themeProvider = ref.watch(sharedPreferencesServiceProvider
+        .select((value) => value.getThemeMode()));
 
     return SingleChildScrollView(
       controller: scrollCtrl,
@@ -98,6 +99,7 @@ class _Body extends HookConsumerWidget {
               children: <Widget>[
                 Expanded(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         user?.name ?? context.l10n.anonymousUser,
@@ -109,7 +111,6 @@ class _Body extends HookConsumerWidget {
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ],
-                    crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                 ),
                 SizedBox(
@@ -136,7 +137,8 @@ class _Body extends HookConsumerWidget {
                     borderRadius: BorderRadius.circular(6),
                     boxShadow: [
                       BoxShadow(
-                          color: Theme.of(context).primaryColor.withOpacity(0.3),
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.3),
                           offset: const Offset(0, 1),
                           blurRadius: 5)
                     ],
@@ -177,7 +179,9 @@ class _Body extends HookConsumerWidget {
                               initialValue: themeProvider,
                               customWidgets: themeWidgets,
                               onChanged: (value) async {
-                                await ref.read(sharedPreferencesServiceProvider).setThemeMode(value!);
+                                await ref
+                                    .read(sharedPreferencesServiceProvider)
+                                    .setThemeMode(value!);
                                 ref.refresh(sharedPreferencesServiceProvider);
                               },
                             ),

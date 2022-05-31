@@ -21,6 +21,5 @@ export {
 } from './functions/cart';
 export { onCategoryWriteAlgoliaUpdate as onCategoryWrite } from './functions/on-category-write-algolia-update';
 export { onAdminUserCreate, onAdminUserDelete } from './functions/on-admin-user-create-delete';
-export { createStripePriceIds } from './functions/create-stripe-price-ids';
 export { createCashOnDeliveryOrder } from './functions/create-cash-on-delivery-order';
 export { deleteAccount } from './functions/delete-account';

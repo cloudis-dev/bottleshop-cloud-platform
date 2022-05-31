@@ -7,6 +7,8 @@ class SearchIconButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
-        tooltip: MaterialLocalizations.of(context).searchFieldLabel, icon: const Icon(Icons.search), onPressed: null);
+        tooltip: MaterialLocalizations.of(context).searchFieldLabel,
+        icon: const Icon(Icons.search),
+        onPressed: null);
   }
 }

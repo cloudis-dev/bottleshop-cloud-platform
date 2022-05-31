@@ -2,6 +2,7 @@ import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:flutter/material.dart';
 
 class SubcategoriesTabBar extends TabBar {
+  // ignore: use_key_in_widget_constructors
   SubcategoriesTabBar(
     CategoriesTreeModel category,
     Widget allTab,

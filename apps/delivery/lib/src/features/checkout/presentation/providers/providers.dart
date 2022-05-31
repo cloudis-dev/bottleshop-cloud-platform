@@ -19,7 +19,8 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
-final checkoutStateProvider = ChangeNotifierProvider.autoDispose<CheckoutState>((ref) {
+final checkoutStateProvider =
+    ChangeNotifierProvider.autoDispose<CheckoutState>((ref) {
   final cartService = ref.watch(cartRepositoryProvider)!;
   final stripeService = ref.watch(stripeProvider);
   return CheckoutState(stripeService: stripeService, cartService: cartService);
@@ -29,7 +30,8 @@ class CheckoutState extends StateNotifier<AsyncValue<void>> with NetworkLoggy {
   final StripeService stripeService;
   final CartRepository cartService;
 
-  CheckoutState({required this.stripeService, required this.cartService}) : super(const AsyncValue.data(null));
+  CheckoutState({required this.stripeService, required this.cartService})
+      : super(const AsyncValue.data(null));
 
   Future<void> payByNativePay(PaymentData paymentData) async {
     logInfo('payByNativePay invoked');

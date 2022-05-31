@@ -27,12 +27,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-final _logger = Logger((CheckoutPagel10n.toString());
-
-class CheckoutPage extends HookConsumerWidget {
+class CheckoutPage extends HookConsumerWidget with UiLoggy {
   const CheckoutPage({Key? key}) : super(key: key);
 
   @override
@@ -40,7 +38,8 @@ class CheckoutPage extends HookConsumerWidget {
     final currentUser = ref.watch(currentUserProvider);
     final currentLocale = ref.watch(currentLocaleProvider);
     final paymentDataNotifier = useValueNotifier<PaymentData?>(null, const []);
-    final checkoutDoneMessageNotifier = useValueNotifier<String?>(null, const []);
+    final checkoutDoneMessageNotifier =
+        useValueNotifier<String?>(null, const []);
 
     final pageCtrl = usePageController(keys: const []);
 
@@ -50,14 +49,17 @@ class CheckoutPage extends HookConsumerWidget {
       children: [
         ShippingDetailsView(
           onNextPage: (paymentData) async {
-            _logger.info('payment data: ${paymentData.toString()}');
+            loggy.info('payment data: ${paymentData.toString()}');
             paymentDataNotifier.value = paymentData;
             if (kIsWeb) {
               if (paymentData.deliveryType == kOrderTypeCashOnDelivery) {
-                final orderId = await ref.read(cloudFunctionsProviderl10n.createCashOnDeliveryOrder(paymentData);
-                _logger.info('orderID: $orderId');
+                final orderId = await ref
+                    .read(cloudFunctionsProvider)
+                    .createCashOnDeliveryOrder(paymentData);
+                loggy.info('orderID: $orderId');
                 if (orderId != null) {
-                  checkoutDoneMessageNotifier.value = 'Order #$orderId confirmed';
+                  checkoutDoneMessageNotifier.value =
+                      'Order #$orderId confirmed';
                   showSimpleNotification(
                     Text(context.l10n.thankYouForYourOrder),
                     position: NotificationPosition.bottom,
@@ -83,8 +85,7 @@ class CheckoutPage extends HookConsumerWidget {
                   deliveryType: paymentData.deliveryType,
                   orderNote: paymentData.orderNote,
                 );
-                //final sessionId = await ref.read(cloudFunctionsProviderl10n.createStripePriceIds(sessionRequest);
-
+                loggy.debug('Session created: $sessionRequest');
               }
             } else {
               await pageCtrl.animateToPage(
@@ -126,12 +127,13 @@ class CheckoutPage extends HookConsumerWidget {
         ),
         ValueListenableBuilder<String?>(
           valueListenable: checkoutDoneMessageNotifier,
-          builder: (context, checkoutDoneMessage, _) => checkoutDoneMessage == null
-              ? const SizedBox.shrink()
-              : CheckoutDoneView(
-                  checkoutDoneMessage,
-                  onClose: () {},
-                ),
+          builder: (context, checkoutDoneMessage, _) =>
+              checkoutDoneMessage == null
+                  ? const SizedBox.shrink()
+                  : CheckoutDoneView(
+                      checkoutDoneMessage,
+                      onClose: () {},
+                    ),
         )
       ],
     );

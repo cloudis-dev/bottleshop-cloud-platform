@@ -30,7 +30,7 @@ export async function generateNewOrderId(): Promise<string> {
 }
 
 export const createPaymentIntent = functions.region(tier1Region).https.onCall(async (data: PaymentData, context) => {
-  if (context.app == undefined) {
+  if (!context.app) {
     throw new functions.https.HttpsError(
       'failed-precondition',
       'The function must be called from an App Check verified app.',
@@ -44,8 +44,8 @@ export const createPaymentIntent = functions.region(tier1Region).https.onCall(as
         .doc(data.userId)
         .collection(cartCollection)
         .doc(tempCartId);
-      const cart = await getEntityByRef<Cart>(cartRef);
-      if (cart != null) {
+      const cart: Cart | undefined = await getEntityByRef<Cart>(cartRef);
+      if (cart) {
         const orderId = await generateNewOrderId();
         return await stripe.paymentIntents.create({
           amount: +(getCartTotalPrice(cart) * 100).toFixed(0),
@@ -61,7 +61,9 @@ export const createPaymentIntent = functions.region(tier1Region).https.onCall(as
             orderId,
           },
         });
-      }
+      } else {
+         return { error: 'bad request'}
+        }
     } else {
       return { access: 'denied' };
     }

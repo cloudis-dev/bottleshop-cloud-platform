@@ -24,7 +24,7 @@ class FilterQuery {
   String toString() {
     final query = queries
         .map((e) => e.toString())
-        .where((e) => e.trim(l10n.isNotEmpty)
+        .where((e) => e.trim().isNotEmpty)
         .interleave(logicOp == FilterLogicOp.and ? ' AND ' : ' OR ')
         .join();
     return query;
@@ -44,7 +44,7 @@ class SingleLogicOpQuery {
         .map((e) => e.toString())
         .interleave(logicOp == FilterLogicOp.and ? ' AND ' : ' OR ')
         .join();
-    return query.trim(l10n.isEmpty ? '' : '($query)';
+    return query.trim().isEmpty ? '' : '($query)';
   }
 }
 

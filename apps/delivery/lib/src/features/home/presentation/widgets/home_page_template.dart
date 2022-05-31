@@ -16,6 +16,7 @@ class HomePageTemplate extends HookConsumerWidget {
   final PreferredSizeWidget? appBarBottom;
 
   const HomePageTemplate({
+    super.key,
     this.scaffoldKey,
     required this.body,
     this.appBarBottom,
@@ -123,7 +124,7 @@ class OrdersAppBarButton extends HookConsumerWidget {
 
     return TextButton(
       onPressed: () {},
-      child: ref.watch(activeOrdersCountProviderl10n.maybeWhen(
+      child: ref.watch(activeOrdersCountProvider).maybeWhen(
             data: (count) => BottleshopBadge(
               showBadge: count > 0,
               badgeText: count.toString(),

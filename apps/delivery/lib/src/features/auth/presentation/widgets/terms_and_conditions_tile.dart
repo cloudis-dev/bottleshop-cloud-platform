@@ -1,5 +1,6 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/dialogs/terms_and_conditions_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -8,18 +9,18 @@ class TermsAndConditionsTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isChecked = ref.watch(termsAcceptanceProvider.notifierl10n.termsAccepted;
+    final isChecked = ref.watch(termsAcceptanceProvider.notifier).termsAccepted;
     return IntrinsicWidth(
       child: CheckboxListTile(
         enableFeedback: true,
         controlAffinity: ListTileControlAffinity.leading,
         onChanged: (newValue) async {
           if (newValue == true) {
-            ref.read(termsAcceptanceProvider.notifierl10n.acceptTerms();
+            ref.read(termsAcceptanceProvider.notifier).acceptTerms();
           } else {
-            ref.read(termsAcceptanceProvider.notifierl10n.rejectTerms();
+            ref.read(termsAcceptanceProvider.notifier).rejectTerms();
           }
-          /*if (newValue == true) {
+          if (newValue == true) {
             if (await showDialog<bool>(
                   context: context,
                   builder: (context) {
@@ -27,13 +28,13 @@ class TermsAndConditionsTile extends HookConsumerWidget {
                   },
                 ) ==
                 true) {
-              ref.read(termsAcceptanceProvider.notifierl10n.acceptTerms();
+              ref.read(termsAcceptanceProvider.notifier).acceptTerms();
             } else {
-              ref.read(termsAcceptanceProvider.notifierl10n.rejectTerms();
+              ref.read(termsAcceptanceProvider.notifier).rejectTerms();
             }
           } else {
-            ref.read(termsAcceptanceProvider.notifierl10n.rejectTerms();
-          }*/
+            ref.read(termsAcceptanceProvider.notifier).rejectTerms();
+          }
         },
         value: isChecked,
         title: Text(

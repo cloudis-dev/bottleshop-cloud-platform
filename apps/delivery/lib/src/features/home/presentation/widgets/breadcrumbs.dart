@@ -22,7 +22,7 @@ class Breadcrumbs extends HookConsumerWidget {
                       (e) => TextButtonTheme(
                         data: textButtonLinkTheme,
                         child: TextButton(
-                          child: e.page.getPageName(context.l10n.fold(
+                          child: e.page.getPageName(context).fold(
                                 (l) => ValueListenableBuilder<String?>(
                                   valueListenable: l,
                                   builder: (context, value, _) {
@@ -33,7 +33,8 @@ class Breadcrumbs extends HookConsumerWidget {
                                       height: 12,
                                       child: AspectRatio(
                                         aspectRatio: 1,
-                                        child: CircularProgressIndicator(strokeWidth: 2.5),
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2.5),
                                       ),
                                     );
                                   },

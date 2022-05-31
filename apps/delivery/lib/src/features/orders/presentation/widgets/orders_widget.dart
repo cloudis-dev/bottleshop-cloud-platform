@@ -63,11 +63,11 @@ class OrdersWidget extends HookConsumerWidget {
         slivers: [
           SliverPagedList(
             itemsState: ordersState,
-            requestData: () => ref.read(ordersProviderl10n.requestData(),
+            requestData: () => ref.read(ordersProvider).requestData(),
             itemBuilder: (context, dynamic item, _) => OrderListItem(
               order: item,
             ),
-            errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onPressed),
+            errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onButtonPressed: onPressed),
             loadingWidgetBuilder: (_) => const ListLoadingWidget(),
           ),
         ],

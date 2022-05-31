@@ -13,17 +13,15 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:delivery/src/core/utils/app_config.dart';
+import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/features/home/data/models/slider_model.dart';
 import 'package:delivery/src/features/home/presentation/providers/providers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 import 'package:meta/meta.dart';
-
-final _logger = Logger((HomeSliderl10n.toString());
 
 const aspect = 16 / 7.5;
 
@@ -37,7 +35,7 @@ class HomeSlider extends HookWidget {
   }
 }
 
-class _Carousel extends HookConsumerWidget {
+class _Carousel extends HookConsumerWidget with UiLoggy {
   @literal
   const _Carousel({Key? key}) : super(key: key);
 
@@ -108,7 +106,7 @@ class _Carousel extends HookConsumerWidget {
                         ),
                       ),
                     );
-                  }l10n.toList(),
+                  }).toList(),
                 ),
               ),
             ],
@@ -161,7 +159,7 @@ class _SliderItem extends HookConsumerWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SizedBox(
-          width: AppConfig(context.l10n.appWidth(40),
+          width: AppConfig(context).appWidth(40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.max,

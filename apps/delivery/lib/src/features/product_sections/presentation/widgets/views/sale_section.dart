@@ -12,7 +12,8 @@ class SaleSection extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productsState = ref.watch(saleProductsProvider.select<ItemsState<ProductModel>>((value) => value.itemsState));
+    final productsState = ref.watch(saleProductsProvider
+        .select<ItemsState<ProductModel>>((value) => value.itemsState));
 
     return ProductsSectionCarousel(
       data: productsState.items,

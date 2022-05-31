@@ -9,16 +9,17 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/features/tutorial/data/models/tutorial_model.dart';
 import 'package:delivery/src/features/tutorial/presentation/providers/tutorial_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TutorialPage extends HookConsumerWidget {
-  const TutorialPage({Key? key}) : super(key: key);
+  const TutorialPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +37,8 @@ class TutorialPage extends HookConsumerWidget {
               height: MediaQuery.of(context).size.height,
               disableCenter: true,
               viewportFraction: 1.0,
-              onPageChanged: ref.read(tutorialModelProvider.notifierl10n.pageChanged,
+              onPageChanged:
+                  ref.read(tutorialModelProvider.notifier).pageChanged,
             ),
             items: TutorialAssets.assets
                 .map(
@@ -89,7 +91,9 @@ class TutorialPage extends HookConsumerWidget {
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
-                onPressed: () => ref.read(tutorialModelProvider.notifierl10n.finishIntroScreen(ref, context),
+                onPressed: () => ref
+                    .read(tutorialModelProvider.notifier)
+                    .finishIntroScreen(ref, context),
                 child: Text(context.l10n.skip),
               ),
             ),
@@ -105,12 +109,14 @@ class TutorialPage extends HookConsumerWidget {
                     (boarding) => Container(
                       width: 25.0,
                       height: 3.0,
-                      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
-                        color: onBoardingViewModel == TutorialAssets.assets.indexOf(boarding)
+                        color: onBoardingViewModel ==
+                                TutorialAssets.assets.indexOf(boarding)
                             ? Theme.of(context).colorScheme.secondary
                             : Theme.of(context).primaryColor,
                       ),
@@ -126,7 +132,8 @@ class TutorialPage extends HookConsumerWidget {
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.secondary,
-                padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
@@ -135,7 +142,9 @@ class TutorialPage extends HookConsumerWidget {
                 ),
               ),
               onPressed: () => isLast
-                  ? ref.read(tutorialModelProvider.notifierl10n.finishIntroScreen(ref, context)
+                  ? ref
+                      .read(tutorialModelProvider.notifier)
+                      .finishIntroScreen(ref, context)
                   : carouselController.nextPage(curve: Curves.easeOutCubic),
               child: isLast
                   ? Row(

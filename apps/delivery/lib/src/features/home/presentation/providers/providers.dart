@@ -23,4 +23,5 @@ final homeSliderProvider = FutureProvider.autoDispose<List<SliderModel>>(
   (ref) => ref.watch(sliderStreamProvider.future),
 );
 
-final layoutModeProvider = StateProvider<SupportedLayoutMode>((ref) => SupportedLayoutMode.list);
+final layoutModeProvider =
+    StateProvider<SupportedLayoutMode>((ref) => SupportedLayoutMode.list);

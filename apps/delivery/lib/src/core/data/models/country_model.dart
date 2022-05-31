@@ -19,8 +19,6 @@ import 'package:flutter/material.dart';
 class CountryModel extends Equatable {
   static const String nameField = 'name';
   static const String flagField = 'flag';
-
-  // static const String regionField = 'region';
   static const String localizedNameField = 'localizedName';
   static const String localizedRegionField = 'localizedRegion';
 
@@ -51,9 +49,11 @@ class CountryModel extends Equatable {
         _localizedName = localizedName;
 
   CountryModel.fromMap(this.id, Map<String, dynamic> data)
-      : _name = data[nameField],
-        flagUrl = data[flagField],
-        _localizedName = data[localizedNameField] != null ? LocalizedModel.fromMap(data[localizedNameField]) : null;
+      : _name = data[nameField] as String,
+        flagUrl = data[flagField] as String,
+        _localizedName = data[localizedNameField] != null
+            ? LocalizedModel.fromMap(data[localizedNameField])
+            : null;
 
   @override
   List<Object?> get props {

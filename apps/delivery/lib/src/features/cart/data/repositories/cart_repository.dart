@@ -48,7 +48,9 @@ class CartRepository with NetworkLoggy {
 
   Future<void> add(String id, int quantity) async {
     loggy.info('adding id $id QTY: $quantity');
-    final ref = cartService.db.collection(FirestoreCollections.productsCollection).doc(id);
+    final ref = cartService.db
+        .collection(FirestoreCollections.productsCollection)
+        .doc(id);
     final cartItem = await cartContentService.getSingle(id);
     if (cartItem == null) {
       final record = CartRecord(productRef: ref, quantity: quantity);
@@ -67,7 +69,9 @@ class CartRepository with NetworkLoggy {
   }
 
   Stream<int> getQuantityOfCartItemStream(String id) {
-    return cartContentService.streamSingle(id).map((value) => value?.quantity ?? 0);
+    return cartContentService
+        .streamSingle(id)
+        .map((value) => value?.quantity ?? 0);
   }
 
   Future<void> setItemQty(String id, int newQty) async {
@@ -76,16 +80,20 @@ class CartRepository with NetworkLoggy {
     }
 
     final record = CartRecord(
-      productRef: cartContentService.db.collection(FirestoreCollections.productsCollection).doc(id),
+      productRef: cartContentService.db
+          .collection(FirestoreCollections.productsCollection)
+          .doc(id),
       quantity: newQty,
     );
 
     return cartContentService.updateData(id, record.toMap());
   }
 
-  Stream<List<CartItemModel>> get cartContent => cartContentService.getCartItemsStream();
+  Stream<List<CartItemModel>> get cartContent =>
+      cartContentService.getCartItemsStream();
 
-  Stream<CartModel?> get cart => cartService.streamSingle(FirestoreCollections.userCartId);
+  Stream<CartModel?> get cart =>
+      cartService.streamSingle(FirestoreCollections.userCartId);
 
   Future<CartModel?> getCartModel() {
     return cartService.getSingle(FirestoreCollections.userCartId);

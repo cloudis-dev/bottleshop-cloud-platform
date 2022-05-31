@@ -64,7 +64,8 @@ class FirestoreCollections {
 
   // document constants
   static const String filtersAggregationsDocument = 'filters';
-  static const String categoryProductCountsAggregationsDocument = 'products_count_per_categories';
+  static const String categoryProductCountsAggregationsDocument =
+      'products_count_per_categories';
   static const String userCartId = 'temp_cart';
 }
 

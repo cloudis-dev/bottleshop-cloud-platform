@@ -111,7 +111,10 @@ class CategoryGridItem extends HookConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
                         maxLines: titleMaxLines,
-                        style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: max(maxSize * .1, 15)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6!
+                            .copyWith(fontSize: max(maxSize * .1, 15)),
                       ),
                       if (productsCount != null)
                         DefaultTextStyle(
@@ -123,7 +126,8 @@ class CategoryGridItem extends HookConsumerWidget {
                               productsCount!.maybeWhen(
                                 data: (count) => Text(
                                   count.toString(),
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 orElse: () => const SizedBox.shrink(),
                               ),

@@ -35,4 +35,6 @@ class TutorialViewModel extends StateNotifier<int> {
   }
 }
 
-final tutorialModelProvider = StateNotifierProvider.autoDispose<TutorialViewModel, int>((ref) => TutorialViewModel());
+final tutorialModelProvider =
+    StateNotifierProvider.autoDispose<TutorialViewModel, int>(
+        (ref) => TutorialViewModel());

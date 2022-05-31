@@ -13,17 +13,16 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/services/wallets_availability_service.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
-import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-final _logger = Logger((NativePaymentsl10n.toString());
+import '../providers/providers.dart';
 
-class NativePayments extends HookConsumerWidget {
+class NativePayments extends HookConsumerWidget with UiLoggy {
   final PaymentData paymentData;
   final double value;
   final void Function(String checkoutDoneMsg) onCheckoutDone;
@@ -38,7 +37,8 @@ class NativePayments extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final isSupported = ref.watch(walletsAvailableProvider.select((value) => value.applePayAvailable));
+    final isSupported = ref.watch(
+        walletsAvailableProvider.select((value) => value.applePayAvailable));
     return isSupported
         ? Column(
             children: [
@@ -51,7 +51,8 @@ class NativePayments extends HookConsumerWidget {
                 width: 208,
                 height: 45,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: !isDarkMode ? Colors.black : Colors.white),
+                  style: ElevatedButton.styleFrom(
+                      primary: !isDarkMode ? Colors.black : Colors.white),
                   child: Image.asset(
                     defaultTargetPlatform == TargetPlatform.iOS
                         ? !isDarkMode
@@ -64,16 +65,19 @@ class NativePayments extends HookConsumerWidget {
                   ),
                   onPressed: () async {
                     try {
-                      await ref.read(checkoutStateProviderl10n.payByNativePay(paymentDatal10n.then(
+                      await ref
+                          .read(checkoutStateProvider)
+                          .payByNativePay(paymentData)
+                          .then(
                             (value) => onCheckoutDone(
                               defaultTargetPlatform == TargetPlatform.android
                                   ? context.l10n.successful_payment_gpay
                                   : context.l10n.successful_payment,
                             ),
                           );
-                      await logPurchase(ref, context, value);
                     } on PlatformException catch (err, stack) {
-                      if (err.code != 'cancelled' || err.code != 'purchaseCancelled') {
+                      if (err.code != 'cancelled' ||
+                          err.code != 'purchaseCancelled') {
                         rethrow;
                       } else {
                         loggy.error('Failed to pay by native', err, stack);

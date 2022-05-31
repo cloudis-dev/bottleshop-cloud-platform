@@ -28,12 +28,16 @@ class AvailableProgressBar extends StatelessWidget {
         Container(
           width: double.infinity,
           height: 4,
-          decoration: BoxDecoration(color: Theme.of(context).focusColor, borderRadius: BorderRadius.circular(6)),
+          decoration: BoxDecoration(
+              color: Theme.of(context).focusColor,
+              borderRadius: BorderRadius.circular(6)),
         ),
         Container(
           width: remainingDurationInHours,
           height: 4,
-          decoration: BoxDecoration(color: _getProgressColor(), borderRadius: BorderRadius.circular(6)),
+          decoration: BoxDecoration(
+              color: _getProgressColor(),
+              borderRadius: BorderRadius.circular(6)),
         ),
       ],
     );

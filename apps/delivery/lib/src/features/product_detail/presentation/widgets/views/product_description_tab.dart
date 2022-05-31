@@ -27,7 +27,8 @@ class ProductDescriptionTab extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            product.getDescription(currentLocale) ?? context.l10n.wereWorkingOnIt,
+            product.getDescription(currentLocale) ??
+                context.l10n.wereWorkingOnIt,
             style: Theme.of(context).textTheme.subtitle2,
           ),
         ),

@@ -43,3 +43,4 @@ Thumbs.db
 vscode
 fixtures
 **/*seed
+.vscode/settings.json

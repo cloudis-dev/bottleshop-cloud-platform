@@ -16,7 +16,8 @@ import 'package:loggy/loggy.dart';
 class StorageService with NetworkLoggy {
   final FirebaseStorage _firebaseStorage;
 
-  StorageService({FirebaseStorage? firebaseStorage}) : _firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
+  StorageService({FirebaseStorage? firebaseStorage})
+      : _firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
 
   Future<String?> getDownloadURL(String filePath) async {
     String downloadURL;
@@ -24,7 +25,7 @@ class StorageService with NetworkLoggy {
       downloadURL = await _firebaseStorage.ref(filePath).getDownloadURL();
       return downloadURL;
     } catch (e) {
-      _logger.warning('filepath $filePath does not exist - reverting to default');
+      loggy.warning('filepath $filePath does not exist - reverting to default');
       return null;
     }
   }

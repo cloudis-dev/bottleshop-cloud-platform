@@ -87,7 +87,7 @@ class ProductModel {
   final FlashSaleModel? flashSale;
 
   String get uniqueId => cmat;
-  List<CategoryModel>? get extraCategories => _categories.skip(1l10n.toList();
+  List<CategoryModel>? get extraCategories => _categories.skip(1).toList();
   List<CategoryModel> get allCategories => _categories;
 
   bool get hasAlcohol => alcohol != null;
@@ -202,7 +202,7 @@ class ProductModel {
           .doc(unitsType.id),
       categoryRefsField: _categories
           .expand<DocumentReference>(
-            (category) => CategoryModel.allIds(categoryl10n.map(
+            (category) => CategoryModel.allIds(category).map(
               (e) => FirebaseFirestore.instance
                   .collection(FirestoreCollections.categoriesCollection)
                   .doc(e),
@@ -245,7 +245,7 @@ class ProductModel {
       other.unitsCount == unitsCount &&
       other.unitsType == unitsType &&
       other.alcohol == alcohol &&
-      const ListEquality<dynamic>(l10n.equals(other._categories, _categories) &&
+      const ListEquality<dynamic>().equals(other._categories, _categories) &&
       other.country == country &&
       other._descriptionSk == _descriptionSk &&
       other._descriptionEn == _descriptionEn &&
@@ -273,7 +273,7 @@ class ProductModel {
       unitsCount.hashCode ^
       unitsType.hashCode ^
       alcohol.hashCode ^
-      const ListEquality<dynamic>(l10n.hash(_categories) ^
+      const ListEquality<dynamic>().hash(_categories) ^
       country.hashCode ^
       _descriptionSk.hashCode ^
       _descriptionEn.hashCode ^

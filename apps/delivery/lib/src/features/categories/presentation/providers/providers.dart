@@ -10,29 +10,35 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
-import 'package:delivery/src/config/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final categoryProvider = FutureProvider.autoDispose.family<CategoriesTreeModel, String>(
+final categoryProvider =
+    FutureProvider.autoDispose.family<CategoriesTreeModel, String>(
   (ref, uid) {
-    final categories = ref.watch(commonDataRepositoryProvider.select((value) => value.data.categories));
-    return categories.firstWhere((element) => element.categoryDetails.id == uid);
+    final categories = ref.watch(
+        commonDataRepositoryProvider.select((value) => value.data.categories));
+    return categories
+        .firstWhere((element) => element.categoryDetails.id == uid);
   },
 );
 
-final mainCategoriesWithoutExtraProvider = StateProvider.autoDispose<List<CategoriesTreeModel>>(
+final mainCategoriesWithoutExtraProvider =
+    StateProvider.autoDispose<List<CategoriesTreeModel>>(
   (ref) => ref
-      .watch(commonDataRepositoryProvider.select((value) => value.data.categories))
+      .watch(
+          commonDataRepositoryProvider.select((value) => value.data.categories))
       .where((element) => !element.categoryDetails.isExtraCategory)
       .toList(),
   name: 'mainCategoriesWithoutExtraProvider',
 );
 
-final categoryProductCountsProvider = StreamProvider.autoDispose<CategoryProductCountsModel>((ref) {
+final categoryProductCountsProvider =
+    StreamProvider.autoDispose<CategoryProductCountsModel>((ref) {
   return FirebaseFirestore.instance
       .collection(FirestoreCollections.aggregationsCollection)
       .doc(FirestoreCollections.categoryProductCountsAggregationsDocument)
@@ -44,7 +50,8 @@ final categoryProductCountsProvider = StreamProvider.autoDispose<CategoryProduct
 class CategoryProductCountsModel {
   final Map<String, int> _productCounts;
 
-  CategoryProductCountsModel.fromMap(Map<String, dynamic> map) : _productCounts = Map<String, int>.from(map);
+  CategoryProductCountsModel.fromMap(Map<String, dynamic> map)
+      : _productCounts = Map<String, int>.from(map);
 
   int? getProductsCount(String? categoryId) {
     if (_productCounts.containsKey(categoryId)) {

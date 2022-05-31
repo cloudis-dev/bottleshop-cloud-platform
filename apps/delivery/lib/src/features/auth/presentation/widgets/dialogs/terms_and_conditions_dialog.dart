@@ -35,16 +35,18 @@ class TermsAndConditionsDialog extends HookWidget {
       actions: defaultTargetPlatform == TargetPlatform.iOS
           ? [
               CupertinoDialogAction(
-                child: Text(context.l10n.termsPopUpNo),
                 onPressed: () => Navigator.pop(context, false),
                 isDefaultAction: true,
                 textStyle: Theme.of(context).textTheme.subtitle2,
+                child: Text(context.l10n.termsPopUpNo),
               ),
               CupertinoDialogAction(
-                child: Text(context.l10n.termsPopUpYes),
                 onPressed: () => Navigator.pop(context, true),
-                textStyle:
-                    Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).colorScheme.secondary),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .subtitle2!
+                    .copyWith(color: Theme.of(context).colorScheme.secondary),
+                child: Text(context.l10n.termsPopUpYes),
               ),
             ]
           : [
@@ -63,8 +65,10 @@ class TermsAndConditionsDialog extends HookWidget {
                 },
                 child: Text(
                   context.l10n.termsPopUpYes,
-                  style:
-                      Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).colorScheme.secondary),
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2!
+                      .copyWith(color: Theme.of(context).colorScheme.secondary),
                 ),
               ),
             ],

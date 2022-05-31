@@ -24,7 +24,7 @@ class YearFilterChip extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final maxYearFilterValue = ref.watch(maxYearScopedProvider);
 
-    return ref.watch(filterAggregationsProviderl10n.maybeWhen(
+    return ref.watch(filterAggregationsProvider).maybeWhen(
           data: (aggs) => Chip(
             backgroundColor: Theme.of(context).backgroundColor,
             label: Text('${context.l10n.year}: '

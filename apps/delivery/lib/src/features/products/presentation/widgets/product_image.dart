@@ -66,10 +66,13 @@ class ProductImage extends HookConsumerWidget {
                         image: NetworkImage(imageUrl),
                         fit: fit,
                         width: width,
-                        errorBuilder: (_, __, ___) => const _PlaceHolderProductImage(),
-                        placeholderBuilder: (_) => const _PlaceHolderProductImage(),
+                        errorBuilder: (_, __, ___) =>
+                            const _PlaceHolderProductImage(),
+                        placeholderBuilder: (_) =>
+                            const _PlaceHolderProductImage(),
                       ),
-                      if (overlayWidget != null) Positioned.fill(child: overlayWidget!.call(imageUrl)),
+                      if (overlayWidget != null)
+                        Positioned.fill(child: overlayWidget!.call(imageUrl)),
                     ],
                   ),
                 ),

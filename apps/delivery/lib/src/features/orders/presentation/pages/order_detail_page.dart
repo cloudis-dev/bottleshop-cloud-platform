@@ -30,11 +30,9 @@ import 'package:delivery/src/features/orders/presentation/widgets/order_steps_wi
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
+import 'package:loggy/loggy.dart';
 
-final _logger = Logger((OrderDetailPagel10n.toString());
-
-class OrderDetailPage extends HookConsumerWidget {
+class OrderDetailPage extends HookConsumerWidget with UiLoggy {
   final String orderUniqueId;
 
   const OrderDetailPage({
@@ -47,7 +45,7 @@ class OrderDetailPage extends HookConsumerWidget {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final scrollCtrl = useScrollController();
 
-    return ref.watch(orderStreamProvider(orderUniqueId)l10n.when(
+    return ref.watch(orderStreamProvider(orderUniqueId)).when(
           data: (order) {
             if (order == null) {
               return const _OrderErrorTab();
@@ -56,7 +54,7 @@ class OrderDetailPage extends HookConsumerWidget {
                 return Scaffold(
                   key: scaffoldKey,
                   appBar: AppBar(
-                    leading: BackButton(onPressed: () => null),
+                    leading: const BackButton(),
                     title: Text('${context.l10n.order} #${order.orderId}'),
                     actions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
                   ),
@@ -320,7 +318,7 @@ class _Body extends HookConsumerWidget {
                           ],
                         ),
                       ),
-                    ...order.cartItems.map<Widget>((e) => OrderCartListItem(e)),
+                    ...order.cartItems.map<Widget>((e) => OrderCartListItem(cartItem: e)),
                   ],
                 ),
               ),

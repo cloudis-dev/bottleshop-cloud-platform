@@ -24,7 +24,8 @@ class PageBodyTemplate extends StatelessWidget {
 class PageBodyTemplateSliver extends StatelessWidget {
   final Widget sliver;
 
-  const PageBodyTemplateSliver({Key? key, required this.sliver}) : super(key: key);
+  const PageBodyTemplateSliver({Key? key, required this.sliver})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

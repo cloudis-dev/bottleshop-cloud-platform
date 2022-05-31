@@ -28,8 +28,10 @@ class PriceFilter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final priceRange = ref.watch(filterModelProvider(filterTypel10n.select<RangeValues>((value) => value.priceRange));
-    final isPriceActive = ref.watch(filterModelProvider(filterTypel10n.select<bool>((value) => value.isPriceActive));
+    final priceRange = ref.watch(filterModelProvider(filterType)
+        .select<RangeValues>((value) => value.priceRange));
+    final isPriceActive = ref.watch(filterModelProvider(filterType)
+        .select<bool>((value) => value.isPriceActive));
 
     return Column(
       children: [
@@ -59,14 +61,16 @@ class PriceFilter extends HookConsumerWidget {
           divisions: FilterConstants.priceDivisions,
           values: priceRange,
           onChanged: (value) {
-            ref.read(filterModelProvider(filterTypel10n.statel10n.state =
-                ref.read(filterModelProvider(filterTypel10n.statel10n.state.copyWith(
+            ref.read(filterModelProvider(filterType).state).state =
+                ref.read(filterModelProvider(filterType).state).state.copyWith(
                       priceRange: value,
                     );
           },
           labels: RangeLabels(
             FormattingUtils.getPriceNumberString(priceRange.start),
-            FilterConstants.isPriceMax(priceRange.end) ? context.l10n.max : FormattingUtils.getPriceNumberString(priceRange.end),
+            FilterConstants.isPriceMax(priceRange.end)
+                ? context.l10n.max
+                : FormattingUtils.getPriceNumberString(priceRange.end),
           ),
         ),
       ],

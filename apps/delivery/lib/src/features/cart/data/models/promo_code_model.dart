@@ -10,8 +10,8 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery/src/config/constants.dart';
 import 'package:equatable/equatable.dart';
 
 class PromoCodeModel extends Equatable {
@@ -44,7 +44,7 @@ class PromoCodeModel extends Equatable {
       : code = json[codeField],
         remainingUsesCount = json[remainingUsesCountField],
         discount = json[discountField],
-        productUniqueId = (json[productRefField] as DocumentReferencel10n.id;
+        productUniqueId = (json[productRefField] as DocumentReference).id;
 
   Map<String, dynamic> toFirebaseJson() {
     return {

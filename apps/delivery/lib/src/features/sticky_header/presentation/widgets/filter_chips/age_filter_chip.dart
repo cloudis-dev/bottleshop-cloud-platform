@@ -24,7 +24,7 @@ class AgeFilterChip extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final minAgeFilterValue = ref.watch(minAgeScopedProvider);
 
-    return ref.watch(filterAggregationsProviderl10n.maybeWhen(
+    return ref.watch(filterAggregationsProvider).maybeWhen(
           data: (aggs) => Chip(
             backgroundColor: Theme.of(context).backgroundColor,
             label: Text('${context.l10n.ageYears}: '

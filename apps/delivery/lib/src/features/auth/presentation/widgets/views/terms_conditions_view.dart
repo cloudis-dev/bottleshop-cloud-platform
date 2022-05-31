@@ -10,19 +10,17 @@
 //
 //
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/app_environment.dart';
+import 'package:delivery/src/config/environment.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:native_pdf_view/native_pdf_view.dart';
 
 final _pdfUrlProvider = Provider<String>((ref) {
-  var lang = ref.watch(currentLocaleProviderl10n.languageCode;
-  final url = '${AppEnvironment.termsPdfEndpoint}tcs_$lang.pdf?alt=media';
+  var lang = ref.watch(currentLocaleProvider).languageCode;
+  final url = '${Environment.tcsPdfUrl}tcs_$lang.pdf?alt=media';
   return url;
 });
 
@@ -47,15 +45,6 @@ class TermsConditionsPage extends HookConsumerWidget {
   const TermsConditionsPage({Key? key}) : super(key: key);
 
   @override
-  Either<ValueListenable<String?>, String> getPageName(BuildContext context) => Right(context.l10n.cart);
-
-  @override
-  String getPagePath() => pagePathBase;
-
-  @override
-  String getPagePathBase() => pagePathBase;
-
-  @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO: implement build
     throw UnimplementedError();
@@ -76,7 +65,7 @@ class _TermsConditionsView extends HookConsumerWidget {
           context.l10n.generalCommercialTermsTitle,
         ),
       ),
-      body: ref.watch(_pdfDocProviderl10n.when(
+      body: ref.watch(_pdfDocProvider).when(
             data: (pdfDoc) {
               return PdfView(
                 pageSnapping: false,

@@ -36,6 +36,7 @@ class DropDown<T> extends StatefulWidget {
   final bool showUnderline;
 
   const DropDown({
+    super.key,
     this.dropDownType = DropDownType.button,
     required this.items,
     required this.customWidgets,
@@ -49,6 +50,7 @@ class DropDown<T> extends StatefulWidget {
         assert(items.length == customWidgets.length);
 
   @override
+  // ignore: library_private_types_in_public_api
   _DropDownState<T> createState() => _DropDownState();
 }
 
@@ -82,7 +84,7 @@ class _DropDownState<T> extends State<DropDown<T>> {
           },
           value: widget.isCleared ? null : selectedValue,
           items:
-              widget.items.map<DropdownMenuItem<T>>(buildDropDownIteml10n.toList(),
+              widget.items.map<DropdownMenuItem<T>>(buildDropDownItem).toList(),
           hint: widget.hint,
         );
     }
@@ -95,7 +97,7 @@ class _DropDownState<T> extends State<DropDown<T>> {
   }
 
   DropdownMenuItem<T> buildDropDownItem(T item) => DropdownMenuItem<T>(
-        child: widget.customWidgets[widget.items.indexOf(item)],
         value: item,
+        child: widget.customWidgets[widget.items.indexOf(item)],
       );
 }

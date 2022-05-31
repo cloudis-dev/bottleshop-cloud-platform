@@ -10,17 +10,22 @@
 //
 //
 
-import 'package:delivery/src/core/utils/streamed_items_state_management/data/items_state_stream_batch.dart';
+import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_handler.dart';
+import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state_stream_batch.dart';
+import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/single_stream_items_state_notifier.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/utils/products_sorting_util.dart';
+import 'package:loggy/loggy.dart';
 
-class FlashSaleProductsStateNotifier extends SingleStreamItemsStateNotifier<ProductModel, String?> {
+class FlashSaleProductsStateNotifier
+    extends SingleStreamItemsStateNotifier<ProductModel, String?> {
   FlashSaleProductsStateNotifier(
     Stream<ItemsStateStreamBatch<ProductModel>> Function() requestItems,
   ) : super(
           requestItems,
           FlashSaleProductItemsHandler(),
-          (err, stack) async => loggy.error('FlashSaleProductsStateNotifier error', err, stack),
+          (err, stack) async =>
+              logError('FlashSaleProductsStateNotifier error', err, stack),
         );
 
   /// Check all the products' flash sales and remove the ones
@@ -32,7 +37,9 @@ class FlashSaleProductsStateNotifier extends SingleStreamItemsStateNotifier<Prod
     itemsState = itemsState.copyWith(
       items: itemsState.items
           .where(
-            (element) => element.flashSale != null && element.flashSale!.flashSaleUntil.compareTo(DateTime.now()) > 0,
+            (element) =>
+                element.flashSale != null &&
+                element.flashSale!.flashSaleUntil.compareTo(DateTime.now()) > 0,
           )
           .toList(),
       status: itemsState.status,
@@ -50,6 +57,7 @@ class FlashSaleProductItemsHandler extends ItemsHandler<ProductModel, String?> {
           // in case any products change,
           // check if all the flash sale products are in the right time
           itemFilterTest: (item) =>
-              item.flashSale != null && item.flashSale!.flashSaleUntil.compareTo(DateTime.now()) > 0,
+              item.flashSale != null &&
+              item.flashSale!.flashSaleUntil.compareTo(DateTime.now()) > 0,
         );
 }

@@ -34,8 +34,12 @@ class SliverCategoryTabHeading extends HookConsumerWidget {
     return SliverToBoxAdapter(
       child: BottleshopSectionHeading(
         leading: const Icon(Icons.liquor),
-        label: '${subCategory!.categoryDetails.getName(currentLocale)} ${context.l10n.category}',
-        trailingWidgets: const <Widget>[ProductsLayoutModeToggle(), SortMenuButton()],
+        label:
+            '${subCategory!.categoryDetails.getName(currentLocale)} ${context.l10n.category}',
+        trailingWidgets: const <Widget>[
+          ProductsLayoutModeToggle(),
+          SortMenuButton()
+        ],
       ),
       // Padding(
       //   padding: const EdgeInsets.symmetric(horizontal: 20),

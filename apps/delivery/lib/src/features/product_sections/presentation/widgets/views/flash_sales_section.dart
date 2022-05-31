@@ -27,7 +27,8 @@ class FlashSalesSection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final itemsState = ref.watch(
-      flashSaleProductsProvider.select<ItemsState<ProductModel>>((value) => value.itemsState),
+      flashSaleProductsProvider
+          .select<ItemsState<ProductModel>>((value) => value.itemsState),
     );
 
     return ProductsSectionCarousel(

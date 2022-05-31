@@ -27,7 +27,7 @@ class VerifyEmailView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     useEffect(() {
       final timer = Timer.periodic(const Duration(seconds: 5), (_) async {
-        await ref.read(userRepositoryProviderl10n.checkUserVerified();
+        await ref.read(userRepositoryProvider).checkUserVerified();
       });
       return timer.cancel;
     }, const []);
@@ -42,14 +42,20 @@ class VerifyEmailView extends HookConsumerWidget {
             children: [
               Text(
                 context.l10n.pleaseVerifyYourEmail,
-                style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
               Expanded(child: Image.asset(kLogo)),
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    await ref.read(userRepositoryProviderl10n.sendVerificationMail(l10n.whenComplete(
+                    await ref
+                        .read(userRepositoryProvider)
+                        .sendVerificationMail()
+                        .whenComplete(
                           () => showSimpleNotification(
                             Text(context.l10n.confirmationEmailSent),
                             position: NotificationPosition.bottom,
@@ -67,26 +73,26 @@ class VerifyEmailView extends HookConsumerWidget {
                     );
                   }
                 },
-                child: Text(context.l10n.resendVerificationEmail),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
+                child: Text(context.l10n.resendVerificationEmail),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    await ref.read(userRepositoryProviderl10n.signOut();
+                    await ref.read(userRepositoryProvider).signOut();
                   } catch (e) {
                     // TODO
                   }
                 },
-                child: Text(context.l10n.logOut),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
+                child: Text(context.l10n.logOut),
               ),
             ],
           ),

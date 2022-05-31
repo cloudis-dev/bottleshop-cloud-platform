@@ -29,7 +29,8 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-bool _shouldDisplayListWithSubcategories(bool isAllCategory, List<CategoriesTreeModel> subCategories) {
+bool _shouldDisplayListWithSubcategories(
+    bool isAllCategory, List<CategoriesTreeModel> subCategories) {
   return !isAllCategory && subCategories.isNotEmpty;
 }
 
@@ -48,7 +49,9 @@ class CategoryProductsList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appliedFilter = ref.watch(appliedFilterProvider(FilterType.categoryProductsl10n.statel10n.state;
+    final appliedFilter = ref
+        .watch(appliedFilterProvider(FilterType.categoryProducts).state)
+        .state;
     final hasProducts = ref
         .watch(
           categoryHasProductsProvider(
@@ -56,9 +59,9 @@ class CategoryProductsList extends HookConsumerWidget {
               isAllCategory,
               category.subCategories,
             )
-                ? category.subCategories.map((e) => e.categoryDetailsl10n.toList()
+                ? category.subCategories.map((e) => e.categoryDetails).toList()
                 : [category.categoryDetails],
-          l10n.state,
+          ).state,
         )
         .state;
 
@@ -73,7 +76,8 @@ class CategoryProductsList extends HookConsumerWidget {
               slivers: [
                 // This is for the sticky header to stop right under app bar
                 SliverObstructionInjector(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 ),
                 const _NoProductsBody(),
               ],
@@ -88,7 +92,8 @@ class CategoryProductsList extends HookConsumerWidget {
               slivers: [
                 // This is for the sticky header to stop right under app bar
                 SliverObstructionInjector(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 ),
                 if (appliedFilter.isAnyFilterActive)
                   _ProductsBodyWithFilter(
@@ -126,7 +131,9 @@ class _ProductsBodyWithFilter extends StatelessWidget {
         ))
           SliverResizablePinnedHeaderPadding(
             maxShift: 56 - _filtersStickyHeaderPadding,
-            shiftDelay: 48 + _categoryTabHeadingPadding.top + _categoryTabHeadingPadding.bottom,
+            shiftDelay: 48 +
+                _categoryTabHeadingPadding.top +
+                _categoryTabHeadingPadding.bottom,
             child: Container(),
           ),
         SliverStickyHeader(
@@ -196,7 +203,9 @@ class _NoProductsBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appliedFilter = ref.watch(appliedFilterProvider(FilterType.categoryProductsl10n.statel10n.state;
+    final appliedFilter = ref
+        .watch(appliedFilterProvider(FilterType.categoryProducts).state)
+        .state;
 
     if (appliedFilter.isAnyFilterActive) {
       return MultiSliver(
@@ -204,14 +213,17 @@ class _NoProductsBody extends HookConsumerWidget {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(top: _filtersStickyHeaderPadding),
-              child: FiltersStickyHeader(filterType: FilterType.categoryProducts),
+              child:
+                  FiltersStickyHeader(filterType: FilterType.categoryProducts),
             ),
           ),
           SliverFillRemaining(
             hasScrollBody: false,
             child: Padding(
               padding: EdgeInsets.only(
-                    bottom: NestedScrollView.sliverOverlapAbsorberHandleFor(context.l10n.layoutExtent!,
+                    bottom:
+                        NestedScrollView.sliverOverlapAbsorberHandleFor(context)
+                            .layoutExtent!,
                   ) +
                   const EdgeInsets.only(bottom: _bottomPad),
               child: EmptyTab(
@@ -231,7 +243,8 @@ class _NoProductsBody extends HookConsumerWidget {
         hasScrollBody: false,
         child: Padding(
           padding: EdgeInsets.only(
-                bottom: NestedScrollView.sliverOverlapAbsorberHandleFor(context.l10n.layoutExtent!,
+                bottom: NestedScrollView.sliverOverlapAbsorberHandleFor(context)
+                    .layoutExtent!,
               ) +
               const EdgeInsets.only(bottom: _bottomPad),
           child: EmptyTab(
@@ -277,8 +290,9 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAnyFilterActive =
-        ref.watch(appliedFilterProvider(FilterType.categoryProductsl10n.select<bool>((value) => value.isAnyFilterActive));
+    final isAnyFilterActive = ref.watch(
+        appliedFilterProvider(FilterType.categoryProducts)
+            .select<bool>((value) => value.isAnyFilterActive));
 
     final currentLocale = ref.watch(currentLocaleProvider);
 
@@ -294,7 +308,8 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
 
       final productsStates = providers
           .map(
-            (provider) => ref.watch(provider.select<ItemsState<ProductModel>>((value) => value.itemsState)),
+            (provider) => ref.watch(provider
+                .select<ItemsState<ProductModel>>((value) => value.itemsState)),
           )
           .toList();
 
@@ -308,13 +323,14 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
                   color: Theme.of(context).scaffoldBackgroundColor,
                   child: ListTile(
                     title: Text(
-                      category.subCategories[id].categoryDetails.getName(currentLocale),
+                      category.subCategories[id].categoryDetails
+                          .getName(currentLocale),
                     ),
                   ),
                 ),
                 sliver: SliverProductsList(
                   productsState: productsStates[id],
-                  requestData: () => ref.read(providers[id]l10n.requestData(),
+                  requestData: () => ref.read(providers[id]).requestData(),
                 ),
               ),
             )
@@ -331,7 +347,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
 
       return SliverProductsList(
         productsState: productsState,
-        requestData: () => ref.read(providerl10n.requestData(),
+        requestData: () => ref.read(provider).requestData(),
       );
     }
   }
