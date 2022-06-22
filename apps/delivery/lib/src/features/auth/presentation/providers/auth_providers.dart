@@ -85,8 +85,6 @@ class TermsAcceptedState extends StateNotifier<bool> {
     state = false;
     _storeState();
   }
-
-  bool get termsAccepted => state;
 }
 
 final termsAcceptanceProvider =

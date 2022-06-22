@@ -39,8 +39,7 @@ class SignInForm extends HookConsumerWidget {
     final password = useTextEditingController();
     final showPassword = useState<bool>(false);
     final formValid = useState<bool>(true);
-    final termsAgreed =
-        ref.watch(termsAcceptanceProvider.notifier).termsAccepted;
+    final termsAgreed = ref.watch(termsAcceptanceProvider);
     final isAppleAvailable = ref.watch(
         walletsAvailableProvider.select((value) => value.appleSignInAvailable));
     final formKey = useMemoized(() => GlobalKey<FormState>());
