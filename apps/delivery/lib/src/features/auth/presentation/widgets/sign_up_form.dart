@@ -155,7 +155,7 @@ class SignUpForm extends HookConsumerWidget {
 final signUpFormValidProvider = StateProvider<bool>((ref) => true);
 
 final signUpButtonEnabledProvider = Provider<bool>((ref) {
-  final termsAgreed = ref.watch(termsAcceptanceProvider.notifier);
+  final termsAgreed = ref.watch(termsAcceptanceProvider);
   final formValid = ref.watch(signUpFormValidProvider.notifier);
-  return termsAgreed.termsAccepted && formValid.state;
+  return termsAgreed && formValid.state;
 });

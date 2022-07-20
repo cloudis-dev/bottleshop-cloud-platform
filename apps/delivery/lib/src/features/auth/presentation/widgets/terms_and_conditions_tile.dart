@@ -9,29 +9,20 @@ class TermsAndConditionsTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isChecked = ref.watch(termsAcceptanceProvider.notifier).termsAccepted;
+    final isChecked = ref.watch(termsAcceptanceProvider);
     return IntrinsicWidth(
       child: CheckboxListTile(
         enableFeedback: true,
         controlAffinity: ListTileControlAffinity.leading,
         onChanged: (newValue) async {
-          if (newValue == true) {
+          if (await showDialog<bool>(
+                context: context,
+                builder: (context) {
+                  return const TermsAndConditionsDialog();
+                },
+              ) ==
+              true) {
             ref.read(termsAcceptanceProvider.notifier).acceptTerms();
-          } else {
-            ref.read(termsAcceptanceProvider.notifier).rejectTerms();
-          }
-          if (newValue == true) {
-            if (await showDialog<bool>(
-                  context: context,
-                  builder: (context) {
-                    return const TermsAndConditionsDialog();
-                  },
-                ) ==
-                true) {
-              ref.read(termsAcceptanceProvider.notifier).acceptTerms();
-            } else {
-              ref.read(termsAcceptanceProvider.notifier).rejectTerms();
-            }
           } else {
             ref.read(termsAcceptanceProvider.notifier).rejectTerms();
           }
