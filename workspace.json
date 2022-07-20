@@ -4,5 +4,6 @@
     "admin": "apps/admin",
     "bottleshop-api": "apps/bottleshop-api",
     "delivery": "apps/delivery"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

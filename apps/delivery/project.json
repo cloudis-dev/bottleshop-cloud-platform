@@ -59,7 +59,6 @@
         "cwd": "apps/delivery"
       }
     },
-
     "buildIpa": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
@@ -77,14 +76,9 @@
     "build": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [
-          "nx run delivery:buildAppbundle",
-          "nx run delivery:buildIpa",
-          "nx run deivery:buildPwa"
-        ],
+        "commands": ["nx run delivery:buildAppbundle", "nx run delivery:buildIpa", "nx run deivery:buildPwa"],
         "parallel": false
       }
-
     }
   },
   "tags": ["scope:flutter", "type:app"]

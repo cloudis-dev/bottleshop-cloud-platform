@@ -78,3 +78,4 @@ ports:
 
 vscode:
   extensions:
+    - dart-code.flutter
