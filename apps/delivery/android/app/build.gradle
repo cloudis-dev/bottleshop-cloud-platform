@@ -21,6 +21,21 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def _compileSdkVersion = localProperties.getProperty('flutter.compileSdkVersion')
+if (_compileSdkVersion == null) {
+  _compileSdkVersion = 32
+}
+
+def _minSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
+if (_minSdkVersion == null) {
+  _minSdkVersion = 26
+}
+
+def _targetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')
+if (_targetSdkVersion == null) {
+  _targetSdkVersion = 32
+}
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -36,7 +51,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion localProperties.getProperty('flutter.compileSdkVersion').toInteger()
+    compileSdkVersion _compileSdkVersion.toInteger()
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -53,8 +68,8 @@ android {
 
     defaultConfig {
         applicationId "sk.bottleshop3veze.bottleshopdeliveryapp"
-        minSdkVersion localProperties.getProperty('flutter.minSdkVersion').toInteger()
-        targetSdkVersion localProperties.getProperty('flutter.targetSdkVersion').toInteger()
+        minSdkVersion _minSdkVersion.toInteger()
+        targetSdkVersion _targetSdkVersion.toInteger()
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

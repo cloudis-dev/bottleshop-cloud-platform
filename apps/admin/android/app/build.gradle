@@ -21,12 +21,27 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def _compileSdkVersion = localProperties.getProperty('flutter.compileSdkVersion')
+if (_compileSdkVersion == null) {
+  _compileSdkVersion = 32
+}
+
+def _minSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
+if (_minSdkVersion == null) {
+  _minSdkVersion = 26
+}
+
+def _targetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')
+if (_targetSdkVersion == null) {
+  _targetSdkVersion = 32
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion _compileSdkVersion.toInteger()
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -40,8 +55,8 @@ android {
 
     defaultConfig {
         applicationId "sk.bottleshop3veze.bottleshop_admin"
-        minSdkVersion 26
-        targetSdkVersion 30
+        minSdkVersion _minSdkVersion
+        targetSdkVersion _targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
