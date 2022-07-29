@@ -55,37 +55,30 @@
     "buildAppbundle": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build appbundle",
+        "command": "flutter build appbundle --flavor production --target lib/main_production.dart",
         "cwd": "apps/delivery"
       }
     },
-
     "buildIpa": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build ipa",
+        "command": "flutter build ipa --flavor production --target lib/main_production.dart",
         "cwd": "apps/delivery"
       }
     },
     "buildPwa": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build web --release",
+        "command": "flutter build web --release --target lib/main_production.dart",
         "cwd": "apps/delivery"
       }
     },
     "build": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [
-          "nx run automation-api:build-cli",
-          "nx run automation-api:build",
-          "nx run automation:build-static",
-          "docker build -f ./apps/automation-api/Dockerfile -t automation-api:latest ."
-        ],
+        "commands": ["nx run delivery:buildAppbundle", "nx run delivery:buildIpa", "nx run deivery:buildPwa"],
         "parallel": false
       }
-
     }
   },
   "tags": ["scope:flutter", "type:app"]
