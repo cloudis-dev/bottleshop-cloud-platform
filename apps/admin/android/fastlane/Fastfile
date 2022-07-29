@@ -1,0 +1,14 @@
+default_platform(:android)
+
+platform :android do
+    desc "Build production release and deploy to Firebase App Distribution"
+    lane :distribute do
+        firebase_app_distribution(
+            app: "1:540936468411:android:6fabcda9c14a73f1bff69e",
+            service_credentials_file: "/Users/kristian/Documents/Kristian/bottleshop/bottleshop3veze-firebase_app_distribution.json",
+            groups: "android-testers",
+            apk_path: "/Users/kristian/Documents/Kristian/bottleshop/bottleshop_admin/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk",
+            release_notes: "Let's go bottleroom"
+        )
+    end
+end

@@ -1,0 +1,187 @@
+import 'package:bottleshop_admin/app_page.dart';
+import 'package:bottleshop_admin/constants/app_theme.dart';
+import 'package:bottleshop_admin/core/data/services/database_service.dart';
+import 'package:bottleshop_admin/core/presentation/providers/providers.dart';
+import 'package:bottleshop_admin/features/orders/data/services.dart';
+import 'package:bottleshop_admin/features/products/data/services.dart';
+import 'package:bottleshop_admin/models/order_model.dart';
+import 'package:bottleshop_admin/utils/formatting_util.dart';
+import 'package:collection/collection.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tuple/tuple.dart';
+
+final _selectedDateProvider = StateProvider.autoDispose<DateTime?>((_) => null);
+
+class _TableRecord {
+  final String productName;
+  final String ean;
+  final int quantity;
+  final String stockState;
+
+  _TableRecord({
+    required this.productName,
+    required this.ean,
+    required this.quantity,
+    required this.stockState,
+  });
+}
+
+final _ordersForDayProvider =
+    FutureProvider.autoDispose<List<_TableRecord>>((ref) async {
+  final dateTime = ref.watch(_selectedDateProvider).state;
+
+  if (dateTime == null) {
+    return Future.value([]);
+  } else {
+    final res = await ordersDbService.getQueryList(
+      args: [
+        QueryArgs(
+          OrderModel.createdAtTimestampField,
+          isGreaterThanOrEqualTo:
+              DateTime(dateTime.year, dateTime.month, dateTime.day),
+        ),
+        QueryArgs(
+          OrderModel.createdAtTimestampField,
+          isLessThan: DateTime(dateTime.year, dateTime.month, dateTime.day)
+              .add(Duration(days: 1)),
+        )
+      ],
+    );
+
+    final groups = groupBy<Tuple4<String, String, String, int>,
+        Tuple3<String, String, String>>(
+      res
+          .map((e) => e.cartItems.map((e) => Tuple4(
+                e.product.uniqueId,
+                e.product.name,
+                e.product.ean,
+                e.count,
+              )))
+          .expand((element) => element),
+      (e) => Tuple3(e.item1, e.item2, e.item3),
+    );
+
+    return Future.wait(
+      groups.entries.map(
+        (e) => productsDbService.getSingle(e.key.item1).then(
+              (value) => _TableRecord(
+                productName: e.key.item2,
+                ean: e.key.item3,
+                quantity: e.value
+                    .map((e) => e.item4)
+                    .reduce((value, element) => value + element),
+                stockState: value?.count.toString() ?? 'odstránený',
+              ),
+            ),
+      ),
+    );
+  }
+});
+
+class OrdersSummaryPage extends AppPage {
+  OrdersSummaryPage()
+      : super(
+          'orders_summary',
+          (_) => _OrdersDetailView(),
+        );
+}
+
+class _OrdersDetailView extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final scrollCtrl = useScrollController();
+    final selectedDate = useProvider(_selectedDateProvider).state;
+
+    return ScaffoldMessenger(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Sumarizácia objednávok'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: context.read(navigationProvider.notifier).popPage,
+          ),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(8),
+          children: [
+            ElevatedButton(
+              child: Text('Vyber dátum'),
+              onPressed: () async {
+                final res = await showDatePicker(
+                  firstDate: DateTime(2021),
+                  initialDate: DateTime.now(),
+                  context: context,
+                  lastDate: DateTime.now().add(Duration(days: 1)),
+                );
+
+                if (res != null) {
+                  context.read(_selectedDateProvider).state = res;
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            if (selectedDate != null) ...[
+              Text(
+                'Vybraný dátum: ${FormattingUtil.getDateString(selectedDate)}',
+                textAlign: TextAlign.center,
+                style: AppTheme.headline1TextStyle,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Zobrazujú sa produkty pre ktoré objednávka bola VYTVORENÁ vo vybraný deň',
+                textAlign: TextAlign.center,
+              ),
+              useProvider(_ordersForDayProvider).when(
+                data: (e) => Scrollbar(
+                  controller: scrollCtrl,
+                  isAlwaysShown: true,
+                  child: SingleChildScrollView(
+                    controller: scrollCtrl,
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      showBottomBorder: true,
+                      columns: [
+                        DataColumn(label: Text('Názov')),
+                        DataColumn(label: Text('EAN')),
+                        DataColumn(label: Text('Predané v deň')),
+                        DataColumn(label: Text('Naskladnené')),
+                      ],
+                      rows: e
+                          .map(
+                            (e) => DataRow(
+                              cells: [
+                                DataCell(Text(e.productName)),
+                                DataCell(Text(e.ean)),
+                                DataCell(Text(e.quantity.toString())),
+                                DataCell(Text(e.stockState)),
+                              ],
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+                loading: () => const SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+                error: (err, stack) {
+                  FirebaseCrashlytics.instance.recordError(err, stack);
+                  return Text('Error');
+                },
+              ),
+            ]
+          ],
+        ),
+      ),
+    );
+  }
+}

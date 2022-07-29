@@ -1,0 +1,57 @@
+name: bottleshop_admin
+description: Admin app for Bottleshop Tri Veze
+version: 1.3.2+13
+publish_to: 'none'
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^1.20.0
+  firebase_messaging: ^12.0.1
+  firebase_storage: ^10.3.4
+  firebase_auth: ^3.6.1
+  firebase_analytics: ^9.3.0
+  cloud_firestore: ^3.4.2
+  cloud_functions: ^3.3.3
+  firebase_crashlytics: ^2.8.6
+  image_cropper: ^2.0.3
+  image_picker: ^0.8.5+3
+  tuple: ^2.0.0
+  intl: ^0.17.0
+  collection: ^1.16.0
+  image: ^3.2.0
+  path_provider: ^2.0.11
+  path: ^1.8.1
+  flutter_hooks: ^0.17.0
+  hooks_riverpod: 0.14.0+4
+  diacritic: ^0.1.3
+  http: ^0.13.1
+  sliver_tools: ^0.2.7
+  equatable: ^2.0.3
+  streamed_items_state_management:
+    git:
+      url: https://github.com/cloudis-dev/streamed-items-state-management.git
+      ref: 689d8a48a564940b145444135882dc5e855e7517
+  package_info_plus: ^1.4.3
+  version: ^3.0.2
+  url_launcher: ^6.1.5
+  optional: ^6.1.0+1
+  flutter_local_notifications: ^9.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.0.3
+  flutter_lints: ^2.0.1
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Bottleshop
+      fonts:
+        - asset: assets/icons/Bottleshop.ttf
+  assets:
+    - assets/images/

@@ -1,0 +1,36 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    strict-inference: true
+    #  #    This solves some cases where generic parameter is implicitly dynamic.
+    #  #    This rule shows warning for such cases, until the generic parameter is explicitly defined.
+    #  #    https://github.com/dart-lang/sdk/issues/33119
+    strict-raw-types: true
+
+  strong-mode:
+    implicit-casts: true
+    implicit-dynamic: true
+
+errors:
+  missing_required_param: error
+  missing_return: error
+  deprecated_member_use_from_same_package: ignore
+
+linter:
+  rules:
+    always_use_package_imports: true
+    close_sinks: true
+    literal_only_boolean_expressions: true
+    unawaited_futures: true
+    cascade_invocations: true
+    prefer_single_quotes: true
+    avoid_print: false
+    avoid_types_on_closure_parameters: true
+    omit_local_variable_types: true
+    unnecessary_await_in_return: true
+    prefer_final_locals: true
+
+    # Uncomment these in production
+    prefer_const_constructors: false
+    prefer_const_literals_to_create_immutables: false

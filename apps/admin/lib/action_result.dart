@@ -1,0 +1,1 @@
+enum ActionResult { success, failed }
