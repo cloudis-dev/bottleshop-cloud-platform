@@ -7,8 +7,9 @@
 3. `npm install -g nx`
 4. Run `yarn`
 5. Finish these [bottleshop-api instructions](apps/bottleshop-api/README.md)
-6. Run `npm run start:api:dev` and check if any errors
+6. Run `npm run start:api:dev` and check if there are any errors
 7. Finish these [delivery app instructions](apps/delivery/README.md)
+8. Ask to be added to the Firebase general project settings to the apps you will be working on, otherwise you won't be able to connect to firebase during development. Send the SHA-1 with the request to be added. You get the SHA-1 with the following command `keytool -list -v -alias androiddebugkey -keystore %USERPROFILE%\.android\debug.keystore`.
 
 This project was generated using [Nx](https://nx.dev).
 
