@@ -1,5 +1,15 @@
 # Bottleshop
 
+## How to spin up the project
+
+1. Update Node to at least v16
+2. `npm i -g yarn`
+3. `npm install -g nx`
+4. Run `yarn`
+5. Finish these [bottleshop-api instructions](apps/bottleshop-api/README.md)
+6. Run `npm run start:api:dev` and check if any errors
+7. Finish these [delivery app instructions](apps/delivery/README.md)
+
 This project was generated using [Nx](https://nx.dev).
 
 <p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>

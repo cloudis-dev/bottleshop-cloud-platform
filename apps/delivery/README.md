@@ -10,6 +10,20 @@ Bottleshop3veze Delivery app
 
 ---
 
+## Setup
+
+1. Add `.env` file (Ask the other devs for the contents of the file)
+
+### Run project
+
+- flutter run --flavor [development|production] --target [lib/development_main.dart|lib/...]
+
+### Appcheck for local setup
+
+- Go to appcheck in firebase project
+- Select project - manage debug tokens
+- add your tokens using the tutorial in the popup for each platform separately
+
 ## Getting Started 🚀
 
 This project contains 3 flavors:
