@@ -13,15 +13,9 @@ import { PaymentData } from '../models/payment-data';
 import { tier1Region } from '../constants/other';
 
 export const createCashOnDeliveryOrder = functions
-  .region(tier1Region)
+  .region(tier1Region).runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: PaymentData, context: functions.https.CallableContext) => {
     functions.logger.log('handler for createCashOnDeliveryOrder invoked');
-    if (context.app == undefined) {
-      throw new functions.https.HttpsError(
-        'failed-precondition',
-        'The function must be called from an App Check verified app.',
-      );
-    }
     try {
       if (context.auth && context.auth.uid) {
         const orderId = await generateNewOrderId();

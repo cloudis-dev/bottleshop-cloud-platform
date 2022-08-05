@@ -11,9 +11,7 @@ class Environment {
   static bool get analyticsEnabled => kDebugMode
       ? const bool.fromEnvironment('analytics_enabled', defaultValue: false)
       : true;
-  static bool get fbEmulatorsEnabled => kDebugMode
-      ? const bool.fromEnvironment('emulators_enabled', defaultValue: true)
-      : false;
+  static bool get fbEmulatorsEnabled => true;
   static String get appleSignInClientId =>
       dotenv.env['APPLE_SIGNIN_CLIENT_ID'] ?? 'n/a';
   static String get applePayMerchantId => dotenv.env['APPLE_PAY_MID'] ?? 'n/a';

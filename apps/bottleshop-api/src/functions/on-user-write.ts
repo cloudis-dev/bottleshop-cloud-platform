@@ -12,14 +12,8 @@ import { usersCollection } from '../constants/collections';
 const stripe = new Stripe(functions.config()['stripe']['api_key'], { typescript: true, apiVersion: '2020-08-27' });
 
 export const createStripeCustomer = functions
-  .region(tier1Region)
+  .region(tier1Region).runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: Stripe.CustomerCreateParams, context: CallableContext) => {
-    if (!context.app) {
-      throw new functions.https.HttpsError(
-        'failed-precondition',
-        'The function must be called from an App Check verified app.',
-      );
-    }
 
     try {
       if (context.auth && context.auth.uid) {

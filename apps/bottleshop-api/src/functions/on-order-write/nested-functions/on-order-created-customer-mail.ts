@@ -22,7 +22,7 @@ export const onOrderCreatedCustomerMail = async (orderSnapshot: functions.firest
   const order = orderSnapshot.data() as Order;
   const orderType = await getEntityByRef<OrderType>(order.order_type_ref);
 
-  if (orderType == null) {
+  if (!orderType) {
     functions.logger.error(`Could not get OrderType entity by reference: ${order.order_type_ref}`);
     return;
   }

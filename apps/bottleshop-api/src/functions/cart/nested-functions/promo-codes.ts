@@ -54,11 +54,11 @@ function removePromoFromCart(cart: Cart): Cart {
 }
 
 export const isPromoCodeValid = async (cart: Cart): Promise<boolean> => {
-  if (cart.promo_code == null) {
+  if (!cart.promo_code) {
     return true;
   }
   const promo = await getPromoByCode(cart.promo_code);
-  if (promo == null) {
+  if (!promo) {
     return false;
   }
   return isPromoValid(promo, cart);
@@ -75,7 +75,7 @@ export const removePromoCode = functions
         .collection(cartCollection)
         .doc(tempCartId);
       const cart = await getEntityByRef<Cart>(cartRef);
-      if (cart != null) {
+      if (cart) {
         const newCart = removePromoFromCart(cart);
         await cartRef.set(newCart);
         return { applied: true };

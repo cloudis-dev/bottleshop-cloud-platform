@@ -5,13 +5,7 @@ import { tier1Region } from '../constants/other';
 
 export const getCurrentTimestamp = functions
   .region(tier1Region)
-  .runWith({ memory: '128MB' })
+  .runWith({ memory: '128MB', allowInvalidAppCheckToken: true })
   .https.onCall((data: unknown, context: functions.https.CallableContext) => {
-    if (!context.app) {
-      throw new functions.https.HttpsError(
-        'failed-precondition',
-        'The function must be called from an App Check verified app.',
-      );
-    }
     return admin.firestore.Timestamp.now();
   });
