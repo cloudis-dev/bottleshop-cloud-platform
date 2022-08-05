@@ -1,8 +1,8 @@
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/config/bottleshop_icons.dart';
-import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_view.dart';
-import 'package:bottleshop_admin/src/models/order_model.dart';
-import 'package:bottleshop_admin/src/providers/auth_providers.dart';
+import 'package:bottleshop_admin/src/core/presentation/providers/auth_providers.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
+import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -52,7 +52,7 @@ class OrderCardActionButton extends HookWidget {
               child: Text(
                   !order.isTakenOverByAdmin
                       ? 'PREBRAŤ'
-                      : OrdersView.orderStepsNames[order.getFollowingStatusId!]
+                      : OrdersPage.orderStepsNames[order.getFollowingStatusId!]
                           .toUpperCase(),
                   style:
                       AppTheme.buttonTextStyle.copyWith(color: Colors.white)),

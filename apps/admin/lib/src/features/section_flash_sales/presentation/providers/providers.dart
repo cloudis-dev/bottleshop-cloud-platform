@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bottleshop_admin/src/core/pagination_toolbox/products/products_pagination_state_notifier.dart';
+import 'package:bottleshop_admin/src/features/products/presentation/view_models/products_view_model.dart';
 import 'package:bottleshop_admin/src/features/section_flash_sales/data/models/flash_sale_model.dart';
 import 'package:bottleshop_admin/src/features/section_flash_sales/data/repositories/flash_sale_products_repository.dart';
 import 'package:bottleshop_admin/src/features/section_flash_sales/data/repositories/flash_sales_repository.dart';
@@ -61,8 +61,8 @@ final timeDifferenceProvider = StateNotifierProvider.autoDispose
 );
 
 final flashSaleProductsProvider =
-    ChangeNotifierProvider.autoDispose.family<ProductsStateNotifier, String>(
-  (ref, flashSaleUid) => ProductsStateNotifier(
+    ChangeNotifierProvider.autoDispose.family<ProductStateViewModel, String>(
+  (ref, flashSaleUid) => ProductStateViewModel(
     () => ref
         .read(flashSaleProductsRepository)
         .getFlashSaleProductsStream(flashSaleUid),

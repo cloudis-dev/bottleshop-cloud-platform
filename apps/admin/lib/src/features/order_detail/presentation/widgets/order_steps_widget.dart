@@ -1,7 +1,7 @@
 import 'package:bottleshop_admin/src/core/utils/iterable_extension.dart';
 import 'package:bottleshop_admin/src/features/order_detail/presentation/widgets/order_step_connector_divider.dart';
 import 'package:bottleshop_admin/src/features/order_detail/presentation/widgets/order_step_row.dart';
-import 'package:bottleshop_admin/src/models/order_model.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
 import 'package:flutter/material.dart';
 
 class OrderStepsWidget extends StatelessWidget {

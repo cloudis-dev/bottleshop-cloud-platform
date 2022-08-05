@@ -1,17 +1,16 @@
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/app_page.dart';
-import 'package:bottleshop_admin/src/core/orders_step.dart';
-import 'package:bottleshop_admin/src/features/home/presentation/home_view.dart';
-import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_view.dart';
+import 'package:bottleshop_admin/src/features/home/presentation/pages/home_view.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
+import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_page.dart';
 import 'package:bottleshop_admin/src/features/orders/presentation/providers/providers.dart';
+import 'package:bottleshop_admin/src/features/products/presentation/pages/products_page.dart';
 import 'package:bottleshop_admin/src/features/products/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/promo_codes/presentation/pages/promo_codes_view.dart';
-import 'package:bottleshop_admin/src/features/sections/presentation/pages/sections_view.dart';
+import 'package:bottleshop_admin/src/features/sections/presentation/pages/sections_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../products/presentation/pages/products_view.dart';
 
 enum TabIndex {
   home,
@@ -115,11 +114,11 @@ class _BodyWidget extends HookWidget {
       case TabIndex.home:
         return const HomeView();
       case TabIndex.orders:
-        return const OrdersView();
+        return const OrdersPage();
       case TabIndex.products:
-        return ProductsView();
+        return ProductsPage();
       case TabIndex.sections:
-        return const SectionsView();
+        return const SectionsPage();
       case TabIndex.promoCodes:
         return const PromoCodesView();
     }

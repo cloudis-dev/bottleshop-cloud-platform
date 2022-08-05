@@ -4,7 +4,7 @@ import 'package:bottleshop_admin/src/core/action_result.dart';
 import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/processing_alert_dialog.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/features/products/data/services.dart';
+import 'package:bottleshop_admin/src/features/products/data/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:optional/optional.dart';

@@ -1,9 +1,19 @@
 import 'dart:async';
 
-import 'package:bottleshop_admin/src/core/data/exceptions/no_such_snapshot_exists.dart';
 import 'package:bottleshop_admin/src/core/utils/logical_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tuple/tuple.dart';
+
+class NoSuchSnapshotExists implements Exception {
+  DocumentReference reference;
+
+  NoSuchSnapshotExists(this.reference);
+
+  @override
+  String toString() {
+    return 'No such snapshot exists: ${reference.path}';
+  }
+}
 
 class DatabaseService<T> {
   String collection;

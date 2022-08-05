@@ -1,7 +1,7 @@
 import 'package:bottleshop_admin/src/core/presentation/widgets/active_text_field.dart';
 import 'package:bottleshop_admin/src/core/utils/math_util.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

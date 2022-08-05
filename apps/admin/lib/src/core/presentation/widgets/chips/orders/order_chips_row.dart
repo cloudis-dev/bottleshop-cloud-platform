@@ -1,7 +1,7 @@
 import 'package:bottleshop_admin/src/core/presentation/widgets/chips/orders/admin_user_chip.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/chips/orders/completed_order_chip.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/chips/orders/order_type_chip.dart';
-import 'package:bottleshop_admin/src/models/order_model.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
 import 'package:flutter/material.dart';
 
 class OrderChipsRow extends StatelessWidget {

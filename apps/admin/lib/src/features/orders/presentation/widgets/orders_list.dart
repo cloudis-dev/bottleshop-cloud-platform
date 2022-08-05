@@ -1,12 +1,10 @@
-import 'package:bottleshop_admin/src/core/orders_step.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
 import 'package:bottleshop_admin/src/features/orders/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/models/order_model.dart';
+import 'package:bottleshop_admin/src/features/orders/presentation/widgets/order_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
-
-import 'order_card.dart';
 
 class OrdersList extends HookWidget {
   const OrdersList({

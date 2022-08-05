@@ -1,8 +1,8 @@
 import 'package:bottleshop_admin/src/config/app_theme.dart';
+import 'package:bottleshop_admin/src/core/data/models/category_model.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/detail_text.dart';
 import 'package:bottleshop_admin/src/core/utils/formatting_util.dart';
-import 'package:bottleshop_admin/src/models/category_model.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 
 class DetailsColumn extends StatelessWidget {

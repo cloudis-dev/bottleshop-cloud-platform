@@ -1,6 +1,6 @@
+import 'package:bottleshop_admin/src/core/data/models/categories_tree_model.dart';
+import 'package:bottleshop_admin/src/core/data/models/category_plain_model.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/active_dropdown_field.dart';
-import 'package:bottleshop_admin/src/models/categories_tree_model.dart';
-import 'package:bottleshop_admin/src/models/category_plain_model.dart';
 import 'package:flutter/material.dart';
 
 class CategoryDropdown extends StatelessWidget {

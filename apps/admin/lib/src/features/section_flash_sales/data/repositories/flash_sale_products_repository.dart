@@ -1,9 +1,9 @@
 import 'package:bottleshop_admin/src/core/data/services/database_service.dart';
 import 'package:bottleshop_admin/src/core/utils/change_status_util.dart';
-import 'package:bottleshop_admin/src/features/products/data/products_repository.dart';
-import 'package:bottleshop_admin/src/features/products/data/services.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/products/data/repositories/products_repository.dart';
+import 'package:bottleshop_admin/src/features/products/data/services/services.dart';
 import 'package:bottleshop_admin/src/features/section_flash_sales/data/models/flash_sale_model.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 import 'package:tuple/tuple.dart';

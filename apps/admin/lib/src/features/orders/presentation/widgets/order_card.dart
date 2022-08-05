@@ -4,11 +4,11 @@ import 'package:bottleshop_admin/src/core/presentation/widgets/chips/orders/orde
 import 'package:bottleshop_admin/src/core/utils/formatting_util.dart';
 import 'package:bottleshop_admin/src/core/utils/snackbar_utils.dart';
 import 'package:bottleshop_admin/src/features/order_detail/presentation/pages/order_detail_page.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
 import 'package:bottleshop_admin/src/features/orders/presentation/dialogs/confirm_order_state_change_dialog.dart';
 import 'package:bottleshop_admin/src/features/orders/presentation/dialogs/confirm_order_take_over_dialog.dart';
-import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_view.dart';
+import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_page.dart';
 import 'package:bottleshop_admin/src/features/orders/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -36,7 +36,7 @@ class OrderCard extends StatelessWidget {
 
     if (res != null) {
       SnackBarUtils.showSnackBar(
-        OrdersView.scaffoldMessengerKey.currentState!,
+        OrdersPage.scaffoldMessengerKey.currentState!,
         SnackBarDuration.short,
         res.message,
       );
@@ -55,7 +55,7 @@ class OrderCard extends StatelessWidget {
 
     if (res != null) {
       SnackBarUtils.showSnackBar(
-        OrdersView.scaffoldMessengerKey.currentState!,
+        OrdersPage.scaffoldMessengerKey.currentState!,
         SnackBarDuration.short,
         res.message,
       );
@@ -81,7 +81,7 @@ class OrderCard extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(OrdersView.orderStepsIcons[order.statusStepId],
+                            Icon(OrdersPage.orderStepsIcons[order.statusStepId],
                                 size: 40,
                                 color: order.isComplete
                                     ? AppTheme.completedOrderColor

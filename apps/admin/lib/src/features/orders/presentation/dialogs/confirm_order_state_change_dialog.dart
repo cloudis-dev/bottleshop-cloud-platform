@@ -1,10 +1,10 @@
+import 'package:bottleshop_admin/src/config/app_strings.dart';
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/action_result.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/processing_alert_dialog.dart';
-import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_view.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
+import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_page.dart';
 import 'package:bottleshop_admin/src/features/orders/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/models/order_model.dart';
-import 'package:bottleshop_admin/src/config/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -55,7 +55,7 @@ class ConfirmOrderStateChangeDialog extends ProcessingAlertDialog {
 
   @override
   Widget content(BuildContext context) => Text(
-        'Naozaj presunúť objednávku ID: ${order.orderId} do stavu ${OrdersView.orderStepsNames[order.getFollowingStatusId!].toUpperCase()}?',
+        'Naozaj presunúť objednávku ID: ${order.orderId} do stavu ${OrdersPage.orderStepsNames[order.getFollowingStatusId!].toUpperCase()}?',
         style: AppTheme.alertDialogContentTextStyle,
       );
 }

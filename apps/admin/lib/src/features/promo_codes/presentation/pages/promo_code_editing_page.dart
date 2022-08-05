@@ -5,6 +5,7 @@ import 'package:bottleshop_admin/src/core/app_page.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/core/result_message.dart';
 import 'package:bottleshop_admin/src/core/utils/snackbar_utils.dart';
+import 'package:bottleshop_admin/src/features/promo_codes/data/models/promo_code_model.dart';
 import 'package:bottleshop_admin/src/features/promo_codes/presentation/dialogs/confirm_promo_code_changes_dialog.dart';
 import 'package:bottleshop_admin/src/features/promo_codes/presentation/dialogs/discard_promo_code_changes_dialog.dart';
 import 'package:bottleshop_admin/src/features/promo_codes/presentation/providers/providers.dart';
@@ -13,7 +14,6 @@ import 'package:bottleshop_admin/src/features/promo_codes/presentation/widgets/p
 import 'package:bottleshop_admin/src/features/promo_codes/presentation/widgets/promo_discount_percent_field.dart';
 import 'package:bottleshop_admin/src/features/promo_codes/presentation/widgets/promo_discount_text_field.dart';
 import 'package:bottleshop_admin/src/features/promo_codes/presentation/widgets/usages_count_text_field.dart';
-import 'package:bottleshop_admin/src/models/promo_code_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

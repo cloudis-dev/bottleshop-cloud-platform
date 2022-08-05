@@ -1,5 +1,5 @@
 import 'package:bottleshop_admin/src/config/app_theme.dart';
-import 'package:bottleshop_admin/src/models/order_type_model.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_type_model.dart';
 import 'package:flutter/material.dart';
 
 class OrderTypeChip extends StatelessWidget {

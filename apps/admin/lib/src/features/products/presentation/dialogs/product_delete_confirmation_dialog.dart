@@ -3,8 +3,8 @@ import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/action_result.dart';
 import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/processing_alert_dialog.dart';
-import 'package:bottleshop_admin/src/features/products/data/services.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/products/data/services/services.dart';
 import 'package:flutter/material.dart';
 
 class ProductDeleteResult {

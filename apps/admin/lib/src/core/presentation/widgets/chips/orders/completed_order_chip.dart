@@ -1,5 +1,5 @@
 import 'package:bottleshop_admin/src/config/app_theme.dart';
-import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_view.dart';
+import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_page.dart';
 import 'package:flutter/material.dart';
 
 class CompletedOrderChip extends StatelessWidget {
@@ -11,7 +11,7 @@ class CompletedOrderChip extends StatelessWidget {
         visualDensity: VisualDensity.compact,
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         label: Text(
-          OrdersView.orderStepsNames.last,
+          OrdersPage.orderStepsNames.last,
           style: AppTheme.subtitle1TextStyle.copyWith(color: Colors.black),
         ),
       );

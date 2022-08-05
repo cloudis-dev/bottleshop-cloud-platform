@@ -1,7 +1,7 @@
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/utils/formatting_util.dart';
-import 'package:bottleshop_admin/src/models/order_model.dart';
-import 'package:bottleshop_admin/src/models/promo_code_model.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
+import 'package:bottleshop_admin/src/features/promo_codes/data/models/promo_code_model.dart';
 import 'package:flutter/material.dart';
 
 class PromoCodeTile extends StatelessWidget {

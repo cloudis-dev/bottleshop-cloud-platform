@@ -1,6 +1,6 @@
-import 'package:bottleshop_admin/src/core/data/services/products_search_service.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/product_card_all_actions_menu_button.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/product_search/data/services/products_search_service.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 

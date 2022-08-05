@@ -12,9 +12,9 @@ import 'package:bottleshop_admin/src/features/order_detail/presentation/widgets/
 import 'package:bottleshop_admin/src/features/order_detail/presentation/widgets/order_steps_widget.dart';
 import 'package:bottleshop_admin/src/features/order_detail/presentation/widgets/promo_code_tile.dart';
 import 'package:bottleshop_admin/src/features/order_detail/presentation/widgets/title_row.dart';
-import 'package:bottleshop_admin/src/features/orders/data/services.dart';
-import 'package:bottleshop_admin/src/models/order_model.dart';
-import 'package:bottleshop_admin/src/models/order_type_model.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_type_model.dart';
+import 'package:bottleshop_admin/src/features/orders/data/services/services.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

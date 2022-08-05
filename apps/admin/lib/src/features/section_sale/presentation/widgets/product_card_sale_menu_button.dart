@@ -7,9 +7,9 @@ import 'package:bottleshop_admin/src/core/utils/snackbar_utils.dart';
 import 'package:bottleshop_admin/src/features/discount/presentation/dialogs/discount_setup_dialog.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/pages/product_edit_page.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:bottleshop_admin/src/features/section_sale/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/features/sections/presentation/pages/sections_view.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/sections/presentation/pages/sections_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -24,7 +24,7 @@ void _onActionSelected(
   _Action action,
   ProductModel product,
 ) {
-  final messengerState = SectionsView.scaffoldMessengerKey.currentState;
+  final messengerState = SectionsPage.scaffoldMessengerKey.currentState;
 
   switch (action) {
     case _Action.edit:

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bottleshop_admin/src/core/data/services/products_search_service.dart';
+import 'package:bottleshop_admin/src/features/product_search/data/services/products_search_service.dart';
 import 'package:bottleshop_admin/src/features/product_search/presentation/providers/providers.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';

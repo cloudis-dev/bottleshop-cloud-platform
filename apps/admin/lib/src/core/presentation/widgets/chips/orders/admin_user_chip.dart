@@ -1,5 +1,5 @@
 import 'package:bottleshop_admin/src/config/app_theme.dart';
-import 'package:bottleshop_admin/src/models/admin_user_model.dart';
+import 'package:bottleshop_admin/src/core/data/models/admin_user_model.dart';
 import 'package:flutter/material.dart';
 
 class AdminUserChip extends StatelessWidget {

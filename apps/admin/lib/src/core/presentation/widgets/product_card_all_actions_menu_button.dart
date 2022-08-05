@@ -7,13 +7,13 @@ import 'package:bottleshop_admin/src/core/utils/snackbar_utils.dart';
 import 'package:bottleshop_admin/src/features/discount/presentation/dialogs/discount_setup_dialog.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/pages/product_edit_page.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:bottleshop_admin/src/features/products/presentation/dialogs/product_delete_confirmation_dialog.dart';
 import 'package:bottleshop_admin/src/features/section_flash_sales/data/repositories/flash_sale_products_repository.dart';
 import 'package:bottleshop_admin/src/features/section_flash_sales/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/section_new_entries/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/section_recommended/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/section_sale/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

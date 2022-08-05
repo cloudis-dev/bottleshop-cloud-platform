@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bottleshop_admin/src/core/data/services/products_search_service.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/product_search/data/services/products_search_service.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tuple/tuple.dart';
 

@@ -1,14 +1,14 @@
 import 'package:bottleshop_admin/src/core/app_page.dart';
+import 'package:bottleshop_admin/src/core/data/models/categories_tree_model.dart';
+import 'package:bottleshop_admin/src/core/data/models/constant_app_data_model.dart';
+import 'package:bottleshop_admin/src/core/data/models/country_model.dart';
+import 'package:bottleshop_admin/src/core/data/models/unit_model.dart';
 import 'package:bottleshop_admin/src/core/data/repositories/common_data_repository.dart';
 import 'package:bottleshop_admin/src/core/data/services/authentication_service.dart';
 import 'package:bottleshop_admin/src/core/data/services/cloud_functions_service.dart';
 import 'package:bottleshop_admin/src/core/data/services/push_notifications_service.dart';
 import 'package:bottleshop_admin/src/core/presentation/view_models/navigation_notifier.dart';
-import 'package:bottleshop_admin/src/models/categories_tree_model.dart';
-import 'package:bottleshop_admin/src/models/constant_app_data.dart';
-import 'package:bottleshop_admin/src/models/country_model.dart';
-import 'package:bottleshop_admin/src/models/order_type_model.dart';
-import 'package:bottleshop_admin/src/models/unit_model.dart';
+import 'package:bottleshop_admin/src/features/orders/data/models/order_type_model.dart';
 import 'package:bottleshop_admin/src/ui/intro_activity/intro_activity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -27,9 +27,9 @@ final navigationProvider =
 );
 
 final constantAppDataProvider =
-    StateProvider<ConstantAppData>((_) => ConstantAppData.empty());
+    StateProvider<ConstantAppDataModel>((_) => ConstantAppDataModel.empty());
 
-final constantAppDataFutureProvider = FutureProvider<ConstantAppData>(
+final constantAppDataFutureProvider = FutureProvider<ConstantAppDataModel>(
   (ref) async {
     final commonData = ref.read(commonDataRepositoryProvider);
     final res = await Future.wait([
@@ -38,7 +38,7 @@ final constantAppDataFutureProvider = FutureProvider<ConstantAppData>(
       commonData.units(),
       commonData.orderTypes(),
     ]);
-    return ConstantAppData(
+    return ConstantAppDataModel(
       countries: res[0] as List<CountryModel>,
       categories: res[1] as List<CategoriesTreeModel>,
       units: res[2] as List<UnitModel>,

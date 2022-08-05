@@ -1,5 +1,5 @@
 import 'package:bottleshop_admin/src/core/utils/discount_util.dart';
-import 'package:bottleshop_admin/src/models/product_model.dart';
+import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 

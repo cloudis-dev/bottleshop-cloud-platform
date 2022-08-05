@@ -2,8 +2,8 @@ import 'package:bottleshop_admin/src/config/app_strings.dart';
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/action_result.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/processing_alert_dialog.dart';
-import 'package:bottleshop_admin/src/features/promo_codes/data/services.dart';
-import 'package:bottleshop_admin/src/models/promo_code_model.dart';
+import 'package:bottleshop_admin/src/features/promo_codes/data/models/promo_code_model.dart';
+import 'package:bottleshop_admin/src/features/promo_codes/data/services/services.dart';
 import 'package:flutter/material.dart';
 
 class PromoCodeDeleteResult {

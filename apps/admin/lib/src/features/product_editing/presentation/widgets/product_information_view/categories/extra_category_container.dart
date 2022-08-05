@@ -1,6 +1,6 @@
+import 'package:bottleshop_admin/src/core/data/models/category_model.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/models/category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

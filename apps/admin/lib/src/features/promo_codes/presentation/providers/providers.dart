@@ -1,6 +1,6 @@
-import 'package:bottleshop_admin/src/core/pagination_toolbox/promo_codes/promo_codes_state_notifier.dart';
-import 'package:bottleshop_admin/src/features/promo_codes/data/promo_codes_repository.dart';
-import 'package:bottleshop_admin/src/models/promo_code_model.dart';
+import 'package:bottleshop_admin/src/features/promo_codes/data/models/promo_code_model.dart';
+import 'package:bottleshop_admin/src/features/promo_codes/data/repositories/promo_codes_repository.dart';
+import 'package:bottleshop_admin/src/features/promo_codes/presentation/view_models/promo_codes_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

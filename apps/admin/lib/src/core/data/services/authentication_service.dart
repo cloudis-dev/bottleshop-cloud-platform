@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:bottleshop_admin/src/config/constants.dart';
+import 'package:bottleshop_admin/src/core/data/models/admin_user_model.dart';
+import 'package:bottleshop_admin/src/core/presentation/providers/auth_providers.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/models/admin_user_model.dart';
-import 'package:bottleshop_admin/src/providers/auth_providers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
