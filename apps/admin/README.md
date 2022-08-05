@@ -11,6 +11,18 @@ Admin app for Bottleshop Tri Veze
 
 ## Setup
 
+### Android
+
+1. Add the `google-services.json` to the `android/app` directory (download from the Firebase or ask the other devs for the file).
+2. Add the `key.properties` file to the `android` directory.
+The contents of the file are the following:
+```
+storePassword=cloudis
+keyAlias=key
+keyPassword=cloudis
+storeFile=cloudis.jks
+```
+3. Run `flutter run` with your android emulator turned on
 
 ## Releasing
 
