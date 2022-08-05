@@ -8,8 +8,8 @@ import 'package:bottleshop_admin/src/core/data/services/authentication_service.d
 import 'package:bottleshop_admin/src/core/data/services/cloud_functions_service.dart';
 import 'package:bottleshop_admin/src/core/data/services/push_notifications_service.dart';
 import 'package:bottleshop_admin/src/core/presentation/view_models/navigation_notifier.dart';
+import 'package:bottleshop_admin/src/features/login/presentation/pages/intro_activity.dart';
 import 'package:bottleshop_admin/src/features/orders/data/models/order_type_model.dart';
-import 'package:bottleshop_admin/src/ui/intro_activity/intro_activity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

@@ -1,5 +1,6 @@
 import 'package:bottleshop_admin/src/config/app_strings.dart';
 import 'package:bottleshop_admin/src/config/app_theme.dart';
+import 'package:bottleshop_admin/src/core/presentation/view_models/processing_alert_dialog_view_model.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/price_row.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/processing_alert_dialog.dart';
 import 'package:bottleshop_admin/src/core/result_message.dart';
@@ -7,7 +8,6 @@ import 'package:bottleshop_admin/src/core/utils/formatting_util.dart';
 import 'package:bottleshop_admin/src/features/discount/presentation/widgets/product_discount_text_field.dart';
 import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:bottleshop_admin/src/features/products/data/services/services.dart';
-import 'package:bottleshop_admin/src/view_models/processing_alert_dialog_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

@@ -1,14 +1,14 @@
 import 'package:bottleshop_admin/src/core/app_page.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/auth_providers.dart';
-import 'package:bottleshop_admin/src/features/main_scaffold/presentation/app_activity.dart';
+import 'package:bottleshop_admin/src/features/app_activity/presentation/app_activity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'intro_activity_providers.dart';
-import 'views/loading_view/loading_view.dart';
-import 'views/sign_in_view/sign_in_view.dart';
-import 'views/signing_in_loading_view.dart';
+import '../providers/providers.dart';
+import 'loading_view.dart';
+import 'sign_in_view.dart';
+import 'signing_in_loading_view.dart';
 
 class IntroActivityPage extends AppPage {
   IntroActivityPage({List<AppPage> Function()? onPagesAfterLogin})

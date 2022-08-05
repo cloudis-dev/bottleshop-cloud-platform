@@ -1,4 +1,4 @@
-import 'package:bottleshop_admin/src/ui/intro_activity/views/loading_view/widgets/logged_user_widget.dart';
+import 'package:bottleshop_admin/src/features/login/presentation/widgets/logged_user_widget.dart';
 import 'package:flutter/material.dart';
 
 class CompleteStateColumn extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:bottleshop_admin/src/core/app_page.dart';
-import 'package:bottleshop_admin/src/features/main_scaffold/presentation/app_activity.dart';
+import 'package:bottleshop_admin/src/features/app_activity/presentation/app_activity.dart';
+import 'package:bottleshop_admin/src/features/login/presentation/pages/intro_activity.dart';
 import 'package:bottleshop_admin/src/features/order_detail/presentation/pages/order_detail_page.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/pages/product_edit_page.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/ui/intro_activity/intro_activity.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NavigationNotifier extends StateNotifier<List<AppPage>> {
