@@ -9,16 +9,17 @@ class WalletsAvailability {
   final bool googlePayAvailable;
 
   const WalletsAvailability(
-      {required this.appleSignInAvailable,
-      required this.applePayAvailable,
-      required this.googlePayAvailable});
+      {required this.appleSignInAvailable, required this.applePayAvailable, required this.googlePayAvailable});
 
   static Future<WalletsAvailability> check() async {
+    if (kIsWeb) {
+      return const WalletsAvailability(
+          appleSignInAvailable: false, applePayAvailable: false, googlePayAvailable: false);
+    }
     var isSignInAvailable = await SignInWithApple.isAvailable();
     var isApplePayAvailable = Stripe.instance.isApplePaySupported.value;
     var isGpayAvailable = await Stripe.instance.isGooglePaySupported(
-        const IsGooglePaySupportedParams(
-            testEnv: kDebugMode, existingPaymentMethodRequired: true));
+        const IsGooglePaySupportedParams(testEnv: kDebugMode, existingPaymentMethodRequired: true));
     return WalletsAvailability(
         appleSignInAvailable: isSignInAvailable,
         applePayAvailable: isApplePayAvailable,
@@ -26,5 +27,4 @@ class WalletsAvailability {
   }
 }
 
-final walletsAvailableProvider =
-    Provider<WalletsAvailability>((ref) => throw UnimplementedError());
+final walletsAvailableProvider = Provider<WalletsAvailability>((ref) => throw UnimplementedError());

@@ -29,13 +29,7 @@ export async function generateNewOrderId(): Promise<string> {
   return (orders.empty ? 1 : (orders.docs[orders.size - 1].data() as Order).id + 1).toString();
 }
 
-export const createPaymentIntent = functions.region(tier1Region).https.onCall(async (data: PaymentData, context) => {
-  if (!context.app) {
-    throw new functions.https.HttpsError(
-      'failed-precondition',
-      'The function must be called from an App Check verified app.',
-    );
-  }
+export const createPaymentIntent = functions.region(tier1Region).runWith({ allowInvalidAppCheckToken: true}).https.onCall(async (data: PaymentData, context) => {
   try {
     if (context.auth && context.auth.uid) {
       const cartRef = admin

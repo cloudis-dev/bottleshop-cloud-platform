@@ -24,8 +24,8 @@ export const onProductWrite = functions
     const containsAllSortFields =
       !snap.after.exists ||
       (snap.after.exists &&
-        snap.after.get(productFields.finalPriceField) != null &&
-        snap.after.get(productFields.nameSortField) != null);
+        snap.after.get(productFields.finalPriceField) !== null &&
+        snap.after.get(productFields.nameSortField) !== null);
 
     // DO NOT update algolia when any of the fields that should be postprocessed (sort fields) was updated.
     // Update algolia after the fields are postgrocessed.

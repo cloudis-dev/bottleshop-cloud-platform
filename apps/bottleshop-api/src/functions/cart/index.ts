@@ -37,7 +37,7 @@ export const validateCart = functions
         .doc(tempCartId);
       const cart = await getEntityByRef<Cart>(cartRef);
 
-      if (cart == null) {
+      if (!cart) {
         return { status: 'no-cart' };
       }
 

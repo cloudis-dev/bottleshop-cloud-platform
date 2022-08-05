@@ -2,6 +2,7 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/app_theme.dart';
 import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/views/reset_password_view.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/sign_in_page.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/splash_view.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
@@ -25,6 +26,7 @@ class App extends HookConsumerWidget {
           VWidget(path: '/', widget: const SignInPage()),
           VWidget(path: '/tutorial', widget: const TutorialPage()),
           VWidget(path: '/home', widget: const HomePage()),
+          VWidget(path: '/reset-password', widget: const ResetPasswordView())
         ],
         debugShowCheckedModeBanner: false,
         mode: VRouterMode.history,

@@ -11,7 +11,6 @@ import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/data/services/wallets_availability_service.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -41,22 +40,17 @@ void main() async {
       ),
     );
     await dotenv.load(mergeWith: {'ENV': 'dev'});
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
+    var app = await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    FirebaseFunctions functions = FirebaseFunctions.instanceFor(
+      app: app,
+      region: FirebaseCallableFunctions.region,
+    );
     if (Environment.fbEmulatorsEnabled) {
-      await FirebaseAuth.instance
-          .useAuthEmulator(Environment.emulatorHost, Environment.authEmuPort);
-      FirebaseFirestore.instance.settings =
-          const Settings(persistenceEnabled: false);
-      FirebaseFirestore.instance.useFirestoreEmulator(
-          Environment.emulatorHost, Environment.firestoreEmuPort);
-      FirebaseFunctions.instance.useFunctionsEmulator(
-          Environment.emulatorHost, Environment.functionsEmuPort);
-      FirebaseStorage.instance.useStorageEmulator(
-          Environment.emulatorHost, Environment.storagesEmuPort);
+      await FirebaseAuth.instance.useAuthEmulator(Environment.emulatorHost, Environment.authEmuPort);
+      FirebaseFirestore.instance.useFirestoreEmulator(Environment.emulatorHost, Environment.firestoreEmuPort);
+      FirebaseStorage.instance.useStorageEmulator(Environment.emulatorHost, Environment.storagesEmuPort);
+      functions.useFunctionsEmulator(Environment.emulatorHost, Environment.functionsEmuPort);
     }
-    await FirebaseAppCheck.instance
-        .activate(webRecaptchaSiteKey: Environment.recaptchSiteId);
     await SystemChrome.setPreferredOrientations(
       [
         DeviceOrientation.portraitUp,
@@ -64,10 +58,6 @@ void main() async {
       ],
     );
     if (kIsWeb) {
-      const int megabyte = 1000000;
-      SystemChannels.skia
-          .invokeMethod('Skia.setResourceCacheMaxBytes', 512 * megabyte);
-      await Future<void>.delayed(Duration.zero);
     } else {
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle());
     }
@@ -92,9 +82,7 @@ void main() async {
             AuthenticationService(firebaseAuth: FirebaseAuth.instance),
           ),
           cloudFunctionsProvider.overrideWithValue(
-            CloudFunctionsService(FirebaseFunctions.instanceFor(
-              region: FirebaseCallableFunctions.region,
-            )),
+            CloudFunctionsService(functions),
           ),
           walletsAvailableProvider.overrideWithValue(walletsAvailable),
         ],
