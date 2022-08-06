@@ -1,6 +1,8 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
+import 'package:delivery/src/core/data/services/common_data_service.dart';
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/data/services/storage_service.dart';
@@ -64,3 +66,10 @@ final appOrientationProvider =
   final orientation = AppConfig(context).appOrientation();
   return orientation ?? Orientation.portrait;
 });
+
+final commonDataRepositoryProvider = Provider<CommonDataRepository>(
+  (ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
+    return CommonDataRepository(dataService: CommonDataService(currentLocale));
+  },
+);
