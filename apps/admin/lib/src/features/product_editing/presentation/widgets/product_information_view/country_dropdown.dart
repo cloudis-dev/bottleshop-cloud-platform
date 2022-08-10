@@ -1,13 +1,11 @@
-import 'package:bottleshop_admin/src/core/data/models/country_model.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
-import 'package:bottleshop_admin/src/core/presentation/widgets/active_dropdown_field.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../../config/app_theme.dart';
+import 'package:bottleshop_admin/src/config/app_theme.dart';
 
 // class CountryDropdown extends HookWidget {
 //   const CountryDropdown({
@@ -82,11 +80,12 @@ class CountryDropdown extends HookWidget {
           return null;
         },
         dropdownDecoratorProps: DropDownDecoratorProps(
-            dropdownSearchDecoration: InputDecoration(
-          hintText: "* Krajina",
-          filled: true,
-          fillColor: AppTheme.lightGreySolid,
-        )),
+          dropdownSearchDecoration: InputDecoration(
+            hintText: '* Krajina',
+            filled: true,
+            fillColor: AppTheme.lightGreySolid,
+          ) 
+        ),
         onChanged: (value) {
           context.read(editedProductProvider).state = context
               .read(editedProductProvider)
