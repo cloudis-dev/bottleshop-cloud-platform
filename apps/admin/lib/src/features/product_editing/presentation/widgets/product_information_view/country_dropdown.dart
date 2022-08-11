@@ -80,6 +80,7 @@ class CountryDropdown extends HookWidget {
           return null;
         },
         dropdownDecoratorProps: DropDownDecoratorProps(
+          textAlignVertical: TextAlignVertical.center,
           dropdownSearchDecoration: InputDecoration(
             hintText: '* Krajina',
             filled: true,
