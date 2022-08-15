@@ -12,11 +12,35 @@ class CountryDropdown extends HookWidget {
     Key? key,
   }) : super(key: key);
 
+  bool searchFunction(String item, String filter) {
+    item = item.toLowerCase();
+    filter = filter.toLowerCase();
+    item = item.replaceAll('ä', 'a');
+    item = item.replaceAll('á', 'a');
+    item = item.replaceAll('č', 'c');
+    item = item.replaceAll('ď', 'd');
+    item = item.replaceAll('é', 'e');
+    item = item.replaceAll('í', 'i');
+    item = item.replaceAll('ĺ', 'l');
+    item = item.replaceAll('ľ', 'l');
+    item = item.replaceAll('ň', 'n');
+    item = item.replaceAll('ó', 'o');
+    item = item.replaceAll('ô', 'o');
+    item = item.replaceAll('ŕ', 'r');
+    item = item.replaceAll('š', 's');
+    item = item.replaceAll('ť', 't');
+    item = item.replaceAll('ú', 'u');
+    item = item.replaceAll('ý', 'y');
+    item = item.replaceAll('ž', 'z');
+    return item.contains(filter);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 16, bottom: 16),
       child: DropdownSearch<String>(
+        filterFn: searchFunction,
         popupProps:
             PopupProps.menu(showSelectedItems: true, showSearchBox: true),
         items: useProvider(constantAppDataProvider)
@@ -39,7 +63,7 @@ class CountryDropdown extends HookWidget {
             hintText: '* Krajina',
             filled: true,
             fillColor: AppTheme.lightGreySolid,
-          ) 
+          )
         ),
         onChanged: (value) {
           context.read(editedProductProvider).state = context
