@@ -1,4 +1,4 @@
-import 'package:bottleshop_admin/utils/iterable_extension.dart';
+import 'package:bottleshop_admin/src/core/utils/iterable_extension.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
