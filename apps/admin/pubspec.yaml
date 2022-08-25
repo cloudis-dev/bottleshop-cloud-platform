@@ -41,6 +41,8 @@ dependencies:
   url_launcher: ^6.1.5
   optional: ^6.1.0+1
   flutter_local_notifications: ^9.7.0
+  csv: ^5.0.1
+  permission_handler: ^10.0.0
 
 dev_dependencies:
   flutter_test:

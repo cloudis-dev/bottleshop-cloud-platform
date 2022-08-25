@@ -8,8 +8,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:bottleshop_admin/ui/shared_widgets/app_navigation_drawer.dart';
-
 class UsersList {
   final key;
   final value;
