@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:delivery/firebase_options.dart';
 import 'package:delivery/main.dart';
 import 'package:delivery/src/app.dart';
 import 'package:delivery/src/core/data/res/app_environment.dart';
@@ -22,7 +23,7 @@ Future<void> main() async {
   initializeLogging();
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   final sharedPreferences = await SharedPreferences.getInstance();
