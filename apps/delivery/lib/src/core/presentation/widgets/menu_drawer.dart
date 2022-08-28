@@ -52,7 +52,7 @@ class MenuDrawer extends HookWidget {
 
     return Drawer(
       child: CupertinoScrollbar(
-        isAlwaysShown: true,
+        thumbVisibility: true,
         controller: scrollController,
         child: Theme(
           data: Theme.of(context).copyWith(
@@ -63,7 +63,7 @@ class MenuDrawer extends HookWidget {
           child: ListView(
             controller: scrollController,
             children: <Widget>[
-              if (hasUser) SideMenuHeader(),
+              if (hasUser) const SideMenuHeader(),
               _SideMenuItem(
                 isSelected:
                     kIsWeb ? currentBranch == NestingBranch.shop : false,
@@ -287,13 +287,13 @@ class _SideMenuItem extends StatelessWidget {
 
   Widget _buildBadgeIcon(BuildContext context) {
     return BottleshopBadge(
+      badgeText: badgeValue.toString(),
+      showBadge: badgeValue > 0,
+      position: BadgePosition.topEnd(top: -5, end: -5),
       child: Icon(
         leading,
         color: IconTheme.of(context).color,
       ),
-      badgeText: badgeValue.toString(),
-      showBadge: badgeValue > 0,
-      position: BadgePosition.topEnd(top: -5, end: -5),
     );
   }
 }
@@ -305,7 +305,7 @@ class BottleshopAboutTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _version = useProvider(_versionProvider);
+    final version = useProvider(_versionProvider);
 
     return ListTile(
       dense: false,
@@ -328,7 +328,7 @@ class BottleshopAboutTile extends HookWidget {
             ),
           ),
           applicationName: S.of(context).app_title,
-          applicationVersion: _version.maybeWhen(
+          applicationVersion: version.maybeWhen(
             data: (version) => '${version.version}.${version.buildNumber}',
             orElse: () => null,
           ),

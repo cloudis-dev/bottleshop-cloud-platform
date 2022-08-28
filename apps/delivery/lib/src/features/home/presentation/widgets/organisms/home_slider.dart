@@ -10,13 +10,13 @@
 //
 //
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/features/home/data/models/slider_model.dart';
 import 'package:delivery/src/features/home/presentation/providers/providers.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -65,7 +65,7 @@ class _Carousel extends HookWidget {
                     autoPlayAnimationDuration:
                         const Duration(milliseconds: 500),
                     autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 5),
+                    autoPlayInterval: const Duration(seconds: 5),
                     enlargeCenterPage: true,
                     viewportFraction: 1,
                     onPageChanged: (index, reason) =>
@@ -93,11 +93,11 @@ class _Carousel extends HookWidget {
                         height: 25,
                         width: 40,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 3.0),
                           child: Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(8),
                               ),
                               color: tabSlidesState.value == idx
@@ -122,7 +122,7 @@ class _Carousel extends HookWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(height: 200),
+                const SizedBox(height: 200),
                 Text(S.of(context).error),
               ],
             ),
@@ -151,7 +151,7 @@ class _SliderItem extends HookWidget {
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).primaryColor,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
             blurRadius: 9,
           ),
         ],
@@ -160,7 +160,7 @@ class _SliderItem extends HookWidget {
         alignment: AlignmentDirectional.bottomEnd,
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Container(
+        child: SizedBox(
           width: AppConfig(context).appWidth(40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

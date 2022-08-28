@@ -54,7 +54,7 @@ class SocialMediaButtonsRow extends HookWidget {
             child: Image.asset('assets/images/facebook.png'),
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         _SocialMediaButtonWrapper(
           child: InkWell(
             onTap: () async {
@@ -70,7 +70,7 @@ class SocialMediaButtonsRow extends HookWidget {
             child: Image.asset('assets/images/google_logo.png'),
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         if (isAppleSupported) ...[
           _SocialMediaButtonWrapper(
             child: Builder(
@@ -89,7 +89,7 @@ class SocialMediaButtonsRow extends HookWidget {
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
         ],
         _SocialMediaButtonWrapper(
           child: InkWell(
@@ -114,11 +114,11 @@ class SocialMediaButtonsRow extends HookWidget {
     showSimpleNotification(
       Text(
         S.of(context).youMustFirstAgreeToTermsConditions,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
       ),
       background: Theme.of(context).colorScheme.onSecondary,
       position: NotificationPosition.bottom,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       slideDismissDirection: DismissDirection.horizontal,
       context: context,
     );

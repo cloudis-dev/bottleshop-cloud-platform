@@ -68,7 +68,7 @@ class QuantityFilter extends HookWidget {
                 context.read(filterModelProvider(filterType)).state.copyWith(
                       minQuantity: FilterConstants.maxQuantity - value.round(),
                     ),
-            label: '${minQuantity.toString()}',
+            label: minQuantity.toString(),
             activeColor: Theme.of(context).colorScheme.secondary,
           ),
         )

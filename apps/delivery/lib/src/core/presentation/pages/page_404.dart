@@ -14,7 +14,7 @@ class Page404 extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right('404');
+      const Right('404');
 
   @override
   String getPagePath() => pagePathBase;

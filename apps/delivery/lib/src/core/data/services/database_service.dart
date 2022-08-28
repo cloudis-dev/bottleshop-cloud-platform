@@ -137,7 +137,7 @@ class DatabaseService<T> {
         // The initial batch have to be first awaited and fully added to the stream
         // Just after that the changes stream is added.
         final initialBatch = await query
-            .get(GetOptions(source: Source.server))
+            .get(const GetOptions(source: Source.server))
             .then(
               (event) => Future.wait(
                 event.docs.map(

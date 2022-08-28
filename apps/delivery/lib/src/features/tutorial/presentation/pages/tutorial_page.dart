@@ -10,11 +10,11 @@
 //
 //
 
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/tutorial/presentation/providers/tutorial_providers.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -27,12 +27,12 @@ class TutorialPage extends RoutebornPage {
   TutorialPage()
       : super.builder(
           pagePathBase,
-          (_) => _TutorialView(),
+          (_) => const _TutorialView(),
         );
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right('TODO');
+      const Right('TODO');
 
   @override
   String getPagePath() => pagePathBase;
@@ -66,7 +66,7 @@ class _TutorialView extends HookWidget {
             items: TutorialAssets.assets
                 .map(
                   (boardingAsset) => Container(
-                    decoration: BoxDecoration(color: kSplashBackground),
+                    decoration: const BoxDecoration(color: kSplashBackground),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Column(
@@ -132,10 +132,10 @@ class _TutorialView extends HookWidget {
                     (boarding) => Container(
                       width: 25.0,
                       height: 3.0,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
                         color: onBoardingViewModel ==
@@ -155,8 +155,9 @@ class _TutorialView extends HookWidget {
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.secondary,
-                padding: EdgeInsets.symmetric(horizontal: 35, vertical: 12),
-                shape: RoundedRectangleBorder(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
                     bottomLeft: Radius.circular(50),

@@ -64,16 +64,16 @@ class CheckoutTile extends HookWidget {
           right: 0,
           child: Container(
             height: 170,
-            padding: EdgeInsets.only(left: 20, right: 20, top: 15),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
             decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(20),
                     topLeft: Radius.circular(20)),
                 boxShadow: [
                   BoxShadow(
                       color: Theme.of(context).hintColor.withOpacity(0.2),
-                      offset: Offset(0, -2),
+                      offset: const Offset(0, -2),
                       blurRadius: 5.0)
                 ]),
             child: SizedBox(
@@ -120,7 +120,7 @@ class CheckoutTile extends HookWidget {
                           )}',
                           style: Theme.of(context).textTheme.subtitle1)
                     ]),
-                  Spacer(flex: 1),
+                  const Spacer(flex: 1),
                   Row(children: <Widget>[
                     Expanded(
                         child: Text(S.of(context).checkout,
@@ -133,7 +133,7 @@ class CheckoutTile extends HookWidget {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ]),
-                  Spacer(flex: 1),
+                  const Spacer(flex: 1),
                   Row(
                     children: [
                       if (showPromoButton)
@@ -151,7 +151,7 @@ class CheckoutTile extends HookWidget {
                                   if (res) {
                                     showSimpleNotification(
                                       Text(S.of(context).promoCodeRemoved),
-                                      duration: Duration(seconds: 5),
+                                      duration: const Duration(seconds: 5),
                                       slideDismissDirection:
                                           DismissDirection.horizontal,
                                       context: context,
@@ -170,7 +170,7 @@ class CheckoutTile extends HookWidget {
                                     if (res) {
                                       showSimpleNotification(
                                         Text(S.of(context).promoCodeApplied),
-                                        duration: Duration(seconds: 5),
+                                        duration: const Duration(seconds: 5),
                                         slideDismissDirection:
                                             DismissDirection.horizontal,
                                         context: context,
@@ -178,7 +178,7 @@ class CheckoutTile extends HookWidget {
                                     } else {
                                       showSimpleNotification(
                                         Text(S.of(context).promoCodeInvalid),
-                                        duration: Duration(seconds: 5),
+                                        duration: const Duration(seconds: 5),
                                         slideDismissDirection:
                                             DismissDirection.horizontal,
                                         context: context,
@@ -223,12 +223,11 @@ class CheckoutTile extends HookWidget {
                               ButtonState.success: const SizedBox.shrink(),
                               ButtonState.fail: const SizedBox.shrink(),
                             },
-                            stateColors: Map.fromIterable(
-                              ButtonState.values.map((e) =>
-                                  Tuple2(e, Theme.of(context).primaryColor)),
-                              key: (e) => e.item1,
-                              value: (e) => e.item2,
-                            ),
+                            stateColors: {
+                              for (var e in ButtonState.values.map((e) =>
+                                  Tuple2(e, Theme.of(context).primaryColor)))
+                                e.item1: e.item2
+                            },
                           ),
                         ),
                       Expanded(
@@ -237,7 +236,7 @@ class CheckoutTile extends HookWidget {
                           alignment: AlignmentDirectional.centerEnd,
                           children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.symmetric(vertical: 14),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
                               child: ProgressButton(
                                 maxWidth: double.infinity,
                                 minWidth: double.infinity,
@@ -256,12 +255,15 @@ class CheckoutTile extends HookWidget {
                                   ButtonState.success: const SizedBox.shrink(),
                                   ButtonState.fail: const SizedBox.shrink(),
                                 },
-                                stateColors: Map.fromIterable(
-                                  ButtonState.values.map((e) => Tuple2(e,
-                                      Theme.of(context).colorScheme.secondary)),
-                                  key: (e) => e.item1,
-                                  value: (e) => e.item2,
-                                ),
+                                stateColors: {
+                                  for (var e in ButtonState.values.map((e) =>
+                                      Tuple2(
+                                          e,
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary)))
+                                    e.item1: e.item2
+                                },
                               ),
                             ),
                             if (!isLastStep)
@@ -302,7 +304,7 @@ class CheckoutTile extends HookWidget {
         case CartStatus.unavailableProducts:
           showSimpleNotification(
             Text(S.of(context).theCartContainsItemCountsThatAreNotAvailableIn),
-            duration: Duration(seconds: 5),
+            duration: const Duration(seconds: 5),
             slideDismissDirection: DismissDirection.horizontal,
             context: context,
           );
@@ -310,7 +312,7 @@ class CheckoutTile extends HookWidget {
         case CartStatus.invalidPromo:
           showSimpleNotification(
             Text(S.of(context).promoCodeInvalid),
-            duration: Duration(seconds: 5),
+            duration: const Duration(seconds: 5),
             slideDismissDirection: DismissDirection.horizontal,
             context: context,
           );
@@ -318,7 +320,7 @@ class CheckoutTile extends HookWidget {
         case CartStatus.error:
           showSimpleNotification(
             Text(S.of(context).errorGeneric),
-            duration: Duration(seconds: 5),
+            duration: const Duration(seconds: 5),
             slideDismissDirection: DismissDirection.horizontal,
             context: context,
           );
@@ -339,7 +341,7 @@ class CheckoutTile extends HookWidget {
           return AdaptiveAlertDialog(
             content: defaultTargetPlatform == TargetPlatform.iOS
                 ? CupertinoTextFormFieldRow(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     placeholder: S.of(context).promoCodeLabel,
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.text,
@@ -367,9 +369,9 @@ class CheckoutTile extends HookWidget {
                       onPressed: () => Navigator.pop(context, null),
                     ),
                     CupertinoDialogAction(
-                      child: Text(S.of(context).saveButton),
                       onPressed: () => Navigator.pop(context, controller.text),
                       isDefaultAction: true,
+                      child: Text(S.of(context).saveButton),
                     ),
                   ]
                 : [

@@ -80,7 +80,7 @@ class YearFilter extends HookWidget {
                   context.read(filterModelProvider(filterType)).state.copyWith(
                         maxYear: value.round(),
                       ),
-              label: '${maxYear.toString()}',
+              label: maxYear.toString(),
               activeColor: Theme.of(context).colorScheme.secondary,
             )
           ],

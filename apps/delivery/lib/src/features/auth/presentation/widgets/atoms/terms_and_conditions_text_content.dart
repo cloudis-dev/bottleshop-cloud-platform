@@ -22,7 +22,7 @@ class TermsAndConditionsTextContent extends StatelessWidget {
         children: [
           TextSpan(
             text: S.of(context).termsPopUpLink,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.blue,
               decoration: TextDecoration.underline,
               decorationColor: Colors.blue,

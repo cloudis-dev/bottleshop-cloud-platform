@@ -36,7 +36,7 @@ class SignUpForm extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = useMemoized(() => GlobalKey<FormState>());
+    final formKey = useMemoized(() => GlobalKey<FormState>());
     final email = useTextEditingController();
     final password = useTextEditingController();
     final passwordRepeat = useTextEditingController();
@@ -49,7 +49,7 @@ class SignUpForm extends HookWidget {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
-          key: _formKey,
+          key: formKey,
           autovalidateMode: AutovalidateMode.disabled,
           onChanged: () {
             if (email.text.isNotEmpty &&
@@ -57,7 +57,7 @@ class SignUpForm extends HookWidget {
                 passwordRepeat.text.isNotEmpty) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 context.read(signUpFormValidProvider.notifier).formValid =
-                    _formKey.currentState!.validate();
+                    formKey.currentState!.validate();
               });
             }
           },
@@ -73,7 +73,7 @@ class SignUpForm extends HookWidget {
               StyledFormField(
                 keyboardType: TextInputType.emailAddress,
                 labelText: S.of(context).email,
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.mail_outline,
                 ),
                 controller: email,
@@ -82,7 +82,7 @@ class SignUpForm extends HookWidget {
               ),
               StyledFormField(
                 labelText: S.of(context).password,
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.lock,
                 ),
                 suffixIcon: IconButton(
@@ -98,7 +98,7 @@ class SignUpForm extends HookWidget {
               ),
               StyledFormField(
                 labelText: S.of(context).password,
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.lock,
                 ),
                 suffixIcon: IconButton(
@@ -135,13 +135,13 @@ class SignUpForm extends HookWidget {
                         authCallback(result);
                       }
                     : null,
-                child: Text(
-                  S.of(context).sign_up,
-                ),
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
                   primary: Theme.of(context).colorScheme.secondary,
                   padding: const EdgeInsets.symmetric(vertical: 20),
+                ),
+                child: Text(
+                  S.of(context).sign_up,
                 ),
               ),
               const SizedBox(height: 8),

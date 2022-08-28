@@ -32,7 +32,7 @@ class Breadcrumbs extends HookWidget {
                                     if (value != null) {
                                       return Text(value);
                                     }
-                                    return SizedBox(
+                                    return const SizedBox(
                                       height: 12,
                                       child: AspectRatio(
                                         aspectRatio: 1,
@@ -55,8 +55,8 @@ class Breadcrumbs extends HookWidget {
                       ),
                     )
                     .interleave(
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
                         child: Text('•'),
                       ),
                     )

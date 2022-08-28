@@ -50,7 +50,7 @@ class SignInForm extends HookWidget {
     final password = useTextEditingController();
     final showPassword = useState<bool>(false);
     final isAppleAvailable = useProvider(appleSignInAvailableProvider);
-    final _formKey = useMemoized(() => GlobalKey<FormState>());
+    final formKey = useMemoized(() => GlobalKey<FormState>());
 
     return Material(
       color: backgroundColor,
@@ -58,13 +58,13 @@ class SignInForm extends HookWidget {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
-          key: _formKey,
+          key: formKey,
           autovalidateMode: AutovalidateMode.disabled,
           onChanged: () {
             if (email.text.isNotEmpty && password.text.isNotEmpty) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 context.read(_signInFormValidProvider.notifier).formValid =
-                    _formKey.currentState!.validate();
+                    formKey.currentState!.validate();
               });
             }
           },
@@ -81,7 +81,7 @@ class SignInForm extends HookWidget {
               StyledFormField(
                 keyboardType: TextInputType.emailAddress,
                 labelText: S.of(context).email,
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.mail_outline,
                 ),
                 controller: email,
@@ -90,7 +90,7 @@ class SignInForm extends HookWidget {
               ),
               StyledFormField(
                 labelText: S.of(context).password,
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.lock,
                 ),
                 suffixIcon: IconButton(
@@ -142,12 +142,12 @@ class SignInForm extends HookWidget {
                         authCallback(result);
                       }
                     : null,
-                child: Text(S.of(context).login),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary,
-                  shape: StadiumBorder(),
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  shape: const StadiumBorder(),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
+                child: Text(S.of(context).login),
               ),
               const SizedBox(height: 8),
               isAppleAvailable.maybeWhen(

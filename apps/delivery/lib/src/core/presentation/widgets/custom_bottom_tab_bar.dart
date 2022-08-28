@@ -53,6 +53,7 @@ class CustomBottomTabBar extends CupertinoTabBar {
   @override
   Size get preferredSize => const Size.fromHeight(kTabBarHeight);
 
+  @override
   bool opaque(BuildContext context) {
     final backgroundColor =
         this.backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor;

@@ -20,7 +20,7 @@ final _addToWishlistButtonStateProvider =
 );
 
 class ToggleWishlistButton extends HookWidget {
-  ToggleWishlistButton({
+  const ToggleWishlistButton({
     Key? key,
     required this.product,
     this.actionOverride,
@@ -60,7 +60,7 @@ class ToggleWishlistButton extends HookWidget {
                         (_) => showSimpleNotification(
                           Text(
                               '${product.name} ${S.of(context).couldntBeSuccessfullyRemovedFromWishlist}'),
-                          duration: Duration(seconds: 1),
+                          duration: const Duration(seconds: 1),
                           slideDismissDirection: DismissDirection.horizontal,
                           context: context,
                         ),
@@ -79,7 +79,7 @@ class ToggleWishlistButton extends HookWidget {
                         (value) => showSimpleNotification(
                           Text(
                               '${product.name} ${S.of(context).addedToWishList}'),
-                          duration: Duration(seconds: 1),
+                          duration: const Duration(seconds: 1),
                           slideDismissDirection: DismissDirection.horizontal,
                           context: context,
                         ),
@@ -88,7 +88,7 @@ class ToggleWishlistButton extends HookWidget {
                         (_) => showSimpleNotification(
                           Text(
                               '${product.name} ${S.of(context).couldntBeSuccessfullyAddedToWishlist}'),
-                          duration: Duration(seconds: 1),
+                          duration: const Duration(seconds: 1),
                           slideDismissDirection: DismissDirection.horizontal,
                           context: context,
                         ),

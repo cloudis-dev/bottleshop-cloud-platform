@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
@@ -30,13 +31,12 @@ import 'package:delivery/src/features/product_detail/presentation/widgets/views/
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:routeborn/routeborn.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ProductDetailPage extends RoutebornPage with UpdatablePageNameMixin {
   static const String pagePathBase = 'product-detail';
@@ -203,7 +203,7 @@ class _BodyWeb extends HookWidget {
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: 500),
+                        constraints: const BoxConstraints(maxWidth: 500),
                         child: ProductImage(
                           imagePath: product.imagePath,
                           overlayWidget: (imgUrl) => Material(
@@ -212,12 +212,12 @@ class _BodyWeb extends HookWidget {
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.zoom_in,
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
-                                    launch(imgUrl);
+                                    launchUrlString(imgUrl);
                                   },
                                 ),
                               ),
@@ -235,7 +235,7 @@ class _BodyWeb extends HookWidget {
                       children: [
                         Expanded(
                           child: Scrollbar(
-                            isAlwaysShown: true,
+                            thumbVisibility: true,
                             controller: scrollCtrl,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 12),
@@ -330,7 +330,7 @@ class _BodyMobile extends HookWidget {
             expandedHeight: 450,
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
-              stretchModes: [
+              stretchModes: const [
                 StretchMode.zoomBackground,
               ],
               collapseMode: CollapseMode.parallax,

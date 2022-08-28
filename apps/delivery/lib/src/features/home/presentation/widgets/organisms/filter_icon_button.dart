@@ -15,7 +15,7 @@ class FilterIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-      icon: Icon(Icons.filter_list),
+      icon: const Icon(Icons.filter_list),
       onPressed: () {
         if (childScaffoldKey.currentState!.isEndDrawerOpen) {
           DrawerStateAcquirer.acquireDrawerCtrl(drawerAcquirerKey.currentState!)

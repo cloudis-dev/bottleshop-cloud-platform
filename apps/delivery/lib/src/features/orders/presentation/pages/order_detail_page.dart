@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
@@ -29,7 +30,6 @@ import 'package:delivery/src/features/orders/presentation/providers/providers.da
 import 'package:delivery/src/features/orders/presentation/widgets/order_cart_list_item.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/order_state_chip.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/order_steps_widget.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -74,7 +74,7 @@ class _OrderDetailPageView extends HookWidget {
   final String orderUniqueId;
   final SetPageNameCallback setPageNameCallback;
 
-  _OrderDetailPageView({
+  const _OrderDetailPageView({
     Key? key,
     required this.orderUniqueId,
     required this.setPageNameCallback,
@@ -88,7 +88,7 @@ class _OrderDetailPageView extends HookWidget {
     return useProvider(orderStreamProvider(orderUniqueId)).when(
       data: (order) {
         if (order == null) {
-          return _OrderErrorTab();
+          return const _OrderErrorTab();
         } else {
           setPageNameCallback('${S.of(context).order} #${order.orderId}');
 
@@ -128,7 +128,7 @@ class _OrderDetailPageView extends HookWidget {
       error: (err, stack) {
         _logger.severe('Failed stream orders', err, stack);
 
-        return _OrderErrorTab();
+        return const _OrderErrorTab();
       },
     );
   }
@@ -183,7 +183,7 @@ class _Body extends HookWidget {
         const SizedBox(height: 8),
         Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.baseline,
-          columnWidths: {
+          columnWidths: const {
             0: IntrinsicColumnWidth(),
             1: FixedColumnWidth(16),
             2: FlexColumnWidth(),
@@ -245,7 +245,7 @@ class _Body extends HookWidget {
           tilePadding: EdgeInsets.zero,
           childrenPadding: const EdgeInsets.only(bottom: 8),
           initiallyExpanded: false,
-          leading: Icon(
+          leading: const Icon(
             Icons.notes_outlined,
           ),
           title: Text(
@@ -255,7 +255,7 @@ class _Body extends HookWidget {
           children: [
             Table(
               defaultVerticalAlignment: TableCellVerticalAlignment.baseline,
-              columnWidths: {
+              columnWidths: const {
                 0: IntrinsicColumnWidth(),
                 1: FixedColumnWidth(16),
                 2: FlexColumnWidth(),
@@ -340,8 +340,8 @@ class _Body extends HookWidget {
                   children: [
                     if (order.hasPromoCode)
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
                         decoration: ListItemContainerDecoration(context),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

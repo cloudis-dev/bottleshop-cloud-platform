@@ -33,7 +33,7 @@ class FilterDrawerFooter extends HookWidget {
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
           primary: Theme.of(context).colorScheme.secondary,
-          shape: StadiumBorder(),
+          shape: const StadiumBorder(),
         ),
         onPressed: () async {
           final currentFilterProviderCtrl =

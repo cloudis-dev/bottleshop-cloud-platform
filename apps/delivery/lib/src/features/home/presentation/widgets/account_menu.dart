@@ -45,7 +45,7 @@ class AccountMenu extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         clipBehavior: Clip.antiAlias,
         child: AnimatedSize(
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           child: _MenuBody(scaffoldKey: scaffoldKey),
         ),
       ),
@@ -62,7 +62,7 @@ class _MenuBody extends HookWidget {
     final tabsState = useState(_TabsState.menu);
 
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 50),
+      duration: const Duration(milliseconds: 50),
       child: () {
         switch (tabsState.value) {
           case _TabsState.menu:
@@ -121,7 +121,7 @@ class _MenuItemsTab extends HookWidget {
     return IntrinsicHeight(
       child: CupertinoScrollbar(
         controller: scrollCtrl,
-        isAlwaysShown: true,
+        thumbVisibility: true,
         child: SingleChildScrollView(
           controller: scrollCtrl,
           child: Theme(
@@ -135,12 +135,12 @@ class _MenuItemsTab extends HookWidget {
               children: [
                 if (!hasUser)
                   ListTile(
-                    leading: Icon(Icons.login),
+                    leading: const Icon(Icons.login),
                     title: Text(S.of(context).login),
                     onTap: onLogin,
                   ),
                 ListTile(
-                  leading: Icon(Icons.favorite),
+                  leading: const Icon(Icons.favorite),
                   title: Text(S.of(context).favoriteTabLabel),
                   onTap: () {
                     context.read(navigationProvider).setNestingBranch(
@@ -152,7 +152,7 @@ class _MenuItemsTab extends HookWidget {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.settings),
+                  leading: const Icon(Icons.settings),
                   title: Text(S.of(context).settings),
                   onTap: () {
                     context.read(navigationProvider).setNestingBranch(
@@ -173,7 +173,7 @@ class _MenuItemsTab extends HookWidget {
                       OverlaySupportEntry.of(context)!.dismiss(animate: false),
                 ),
                 ListTile(
-                  leading: Icon(Icons.help_outlined),
+                  leading: const Icon(Icons.help_outlined),
                   title: Text(S.of(context).helpSupport),
                   onTap: () {
                     context.read(navigationProvider).setNestingBranch(
@@ -190,7 +190,7 @@ class _MenuItemsTab extends HookWidget {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.gavel),
+                  leading: const Icon(Icons.gavel),
                   title: Text(S.of(context).menuTerms),
                   onTap: () {
                     context.read(navigationProvider).pushPage(
@@ -203,7 +203,7 @@ class _MenuItemsTab extends HookWidget {
                 ),
                 if (hasUser)
                   ListTile(
-                    leading: Icon(Icons.exit_to_app),
+                    leading: const Icon(Icons.exit_to_app),
                     title: Text(S.of(context).logOut),
                     onTap: () async {
                       await context.read(userRepositoryProvider).signOut();
@@ -240,13 +240,13 @@ class _TermsAndConditionsTab extends HookWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8, top: 8),
             child: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.arrow_back_ios),
               onPressed: onBack,
             ),
           ),
           Expanded(
             child: CupertinoScrollbar(
-              isAlwaysShown: true,
+              thumbVisibility: true,
               controller: scrollCtrl,
               child: SingleChildScrollView(
                 controller: scrollCtrl,
@@ -278,18 +278,18 @@ class _TermsAndConditionsTab extends HookWidget {
             ),
           ),
           CupertinoDialogAction(
-            child: Text(S.of(context).termsPopUpYes),
             onPressed: onAccept,
             textStyle: Theme.of(context)
                 .textTheme
                 .subtitle2!
                 .copyWith(color: Theme.of(context).colorScheme.secondary),
+            child: Text(S.of(context).termsPopUpYes),
           ),
           CupertinoDialogAction(
-            child: Text(S.of(context).termsPopUpNo),
             onPressed: onBack,
             isDefaultAction: true,
             textStyle: Theme.of(context).textTheme.subtitle2,
+            child: Text(S.of(context).termsPopUpNo),
           ),
         ],
       ),
@@ -311,7 +311,7 @@ class _SignUpTab extends HookWidget {
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
-        isAlwaysShown: true,
+        thumbVisibility: true,
         controller: scrollCtrl,
         child: SingleChildScrollView(
           controller: scrollCtrl,
@@ -323,7 +323,7 @@ class _SignUpTab extends HookWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: const Icon(Icons.arrow_back_ios),
                     onPressed: onBack,
                   ),
                 ),
@@ -361,7 +361,7 @@ class _LoginTab extends HookWidget {
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
-        isAlwaysShown: true,
+        thumbVisibility: true,
         controller: scrollCtrl,
         child: SingleChildScrollView(
           controller: scrollCtrl,
@@ -373,7 +373,7 @@ class _LoginTab extends HookWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: const Icon(Icons.arrow_back_ios),
                     onPressed: onBack,
                   ),
                 ),

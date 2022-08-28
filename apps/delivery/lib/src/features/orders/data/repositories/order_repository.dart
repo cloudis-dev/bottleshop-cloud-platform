@@ -10,19 +10,19 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
 import 'package:delivery/src/core/utils/change_status_util.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
 import 'package:delivery/src/features/orders/data/services/db_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 import 'package:tuple/tuple.dart';
 
 class OrderRepository {
   Stream<int> activeOrdersCount(UserModel? user) {
     if (user == null) {
-      return Stream.empty();
+      return const Stream.empty();
     }
 
     final args = [
@@ -39,7 +39,7 @@ class OrderRepository {
   Stream<PagedItemsStateStreamBatch<OrderModel, DocumentSnapshot>>
       getUserOrdersStream(DocumentSnapshot? lastDoc, UserModel? user) {
     if (user == null) {
-      return Stream.empty();
+      return const Stream.empty();
     }
 
     final query = QueryArgs(

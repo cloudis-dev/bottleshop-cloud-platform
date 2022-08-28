@@ -84,7 +84,7 @@ class AgeFilter extends HookWidget {
                             .copyWith(
                               minAge: aggs.maxAge! - value.round(),
                             ),
-                label: '${minAge.toString()}',
+                label: minAge.toString(),
                 activeColor: Theme.of(context).colorScheme.secondary,
               ),
             )

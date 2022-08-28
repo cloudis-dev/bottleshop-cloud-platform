@@ -26,12 +26,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
 
 class SearchedCategoryListItem extends HookWidget {
-  SearchedCategoryListItem({
+  const SearchedCategoryListItem({
+    Key? key,
     required this.categoryPlainModel,
     required this.navigationCategory,
     required this.heroTag,
     this.bottomSideLineWidth,
-  });
+  }) : super(key: key);
 
   final CategoryPlainModel categoryPlainModel;
   final CategoriesTreeModel navigationCategory;
@@ -99,7 +100,7 @@ class SearchedCategoryListItem extends HookWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 final _logger = Logger((VersionCheckView).toString());
 
@@ -66,9 +66,9 @@ class _WrongAppVersionView extends HookWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary,
-                  shape: StadiumBorder(),
+                  shape: const StadiumBorder(),
                 ),
-                onPressed: () => launch(url),
+                onPressed: () => launchUrlString(url),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(

@@ -21,7 +21,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderCartListItem extends HookWidget {
-  OrderCartListItem(this.cartItem);
+  const OrderCartListItem(this.cartItem, {Key? key}) : super(key: key);
 
   final CartItemModel cartItem;
 
@@ -30,7 +30,7 @@ class OrderCartListItem extends HookWidget {
     final currentLocale = useProvider(currentLocaleProvider);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: ListItemContainerDecoration(context),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,7 +42,7 @@ class OrderCartListItem extends HookWidget {
               child: ProductImage(imagePath: cartItem.product.thumbnailPath),
             ),
           ),
-          SizedBox(width: 15),
+          const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +84,7 @@ class OrderCartListItem extends HookWidget {
                           cartItem.product.priceWithVat,
                           withCurrency: true,
                         ),
-                        style: TextStyle(
+                        style: const TextStyle(
                           decoration: TextDecoration.lineThrough,
                         ),
                       )
@@ -104,7 +104,7 @@ class OrderCartListItem extends HookWidget {
                 style: Theme.of(context).textTheme.headline6,
               ),
               Padding(
-                padding: EdgeInsets.only(top: 3),
+                padding: const EdgeInsets.only(top: 3),
                 child: Chip(
                   clipBehavior: Clip.antiAlias,
                   backgroundColor: Colors.transparent,

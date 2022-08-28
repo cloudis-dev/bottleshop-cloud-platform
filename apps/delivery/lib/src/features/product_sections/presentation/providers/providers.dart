@@ -13,7 +13,7 @@ final newArrivalsProductsProvider =
   (ref) {
     return ProductsStateNotifier(
       ref.watch(productsRepositoryProvider).getNewProductsStream,
-      SortModel(sortField: SortField.name, ascending: true),
+      const SortModel(sortField: SortField.name, ascending: true),
     )..requestData();
   },
 );
@@ -23,7 +23,7 @@ final saleProductsProvider =
   (ref) {
     return ProductsStateNotifier(
       ref.watch(productsRepositoryProvider).getSaleProductsStream,
-      SortModel(sortField: SortField.name, ascending: true),
+      const SortModel(sortField: SortField.name, ascending: true),
     )..requestData();
   },
 );
@@ -33,7 +33,7 @@ final recommendedProductsProvider =
   (ref) {
     return ProductsStateNotifier(
       ref.watch(productsRepositoryProvider).getRecommendedProductsStream,
-      SortModel(sortField: SortField.name, ascending: true),
+      const SortModel(sortField: SortField.name, ascending: true),
     )..requestData();
   },
 );
@@ -61,7 +61,7 @@ final flashSaleEndProvider =
     var durationTillEnd = flashSale.flashSaleUntil.difference(DateTime.now());
     streamController.add(durationTillEnd);
     _logger.fine('streamed durationUntilEnd: ${durationTillEnd.inHours}');
-    timer = Timer.periodic(Duration(minutes: 1), (timer) {
+    timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       var durationTillEnd = flashSale.flashSaleUntil.difference(DateTime.now());
       streamController.add(durationTillEnd);
       _logger.fine('streamed durationUntilEnd: ${durationTillEnd.inHours}');

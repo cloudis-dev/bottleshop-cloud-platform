@@ -24,6 +24,8 @@ import 'package:overlay_support/overlay_support.dart';
 class ResetPasswordView extends HookWidget {
   static const routeName = '/reset-password';
 
+  const ResetPasswordView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final isLoading =
@@ -41,7 +43,7 @@ class ResetPasswordView extends HookWidget {
             builder: (context, viewportConstraints) {
               return SingleChildScrollView(
                 reverse: true,
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 controller: scrollController,
                 child: Padding(
                   padding: EdgeInsets.only(bottom: bottom),
@@ -54,7 +56,7 @@ class ResetPasswordView extends HookWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           height: AppConfig(context).appHeight(70),
                           child: Stack(
                             alignment: Alignment.center,
@@ -66,7 +68,7 @@ class ResetPasswordView extends HookWidget {
                                 start: 60,
                                 end: 60,
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       vertical: 30, horizontal: 20),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
@@ -94,7 +96,7 @@ class ResetPasswordView extends HookWidget {
                                               .checkYourEmailForPasswordResetInstructions,
                                         ),
                                         position: NotificationPosition.bottom,
-                                        duration: Duration(seconds: 5),
+                                        duration: const Duration(seconds: 5),
                                         slideDismissDirection:
                                             DismissDirection.horizontal,
                                         background:

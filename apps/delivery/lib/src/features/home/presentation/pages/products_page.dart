@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/drawer_state_acquirer.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
@@ -12,7 +13,6 @@ import 'package:delivery/src/features/home/presentation/widgets/templates/home_p
 import 'package:delivery/src/features/home/presentation/widgets/views/home_products_body.dart';
 import 'package:delivery/src/features/product_sections/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -26,7 +26,7 @@ class ProductsPage extends RoutebornPage {
   ProductsPage()
       : super.builder(
           pagePathBase,
-          (_) => _ProductsView(),
+          (_) => const _ProductsView(),
         );
 
   @override

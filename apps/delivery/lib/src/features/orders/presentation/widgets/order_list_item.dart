@@ -46,7 +46,7 @@ class OrderListItem extends HookWidget {
               );
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: ListItemContainerDecoration(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,13 +68,13 @@ class OrderListItem extends HookWidget {
                           maxLines: 2,
                           style: Theme.of(context).textTheme.headline6,
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         DefaultTextStyle(
                           style: Theme.of(context).textTheme.subtitle2!,
                           child: Table(
                             defaultVerticalAlignment:
                                 TableCellVerticalAlignment.baseline,
-                            columnWidths: {
+                            columnWidths: const {
                               0: IntrinsicColumnWidth(),
                               1: FixedColumnWidth(12),
                               2: FlexColumnWidth(),

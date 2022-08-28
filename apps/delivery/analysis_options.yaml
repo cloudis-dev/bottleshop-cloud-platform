@@ -44,3 +44,6 @@ linter:
     no_default_cases: false
     prefer_mixin: false
     avoid_print: true
+    depend_on_referenced_packages: false
+    library_private_types_in_public_api: false
+    implementation_imports: false

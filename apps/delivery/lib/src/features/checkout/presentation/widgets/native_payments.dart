@@ -49,7 +49,7 @@ class NativePayments extends HookWidget {
                     S.of(context).orCheckoutWith,
                     style: Theme.of(context).textTheme.caption,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   SizedBox(
                     width: 208,
                     height: 45,

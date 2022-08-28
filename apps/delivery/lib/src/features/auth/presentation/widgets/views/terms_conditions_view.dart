@@ -48,7 +48,7 @@ class TermsConditionsPage extends RoutebornPage {
   static const String pagePathBase = 'terms-and-conditions';
 
   TermsConditionsPage()
-      : super.builder(pagePathBase, (_) => _TermsConditionsView());
+      : super.builder(pagePathBase, (_) => const _TermsConditionsView());
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>

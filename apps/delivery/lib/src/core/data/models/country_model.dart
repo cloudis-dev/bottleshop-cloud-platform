@@ -42,7 +42,7 @@ class CountryModel extends Equatable {
     }
   }
 
-  CountryModel({
+  const CountryModel({
     required this.id,
     required this.flagUrl,
     // @required this.region,

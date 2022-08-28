@@ -12,14 +12,14 @@ class CartIconWithBadge extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = Icon(Icons.shopping_cart);
+    const icon = Icon(Icons.shopping_cart);
 
     return useProvider(cartProvider).maybeWhen(
       data: (cart) => BottleshopBadge(
-        child: icon,
         badgeText: cart?.totalItems.toString() ?? '',
         showBadge: (cart?.totalItems ?? 0) > 0,
         position: BadgePosition.topEnd(top: -5),
+        child: icon,
       ),
       orElse: () => icon,
     );

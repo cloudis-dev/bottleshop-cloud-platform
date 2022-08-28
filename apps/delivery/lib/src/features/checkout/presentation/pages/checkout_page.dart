@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -25,7 +26,6 @@ import 'package:delivery/src/features/checkout/presentation/widgets/views/paymen
 import 'package:delivery/src/features/checkout/presentation/widgets/views/shipping_details_view.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,11 +40,12 @@ final _logger = Logger((CheckoutPage).toString());
 class CheckoutPage extends RoutebornPage {
   static const String pagePathBase = 'checkout';
 
-  CheckoutPage() : super.builder(pagePathBase, (_) => _CheckoutPageView());
+  CheckoutPage()
+      : super.builder(pagePathBase, (_) => const _CheckoutPageView());
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right('TODO');
+      const Right('TODO');
 
   @override
   String getPagePath() => pagePathBase;
@@ -97,7 +98,7 @@ class _CheckoutPageView extends HookWidget {
 
                     await pageCtrl.animateToPage(
                       2,
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn,
                     );
                   } else {
@@ -124,7 +125,7 @@ class _CheckoutPageView extends HookWidget {
               } else {
                 await pageCtrl.animateToPage(
                   1,
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
               }
@@ -137,13 +138,13 @@ class _CheckoutPageView extends HookWidget {
         ValueListenableBuilder<PaymentData?>(
           valueListenable: paymentDataNotifier,
           builder: (context, paymentData, _) => paymentData == null
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : PaymentMethodView(
                   paymentData,
                   onBackButton: () {
                     pageCtrl.animateToPage(
                       0,
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn,
                     );
                   },
@@ -158,7 +159,7 @@ class _CheckoutPageView extends HookWidget {
 
                     pageCtrl.animateToPage(
                       2,
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn,
                     );
                   },
@@ -168,7 +169,7 @@ class _CheckoutPageView extends HookWidget {
           valueListenable: checkoutDoneMessageNotifier,
           builder: (context, checkoutDoneMessage, _) => checkoutDoneMessage ==
                   null
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : CheckoutDoneView(
                   checkoutDoneMessage,
                   onClose: () {

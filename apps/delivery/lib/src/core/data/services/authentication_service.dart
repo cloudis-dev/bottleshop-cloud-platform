@@ -13,8 +13,8 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:crypto/crypto.dart';
+import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -113,10 +113,9 @@ class AuthenticationService {
     try {
       var facebookProvider = FacebookAuthProvider();
 
-      facebookProvider.addScope('email')
-        ..setCustomParameters({
-          'display': 'popup',
-        });
+      facebookProvider.addScope('email').setCustomParameters({
+        'display': 'popup',
+      });
       await FirebaseAuth.instance.signInWithPopup(facebookProvider);
     } catch (err) {
       throw PlatformException(

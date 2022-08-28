@@ -36,7 +36,7 @@ const _categoryTabHeadingPadding = EdgeInsets.symmetric(vertical: 12);
 const _filtersStickyHeaderPadding = 12.0;
 
 class CategoryProductsList extends HookWidget {
-  CategoryProductsList({
+  const CategoryProductsList({
     Key? key,
     required this.category,
     required this.isAllCategory,
@@ -107,7 +107,7 @@ class CategoryProductsList extends HookWidget {
 }
 
 class _ProductsBodyWithFilter extends StatelessWidget {
-  _ProductsBodyWithFilter({
+  const _ProductsBodyWithFilter({
     Key? key,
     required this.category,
     required this.isAllCategory,
@@ -161,7 +161,7 @@ class _ProductsBodyWithFilter extends StatelessWidget {
 }
 
 class _ProductsBody extends StatelessWidget {
-  _ProductsBody({
+  const _ProductsBody({
     Key? key,
     required this.category,
     required this.isAllCategory,
@@ -273,7 +273,7 @@ class _CategoryHeading extends HookWidget {
 }
 
 class _ProductsListWithSubcategoriesStickyHeaders extends HookWidget {
-  _ProductsListWithSubcategoriesStickyHeaders({
+  const _ProductsListWithSubcategoriesStickyHeaders({
     Key? key,
     required this.category,
     required this.isAllCategory,

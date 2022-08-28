@@ -15,7 +15,7 @@ class HomeMobileScaffold extends HookWidget {
       navigationBarItems: [
         BottomNavigationTab(
           bottomNavigationBarItem: BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: const Icon(Icons.home),
             label: S.of(context).homeTabLabel,
           ),
           navigationNestingLevel: NestingBranch.shop,
@@ -27,7 +27,7 @@ class HomeMobileScaffold extends HookWidget {
         ),
         BottomNavigationTab(
           bottomNavigationBarItem: BottomNavigationBarItem(
-            icon: Icon(Icons.liquor),
+            icon: const Icon(Icons.liquor),
             label: S.of(context).categories,
           ),
           navigationNestingLevel: NestingBranch.categories,
@@ -37,7 +37,7 @@ class HomeMobileScaffold extends HookWidget {
         ),
         BottomNavigationTab(
           bottomNavigationBarItem: BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: const Icon(Icons.favorite),
             label: S.of(context).favoriteTabLabel,
           ),
           navigationNestingLevel: NestingBranch.favorites,

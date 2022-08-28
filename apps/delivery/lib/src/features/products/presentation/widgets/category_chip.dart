@@ -21,7 +21,7 @@ class CategoryChip extends HookWidget {
   final void Function(BuildContext context) onNavigateToCategory;
   final String heroTag;
 
-  CategoryChip({
+  const CategoryChip({
     Key? key,
     required this.category,
     required this.onNavigateToCategory,
@@ -33,7 +33,7 @@ class CategoryChip extends HookWidget {
     final currentLocale = useProvider(currentLocaleProvider);
 
     return ActionChip(
-      visualDensity: VisualDensity(
+      visualDensity: const VisualDensity(
         horizontal: VisualDensity.maximumDensity,
         vertical: VisualDensity.maximumDensity,
       ),

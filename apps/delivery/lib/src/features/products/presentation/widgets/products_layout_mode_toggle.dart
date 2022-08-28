@@ -22,7 +22,7 @@ class ProductsLayoutModeToggle extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final layoutMode = useProvider(productsLayoutModeProvider).state;
-    final appIcon = const Icon(Icons.apps);
+    const appIcon = Icon(Icons.apps);
     if (layoutMode == SupportedLayoutMode.grid) {
       return IconButton(
         icon: appIcon,

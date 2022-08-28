@@ -59,9 +59,11 @@ class RenderSliverObstructionInjector extends RenderSliverOverlapInjector {
   ///
   /// This should be a handle owned by a [RenderSliverOverlapAbsorber] and a
   /// [RenderNestedScrollViewViewport].
+  @override
   SliverOverlapAbsorberHandle get handle => _handle;
   SliverOverlapAbsorberHandle _handle;
 
+  @override
   set handle(SliverOverlapAbsorberHandle value) {
     if (handle == value) return;
     if (attached) {

@@ -18,14 +18,14 @@ class ProductDetailBottomBar extends HookWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).hintColor.withOpacity(0.3),
             blurRadius: 5,
-            offset: Offset(0, -2),
+            offset: const Offset(0, -2),
           ),
         ],
       ),

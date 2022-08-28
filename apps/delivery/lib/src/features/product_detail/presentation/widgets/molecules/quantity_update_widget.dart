@@ -68,14 +68,15 @@ class QuantityUpdateWidget extends HookWidget {
                             Text(S
                                 .of(context)
                                 .couldntChangeQuantityOfTheProductInTheCart),
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             slideDismissDirection: DismissDirection.horizontal,
                             context: context,
                           );
                         }
                       },
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  icon: Icon(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  icon: const Icon(
                     Icons.remove_circle_outline,
                   ),
                 ),
@@ -108,7 +109,7 @@ class QuantityUpdateWidget extends HookWidget {
                                   Text(S
                                       .of(context)
                                       .couldntChangeQuantityOfTheProductInTheCart),
-                                  duration: Duration(seconds: 1),
+                                  duration: const Duration(seconds: 1),
                                   slideDismissDirection:
                                       DismissDirection.horizontal,
                                   context: context,
@@ -120,8 +121,9 @@ class QuantityUpdateWidget extends HookWidget {
                                     .state = ButtonState.idle;
                               }
                             }),
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  icon: Icon(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  icon: const Icon(
                     Icons.add_circle_outline,
                   ),
                 ),

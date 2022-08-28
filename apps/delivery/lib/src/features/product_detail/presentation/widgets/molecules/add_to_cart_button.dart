@@ -55,7 +55,7 @@ class AddToCartButton extends HookWidget {
                     );
                     showSimpleNotification(
                       Text('${product.name} ${S.of(context).addedToCart}'),
-                      duration: Duration(seconds: 1),
+                      duration: const Duration(seconds: 1),
                       slideDismissDirection: DismissDirection.horizontal,
                       context: context,
                     );
@@ -63,7 +63,7 @@ class AddToCartButton extends HookWidget {
                     showSimpleNotification(
                       Text(
                           '${product.name} ${S.of(context).couldntBeAddedToTheCart}'),
-                      duration: Duration(seconds: 1),
+                      duration: const Duration(seconds: 1),
                       slideDismissDirection: DismissDirection.horizontal,
                       context: context,
                     );

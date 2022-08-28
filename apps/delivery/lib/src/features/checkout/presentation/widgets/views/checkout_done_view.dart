@@ -19,7 +19,11 @@ class CheckoutDoneView extends HookWidget {
   final void Function() onClose;
   final String checkoutDoneMessage;
 
-  CheckoutDoneView(this.checkoutDoneMessage, {required this.onClose});
+  const CheckoutDoneView(
+    this.checkoutDoneMessage, {
+    Key? key,
+    required this.onClose,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +35,10 @@ class CheckoutDoneView extends HookWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: Container(
           alignment: AlignmentDirectional.center,
-          padding: EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           height: AppConfig(context).appHeight(60),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -89,7 +93,7 @@ class CheckoutDoneView extends HookWidget {
                   )
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Opacity(
                 opacity: 0.8,
                 child: Text(
@@ -98,7 +102,7 @@ class CheckoutDoneView extends HookWidget {
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Opacity(
                 opacity: 0.8,
                 child: Text(
@@ -110,12 +114,13 @@ class CheckoutDoneView extends HookWidget {
                       .copyWith(fontSize: 20.0),
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               TextButton(
                 style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                   primary: Theme.of(context).colorScheme.secondary,
-                  shape: StadiumBorder(),
+                  shape: const StadiumBorder(),
                 ),
                 onPressed: onClose,
                 child: Text(S.of(context).start_shopping),

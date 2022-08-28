@@ -43,10 +43,10 @@ class CartView extends HookWidget {
         Container(
           margin: EdgeInsets.only(
               bottom: MediaQuery.of(context).padding.bottom + 120),
-          padding: EdgeInsets.only(bottom: 30),
+          padding: const EdgeInsets.only(bottom: 30),
           child: CupertinoScrollbar(
             controller: scrollController,
-            isAlwaysShown: false,
+            thumbVisibility: false,
             child: useProvider(cartContentProvider).when(
               data: (cart) {
                 return ListView.builder(
@@ -61,11 +61,11 @@ class CartView extends HookWidget {
                     key: UniqueKey(),
                     background: Container(
                       color: Colors.red,
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerRight,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: const Icon(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Icon(
                             Icons.delete_forever,
                             color: Colors.white,
                           ),
@@ -79,7 +79,7 @@ class CartView extends HookWidget {
                       showSimpleNotification(
                         Text(S.of(context).itemRemovedFromCart),
                         position: NotificationPosition.bottom,
-                        duration: Duration(seconds: 1),
+                        duration: const Duration(seconds: 1),
                         slideDismissDirection: DismissDirection.horizontal,
                         context: context,
                       );

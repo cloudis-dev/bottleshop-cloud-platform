@@ -20,7 +20,7 @@ class SplashView extends StatelessWidget {
   static const routeName = '/splash';
 
   @literal
-  const SplashView();
+  const SplashView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

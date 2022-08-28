@@ -21,17 +21,17 @@ class AppConfig {
   Orientation? _orientation;
   Brightness? _brightness;
 
-  AppConfig(BuildContext _context) {
-    this._context = _context;
-    var _queryData = MediaQuery.of(this._context);
-    _orientation = _queryData.orientation;
-    _brightness = _queryData.platformBrightness;
-    _height = _queryData.size.height / 100.0;
-    _width = _queryData.size.width / 100.0;
-    _heightPadding = _height -
-        ((_queryData.padding.top + _queryData.padding.bottom) / 100.0);
+  AppConfig(BuildContext context) {
+    _context = context;
+    var queryData = MediaQuery.of(_context);
+    _orientation = queryData.orientation;
+    _brightness = queryData.platformBrightness;
+    _height = queryData.size.height / 100.0;
+    _width = queryData.size.width / 100.0;
+    _heightPadding =
+        _height - ((queryData.padding.top + queryData.padding.bottom) / 100.0);
     _widthPadding =
-        _width - (_queryData.padding.left + _queryData.padding.right) / 100.0;
+        _width - (queryData.padding.left + queryData.padding.right) / 100.0;
   }
 
   Orientation? appOrientation() => _orientation;

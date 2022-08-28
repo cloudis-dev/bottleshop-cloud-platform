@@ -69,7 +69,7 @@ class ProductHomeTab extends HookWidget {
         const SizedBox(height: 10),
         ListTile(
           dense: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 0),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0),
           title: Text(
             S.of(context).category,
             style: Theme.of(context).textTheme.subtitle1,
@@ -90,7 +90,7 @@ class ProductHomeTab extends HookWidget {
           const SizedBox(height: 20),
           ListTile(
             dense: true,
-            contentPadding: EdgeInsets.symmetric(vertical: 0),
+            contentPadding: const EdgeInsets.symmetric(vertical: 0),
             title: Text(
               S.of(context).otherCategory,
               style: Theme.of(context).textTheme.subtitle1,

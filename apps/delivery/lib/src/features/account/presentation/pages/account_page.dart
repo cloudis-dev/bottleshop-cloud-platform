@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -24,7 +25,6 @@ import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup
 import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ import 'package:routeborn/routeborn.dart';
 class AccountPage extends RoutebornPage {
   static const String pagePathBase = 'account';
 
-  AccountPage() : super.builder(pagePathBase, (_) => _AccountPageView());
+  AccountPage() : super.builder(pagePathBase, (_) => const _AccountPageView());
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
@@ -122,6 +122,7 @@ class _Body extends HookWidget {
               children: <Widget>[
                 Expanded(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         user?.name ?? S.of(context).anonymousUser,
@@ -133,7 +134,6 @@ class _Body extends HookWidget {
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ],
-                    crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                 ),
                 SizedBox(
@@ -184,7 +184,7 @@ class _Body extends HookWidget {
                             S.of(context).languages,
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
-                          trailing: LanguageDropdown(),
+                          trailing: const LanguageDropdown(),
                         ),
                         if (!kIsWeb)
                           ListTile(
@@ -216,7 +216,7 @@ class _Body extends HookWidget {
                   ),
                 ),
                 const SizedBox(height: 15),
-                DeleteAccountTile(),
+                const DeleteAccountTile(),
               ],
             ),
           ),

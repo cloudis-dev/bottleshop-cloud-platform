@@ -12,6 +12,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/models/preferences.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
@@ -24,7 +25,6 @@ import 'package:delivery/src/features/products/data/repositories/product_reposit
 import 'package:delivery/src/features/products/data/services/product_search_service.dart';
 import 'package:delivery/src/features/products/presentation/view_models/products_state_notifier.dart';
 import 'package:delivery/src/features/sorting/presentation/providers/providers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 import 'package:tuple/tuple.dart';
@@ -99,7 +99,7 @@ final filteredProductsProvider = ChangeNotifierProvider.autoDispose
             ),
           );
         } else {
-          return Stream.empty();
+          return const Stream.empty();
         }
       },
       sortModel,

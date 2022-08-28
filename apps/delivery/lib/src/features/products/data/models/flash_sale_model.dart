@@ -26,7 +26,7 @@ class FlashSaleModel extends Equatable {
   final String? name;
   final DateTime flashSaleUntil;
 
-  FlashSaleModel({
+  const FlashSaleModel({
     required this.uniqueId,
     required this.name,
     required this.flashSaleUntil,

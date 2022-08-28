@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
@@ -17,7 +18,6 @@ import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -54,11 +54,11 @@ class ProfileSettingsDialog extends HookWidget {
                 formatter: FormattingUtils.getDateFormatter(currentLocale),
               );
             },
+      style: TextButton.styleFrom(
+          primary: Theme.of(context).colorScheme.secondary),
       child: Text(
         S.of(context).edit,
       ),
-      style: TextButton.styleFrom(
-          primary: Theme.of(context).colorScheme.secondary),
     );
   }
 
@@ -75,7 +75,7 @@ class ProfileSettingsDialog extends HookWidget {
         return AlertDialog(
           title: buildDialogTitle(context, S.of(context).profileSettings),
           content: CupertinoScrollbar(
-            isAlwaysShown: true,
+            thumbVisibility: true,
             controller: controller,
             child: SingleChildScrollView(
               controller: controller,
@@ -95,7 +95,6 @@ class ProfileSettingsDialog extends HookWidget {
               },
             ),
             TextButton(
-              child: Text(S.of(context).save),
               style: TextButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary),
               onPressed: () {
@@ -106,13 +105,14 @@ class ProfileSettingsDialog extends HookWidget {
                   showSimpleNotification(
                     Text(S.of(context).profileUpdated),
                     position: NotificationPosition.top,
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                     slideDismissDirection: DismissDirection.horizontal,
                     context: context,
                   );
                   Navigator.of(context).pop();
                 }
               },
+              child: Text(S.of(context).save),
             ),
           ],
         );
@@ -203,8 +203,9 @@ class ProfileSettingsDialog extends HookWidget {
                   context: context,
                   firstDate: DateTime(1900),
                   initialDate: initialDate ??
-                      (DateTime.now().subtract(Duration(days: 365 * 18))),
-                  lastDate: (DateTime.now().subtract(Duration(days: 365 * 18))),
+                      (DateTime.now().subtract(const Duration(days: 365 * 18))),
+                  lastDate:
+                      (DateTime.now().subtract(const Duration(days: 365 * 18))),
                   initialDatePickerMode: DatePickerMode.year,
                   helpText: S.of(context).selectYourDayOfBirth,
                 );
@@ -225,8 +226,8 @@ class ProfileSettingsDialog extends HookWidget {
   Row buildDialogTitle(BuildContext context, String title) {
     return Row(
       children: <Widget>[
-        Icon(Icons.supervised_user_circle_outlined),
-        SizedBox(width: 10),
+        const Icon(Icons.supervised_user_circle_outlined),
+        const SizedBox(width: 10),
         Text(
           title,
         )

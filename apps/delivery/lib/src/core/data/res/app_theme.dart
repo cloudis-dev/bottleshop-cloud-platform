@@ -98,7 +98,7 @@ final textButtonLinkTheme = TextButtonThemeData(
 
 ThemeData buildAppTheme() {
   final base = ThemeData.from(
-    colorScheme: ColorScheme(
+    colorScheme: const ColorScheme(
       primary: _kBottleshopPrimaryColor,
       primaryContainer: _kBottleshopPrimaryVariantColor,
       onPrimary: _kBottleshopOnPrimaryColor,
@@ -134,7 +134,7 @@ ThemeData buildAppTheme() {
     primaryIconTheme: base.primaryIconTheme.copyWith(color: Colors.black),
     inputDecorationTheme: base.inputDecorationTheme.copyWith(
       floatingLabelBehavior: FloatingLabelBehavior.auto,
-      focusedBorder: UnderlineInputBorder(
+      focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: _kBottleshopSecondaryColor)),
       labelStyle: workSansTextTheme.caption!.copyWith(color: Colors.black),
       hintStyle: workSansTextTheme.caption!.copyWith(
@@ -168,7 +168,7 @@ ThemeData buildAppTheme() {
 
 ThemeData buildDarkAppTheme() {
   final base = ThemeData.from(
-    colorScheme: ColorScheme(
+    colorScheme: const ColorScheme(
       primary: _kBottleshopPrimaryDarkColor,
       primaryContainer: _kBottleshopPrimaryVariantDarkColor,
       onPrimary: _kBottleshopOnPrimaryDark,
@@ -204,7 +204,7 @@ ThemeData buildDarkAppTheme() {
     primaryIconTheme: base.primaryIconTheme.copyWith(color: Colors.white),
     inputDecorationTheme: base.inputDecorationTheme.copyWith(
       floatingLabelBehavior: FloatingLabelBehavior.auto,
-      focusedBorder: UnderlineInputBorder(
+      focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: _kBottleshopSecondaryDarkColor)),
       labelStyle: workSansTextTheme.caption!.copyWith(color: Colors.white),
       hintStyle: workSansTextTheme.caption!.copyWith(

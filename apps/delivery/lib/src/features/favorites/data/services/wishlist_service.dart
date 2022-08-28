@@ -37,5 +37,5 @@ class WishListService {
   }
 
   Stream<List<ProductModel>> get wishList =>
-      db == null ? Stream.empty() : db!.getWishListStream();
+      db == null ? const Stream.empty() : db!.getWishListStream();
 }

@@ -17,12 +17,13 @@ class HomePageTemplate extends StatelessWidget {
   final List<Widget> appBarActions;
   final PreferredSizeWidget? appBarBottom;
 
-  HomePageTemplate({
+  const HomePageTemplate({
+    Key? key,
     this.scaffoldKey,
     required this.body,
     this.appBarBottom,
     this.appBarActions = const [],
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,18 +70,18 @@ class HomePageTemplate extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 20),
-              HomeAppBarButton(),
-              CategoriesAppBarButton(),
-              WholeSaleAppBarButton(),
-              OrdersAppBarButton(),
-              SaleAppBarButton(),
+              const HomeAppBarButton(),
+              const CategoriesAppBarButton(),
+              const WholeSaleAppBarButton(),
+              const OrdersAppBarButton(),
+              const SaleAppBarButton(),
             ],
           ),
         ),
       ),
       body: Column(
         children: [
-          Breadcrumbs(),
+          const Breadcrumbs(),
           Expanded(
             child: ClipRect(
               child: OverlaySupport.local(child: body),

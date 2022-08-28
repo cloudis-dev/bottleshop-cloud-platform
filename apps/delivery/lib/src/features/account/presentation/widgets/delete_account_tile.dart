@@ -27,7 +27,7 @@ class DeleteAccountTile extends HookWidget {
               style: Theme.of(context).textTheme.caption,
             ),
             trailing: ButtonTheme(
-              padding: EdgeInsets.all(0),
+              padding: const EdgeInsets.all(0),
               minWidth: 50.0,
               height: 25.0,
               child: TextButton(
@@ -45,7 +45,7 @@ class DeleteAccountTile extends HookWidget {
               ),
             ),
           )
-        : SizedBox.shrink();
+        : const SizedBox.shrink();
   }
 }
 
@@ -68,14 +68,14 @@ class _DeleteConfirmationDialog extends StatelessWidget {
 
     if (!result) {
       showSimpleNotification(
-        Text('Failed to delete account'),
+        const Text('Failed to delete account'),
         slideDismissDirection: DismissDirection.horizontal,
         context: parentContext,
       );
     } else {
       await parentContext.read(userRepositoryProvider).signOut();
       showSimpleNotification(
-        Text('Successfully deleted your account'),
+        const Text('Successfully deleted your account'),
         slideDismissDirection: DismissDirection.horizontal,
         context: parentContext,
       );

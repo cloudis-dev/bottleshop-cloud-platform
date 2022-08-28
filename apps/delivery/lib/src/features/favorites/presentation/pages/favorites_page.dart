@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
@@ -23,7 +24,6 @@ import 'package:delivery/src/features/home/presentation/widgets/menu_button.dart
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -37,7 +37,8 @@ final _logger = Logger((FavoritesPage).toString());
 class FavoritesPage extends RoutebornPage {
   static const String pagePathBase = 'favorites';
 
-  FavoritesPage() : super.builder(pagePathBase, (_) => _FavoritesPageView());
+  FavoritesPage()
+      : super.builder(pagePathBase, (_) => const _FavoritesPageView());
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
@@ -100,7 +101,7 @@ class _SearchIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       tooltip: MaterialLocalizations.of(context).searchFieldLabel,
-      icon: Icon(Icons.search),
+      icon: const Icon(Icons.search),
       onPressed: () => context.read(navigationProvider).setNestingBranch(
             context,
             NestingBranch.search,
@@ -171,13 +172,13 @@ class _FavoritesListLayout extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _messageRemoved = S.of(context).itemRemovedFromWishList;
+    final messageRemoved = S.of(context).itemRemovedFromWishList;
 
     return ListView.builder(
       physics: const BouncingScrollPhysics(
         parent: AlwaysScrollableScrollPhysics(),
       ),
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       scrollDirection: Axis.vertical,
       itemCount: favorites.length,
       itemBuilder: (context, index) {
@@ -191,9 +192,9 @@ class _FavoritesListLayout extends HookWidget {
                 .remove(favorites.elementAt(index).uniqueId)
                 .then(
                   (value) => showSimpleNotification(
-                    Text(_messageRemoved),
+                    Text(messageRemoved),
                     position: NotificationPosition.bottom,
-                    duration: Duration(seconds: 1),
+                    duration: const Duration(seconds: 1),
                     slideDismissDirection: DismissDirection.horizontal,
                     context: context,
                   ),

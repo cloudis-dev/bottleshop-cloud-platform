@@ -23,13 +23,13 @@ class SliverProductsHeadingTile extends StatelessWidget {
     return SliverToBoxAdapter(
       child: ListTile(
         dense: true,
-        contentPadding: EdgeInsets.symmetric(vertical: 0),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0),
         title: Text(title!, style: Theme.of(context).textTheme.headline6),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ProductsLayoutModeToggle(),
-            const SortMenuButton()
+          children: const <Widget>[
+            ProductsLayoutModeToggle(),
+            SortMenuButton()
           ],
         ),
       ),

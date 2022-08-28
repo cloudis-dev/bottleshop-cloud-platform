@@ -29,7 +29,7 @@ class CategoryGridItem extends HookWidget {
   final double maxSize;
   final int titleMaxLines;
 
-  CategoryGridItem({
+  const CategoryGridItem({
     Key? key,
     required this.category,
     required this.onNavigateToCategory,
@@ -56,7 +56,7 @@ class CategoryGridItem extends HookWidget {
                 gradient: LinearGradient(
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
-                  stops: [.25, 1],
+                  stops: const [.25, 1],
                   colors: [
                     Theme.of(context).colorScheme.secondary,
                     Theme.of(context).primaryColor.withOpacity(.9),
@@ -93,7 +93,7 @@ class CategoryGridItem extends HookWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: Align(
                 child: SingleChildScrollView(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   child: Column(
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -126,7 +126,8 @@ class CategoryGridItem extends HookWidget {
                               productsCount!.maybeWhen(
                                 data: (count) => Text(
                                   count.toString(),
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 orElse: () => const SizedBox.shrink(),
                               ),

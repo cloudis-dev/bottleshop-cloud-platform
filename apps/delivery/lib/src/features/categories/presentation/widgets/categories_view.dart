@@ -52,7 +52,7 @@ class CategoriesView extends HookWidget {
       controller: scrollCtrl,
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.symmetric(vertical: 20),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: maxSize,
         mainAxisSpacing: 15,
         crossAxisSpacing: 15,
@@ -70,9 +70,9 @@ class CategoriesView extends HookWidget {
             ),
             error: (err) {
               _logger.severe('Failed to fetch products counts', err);
-              return AsyncValue.loading();
+              return const AsyncValue.loading();
             },
-            loading: (value) => AsyncValue.loading(),
+            loading: (value) => const AsyncValue.loading(),
           ),
           maxSize: maxSize,
         );

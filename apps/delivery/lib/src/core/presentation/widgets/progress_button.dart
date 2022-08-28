@@ -77,10 +77,8 @@ class ProgressButton extends StatefulWidget {
       'Must be non-null widgets provided in map of stateWidgets. Missing keys => ${ButtonState.values.toSet().difference(iconedButtons.keys.toSet())}',
     );
 
-    if (textStyle == null) {
-      textStyle =
-          const TextStyle(color: Colors.white, fontWeight: FontWeight.w500);
-    }
+    textStyle ??=
+        const TextStyle(color: Colors.white, fontWeight: FontWeight.w500);
 
     final stateWidgets = <ButtonState, Widget>{
       ButtonState.idle: buildChildWithIcon(

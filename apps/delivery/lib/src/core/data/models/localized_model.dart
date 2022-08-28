@@ -19,7 +19,7 @@ class LocalizedModel extends Equatable {
 
   final String slovak;
 
-  LocalizedModel({required this.slovak});
+  const LocalizedModel({required this.slovak});
 
   LocalizedModel.fromMap(Map<String, dynamic> json)
       : slovak = json[slovakField];

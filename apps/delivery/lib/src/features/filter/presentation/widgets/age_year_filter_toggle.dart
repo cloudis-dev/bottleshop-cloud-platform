@@ -43,16 +43,6 @@ class AgeYearFilterToggle extends HookWidget {
             constraints: BoxConstraints.expand(
                 width: (constraints.maxWidth - borderWidth * 3) / 2),
             isSelected: [isFilterByAge, !isFilterByAge],
-            children: [
-              Text(
-                S.of(context).age,
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              Text(
-                S.of(context).years,
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-            ],
             onPressed: (id) => context
                     .read(filterModelProvider(filterType))
                     .state =
@@ -64,6 +54,16 @@ class AgeYearFilterToggle extends HookWidget {
                 ? Theme.of(context).colorScheme.secondary
                 : Theme.of(context).colorScheme.secondary.withOpacity(0.2),
             borderWidth: borderWidth.toDouble(),
+            children: [
+              Text(
+                S.of(context).age,
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              Text(
+                S.of(context).years,
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+            ],
           );
         },
       ),

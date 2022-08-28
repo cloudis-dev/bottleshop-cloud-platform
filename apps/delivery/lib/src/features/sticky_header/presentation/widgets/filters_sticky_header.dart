@@ -47,7 +47,7 @@ class FiltersStickyHeader extends HookWidget {
           Container(
             clipBehavior: Clip.hardEdge,
             width: 80,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(60),
                 topRight: Radius.circular(60),
@@ -72,10 +72,10 @@ class FiltersStickyHeader extends HookWidget {
           Expanded(
             child: Container(
               clipBehavior: Clip.hardEdge,
-              margin: EdgeInsets.only(left: 10),
+              margin: const EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondary.withOpacity(1),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(60),
                   topLeft: Radius.circular(60),
                 ),

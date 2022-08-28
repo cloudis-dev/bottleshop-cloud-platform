@@ -19,7 +19,7 @@ class ProductDescriptionTab extends HookWidget {
       children: [
         ListTile(
           dense: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 0),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0),
           title: Text(
             S.of(context).description,
             style: Theme.of(context).textTheme.subtitle1,

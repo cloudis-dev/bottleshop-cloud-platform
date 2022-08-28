@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -8,7 +9,6 @@ import 'package:delivery/src/features/home/presentation/widgets/organisms/langua
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/wholesale/presentation/widgets/wholesale_view.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -17,7 +17,7 @@ import 'package:routeborn/routeborn.dart';
 class WholeSalePage extends RoutebornPage {
   static const String pagePathBase = 'wholesale';
 
-  WholeSalePage() : super.builder(pagePathBase, (_) => _WholeSalePage());
+  WholeSalePage() : super.builder(pagePathBase, (_) => const _WholeSalePage());
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
       Right(S.of(context).wholesale);
@@ -46,8 +46,8 @@ class _WholeSalePage extends HookWidget {
             AuthPopupButton(scaffoldKey: scaffoldKey),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        body: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: WholeSaleView(),
         ),
       );

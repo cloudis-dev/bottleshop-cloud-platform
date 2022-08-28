@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
@@ -18,7 +19,6 @@ import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/views/home_mobile_scaffold.dart';
 import 'package:delivery/src/features/home/presentation/widgets/views/home_web_scaffold.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -34,7 +34,7 @@ class HomePage extends RoutebornPage {
   HomePage()
       : super.builder(
           pagePathBase,
-          (_) => _HomeView(),
+          (_) => const _HomeView(),
         );
 
   @override
@@ -78,7 +78,7 @@ class _HomeView extends HookWidget {
     }, const []);
 
     return shouldUseMobileLayout(context)
-        ? HomeMobileScaffold()
-        : HomeWebScaffold();
+        ? const HomeMobileScaffold()
+        : const HomeWebScaffold();
   }
 }

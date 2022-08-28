@@ -12,6 +12,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
@@ -21,7 +22,6 @@ import 'package:delivery/src/core/data/services/shared_preferences_service.dart'
 import 'package:delivery/src/features/auth/data/models/device_model.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -451,7 +451,7 @@ class UserRepository extends ChangeNotifier {
   Future<void> signOut() async {
     await _auth.signOut();
     await _userListener?.cancel();
-    return Future.delayed(Duration(milliseconds: 500));
+    return Future.delayed(const Duration(milliseconds: 500));
   }
 
   @override
@@ -473,8 +473,6 @@ class UserRepository extends ChangeNotifier {
         return S.of(context).userWithThisEmailNotFound;
       case ('wrong-password'):
         return S.of(context).incorrectPassword;
-      case ('email-already-in-use'):
-        return S.of(context).userWithThisEmailAlreadyExists;
       case ('account-exists-with-different-credential'):
         return S.of(context).userAlreadySignedUpWithDifferentProvider;
       default:

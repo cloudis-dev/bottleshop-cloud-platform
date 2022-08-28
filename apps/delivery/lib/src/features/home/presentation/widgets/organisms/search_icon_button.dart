@@ -9,7 +9,7 @@ class SearchIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       tooltip: MaterialLocalizations.of(context).searchFieldLabel,
-      icon: Icon(Icons.search),
+      icon: const Icon(Icons.search),
       onPressed: () => context.read(navigationProvider).setNestingBranch(
             context,
             NestingBranch.search,

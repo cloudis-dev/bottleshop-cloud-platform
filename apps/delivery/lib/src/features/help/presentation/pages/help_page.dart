@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
@@ -20,7 +21,6 @@ import 'package:delivery/src/features/help/presentation/widgets/help_section.dar
 import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +103,7 @@ class _Body extends HookWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       controller: scrollCtrl,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: useProvider(mdContentProvider).when(
         data: (mds) {
           return Column(
@@ -125,7 +125,7 @@ class _Body extends HookWidget {
         },
         loading: () => const Loader(),
         error: (_, __) {
-          return Text('');
+          return const Text('');
         },
       ),
     );

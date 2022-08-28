@@ -35,7 +35,8 @@ class DropDown<T> extends StatefulWidget {
   /// You can choose between show an underline at bottom or not
   final bool showUnderline;
 
-  DropDown({
+  const DropDown({
+    Key? key,
     this.dropDownType = DropDownType.button,
     required this.items,
     required this.customWidgets,
@@ -45,8 +46,9 @@ class DropDown<T> extends StatefulWidget {
     this.isExpanded = false,
     this.isCleared = false,
     this.showUnderline = true,
-  })  : assert(!(items is Widget)),
-        assert(items.length == customWidgets.length);
+  })  : assert(items is! Widget),
+        assert(items.length == customWidgets.length),
+        super(key: key);
 
   @override
   _DropDownState<T> createState() => _DropDownState();
@@ -95,7 +97,7 @@ class _DropDownState<T> extends State<DropDown<T>> {
   }
 
   DropdownMenuItem<T> buildDropDownItem(T item) => DropdownMenuItem<T>(
-        child: widget.customWidgets[widget.items.indexOf(item)],
         value: item,
+        child: widget.customWidgets[widget.items.indexOf(item)],
       );
 }

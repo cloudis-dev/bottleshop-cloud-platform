@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
@@ -32,7 +33,6 @@ import 'package:delivery/src/features/home/presentation/widgets/templates/page_b
 import 'package:delivery/src/features/products/presentation/slivers/sliver_category_detail_app_bar.dart';
 import 'package:delivery/src/features/products/presentation/widgets/category_products_list.dart';
 import 'package:delivery/src/features/products/presentation/widgets/subcategories_tab_bar.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -186,7 +186,8 @@ class _Body extends HookWidget {
                 actions: [
                   FilterIconButton(scaffoldKey, drawerAcquirerKey),
                   IconButton(
-                    icon: Hero(tag: UniqueKey(), child: Icon(Icons.search)),
+                    icon:
+                        Hero(tag: UniqueKey(), child: const Icon(Icons.search)),
                     onPressed: () =>
                         context.read(navigationProvider).setNestingBranch(
                               context,
@@ -215,7 +216,7 @@ class _Body extends HookWidget {
         scaffoldKey: scaffoldKey,
         appBarActions: [
           const LanguageDropdown(),
-          SearchIconButton(),
+          const SearchIconButton(),
           FilterIconButton(bodyScaffoldKey, drawerAcquirerKey),
           const CartAppbarButton(),
           AuthPopupButton(scaffoldKey: scaffoldKey),
@@ -242,7 +243,7 @@ class _Body extends HookWidget {
                 SliverOverlapAbsorber(
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                  sliver: SliverToBoxAdapter(),
+                  sliver: const SliverToBoxAdapter(),
                 )
               ],
               body: CategoryProductsBody(

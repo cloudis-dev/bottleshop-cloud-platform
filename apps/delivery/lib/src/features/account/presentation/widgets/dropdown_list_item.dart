@@ -17,7 +17,7 @@ class DropdownListItem extends StatelessWidget {
   const DropdownListItem({
     Key? key,
     required this.label,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

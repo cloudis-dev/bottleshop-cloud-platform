@@ -26,7 +26,7 @@ class VerifyEmailView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      final timer = Timer.periodic(Duration(seconds: 5), (_) async {
+      final timer = Timer.periodic(const Duration(seconds: 5), (_) async {
         await context.read(userRepositoryProvider).checkUserVerified();
       });
       return timer.cancel;
@@ -34,7 +34,7 @@ class VerifyEmailView extends HookWidget {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: BoxDecoration(color: kSplashBackground),
+        decoration: const BoxDecoration(color: kSplashBackground),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Column(
@@ -73,11 +73,11 @@ class VerifyEmailView extends HookWidget {
                     );
                   }
                 },
-                child: Text(S.of(context).resendVerificationEmail),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary,
-                  shape: StadiumBorder(),
+                  shape: const StadiumBorder(),
                 ),
+                child: Text(S.of(context).resendVerificationEmail),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
@@ -88,11 +88,11 @@ class VerifyEmailView extends HookWidget {
                     // TODO
                   }
                 },
-                child: Text(S.of(context).logOut),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary,
-                  shape: StadiumBorder(),
+                  shape: const StadiumBorder(),
                 ),
+                child: Text(S.of(context).logOut),
               ),
             ],
           ),

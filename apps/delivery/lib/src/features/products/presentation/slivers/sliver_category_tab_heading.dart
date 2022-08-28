@@ -37,9 +37,9 @@ class SliverCategoryTabHeading extends HookWidget {
         leading: const Icon(Icons.liquor),
         label:
             '${subCategory!.categoryDetails.getName(currentLocale)} ${S.of(context).category}',
-        trailingWidgets: <Widget>[
-          const ProductsLayoutModeToggle(),
-          const SortMenuButton()
+        trailingWidgets: const <Widget>[
+          ProductsLayoutModeToggle(),
+          SortMenuButton()
         ],
       ),
       // Padding(

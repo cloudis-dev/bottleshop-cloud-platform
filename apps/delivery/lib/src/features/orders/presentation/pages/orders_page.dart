@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -19,7 +20,6 @@ import 'package:delivery/src/features/home/presentation/widgets/organisms/langua
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/orders_widget.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -29,7 +29,7 @@ import 'package:routeborn/routeborn.dart';
 class OrdersPage extends RoutebornPage {
   static const String pagePathBase = 'orders';
 
-  OrdersPage() : super.builder(pagePathBase, (_) => _OrdersPageView());
+  OrdersPage() : super.builder(pagePathBase, (_) => const _OrdersPageView());
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>

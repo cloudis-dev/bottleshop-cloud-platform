@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:collection/collection.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -18,7 +19,6 @@ import 'package:delivery/src/core/utils/iterable_extension.dart';
 import 'package:delivery/src/core/utils/sorting_util.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -78,7 +78,7 @@ class CountryDropdownsFilterGroup extends HookWidget {
 }
 
 class _CountryDropdownFilter extends HookWidget {
-  _CountryDropdownFilter({
+  const _CountryDropdownFilter({
     Key? key,
     required this.id,
     required this.selectableCountries,
@@ -145,7 +145,7 @@ class _CountryDropdownFilter extends HookWidget {
             ),
             if (selectedValue != null)
               IconButton(
-                icon: Icon(Icons.cancel),
+                icon: const Icon(Icons.cancel),
                 color: Theme.of(context).colorScheme.secondary,
                 onPressed: () {
                   final res = List<CountryModel>.from(context

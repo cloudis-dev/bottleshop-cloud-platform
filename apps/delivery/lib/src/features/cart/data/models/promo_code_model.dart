@@ -10,8 +10,8 @@
 //
 //
 
-import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:equatable/equatable.dart';
 
 class PromoCodeModel extends Equatable {
@@ -26,7 +26,7 @@ class PromoCodeModel extends Equatable {
   final double? discount;
   final String productUniqueId;
 
-  PromoCodeModel({
+  const PromoCodeModel({
     required this.uid,
     required this.code,
     required this.remainingUsesCount,
@@ -34,7 +34,7 @@ class PromoCodeModel extends Equatable {
     required this.productUniqueId,
   });
 
-  PromoCodeModel.empty(this.productUniqueId)
+  const PromoCodeModel.empty(this.productUniqueId)
       : uid = null,
         code = null,
         remainingUsesCount = null,

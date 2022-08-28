@@ -28,7 +28,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class App extends HookWidget {
   const App({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class App extends HookWidget {
         ),
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (context) => S.of(context).app_title,
-        localizationsDelegates: [
+        localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -100,7 +100,7 @@ class _RouterWidget extends HookWidget {
             Future.doWhile(
               () async {
                 if (rootNavKey.currentContext == null) {
-                  await Future<void>.delayed(Duration(microseconds: 1));
+                  await Future<void>.delayed(const Duration(microseconds: 1));
                   return true;
                 }
                 return false;
@@ -135,7 +135,8 @@ class AgeVerificationDialog extends HookWidget {
         content: Text(S.of(context).ageValidationDialogLabel),
         actions: [
           TextButton(
-            onPressed: () => launch('about:blank', webOnlyWindowName: '_self'),
+            onPressed: () =>
+                launchUrlString('about:blank', webOnlyWindowName: '_self'),
             child: Text(S.of(context).ageValidationDialogButtonNo),
           ),
           ElevatedButton(

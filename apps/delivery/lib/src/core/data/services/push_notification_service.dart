@@ -19,7 +19,6 @@ import 'package:delivery/src/features/orders/presentation/pages/order_detail_pag
 import 'package:delivery/src/features/orders/presentation/pages/orders_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
@@ -58,7 +57,7 @@ class PushNotificationService {
         _logger.fine('User declined or has not accepted permission');
       }
       if (defaultTargetPlatform == TargetPlatform.android) {
-        final initSettings = InitializationSettings(android: settingsAndroid);
+        const initSettings = InitializationSettings(android: settingsAndroid);
         await _flutterLocalNotificationsPlugin!.initialize(initSettings,
             onSelectNotification: (orderId) async {
           _logger.fine('foreground clicked: $orderId');

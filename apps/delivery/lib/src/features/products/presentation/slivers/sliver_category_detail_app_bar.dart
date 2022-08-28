@@ -67,7 +67,7 @@ class SliverCategoryDetailAppBar extends HookWidget {
                 gradient: LinearGradient(
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
-                  stops: [.25, 1],
+                  stops: const [.25, 1],
                   colors: [
                     Theme.of(context).colorScheme.secondary,
                     Theme.of(context).primaryColor.withOpacity(.9),
@@ -115,7 +115,7 @@ class SliverCategoryDetailAppBar extends HookWidget {
                       size: 90,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     category!.categoryDetails.getName(currentLocale),
                     style: Theme.of(context).textTheme.headline6,
@@ -146,7 +146,8 @@ class SliverCategoryDetailAppBar extends HookWidget {
               unselectedLabelColor:
                   Theme.of(context).primaryColor.withOpacity(0.6),
               labelColor: Theme.of(context).primaryColor,
-              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
+              unselectedLabelStyle:
+                  const TextStyle(fontWeight: FontWeight.w300),
               isScrollable: true,
               indicatorColor: Theme.of(context).primaryColor,
             ),
@@ -155,7 +156,7 @@ class SliverCategoryDetailAppBar extends HookWidget {
 }
 
 class _TabWrapper extends StatelessWidget {
-  _TabWrapper({
+  const _TabWrapper({
     Key? key,
     required this.child,
   }) : super(key: key);

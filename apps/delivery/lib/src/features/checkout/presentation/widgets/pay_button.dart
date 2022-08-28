@@ -47,8 +47,8 @@ class PayButton extends HookWidget {
           child: OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
                 primary: Theme.of(context).colorScheme.onBackground,
-                padding: EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder()),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: const RoundedRectangleBorder()),
             onPressed: () async {
               try {
                 await context
@@ -84,7 +84,7 @@ class PayButton extends HookWidget {
                 );
               }
             },
-            icon: Icon(Icons.account_balance_outlined),
+            icon: const Icon(Icons.account_balance_outlined),
             label: Text(
               S.of(context).confirmPayment,
               textAlign: TextAlign.start,

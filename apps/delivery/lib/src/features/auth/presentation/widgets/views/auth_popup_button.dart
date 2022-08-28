@@ -10,7 +10,8 @@ import 'package:overlay_support/overlay_support.dart';
 class AuthPopupButton extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  AuthPopupButton({Key? key, required this.scaffoldKey}) : super(key: key);
+  const AuthPopupButton({Key? key, required this.scaffoldKey})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => AuthPopupButtonState();

@@ -21,7 +21,7 @@ class TermsAndConditionsTile extends HookWidget {
           if (newValue == true) {
             if (await showDialog<bool>(
                   context: context,
-                  builder: (context) => TermsAndConditionsDialog(),
+                  builder: (context) => const TermsAndConditionsDialog(),
                 ) ==
                 true) {
               context.read(termsAcceptanceProvider.notifier).acceptTerms();

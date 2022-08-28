@@ -58,11 +58,11 @@ class AddressSettingsDialog extends HookWidget {
                     profileData: profileData,
                   );
                 },
+          style: TextButton.styleFrom(
+              primary: Theme.of(context).colorScheme.secondary),
           child: Text(
             S.of(context).edit,
           ),
-          style: TextButton.styleFrom(
-              primary: Theme.of(context).colorScheme.secondary),
         );
       },
       loading: () => const Loader(),
@@ -88,7 +88,7 @@ class AddressSettingsDialog extends HookWidget {
           title: buildDialogTitle(context),
           content: CupertinoScrollbar(
             controller: controller,
-            isAlwaysShown: true,
+            thumbVisibility: true,
             child: SingleChildScrollView(
               controller: controller,
               child: buildAddressForm(
@@ -106,7 +106,6 @@ class AddressSettingsDialog extends HookWidget {
               },
             ),
             TextButton(
-              child: Text(S.of(context).saveButton),
               onPressed: () {
                 var isValid = _formKey.currentState!.validate();
                 _logger.fine('form valid: $isValid');
@@ -136,6 +135,7 @@ class AddressSettingsDialog extends HookWidget {
               },
               style: TextButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary),
+              child: Text(S.of(context).saveButton),
             ),
           ],
         );
@@ -263,10 +263,8 @@ class AddressSettingsDialog extends HookWidget {
     return Row(
       children: <Widget>[
         icon,
-        SizedBox(width: 10),
-        Text(
-          title,
-        )
+        const SizedBox(width: 10),
+        Text(title),
       ],
     );
   }

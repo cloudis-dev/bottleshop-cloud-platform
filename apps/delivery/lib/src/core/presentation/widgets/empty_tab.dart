@@ -96,7 +96,7 @@ class EmptyTab extends HookWidget {
                 )
               ],
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Opacity(
               opacity: 0.8,
               child: Text(

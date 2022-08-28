@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/repositories/repository_base.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
@@ -18,7 +19,6 @@ import 'package:delivery/src/core/utils/change_status_util.dart';
 import 'package:delivery/src/features/products/data/models/flash_sale_model.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 import 'package:tuple/tuple.dart';
 
@@ -36,7 +36,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
         DateTime.now().millisecondsSinceEpoch);
 
     final flashSaleUntilPath = FieldPath(
-      [
+      const [
         ProductModel.flashSaleModelField,
         FlashSaleModel.flashSaleUntilField,
       ],

@@ -57,10 +57,12 @@ class _Body extends HookWidget {
       const SliverToBoxAdapter(child: FlashSalesSection()),
       const SliverToBoxAdapter(child: SizedBox(height: 8)),
       if (shouldUseMobileLayout(context))
-        MultiSliver(children: [
-          const SliverToBoxAdapter(child: SaleSection()),
-          const SliverToBoxAdapter(child: SizedBox(height: 8)),
-        ]),
+        MultiSliver(
+          children: const [
+            SliverToBoxAdapter(child: SaleSection()),
+            SliverToBoxAdapter(child: SizedBox(height: 8)),
+          ],
+        ),
       const SliverToBoxAdapter(child: NewArrivalsSection()),
       const SliverToBoxAdapter(child: SizedBox(height: 8)),
       const SliverToBoxAdapter(child: RecommendedSection()),

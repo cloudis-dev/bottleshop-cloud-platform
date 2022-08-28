@@ -34,7 +34,7 @@ class ProductsSectionCarousel extends HookWidget {
       Widget child;
 
       if (shouldUseMobileLayout(context)) {
-        child = Container(
+        child = SizedBox(
           height: 320 +
               (data.any((element) => element.isFlashSale) ? 40 : 0).toDouble(),
           child: ListView.builder(
@@ -44,13 +44,13 @@ class ProductsSectionCarousel extends HookWidget {
             scrollDirection: Axis.horizontal,
             itemCount: data.length,
             itemBuilder: (context, id) {
-              final spacing = 20.0;
-              final _marginLeft = (id == 0) ? spacing : 0;
+              const spacing = 20.0;
+              final marginLeft = (id == 0) ? spacing : 0;
 
               return SectionProductItem(
                 product: data[id],
                 margin: EdgeInsets.only(
-                    left: _marginLeft.toDouble(), right: spacing),
+                    left: marginLeft.toDouble(), right: spacing),
               );
             },
           ),
@@ -59,7 +59,7 @@ class ProductsSectionCarousel extends HookWidget {
         child = GridView.builder(
           padding: const EdgeInsets.only(left: 20),
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: data.length,
           itemBuilder: (context, idx) {
             return SectionProductItem(
@@ -67,7 +67,7 @@ class ProductsSectionCarousel extends HookWidget {
               margin: EdgeInsets.zero,
             );
           },
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             mainAxisSpacing: 5,
             crossAxisSpacing: 10,
             maxCrossAxisExtent: 175,

@@ -84,9 +84,11 @@ class SectionProductItem extends HookWidget {
               right: 5,
               child: IgnorePointer(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(100)),
                       color: Theme.of(context).colorScheme.secondary),
                   alignment: AlignmentDirectional.topEnd,
                   child: Text(
@@ -104,7 +106,7 @@ class SectionProductItem extends HookWidget {
                 child: Container(
                   width: 70,
                   height: 70,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/images/special.png')),
                   ),
@@ -131,15 +133,15 @@ class SectionProductItem extends HookWidget {
                                 color: Theme.of(context)
                                     .hintColor
                                     .withOpacity(0.15),
-                                offset: Offset(0, 3),
+                                offset: const Offset(0, 3),
                                 blurRadius: 10)
                           ],
                         ),
                         child: _FlashSaleItem(product),
                       ),
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 12),
                       width: imageWidth - 20,
                       height: 120,
                       decoration: BoxDecoration(
@@ -149,7 +151,7 @@ class SectionProductItem extends HookWidget {
                           BoxShadow(
                               color:
                                   Theme.of(context).hintColor.withOpacity(0.1),
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                               blurRadius: 10)
                         ],
                       ),
@@ -247,7 +249,7 @@ class SectionProductItem extends HookWidget {
 class _FlashSaleItem extends HookWidget {
   final ProductModel product;
 
-  _FlashSaleItem(this.product);
+  const _FlashSaleItem(this.product);
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +294,7 @@ class _FlashSaleItem extends HookWidget {
 
   List<TextSpan> _getFlashSaleProgressLabelTexts(
       BuildContext context, Duration flashSaleEndsIn) {
-    final highlightStyle = TextStyle(fontWeight: FontWeight.bold);
+    const highlightStyle = TextStyle(fontWeight: FontWeight.bold);
 
     if (flashSaleEndsIn.inSeconds <= 0) {
       return [TextSpan(text: S.of(context).flashSaleEnded)];

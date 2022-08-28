@@ -41,7 +41,7 @@ class AccountCard extends HookWidget {
             boxShadow: [
               BoxShadow(
                 color: Theme.of(context).primaryColor.withOpacity(0.5),
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
                 blurRadius: 6,
               )
             ],
@@ -56,13 +56,13 @@ class AccountCard extends HookWidget {
                   S.of(context).contactDetails,
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                subtitle: Text(''),
+                subtitle: const Text(''),
               ),
               ListTile(
                 dense: true,
                 leading: const Icon(Icons.email_outlined),
                 title: Text(
-                  '${S.of(context).email}',
+                  S.of(context).email,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
@@ -70,7 +70,7 @@ class AccountCard extends HookWidget {
                   style: Theme.of(context).textTheme.caption,
                 ),
                 trailing: ButtonTheme(
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   minWidth: 50.0,
                   height: 25.0,
                   child: ProfileSettingsDialog(
@@ -84,7 +84,7 @@ class AccountCard extends HookWidget {
                   Icons.person_outline_rounded,
                 ),
                 title: Text(
-                  '${S.of(context).fullName}',
+                  S.of(context).fullName,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
@@ -98,7 +98,7 @@ class AccountCard extends HookWidget {
                   Icons.settings_phone,
                 ),
                 title: Text(
-                  '${S.of(context).phoneNumber}',
+                  S.of(context).phoneNumber,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
@@ -124,7 +124,7 @@ class AccountCard extends HookWidget {
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ),
-              Divider(
+              const Divider(
                 indent: 15,
                 endIndent: 15,
                 thickness: 0.5,
@@ -135,7 +135,7 @@ class AccountCard extends HookWidget {
                   Icons.business_outlined,
                 ),
                 title: Text(
-                  '${S.of(context).billingAddress}',
+                  S.of(context).billingAddress,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
@@ -144,14 +144,14 @@ class AccountCard extends HookWidget {
                   style: Theme.of(context).textTheme.caption,
                 ),
                 trailing: ButtonTheme(
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   minWidth: 50.0,
                   height: 25.0,
                   child: AddressSettingsDialog(
                       title: S.of(context).billingAddress),
                 ),
               ),
-              Divider(
+              const Divider(
                 indent: 15,
                 endIndent: 15,
                 thickness: 0.5,
@@ -162,7 +162,7 @@ class AccountCard extends HookWidget {
                   Icons.home_outlined,
                 ),
                 title: Text(
-                  '${S.of(context).shippingAddress}',
+                  S.of(context).shippingAddress,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
@@ -171,7 +171,7 @@ class AccountCard extends HookWidget {
                   style: Theme.of(context).textTheme.caption,
                 ),
                 trailing: ButtonTheme(
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   minWidth: 50.0,
                   height: 25.0,
                   child: AddressSettingsDialog(
@@ -186,7 +186,7 @@ class AccountCard extends HookWidget {
         );
       },
       loading: () => const Loader(),
-      error: (err, _) => Center(
+      error: (err, _) => const Center(
         child: Text('error'),
       ),
     );

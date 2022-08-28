@@ -52,7 +52,7 @@ class ProductGridItem extends HookWidget {
 
     final currentLocale = useProvider(currentLocaleProvider);
 
-    final fit = BoxFit.fitHeight;
+    const fit = BoxFit.fitHeight;
 
     return Align(
       alignment: Alignment.topCenter,

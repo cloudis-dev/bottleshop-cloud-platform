@@ -12,6 +12,7 @@
 
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -24,7 +25,6 @@ import 'package:delivery/src/features/products/data/services/product_search_serv
 import 'package:delivery/src/features/products/presentation/widgets/product_list_item.dart';
 import 'package:delivery/src/features/search/presentation/providers/providers.dart';
 import 'package:delivery/src/features/search/presentation/widgets/searched_category_list_item.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -117,7 +117,7 @@ class _PageScaffold extends HookWidget {
 class _Body extends HookWidget {
   final GlobalKey<ScaffoldState> scaffoldStateKey;
 
-  _Body({Key? key, required this.scaffoldStateKey}) : super(key: key);
+  const _Body({Key? key, required this.scaffoldStateKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +170,7 @@ class _ResultsWidget extends HookWidget {
           // Scaffold.of(context).
           context.read(_searchEditingCtrlProvider).clear();
           context.read(searchResultsProvider).state =
-              Tuple3(SearchState.cleaned, [], []);
+              const Tuple3(SearchState.cleaned, [], []);
           FocusScope.of(context).requestFocus(_searchBarFocusNode);
         },
       );
@@ -245,10 +245,10 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
 
     if (query.isEmpty) {
       _getContext().read(searchResultsProvider).state =
-          Tuple3(SearchState.cleaned, [], []);
+          const Tuple3(SearchState.cleaned, [], []);
     } else {
       _getContext().read(searchResultsProvider).state =
-          Tuple3(SearchState.typing, [], []);
+          const Tuple3(SearchState.typing, [], []);
 
       _getContext().read(debounceTimerProvider).state = Timer(
         const Duration(milliseconds: _debounceMs),
@@ -265,7 +265,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
             }
 
             _getContext().read(searchResultsProvider).state =
-                Tuple3(SearchState.waiting, [], []);
+                const Tuple3(SearchState.waiting, [], []);
 
             final res = await ProductsSearchService.search(
               query,
@@ -287,7 +287,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
             return;
           } catch (err, stack) {
             _getContext().read(searchResultsProvider).state =
-                Tuple3(SearchState.error, [], []);
+                const Tuple3(SearchState.error, [], []);
 
             _logger.severe('Search failed', err, stack);
           }
@@ -298,7 +298,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
     return;
   } catch (err, stack) {
     _getContext().read(searchResultsProvider).state =
-        Tuple3(SearchState.error, [], []);
+        const Tuple3(SearchState.error, [], []);
 
     _logger.severe('search failed', err, stack);
   }
@@ -310,14 +310,14 @@ List<TextSpan> parseMatchToTextSpans(String match) {
   final res = Iterable<int>.generate(splits.length)
       .map(
         (id) {
-          final tmp = splits[id].split('<\/em>');
+          final tmp = splits[id].split('</em>');
           if (tmp.length == 1) {
             return [Tuple2(false, tmp.first)];
           }
 
           return Iterable<int>.generate(tmp.length).map((e) => Tuple2(
                 e % 2 == 0,
-                tmp[e].replaceFirst('<\/em>', ''),
+                tmp[e].replaceFirst('</em>', ''),
               ));
         },
       )

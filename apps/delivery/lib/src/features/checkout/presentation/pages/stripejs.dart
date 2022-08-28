@@ -6,7 +6,7 @@ import 'package:js/js.dart';
 
 Future<void> redirectToCheckout(String sessionId) async {
   Stripe(AppEnvironment.stripePublishableKey)
-    ..redirectToCheckout(CheckoutOptions(sessionId: sessionId));
+      .redirectToCheckout(CheckoutOptions(sessionId: sessionId));
 }
 
 @JS()

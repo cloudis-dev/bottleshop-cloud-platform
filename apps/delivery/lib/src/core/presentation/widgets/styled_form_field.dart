@@ -34,7 +34,7 @@ class StyledFormField extends StatelessWidget {
   final bool readOnly;
   final bool enabled;
 
-  const StyledFormField({
+  const StyledFormField({Key? key,
     required this.onSaved,
     required this.validator,
     this.keyboardType = TextInputType.text,
@@ -54,7 +54,7 @@ class StyledFormField extends StatelessWidget {
     this.autoFocus = false,
     this.readOnly = false,
     this.enabled = true,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

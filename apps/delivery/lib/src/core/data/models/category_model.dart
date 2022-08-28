@@ -19,7 +19,7 @@ class CategoryModel extends Equatable {
   final CategoryPlainModel categoryDetails;
   final CategoryModel? subCategory;
 
-  CategoryModel({
+  const CategoryModel({
     required this.categoryDetails,
     this.subCategory,
   });

@@ -48,7 +48,7 @@ class SignInView extends HookWidget {
                 controller: scrollController,
                 child: SingleChildScrollView(
                   reverse: true,
-                  physics: ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   controller: scrollController,
                   child: Padding(
                     padding: EdgeInsets.only(bottom: bottom),
@@ -61,7 +61,7 @@ class SignInView extends HookWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Container(
+                          SizedBox(
                             height: AppConfig(context).appHeight(70),
                             child: Stack(
                               alignment: Alignment.center,

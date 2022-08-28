@@ -26,7 +26,7 @@ class FatalError extends StatelessWidget {
         title: Text(S.of(context).errorGeneric),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(kSplash),
             fit: BoxFit.cover,

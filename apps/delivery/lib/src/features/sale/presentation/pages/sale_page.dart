@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -9,7 +10,6 @@ import 'package:delivery/src/features/home/presentation/widgets/organisms/search
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/product_sections/presentation/widgets/views/sale_section.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -18,7 +18,7 @@ import 'package:routeborn/routeborn.dart';
 class SalePage extends RoutebornPage {
   static const String pagePathBase = 'sale';
 
-  SalePage() : super.builder(pagePathBase, (_) => _SalePage());
+  SalePage() : super.builder(pagePathBase, (_) => const _SalePage());
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
@@ -48,8 +48,8 @@ class _SalePage extends HookWidget {
             AuthPopupButton(scaffoldKey: scaffoldKey),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        body: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: SaleSection(),
         ),
       );
@@ -69,7 +69,7 @@ class _SalePage extends HookWidget {
           child: PageBodyTemplate(
             child: SingleChildScrollView(
               controller: scrollCtrl,
-              child: SaleSection(),
+              child: const SaleSection(),
             ),
           ),
         ),

@@ -38,10 +38,10 @@ import 'package:routeborn/routeborn.dart';
 
 final _categoryDetailRoutes = <String, RouteNode<NestingBranch>>{
   CategoryProductsPage.pagePathBase: RouteNode(
-    ParametrizedPage(CategoryProductsPage.fromPathParams),
+    const ParametrizedPage(CategoryProductsPage.fromPathParams),
     routes: {
       ProductDetailPage.pagePathBase: RouteNode(
-        ParametrizedPage(ProductDetailPage.fromPathParams),
+        const ParametrizedPage(ProductDetailPage.fromPathParams),
       ),
     },
   ),
@@ -59,7 +59,7 @@ final routes = <String, RouteNode<NestingBranch>>{
             NonParametrizedPage(() => ProductsPage()),
             routes: {
               ProductDetailPage.pagePathBase: RouteNode(
-                ParametrizedPage(ProductDetailPage.fromPathParams),
+                const ParametrizedPage(ProductDetailPage.fromPathParams),
               ),
             },
           ),
@@ -81,7 +81,7 @@ final routes = <String, RouteNode<NestingBranch>>{
             NonParametrizedPage(() => SalePage()),
             routes: {
               ProductDetailPage.pagePathBase: RouteNode(
-                ParametrizedPage(ProductDetailPage.fromPathParams),
+                const ParametrizedPage(ProductDetailPage.fromPathParams),
               ),
             },
           ),
@@ -92,7 +92,7 @@ final routes = <String, RouteNode<NestingBranch>>{
             NonParametrizedPage(() => FavoritesPage()),
             routes: {
               ProductDetailPage.pagePathBase: RouteNode(
-                ParametrizedPage(ProductDetailPage.fromPathParams),
+                const ParametrizedPage(ProductDetailPage.fromPathParams),
               ),
             },
           ),
@@ -108,7 +108,7 @@ final routes = <String, RouteNode<NestingBranch>>{
             routes: {
               ..._categoryDetailRoutes,
               ProductDetailPage.pagePathBase: RouteNode(
-                ParametrizedPage(ProductDetailPage.fromPathParams),
+                const ParametrizedPage(ProductDetailPage.fromPathParams),
               ),
             },
           ),
@@ -119,7 +119,7 @@ final routes = <String, RouteNode<NestingBranch>>{
             NonParametrizedPage(() => OrdersPage()),
             routes: {
               OrderDetailPage.pagePathBase: RouteNode(
-                ParametrizedPage(OrderDetailPage.fromPathParams),
+                const ParametrizedPage(OrderDetailPage.fromPathParams),
               )
             },
           ),

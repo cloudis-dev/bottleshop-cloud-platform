@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
@@ -7,7 +8,6 @@ import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -22,7 +22,7 @@ class StripeCheckoutSuccessPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right('Store');
+      const Right('Store');
 
   @override
   String getPagePath() => pagePathBase;

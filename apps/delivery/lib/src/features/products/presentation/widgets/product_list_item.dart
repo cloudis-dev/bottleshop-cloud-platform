@@ -32,9 +32,10 @@ class ProductListItem extends HookWidget {
   final List<TextSpan>? nameTextSpans;
 
   const ProductListItem({
+    Key? key,
     required this.product,
     this.nameTextSpans,
-  });
+  }) : super(key: key);
 
   void onClick(BuildContext context) {
     context
@@ -66,7 +67,7 @@ class ProductListItem extends HookWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,6 +95,8 @@ class ProductListItem extends HookWidget {
                                 style: Theme.of(context).textTheme.subtitle2,
                               ),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                   '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)}',
@@ -106,8 +109,6 @@ class ProductListItem extends HookWidget {
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                               ],
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
                             ),
                             Text(
                               product.count > 0
@@ -125,7 +126,7 @@ class ProductListItem extends HookWidget {
                           ],
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -137,7 +138,7 @@ class ProductListItem extends HookWidget {
                               style: Theme.of(context).textTheme.subtitle1),
                           if (product.discount != null)
                             Padding(
-                              padding: EdgeInsets.only(top: 5),
+                              padding: const EdgeInsets.only(top: 5),
                               child: Text(
                                   FormattingUtils.getPriceNumberString(
                                     product.priceWithVat,

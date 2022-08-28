@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HelpSection extends HookWidget {
   final IconData icon;
@@ -32,14 +32,14 @@ class HelpSection extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(6),
         boxShadow: [
           BoxShadow(
               color: Theme.of(context).hintColor.withOpacity(0.3),
-              offset: Offset(0, 1),
+              offset: const Offset(0, 1),
               blurRadius: 5)
         ],
       ),
@@ -58,11 +58,12 @@ class HelpSection extends HookWidget {
               subTitle,
               style: Theme.of(context).textTheme.caption,
             ),
-            childrenPadding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            childrenPadding:
+                const EdgeInsets.only(left: 10, right: 10, bottom: 10),
             children: [
               MarkdownBody(
                 onTapLink: (title, href, text) async {
-                  await launch(href!);
+                  await launchUrlString(href!);
                 },
                 selectable: true,
                 data: mdString,

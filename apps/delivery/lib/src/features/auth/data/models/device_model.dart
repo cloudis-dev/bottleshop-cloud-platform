@@ -19,9 +19,9 @@ class Device extends Equatable {
   final DateTime? createdAt;
   final DateTime? lastUpdatedAt;
   final DeviceDetails? deviceInfo;
-  late final String? token;
+  final String? token;
 
-  Device({
+  const Device({
     required this.id,
     this.token,
     this.createdAt,

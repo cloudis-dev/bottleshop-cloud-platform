@@ -26,7 +26,7 @@ class CreditCards extends StatelessWidget {
       alignment: AlignmentDirectional.topCenter,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(top: 25),
+          margin: const EdgeInsets.only(top: 25),
           width: 300,
           height: 195,
           decoration: BoxDecoration(
@@ -36,7 +36,7 @@ class CreditCards extends StatelessWidget {
               BoxShadow(
                   color: Theme.of(context).hintColor.withOpacity(0.3),
                   blurRadius: 5,
-                  offset: Offset(0, -1)),
+                  offset: const Offset(0, -1)),
             ],
           ),
           child: Padding(

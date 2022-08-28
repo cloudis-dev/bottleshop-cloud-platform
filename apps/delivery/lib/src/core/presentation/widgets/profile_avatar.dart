@@ -25,7 +25,7 @@ class ProfileAvatar extends StatelessWidget {
       return OctoImage(
         image: NetworkImage(imageUrl!),
         fit: BoxFit.cover,
-        imageBuilder: (context, imageProvider) => Container(
+        imageBuilder: (context, imageProvider) => SizedBox(
           width: 80.0,
           height: 80.0,
           child: ClipOval(

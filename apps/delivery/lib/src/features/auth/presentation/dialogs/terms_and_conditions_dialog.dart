@@ -35,18 +35,18 @@ class TermsAndConditionsDialog extends HookWidget {
       actions: defaultTargetPlatform == TargetPlatform.iOS
           ? [
               CupertinoDialogAction(
-                child: Text(S.of(context).termsPopUpNo),
                 onPressed: () => Navigator.pop(context, false),
                 isDefaultAction: true,
                 textStyle: Theme.of(context).textTheme.subtitle2,
+                child: Text(S.of(context).termsPopUpNo),
               ),
               CupertinoDialogAction(
-                child: Text(S.of(context).termsPopUpYes),
                 onPressed: () => Navigator.pop(context, true),
                 textStyle: Theme.of(context)
                     .textTheme
                     .subtitle2!
                     .copyWith(color: Theme.of(context).colorScheme.secondary),
+                child: Text(S.of(context).termsPopUpYes),
               ),
             ]
           : [

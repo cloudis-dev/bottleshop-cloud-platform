@@ -21,11 +21,12 @@ class PaymentMethodView extends HookWidget {
   final void Function() onBackButton;
   final void Function(String checkoutDoneMsg) onCheckoutDone;
 
-  PaymentMethodView(
+  const PaymentMethodView(
     this.paymentData, {
+    Key? key,
     required this.onBackButton,
     required this.onCheckoutDone,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +48,10 @@ class PaymentMethodView extends HookWidget {
         ),
         body: CupertinoScrollbar(
           controller: scrollController,
-          isAlwaysShown: true,
+          thumbVisibility: true,
           child: SingleChildScrollView(
             controller: scrollController,
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: cartData.when(
               data: (cart) => cart == null
                   ? EmptyTab(
@@ -64,7 +65,8 @@ class PaymentMethodView extends HookWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 20, right: 10),
                           child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(vertical: 0),
+                            contentPadding:
+                                const EdgeInsets.symmetric(vertical: 0),
                             title: Text(
                               S.of(context).selectYourPreferredPaymentMode,
                               maxLines: 1,

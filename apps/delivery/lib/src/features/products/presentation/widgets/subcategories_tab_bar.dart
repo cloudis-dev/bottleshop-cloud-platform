@@ -6,6 +6,7 @@ class SubcategoriesTabBar extends TabBar {
     CategoriesTreeModel category,
     Widget allTab,
     Widget Function(CategoriesTreeModel) tabBuilder, {
+    Key? key,
     TabController? controller,
     Color? indicatorColor,
     bool isScrollable = false,
@@ -15,6 +16,7 @@ class SubcategoriesTabBar extends TabBar {
     TabBarIndicatorSize? indicatorSize,
     double indicatorWeight = 2,
   }) : super(
+          key: key,
           indicatorWeight: indicatorWeight,
           indicatorSize: indicatorSize,
           unselectedLabelColor: unselectedLabelColor,

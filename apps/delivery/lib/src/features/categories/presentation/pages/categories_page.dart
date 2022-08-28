@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -21,7 +22,6 @@ import 'package:delivery/src/features/home/presentation/widgets/organisms/langua
 import 'package:delivery/src/features/home/presentation/widgets/organisms/search_icon_button.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -30,7 +30,8 @@ import 'package:routeborn/routeborn.dart';
 class CategoriesPage extends RoutebornPage {
   static const String pagePathBase = 'categories';
 
-  CategoriesPage() : super.builder(pagePathBase, (_) => _CategoriesPage());
+  CategoriesPage()
+      : super.builder(pagePathBase, (_) => const _CategoriesPage());
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
@@ -62,9 +63,9 @@ class _CategoriesPage extends HookWidget {
             AuthPopupButton(scaffoldKey: scaffoldKey),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: const CategoriesView(),
+        body: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: CategoriesView(),
         ),
       );
     } else {

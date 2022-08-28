@@ -68,8 +68,10 @@ class PriceFilter extends HookWidget {
                     );
           },
           labels: RangeLabels(
-            '${FormattingUtils.getPriceNumberString(priceRange.start)}',
-            '${FilterConstants.isPriceMax(priceRange.end) ? S.of(context).max : FormattingUtils.getPriceNumberString(priceRange.end)}',
+            FormattingUtils.getPriceNumberString(priceRange.start),
+            FilterConstants.isPriceMax(priceRange.end)
+                ? S.of(context).max
+                : FormattingUtils.getPriceNumberString(priceRange.end),
           ),
         ),
       ],

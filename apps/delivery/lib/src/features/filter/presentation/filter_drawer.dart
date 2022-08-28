@@ -68,7 +68,7 @@ class FilterDrawer extends HookWidget {
                   const Divider(),
                   Expanded(
                     child: CupertinoScrollbar(
-                      isAlwaysShown: true,
+                      thumbVisibility: true,
                       controller: scrollController,
                       child: ListView(
                         controller: scrollController,

@@ -147,9 +147,9 @@ void onUserDenied(BuildContext context, List<DeniedReason> reasons) {
   if (reasons.isNotEmpty) {
     var message = buildMessage(context, reasons);
     showSimpleNotification(
-      Text('$message'),
+      Text(message),
       position: NotificationPosition.top,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       slideDismissDirection: DismissDirection.horizontal,
       context: context,
     );
@@ -260,9 +260,9 @@ class ShippingDetailsView extends HookWidget {
                   padding: const EdgeInsets.only(bottom: 30),
                   child: CupertinoScrollbar(
                     controller: scrollController,
-                    isAlwaysShown: true,
+                    thumbVisibility: true,
                     child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       controller: scrollController,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 30),
@@ -283,7 +283,7 @@ class ShippingDetailsView extends HookWidget {
                                 case 0:
                                   return DeliveryOptionTile(user: user);
                                 case 1:
-                                  return AccountCard(showBirthday: false);
+                                  return const AccountCard(showBirthday: false);
                                 default:
                                   return Card(
                                     color: Theme.of(context).primaryColor,
@@ -370,9 +370,9 @@ class ShippingDetailsView extends HookWidget {
     if (reasons.isNotEmpty) {
       var message = buildMessage(context, reasons);
       showSimpleNotification(
-        Text('$message'),
+        Text(message),
         position: NotificationPosition.top,
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 3),
         slideDismissDirection: DismissDirection.horizontal,
         context: context,
       );
@@ -416,31 +416,33 @@ class DeliveryOptionTile extends HookWidget {
         endIndent: 980,
         color: Theme.of(context).colorScheme.secondary,
       ),
-    ]..addAll(orderTypes
-        .map<Widget>(
-          (orderType) => RadioListTile<DeliveryOption>(
-            title: Text(orderType.getName(currentLocale)!,
-                style: Theme.of(context).textTheme.bodyText1),
-            subtitle: Text(orderType.getDescription(currentLocale)!,
-                style: Theme.of(context).textTheme.caption),
-            dense: true,
-            activeColor: Theme.of(context).colorScheme.secondary,
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            value: orderType.deliveryOption,
-            groupValue: selectedDeliveryOption,
-            onChanged: (value) {
-              context
-                  .read(deliveryOptionsStateProvider.notifier)
-                  .selectDeliveryOption(value);
-              context.read(cloudFunctionsProvider).setShippingFee(value);
-              final deniedReasons = context
-                  .read(deliveryOptionsStateProvider.notifier)
-                  .validate(user, value);
-              onUserDenied(context, deniedReasons);
-            },
-          ),
-        )
-        .toList());
+      ...orderTypes
+          .map<Widget>(
+            (orderType) => RadioListTile<DeliveryOption>(
+              title: Text(orderType.getName(currentLocale)!,
+                  style: Theme.of(context).textTheme.bodyText1),
+              subtitle: Text(orderType.getDescription(currentLocale)!,
+                  style: Theme.of(context).textTheme.caption),
+              dense: true,
+              activeColor: Theme.of(context).colorScheme.secondary,
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              value: orderType.deliveryOption,
+              groupValue: selectedDeliveryOption,
+              onChanged: (value) {
+                context
+                    .read(deliveryOptionsStateProvider.notifier)
+                    .selectDeliveryOption(value);
+                context.read(cloudFunctionsProvider).setShippingFee(value);
+                final deniedReasons = context
+                    .read(deliveryOptionsStateProvider.notifier)
+                    .validate(user, value);
+                onUserDenied(context, deniedReasons);
+              },
+            ),
+          )
+          .toList(),
+    ];
     items.insertAll(items.length - 1, <Widget>[
       Container(
         padding: const EdgeInsets.only(left: 65),
@@ -467,11 +469,11 @@ class DeliveryOptionTile extends HookWidget {
 
     return Card(
       color: Theme.of(context).primaryColor,
-      margin: EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ExpansionTile(
         childrenPadding: const EdgeInsets.only(bottom: 8),
         initiallyExpanded: true,
-        leading: Icon(
+        leading: const Icon(
           Icons.airport_shuttle,
         ),
         title: Text(
