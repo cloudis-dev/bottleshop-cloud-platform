@@ -12,7 +12,7 @@
 
 import 'dart:math';
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +122,7 @@ class CategoryGridItem extends HookWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${S.of(context).products}: '),
+                              Text('${context.l10n.products}: '),
                               productsCount!.maybeWhen(
                                 data: (count) => Text(
                                   count.toString(),

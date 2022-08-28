@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
@@ -42,11 +42,11 @@ class SideMenuHeader extends HookWidget {
               const BorderRadius.only(bottomLeft: Radius.circular(35)),
         ),
         accountName: Text(
-          userData?.name ?? S.of(context).anonymousUser,
+          userData?.name ?? context.l10n.anonymousUser,
           style: Theme.of(context).textTheme.headline6,
         ),
         accountEmail: Text(
-          userData?.email ?? S.of(context).anonymousUser,
+          userData?.email ?? context.l10n.anonymousUser,
           style: Theme.of(context).textTheme.caption,
         ),
         currentAccountPicture: ProfileAvatar(imageUrl: userData?.avatar),

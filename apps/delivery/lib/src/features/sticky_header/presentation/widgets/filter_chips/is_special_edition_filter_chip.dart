@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/sticky_header/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,7 +28,7 @@ class IsSpecialEditionFilterChip extends HookWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       label: Row(
         children: [
-          Text('${S.of(context).onlySpecialEditions}: '),
+          Text('${context.l10n.onlySpecialEditions}: '),
           const Icon(Icons.check),
         ],
       ),

@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -39,7 +39,7 @@ class HelpPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).help);
+      Right(context.l10n.help);
 
   @override
   String getPagePath() => pagePathBase;
@@ -57,7 +57,7 @@ class _HelpPageView extends HookWidget {
     if (shouldUseMobileLayout(context)) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).help),
+          title: Text(context.l10n.help),
           leading: CloseButton(
             onPressed: () => context.read(navigationProvider).setNestingBranch(
                   context,
@@ -110,14 +110,14 @@ class _Body extends HookWidget {
             children: <Widget>[
               HelpSection(
                 icon: Icons.help,
-                title: S.of(context).faq,
-                subTitle: S.of(context).someAnswers,
+                title: context.l10n.faq,
+                subTitle: context.l10n.someAnswers,
                 mdString: mds.item1,
               ),
               HelpSection(
                 icon: Icons.attractions,
-                title: S.of(context).contactDetails,
-                subTitle: S.of(context).contactInformation,
+                title: context.l10n.contactDetails,
+                subTitle: context.l10n.contactInformation,
                 mdString: mds.item2,
               ),
             ],

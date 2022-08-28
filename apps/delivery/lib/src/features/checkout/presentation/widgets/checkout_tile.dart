@@ -12,7 +12,7 @@
 
 import 'dart:async';
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/adaptive_alert_dialog.dart';
@@ -85,7 +85,7 @@ class CheckoutTile extends HookWidget {
                 children: <Widget>[
                   Row(children: <Widget>[
                     Expanded(
-                      child: Text(S.of(context).subtotal,
+                      child: Text(context.l10n.subtotal,
                           style: Theme.of(context).textTheme.bodyText1),
                     ),
                     Text(
@@ -97,7 +97,7 @@ class CheckoutTile extends HookWidget {
                   ]),
                   Row(children: <Widget>[
                     Expanded(
-                      child: Text(S.of(context).vat20,
+                      child: Text(context.l10n.vat20,
                           style: Theme.of(context).textTheme.bodyText1),
                     ),
                     Text(
@@ -110,7 +110,7 @@ class CheckoutTile extends HookWidget {
                   if (cart.promoCode != null)
                     Row(children: <Widget>[
                       Expanded(
-                        child: Text(S.of(context).promoCodeLabel,
+                        child: Text(context.l10n.promoCodeLabel,
                             style: Theme.of(context).textTheme.bodyText1),
                       ),
                       Text(
@@ -123,7 +123,7 @@ class CheckoutTile extends HookWidget {
                   const Spacer(flex: 1),
                   Row(children: <Widget>[
                     Expanded(
-                        child: Text(S.of(context).checkout,
+                        child: Text(context.l10n.checkout,
                             style: Theme.of(context).textTheme.headline6)),
                     Text(
                       FormattingUtils.getPriceNumberString(
@@ -150,7 +150,7 @@ class CheckoutTile extends HookWidget {
                                       .removePromoCode();
                                   if (res) {
                                     showSimpleNotification(
-                                      Text(S.of(context).promoCodeRemoved),
+                                      Text(context.l10n.promoCodeRemoved),
                                       duration: const Duration(seconds: 5),
                                       slideDismissDirection:
                                           DismissDirection.horizontal,
@@ -169,7 +169,7 @@ class CheckoutTile extends HookWidget {
                                         .promoApplied(promo);
                                     if (res) {
                                       showSimpleNotification(
-                                        Text(S.of(context).promoCodeApplied),
+                                        Text(context.l10n.promoCodeApplied),
                                         duration: const Duration(seconds: 5),
                                         slideDismissDirection:
                                             DismissDirection.horizontal,
@@ -177,7 +177,7 @@ class CheckoutTile extends HookWidget {
                                       );
                                     } else {
                                       showSimpleNotification(
-                                        Text(S.of(context).promoCodeInvalid),
+                                        Text(context.l10n.promoCodeInvalid),
                                         duration: const Duration(seconds: 5),
                                         slideDismissDirection:
                                             DismissDirection.horizontal,
@@ -205,7 +205,7 @@ class CheckoutTile extends HookWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     cart.promoCode == null
-                                        ? Text(S.of(context).promoCodeLabel)
+                                        ? Text(context.l10n.promoCodeLabel)
                                         : Icon(
                                             Icons.receipt_long_outlined,
                                             color: cart.promoCode != null
@@ -287,7 +287,7 @@ class CheckoutTile extends HookWidget {
         );
       },
       loading: () => const Loader(),
-      error: (_, __) => Center(child: Text(S.of(context).error)),
+      error: (_, __) => Center(child: Text(context.l10n.error)),
     );
   }
 
@@ -303,7 +303,7 @@ class CheckoutTile extends HookWidget {
           break;
         case CartStatus.unavailableProducts:
           showSimpleNotification(
-            Text(S.of(context).theCartContainsItemCountsThatAreNotAvailableIn),
+            Text(context.l10n.theCartContainsItemCountsThatAreNotAvailableIn),
             duration: const Duration(seconds: 5),
             slideDismissDirection: DismissDirection.horizontal,
             context: context,
@@ -311,7 +311,7 @@ class CheckoutTile extends HookWidget {
           break;
         case CartStatus.invalidPromo:
           showSimpleNotification(
-            Text(S.of(context).promoCodeInvalid),
+            Text(context.l10n.promoCodeInvalid),
             duration: const Duration(seconds: 5),
             slideDismissDirection: DismissDirection.horizontal,
             context: context,
@@ -319,7 +319,7 @@ class CheckoutTile extends HookWidget {
           break;
         case CartStatus.error:
           showSimpleNotification(
-            Text(S.of(context).errorGeneric),
+            Text(context.l10n.errorGeneric),
             duration: const Duration(seconds: 5),
             slideDismissDirection: DismissDirection.horizontal,
             context: context,
@@ -342,7 +342,7 @@ class CheckoutTile extends HookWidget {
             content: defaultTargetPlatform == TargetPlatform.iOS
                 ? CupertinoTextFormFieldRow(
                     padding: const EdgeInsets.all(8.0),
-                    placeholder: S.of(context).promoCodeLabel,
+                    placeholder: context.l10n.promoCodeLabel,
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.text,
                     autofocus: true,
@@ -354,35 +354,35 @@ class CheckoutTile extends HookWidget {
                 : StyledFormField(
                     controller: controller,
                     validator: null,
-                    labelText: S.of(context).promoCodeLabel,
+                    labelText: context.l10n.promoCodeLabel,
                     onSaved: null,
                     keyboardType: TextInputType.text,
                     autoFocus: true,
                     style: Theme.of(context).textTheme.bodyText2,
                     maxLines: 1,
                   ),
-            title: Text(S.of(context).promoCodeLabel),
+            title: Text(context.l10n.promoCodeLabel),
             actions: defaultTargetPlatform == TargetPlatform.iOS
                 ? [
                     CupertinoDialogAction(
-                      child: Text(S.of(context).cancelButton),
+                      child: Text(context.l10n.cancelButton),
                       onPressed: () => Navigator.pop(context, null),
                     ),
                     CupertinoDialogAction(
                       onPressed: () => Navigator.pop(context, controller.text),
                       isDefaultAction: true,
-                      child: Text(S.of(context).saveButton),
+                      child: Text(context.l10n.saveButton),
                     ),
                   ]
                 : [
                     SimpleDialogOption(
                       onPressed: () => Navigator.pop(context, null),
-                      child: Text(S.of(context).cancelButton),
+                      child: Text(context.l10n.cancelButton),
                     ),
                     SimpleDialogOption(
                       onPressed: () => Navigator.pop(context, controller.text),
                       child: Text(
-                        S.of(context).saveButton,
+                        context.l10n.saveButton,
                         style: Theme.of(context).textTheme.subtitle2,
                       ),
                     ),

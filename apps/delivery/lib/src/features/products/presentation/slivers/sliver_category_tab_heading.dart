@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_section_heading.dart';
@@ -36,7 +36,7 @@ class SliverCategoryTabHeading extends HookWidget {
       child: BottleshopSectionHeading(
         leading: const Icon(Icons.liquor),
         label:
-            '${subCategory!.categoryDetails.getName(currentLocale)} ${S.of(context).category}',
+            '${subCategory!.categoryDetails.getName(currentLocale)} ${context.l10n.category}',
         trailingWidgets: const <Widget>[
           ProductsLayoutModeToggle(),
           SortMenuButton()
@@ -51,7 +51,7 @@ class SliverCategoryTabHeading extends HookWidget {
       //       Icons.liquor,
       //     ),
       //     title: Text(
-      //       '${subCategory!.categoryDetails.getName(currentLocale)} ${S.of(context).category}',
+      //       '${subCategory!.categoryDetails.getName(currentLocale)} ${context.l10n.category}',
       //       overflow: TextOverflow.fade,
       //       softWrap: false,
       //       style: Theme.of(context).textTheme.headline6,

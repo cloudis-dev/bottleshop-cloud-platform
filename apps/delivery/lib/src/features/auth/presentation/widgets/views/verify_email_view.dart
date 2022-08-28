@@ -12,7 +12,7 @@
 
 import 'dart:async';
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +41,7 @@ class VerifyEmailView extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                S.of(context).pleaseVerifyYourEmail,
+                context.l10n.pleaseVerifyYourEmail,
                 style: Theme.of(context)
                     .textTheme
                     .headline6!
@@ -57,7 +57,7 @@ class VerifyEmailView extends HookWidget {
                         .sendVerificationMail()
                         .whenComplete(
                           () => showSimpleNotification(
-                            Text(S.of(context).confirmationEmailSent),
+                            Text(context.l10n.confirmationEmailSent),
                             position: NotificationPosition.bottom,
                             slideDismissDirection: DismissDirection.horizontal,
                             context: context,
@@ -65,7 +65,7 @@ class VerifyEmailView extends HookWidget {
                         );
                   } catch (e) {
                     showSimpleNotification(
-                      Text(S.of(context).confirmationEmailNotSent),
+                      Text(context.l10n.confirmationEmailNotSent),
                       position: NotificationPosition.bottom,
                       slideDismissDirection: DismissDirection.horizontal,
                       background: Theme.of(context).errorColor,
@@ -77,7 +77,7 @@ class VerifyEmailView extends HookWidget {
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
-                child: Text(S.of(context).resendVerificationEmail),
+                child: Text(context.l10n.resendVerificationEmail),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
@@ -92,7 +92,7 @@ class VerifyEmailView extends HookWidget {
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
-                child: Text(S.of(context).logOut),
+                child: Text(context.l10n.logOut),
               ),
             ],
           ),

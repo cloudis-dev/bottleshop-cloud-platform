@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/drawer_state_acquirer.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -31,7 +31,7 @@ class ProductsPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).homeTabLabel);
+      Right(context.l10n.homeTabLabel);
 
   @override
   String getPagePath() => pagePathBase;
@@ -78,7 +78,7 @@ class _Scaffold extends HookWidget {
             const SearchIconButton(),
             AuthPopupButton(scaffoldKey: scaffoldKey),
           ],
-          title: Text(S.of(context).homeTabLabel),
+          title: Text(context.l10n.homeTabLabel),
           leading: MenuButton(drawerScaffoldKey: scaffoldKey),
         ),
         body: HomeProductsBody(childScaffoldKey, drawerAcquirerKey),

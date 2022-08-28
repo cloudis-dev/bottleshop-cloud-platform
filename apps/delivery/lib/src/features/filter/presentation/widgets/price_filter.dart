@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
@@ -39,7 +39,7 @@ class PriceFilter extends HookWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(S.of(context).price),
+            Text(context.l10n.price),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               decoration: BoxDecoration(
@@ -70,7 +70,7 @@ class PriceFilter extends HookWidget {
           labels: RangeLabels(
             FormattingUtils.getPriceNumberString(priceRange.start),
             FilterConstants.isPriceMax(priceRange.end)
-                ? S.of(context).max
+                ? context.l10n.max
                 : FormattingUtils.getPriceNumberString(priceRange.end),
           ),
         ),

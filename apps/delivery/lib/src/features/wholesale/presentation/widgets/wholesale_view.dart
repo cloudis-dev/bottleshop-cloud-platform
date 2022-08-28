@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -14,13 +14,13 @@ class WholeSaleView extends StatelessWidget {
         children: [
           if (!shouldUseMobileLayout(context)) ...[
             Text(
-              S.of(context).wholesale,
+              context.l10n.wholesale,
               style: Theme.of(context).textTheme.headline6,
             ),
             const SizedBox(height: 8),
           ],
           SelectableText(
-            S.of(context).wholesaleDescription,
+            context.l10n.wholesaleDescription,
             style: Theme.of(context).textTheme.bodyText1,
           ),
         ],

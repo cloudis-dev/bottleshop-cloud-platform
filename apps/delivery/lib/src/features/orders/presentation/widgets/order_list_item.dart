@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -63,7 +63,7 @@ class OrderListItem extends HookWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${S.of(context).order} #${order.orderId}',
+                          '${context.l10n.order} #${order.orderId}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: Theme.of(context).textTheme.headline6,
@@ -82,7 +82,7 @@ class OrderListItem extends HookWidget {
                             textBaseline: TextBaseline.alphabetic,
                             children: [
                               TableRow(children: [
-                                Text('${S.of(context).orderType}:'),
+                                Text('${context.l10n.orderType}:'),
                                 const SizedBox(),
                                 Text(
                                   order.orderType.getName(currentLocale)!,
@@ -90,7 +90,7 @@ class OrderListItem extends HookWidget {
                                 ),
                               ]),
                               TableRow(children: [
-                                Text('${S.of(context).itemsCount}:'),
+                                Text('${context.l10n.itemsCount}:'),
                                 const SizedBox(),
                                 Text(
                                   order.cartItems
@@ -102,7 +102,7 @@ class OrderListItem extends HookWidget {
                               ]),
                               TableRow(
                                 children: [
-                                  Text('${S.of(context).created}:'),
+                                  Text('${context.l10n.created}:'),
                                   const SizedBox(),
                                   Text(
                                     FormattingUtils.getDateFormatter(

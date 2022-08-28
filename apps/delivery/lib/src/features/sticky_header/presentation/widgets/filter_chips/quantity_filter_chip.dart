@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:delivery/src/features/sticky_header/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class QuantityFilterChip extends HookWidget {
 
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
-      label: Text('${S.of(context).inStockCount}: '
+      label: Text('${context.l10n.inStockCount}: '
           '${FilterFormattingUtils.getQuantityRangeString(quantityFilterValue.value, context)}'),
       onDeleted: quantityFilterValue.onDeleteFilter,
     );

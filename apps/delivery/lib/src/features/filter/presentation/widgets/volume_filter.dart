@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
@@ -39,7 +39,7 @@ class VolumeFilter extends HookWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(S.of(context).volumeLiters),
+            Text(context.l10n.volumeLiters),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               decoration: BoxDecoration(
@@ -70,7 +70,7 @@ class VolumeFilter extends HookWidget {
           },
           labels: RangeLabels(
             '${FormattingUtils.getFilterVolumeNumberString(volumeRange.start)}',
-            '${FilterConstants.isVolumeMax(volumeRange.end) ? S.of(context).max : FormattingUtils.getVolumeNumberString(volumeRange.end)}',
+            '${FilterConstants.isVolumeMax(volumeRange.end) ? context.l10n.max : FormattingUtils.getVolumeNumberString(volumeRange.end)}',
           ),
         ),
       ],

@@ -9,7 +9,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +41,11 @@ class ResetPasswordForm extends HookWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(S.of(context).sign_in,
+          Text(context.l10n.sign_in,
               style: Theme.of(context).textTheme.headline4),
           StyledFormField(
             keyboardType: TextInputType.emailAddress,
-            labelText: S.of(context).email,
+            labelText: context.l10n.email,
             autovalidateMode: AutovalidateMode.disabled,
             prefixIcon: const Icon(
               Icons.mail_outline,
@@ -76,7 +76,7 @@ class ResetPasswordForm extends HookWidget {
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 70),
             ),
             child: Text(
-              S.of(context).reset,
+              context.l10n.reset,
             ),
           ),
         ],

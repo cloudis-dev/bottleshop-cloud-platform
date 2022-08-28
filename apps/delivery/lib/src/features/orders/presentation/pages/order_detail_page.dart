@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -90,7 +90,7 @@ class _OrderDetailPageView extends HookWidget {
         if (order == null) {
           return const _OrderErrorTab();
         } else {
-          setPageNameCallback('${S.of(context).order} #${order.orderId}');
+          setPageNameCallback('${context.l10n.order} #${order.orderId}');
 
           if (shouldUseMobileLayout(context)) {
             return Scaffold(
@@ -99,7 +99,7 @@ class _OrderDetailPageView extends HookWidget {
                 leading: BackButton(
                     onPressed: () =>
                         context.read(navigationProvider).popPage(context)),
-                title: Text('${S.of(context).order} #${order.orderId}'),
+                title: Text('${context.l10n.order} #${order.orderId}'),
                 actions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
               ),
               body: _Body(
@@ -141,8 +141,8 @@ class _OrderErrorTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return EmptyTab(
       icon: Icons.error_outline,
-      message: S.of(context).upsSomethingWentWrong,
-      buttonMessage: S.of(context).backToOrders,
+      message: context.l10n.upsSomethingWentWrong,
+      buttonMessage: context.l10n.backToOrders,
       onButtonPressed: () => context.read(navigationProvider).popPage(context),
     );
   }
@@ -177,7 +177,7 @@ class _Body extends HookWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          S.of(context).details,
+          context.l10n.details,
           style: Theme.of(context).textTheme.headline4,
         ),
         const SizedBox(height: 8),
@@ -193,7 +193,7 @@ class _Body extends HookWidget {
             TableRow(
               children: [
                 Text(
-                  '${S.of(context).totalPaid}:',
+                  '${context.l10n.totalPaid}:',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 const SizedBox(),
@@ -208,7 +208,7 @@ class _Body extends HookWidget {
             TableRow(
               children: [
                 Text(
-                  '${S.of(context).orderType}:',
+                  '${context.l10n.orderType}:',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 const SizedBox(),
@@ -224,7 +224,7 @@ class _Body extends HookWidget {
               TableRow(
                 children: [
                   Text(
-                    '${S.of(context).shippingFee}:',
+                    '${context.l10n.shippingFee}:',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                   const SizedBox(),
@@ -249,7 +249,7 @@ class _Body extends HookWidget {
             Icons.notes_outlined,
           ),
           title: Text(
-            S.of(context).furtherDetails,
+            context.l10n.furtherDetails,
             style: Theme.of(context).textTheme.bodyText2,
           ),
           children: [
@@ -267,7 +267,7 @@ class _Body extends HookWidget {
                   TableRow(
                     children: [
                       Text(
-                        '${S.of(context).shippingAddress}:',
+                        '${context.l10n.shippingAddress}:',
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                       const SizedBox(),
@@ -291,7 +291,7 @@ class _Body extends HookWidget {
                 TableRow(
                   children: [
                     Text(
-                      '${S.of(context).phoneNumber}:',
+                      '${context.l10n.phoneNumber}:',
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                     const SizedBox(),
@@ -306,7 +306,7 @@ class _Body extends HookWidget {
                   TableRow(
                     children: [
                       Text(
-                        '${S.of(context).notes}:',
+                        '${context.l10n.notes}:',
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                       const SizedBox(),
@@ -325,7 +325,7 @@ class _Body extends HookWidget {
         OrderStepsWidget(order: order),
         const SizedBox(height: 12),
         Text(
-          S.of(context).orderedItems,
+          context.l10n.orderedItems,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline6,
         ),
@@ -350,7 +350,7 @@ class _Body extends HookWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  S.of(context).promoCodeLabel,
+                                  context.l10n.promoCodeLabel,
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                                 Text(

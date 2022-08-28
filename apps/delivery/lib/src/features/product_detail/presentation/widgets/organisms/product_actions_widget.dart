@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
@@ -37,21 +37,21 @@ class ProductActionsWidget extends HookWidget {
           () {
             switch (action) {
               case _ProductAction.purchase:
-                return S.of(context).loginNeededForPurchase;
+                return context.l10n.loginNeededForPurchase;
               case _ProductAction.favorite:
-                return S.of(context).loginNeededForFavorite;
+                return context.l10n.loginNeededForFavorite;
             }
           }(),
         ),
         actions: [
           TextButton(
-            child: Text(S.of(context).cancel),
+            child: Text(context.l10n.cancel),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           ElevatedButton(
-            child: Text(S.of(context).login),
+            child: Text(context.l10n.login),
             onPressed: () {
               Navigator.of(context).pop();
               authButtonKey.currentState!.showAccountMenu();
@@ -106,7 +106,7 @@ class ProductActionsWidget extends HookWidget {
         orElse: () => const Loader(),
         error: (err, stack) {
           _logger.severe('Failed to fetch is item in cart', err, stack);
-          return Text(S.of(context).error);
+          return Text(context.l10n.error);
         },
       ),
     );

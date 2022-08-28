@@ -11,7 +11,7 @@
 //
 
 import 'package:collection/collection.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
@@ -45,7 +45,7 @@ class CountryDropdownsFilterGroup extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(S.of(context).onlyFollowingCountries),
+          Text(context.l10n.onlyFollowingCountries),
           const SizedBox(height: 16),
           ...useProvider(filterAggregationsProvider).when(
             data: (aggs) {
@@ -68,7 +68,7 @@ class CountryDropdownsFilterGroup extends HookWidget {
             loading: () => [const Loader()],
             error: (err, stack) {
               _logger.severe('Failed to fetch filter aggregations', err, stack);
-              return [Text(S.of(context).error)];
+              return [Text(context.l10n.error)];
             },
           ),
         ],
@@ -120,8 +120,8 @@ class _CountryDropdownFilter extends HookWidget {
                 value: selectedValue,
                 isExpanded: true,
                 hint: Text(id == 0
-                    ? S.of(context).selectCountry
-                    : S.of(context).addAnotherCountry),
+                    ? context.l10n.selectCountry
+                    : context.l10n.addAnotherCountry),
                 items: items
                     .map(
                       (e) => DropdownMenuItem(
@@ -170,7 +170,7 @@ class _CountryDropdownFilter extends HookWidget {
         _logger.severe('Failed to fetch filter aggregations', err, stack);
 
         return Center(
-          child: Text(S.of(context).error),
+          child: Text(context.l10n.error),
         );
       },
     );

@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
@@ -136,12 +136,12 @@ class _MenuItemsTab extends HookWidget {
                 if (!hasUser)
                   ListTile(
                     leading: const Icon(Icons.login),
-                    title: Text(S.of(context).login),
+                    title: Text(context.l10n.login),
                     onTap: onLogin,
                   ),
                 ListTile(
                   leading: const Icon(Icons.favorite),
-                  title: Text(S.of(context).favoriteTabLabel),
+                  title: Text(context.l10n.favoriteTabLabel),
                   onTap: () {
                     context.read(navigationProvider).setNestingBranch(
                           scaffoldKey.currentContext!,
@@ -153,7 +153,7 @@ class _MenuItemsTab extends HookWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: Text(S.of(context).settings),
+                  title: Text(context.l10n.settings),
                   onTap: () {
                     context.read(navigationProvider).setNestingBranch(
                           scaffoldKey.currentContext!,
@@ -174,7 +174,7 @@ class _MenuItemsTab extends HookWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.help_outlined),
-                  title: Text(S.of(context).helpSupport),
+                  title: Text(context.l10n.helpSupport),
                   onTap: () {
                     context.read(navigationProvider).setNestingBranch(
                           scaffoldKey.currentContext!,
@@ -191,7 +191,7 @@ class _MenuItemsTab extends HookWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.gavel),
-                  title: Text(S.of(context).menuTerms),
+                  title: Text(context.l10n.menuTerms),
                   onTap: () {
                     context.read(navigationProvider).pushPage(
                           context,
@@ -204,7 +204,7 @@ class _MenuItemsTab extends HookWidget {
                 if (hasUser)
                   ListTile(
                     leading: const Icon(Icons.exit_to_app),
-                    title: Text(S.of(context).logOut),
+                    title: Text(context.l10n.logOut),
                     onTap: () async {
                       await context.read(userRepositoryProvider).signOut();
                       OverlaySupportEntry.of(context)!.dismiss(animate: false);
@@ -256,7 +256,7 @@ class _TermsAndConditionsTab extends HookWidget {
                   child: Column(
                     children: [
                       Text(
-                        S.of(context).termsTitleMainScreen,
+                        context.l10n.termsTitleMainScreen,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       const SizedBox(height: 20),
@@ -283,13 +283,13 @@ class _TermsAndConditionsTab extends HookWidget {
                 .textTheme
                 .subtitle2!
                 .copyWith(color: Theme.of(context).colorScheme.secondary),
-            child: Text(S.of(context).termsPopUpYes),
+            child: Text(context.l10n.termsPopUpYes),
           ),
           CupertinoDialogAction(
             onPressed: onBack,
             isDefaultAction: true,
             textStyle: Theme.of(context).textTheme.subtitle2,
-            child: Text(S.of(context).termsPopUpNo),
+            child: Text(context.l10n.termsPopUpNo),
           ),
         ],
       ),
@@ -388,7 +388,7 @@ class _LoginTab extends HookWidget {
               ),
               TextButton(
                 onPressed: onSignUp,
-                child: Text(S.of(context).dontHaveAnAccount),
+                child: Text(context.l10n.dontHaveAnAccount),
               ),
               const SizedBox(height: 24),
             ],

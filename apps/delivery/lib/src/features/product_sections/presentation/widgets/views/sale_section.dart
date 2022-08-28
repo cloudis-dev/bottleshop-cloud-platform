@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_section_heading.dart';
 import 'package:delivery/src/features/product_sections/presentation/providers/providers.dart';
 import 'package:delivery/src/features/product_sections/presentation/widgets/organisms/products_section_carousel.dart';
@@ -18,7 +18,7 @@ class SaleSection extends HookWidget {
       data: productsState.items,
       carouselHeader: BottleshopSectionHeading(
         leading: const Icon(Icons.monetization_on),
-        label: S.of(context).sale,
+        label: context.l10n.sale,
       ),
     );
   }

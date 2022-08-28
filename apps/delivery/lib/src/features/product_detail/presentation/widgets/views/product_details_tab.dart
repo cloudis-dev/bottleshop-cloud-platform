@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/atoms/detail_row_item.dart';
@@ -39,7 +39,7 @@ class ProductDetailsTab extends HookWidget {
           dense: true,
           contentPadding: const EdgeInsets.symmetric(vertical: 0),
           title: Text(
-            S.of(context).details,
+            context.l10n.details,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -49,12 +49,12 @@ class ProductDetailsTab extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               DetailRowItem(
-                title: S.of(context).alcoholContent,
+                title: context.l10n.alcoholContent,
                 value: FormattingUtils.getAlcoholNumberString(
                     product.alcohol ?? 0),
               ),
               DetailRowItem(
-                title: S.of(context).volume,
+                title: context.l10n.volume,
                 value:
                     '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)}',
               ),
@@ -68,7 +68,7 @@ class ProductDetailsTab extends HookWidget {
                     const SizedBox(width: 20.0),
                     Expanded(
                       child: Text(
-                        S.of(context).flashSales,
+                        context.l10n.flashSales,
                         style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
@@ -87,7 +87,7 @@ class ProductDetailsTab extends HookWidget {
                     const SizedBox(width: 20.0),
                     Expanded(
                       child: Text(
-                        S.of(context).newAdditionToOurStock,
+                        context.l10n.newAdditionToOurStock,
                         style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
@@ -106,7 +106,7 @@ class ProductDetailsTab extends HookWidget {
                     const SizedBox(width: 20.0),
                     Expanded(
                       child: Text(
-                        S.of(context).recommendedByOurStaff,
+                        context.l10n.recommendedByOurStaff,
                         style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
@@ -118,23 +118,23 @@ class ProductDetailsTab extends HookWidget {
               const SizedBox(height: 10.0),
               if (product.isFlashSale)
                 DetailRowItem(
-                  title: S.of(context).flashsaleUntil,
+                  title: context.l10n.flashsaleUntil,
                   value: FormattingUtils.getDateTimeFormatter(currentLocale)
                       .format(product.flashSale!.flashSaleUntil),
                 ),
               if (product.isSpecialEdition)
                 DetailRowItem(
-                  title: S.of(context).specialEdition,
+                  title: context.l10n.specialEdition,
                   value: product.edition,
                 ),
               if (product.age != null)
                 DetailRowItem(
-                  title: S.of(context).age,
+                  title: context.l10n.age,
                   value: product.age.toString(),
                 ),
               if (product.year != null)
                 DetailRowItem(
-                  title: S.of(context).year,
+                  title: context.l10n.year,
                   value: product.year.toString(),
                 ),
               Row(
@@ -143,7 +143,7 @@ class ProductDetailsTab extends HookWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      S.of(context).country,
+                      context.l10n.country,
                       style: Theme.of(context).textTheme.subtitle2,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

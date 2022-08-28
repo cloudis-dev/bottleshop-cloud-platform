@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/molecules/social_media_buttons_row.dart';
@@ -74,13 +74,13 @@ class SignInForm extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                S.of(context).sign_in,
+                context.l10n.sign_in,
                 style: Theme.of(context).textTheme.headline4,
                 textAlign: TextAlign.center,
               ),
               StyledFormField(
                 keyboardType: TextInputType.emailAddress,
-                labelText: S.of(context).email,
+                labelText: context.l10n.email,
                 prefixIcon: const Icon(
                   Icons.mail_outline,
                 ),
@@ -89,7 +89,7 @@ class SignInForm extends HookWidget {
                 onSaved: (value) => email.text = value!,
               ),
               StyledFormField(
-                labelText: S.of(context).password,
+                labelText: context.l10n.password,
                 prefixIcon: const Icon(
                   Icons.lock,
                 ),
@@ -111,14 +111,14 @@ class SignInForm extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    S.of(context).password_forgotten,
+                    context.l10n.password_forgotten,
                     style: Theme.of(context).textTheme.caption,
                   ),
                   TextButton(
                     onPressed: () => Navigator.pushNamed(
                         context, ResetPasswordView.routeName),
                     child: Text(
-                      S.of(context).reset,
+                      context.l10n.reset,
                     ),
                   ),
                 ],
@@ -147,7 +147,7 @@ class SignInForm extends HookWidget {
                   shape: const StadiumBorder(),
                   padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
-                child: Text(S.of(context).login),
+                child: Text(context.l10n.login),
               ),
               const SizedBox(height: 8),
               isAppleAvailable.maybeWhen(

@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/slivers/sliver_obstruction_injector.dart';
@@ -222,8 +222,8 @@ class _NoProductsBody extends HookWidget {
                   const EdgeInsets.only(bottom: _bottomPad),
               child: EmptyTab(
                 icon: Icons.block_rounded,
-                message: S.of(context).noSuchItems,
-                buttonMessage: S.of(context).modifyFilter,
+                message: context.l10n.noSuchItems,
+                buttonMessage: context.l10n.modifyFilter,
                 onButtonPressed: () =>
                     // parent of parent scaffold
                     Scaffold.of(context).openEndDrawer(),
@@ -243,8 +243,8 @@ class _NoProductsBody extends HookWidget {
               const EdgeInsets.only(bottom: _bottomPad),
           child: EmptyTab(
             icon: Icons.block_rounded,
-            message: S.of(context).noSuchItems,
-            buttonMessage: S.of(context).modifyFilter,
+            message: context.l10n.noSuchItems,
+            buttonMessage: context.l10n.modifyFilter,
             onButtonPressed: () => Scaffold.of(context).openEndDrawer(),
           ),
         ),

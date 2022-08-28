@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/adaptive_alert_dialog.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/atoms/terms_and_conditions_text_content.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,14 +31,14 @@ class TermsAndConditionsDialog extends HookWidget {
           },
         ),
       ),
-      title: Text(S.of(context).termsTitleMainScreen),
+      title: Text(context.l10n.termsTitleMainScreen),
       actions: defaultTargetPlatform == TargetPlatform.iOS
           ? [
               CupertinoDialogAction(
                 onPressed: () => Navigator.pop(context, false),
                 isDefaultAction: true,
                 textStyle: Theme.of(context).textTheme.subtitle2,
-                child: Text(S.of(context).termsPopUpNo),
+                child: Text(context.l10n.termsPopUpNo),
               ),
               CupertinoDialogAction(
                 onPressed: () => Navigator.pop(context, true),
@@ -46,7 +46,7 @@ class TermsAndConditionsDialog extends HookWidget {
                     .textTheme
                     .subtitle2!
                     .copyWith(color: Theme.of(context).colorScheme.secondary),
-                child: Text(S.of(context).termsPopUpYes),
+                child: Text(context.l10n.termsPopUpYes),
               ),
             ]
           : [
@@ -55,7 +55,7 @@ class TermsAndConditionsDialog extends HookWidget {
                   Navigator.pop(context, false);
                 },
                 child: Text(
-                  S.of(context).termsPopUpNo,
+                  context.l10n.termsPopUpNo,
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
               ),
@@ -64,7 +64,7 @@ class TermsAndConditionsDialog extends HookWidget {
                   Navigator.pop(context, true);
                 },
                 child: Text(
-                  S.of(context).termsPopUpYes,
+                  context.l10n.termsPopUpYes,
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2!

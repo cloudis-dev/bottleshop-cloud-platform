@@ -10,7 +10,7 @@
 //
 //
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
@@ -36,7 +36,7 @@ class CartPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).cart);
+      Right(context.l10n.cart);
 
   @override
   String getPagePath() => pagePathBase;
@@ -57,7 +57,7 @@ class _CartPageView extends HookWidget {
         key: scaffoldKey,
         drawer: const MenuDrawer(),
         appBar: AppBar(
-          title: Text(S.of(context).cart),
+          title: Text(context.l10n.cart),
           leading: MenuButton(drawerScaffoldKey: scaffoldKey),
           actions: [
             AuthPopupButton(scaffoldKey: scaffoldKey),
@@ -92,8 +92,8 @@ class _Body extends HookWidget {
     return isCartEmpty
         ? EmptyTab(
             icon: Icons.shopping_cart_outlined,
-            message: S.of(context).emptyCart,
-            buttonMessage: S.of(context).startExploring,
+            message: context.l10n.emptyCart,
+            buttonMessage: context.l10n.startExploring,
             onButtonPressed: () {
               context
                   .read(navigationProvider)

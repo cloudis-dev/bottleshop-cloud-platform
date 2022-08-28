@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class FatalError extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).errorGeneric),
+        title: Text(context.l10n.errorGeneric),
       ),
       body: Container(
         decoration: const BoxDecoration(

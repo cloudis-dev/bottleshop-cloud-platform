@@ -1,5 +1,5 @@
 import 'package:badges/badges.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
@@ -99,7 +99,7 @@ class HomeAppBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      child: Text(S.of(context).homeTabLabel),
+      child: Text(context.l10n.homeTabLabel),
       onPressed: () {
         final nav = context.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.shop) {
@@ -118,7 +118,7 @@ class CategoriesAppBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      child: Text(S.of(context).categories),
+      child: Text(context.l10n.categories),
       onPressed: () {
         final nav = context.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.categories) {
@@ -140,7 +140,7 @@ class WholeSaleAppBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      child: Text(S.of(context).wholesale),
+      child: Text(context.l10n.wholesale),
       onPressed: () {
         final nav = context.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.wholesale) {
@@ -158,7 +158,7 @@ class OrdersAppBarButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final child = Text(S.of(context).orderTabLabel);
+    final child = Text(context.l10n.orderTabLabel);
 
     return TextButton(
       onPressed: () {
@@ -191,7 +191,7 @@ class SaleAppBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      child: Text(S.of(context).sale),
+      child: Text(context.l10n.sale),
       onPressed: () {
         final nav = context.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.sale) {

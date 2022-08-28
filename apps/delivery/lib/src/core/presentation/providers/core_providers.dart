@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
@@ -67,14 +67,14 @@ final currentLocaleProvider = Provider<Locale>((ref) {
   debugPrint(
       'current locale: ${Intl.getCurrentLocale().substring(0, 2)} - current system locale: $systemLanguage');
   if (mode == null) {
-    return S.delegate.supportedLocales.firstWhere(
+    return AppLocalizations.supportedLocales.firstWhere(
       (element) => element.languageCode == systemLanguage,
-      orElse: () => S.delegate.supportedLocales.first,
+      orElse: () => AppLocalizations.supportedLocales.first,
     );
   }
-  return S.delegate.supportedLocales.firstWhere(
+  return AppLocalizations.supportedLocales.firstWhere(
     (element) => mode.toString().contains(element.languageCode),
-    orElse: () => S.delegate.supportedLocales.first,
+    orElse: () => AppLocalizations.supportedLocales.first,
   );
 });
 

@@ -11,7 +11,7 @@
 //
 
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
@@ -57,7 +57,7 @@ class ProfileSettingsDialog extends HookWidget {
       style: TextButton.styleFrom(
           primary: Theme.of(context).colorScheme.secondary),
       child: Text(
-        S.of(context).edit,
+        context.l10n.edit,
       ),
     );
   }
@@ -73,7 +73,7 @@ class ProfileSettingsDialog extends HookWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: buildDialogTitle(context, S.of(context).profileSettings),
+          title: buildDialogTitle(context, context.l10n.profileSettings),
           content: CupertinoScrollbar(
             thumbVisibility: true,
             controller: controller,
@@ -89,7 +89,7 @@ class ProfileSettingsDialog extends HookWidget {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(S.of(context).cancel),
+              child: Text(context.l10n.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -103,7 +103,7 @@ class ProfileSettingsDialog extends HookWidget {
                   _formKey.currentState!.save();
                   userDb.updateData(user.uid, profileData!);
                   showSimpleNotification(
-                    Text(S.of(context).profileUpdated),
+                    Text(context.l10n.profileUpdated),
                     position: NotificationPosition.top,
                     duration: const Duration(seconds: 2),
                     slideDismissDirection: DismissDirection.horizontal,
@@ -112,7 +112,7 @@ class ProfileSettingsDialog extends HookWidget {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text(S.of(context).save),
+              child: Text(context.l10n.save),
             ),
           ],
         );
@@ -134,7 +134,7 @@ class ProfileSettingsDialog extends HookWidget {
           StyledFormField(
             initialValue: user.email,
             keyboardType: TextInputType.emailAddress,
-            labelText: '${S.of(context).email}*',
+            labelText: '${context.l10n.email}*',
             onSaved: (input) {
               if (input != null) {
                 profileData![UserFields.email] = input;
@@ -144,20 +144,20 @@ class ProfileSettingsDialog extends HookWidget {
             },
             validator: MultiValidator(
               <FieldValidator<dynamic>>[
-                RequiredValidator(errorText: S.of(context).emailIsRequired),
-                EmailValidator(errorText: S.of(context).email_invalid),
+                RequiredValidator(errorText: context.l10n.emailIsRequired),
+                EmailValidator(errorText: context.l10n.email_invalid),
               ],
             ),
           ),
           StyledFormField(
             keyboardType: TextInputType.name,
-            labelText: '${S.of(context).fullName}*',
+            labelText: '${context.l10n.fullName}*',
             initialValue: user.name,
             validator: MultiValidator(
               <FieldValidator<dynamic>>[
-                RequiredValidator(errorText: S.of(context).fullNameIsRequired),
+                RequiredValidator(errorText: context.l10n.fullNameIsRequired),
                 MinLengthValidator(3,
-                    errorText: S.of(context).fullNameMustBeLonger),
+                    errorText: context.l10n.fullNameMustBeLonger),
               ],
             ),
             onSaved: (input) {
@@ -171,14 +171,14 @@ class ProfileSettingsDialog extends HookWidget {
           StyledFormField(
             keyboardType: TextInputType.phone,
             validator: MultiValidator([
-              RequiredValidator(errorText: S.of(context).phoneNumberIsRequired),
+              RequiredValidator(errorText: context.l10n.phoneNumberIsRequired),
               LengthRangeValidator(
                   min: 10,
                   max: 13,
-                  errorText: S.of(context).enterValidPhoneNumber),
+                  errorText: context.l10n.enterValidPhoneNumber),
             ]),
             hintText: '+421 9xx xxx xxx',
-            labelText: '${S.of(context).phoneNumber}*',
+            labelText: '${context.l10n.phoneNumber}*',
             initialValue: user.phoneNumber,
             onSaved: (input) {
               if (input != null) {
@@ -193,8 +193,8 @@ class ProfileSettingsDialog extends HookWidget {
               resetIcon: null,
               decoration: getInputFieldDecorator(
                 context: context,
-                hintText: S.of(context).yyyymmdd,
-                labelText: S.of(context).dayOfBirth,
+                hintText: context.l10n.yyyymmdd,
+                labelText: context.l10n.dayOfBirth,
               ),
               format: formatter!,
               initialValue: user.dayOfBirth,
@@ -207,7 +207,7 @@ class ProfileSettingsDialog extends HookWidget {
                   lastDate:
                       (DateTime.now().subtract(const Duration(days: 365 * 18))),
                   initialDatePickerMode: DatePickerMode.year,
-                  helpText: S.of(context).selectYourDayOfBirth,
+                  helpText: context.l10n.selectYourDayOfBirth,
                 );
                 return date;
               },

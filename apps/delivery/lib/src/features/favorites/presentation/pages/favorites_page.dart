@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
@@ -42,7 +42,7 @@ class FavoritesPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).favoriteTabLabel);
+      Right(context.l10n.favoriteTabLabel);
 
   @override
   String getPagePath() => pagePathBase;
@@ -64,7 +64,7 @@ class _FavoritesPageView extends HookWidget {
         key: scaffoldKey,
         drawer: const MenuDrawer(),
         appBar: AppBar(
-          title: Text(S.of(context).favoriteTabLabel),
+          title: Text(context.l10n.favoriteTabLabel),
           actions: [
             const _SearchIconButton(),
             AuthPopupButton(
@@ -129,16 +129,16 @@ class _Body extends HookWidget {
         if (favorites == null) {
           return EmptyTab(
             icon: Icons.login,
-            message: S.of(context).youNeedToLoginFirst,
-            buttonMessage: S.of(context).login,
+            message: context.l10n.youNeedToLoginFirst,
+            buttonMessage: context.l10n.login,
             onButtonPressed: () =>
                 authButtonKey!.currentState!.showAccountMenu(),
           );
         } else {
           return EmptyTab(
             icon: Icons.favorite_border,
-            message: S.of(context).emptyWishList,
-            buttonMessage: S.of(context).startExploring,
+            message: context.l10n.emptyWishList,
+            buttonMessage: context.l10n.startExploring,
             onButtonPressed: () => context
                 .read(navigationProvider)
                 .setNestingBranch(context, NestingBranch.shop),
@@ -151,8 +151,8 @@ class _Body extends HookWidget {
 
         return EmptyTab(
           icon: Icons.favorite_border,
-          message: S.of(context).emptyWishList,
-          buttonMessage: S.of(context).startExploring,
+          message: context.l10n.emptyWishList,
+          buttonMessage: context.l10n.startExploring,
           onButtonPressed: () => context
               .read(navigationProvider)
               .setNestingBranch(context, NestingBranch.shop),
@@ -172,7 +172,7 @@ class _FavoritesListLayout extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final messageRemoved = S.of(context).itemRemovedFromWishList;
+    final messageRemoved = context.l10n.itemRemovedFromWishList;
 
     return ListView.builder(
       physics: const BouncingScrollPhysics(

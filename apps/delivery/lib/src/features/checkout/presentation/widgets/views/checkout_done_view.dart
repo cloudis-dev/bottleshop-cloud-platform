@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -29,7 +29,7 @@ class CheckoutDoneView extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).checkout),
+        title: Text(context.l10n.checkout),
         leading: CloseButton(
           onPressed: onClose,
         ),
@@ -97,7 +97,7 @@ class CheckoutDoneView extends HookWidget {
               Opacity(
                 opacity: 0.8,
                 child: Text(
-                  S.of(context).orderCompletedAndPaid,
+                  context.l10n.orderCompletedAndPaid,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline4,
                 ),
@@ -123,7 +123,7 @@ class CheckoutDoneView extends HookWidget {
                   shape: const StadiumBorder(),
                 ),
                 onPressed: onClose,
-                child: Text(S.of(context).start_shopping),
+                child: Text(context.l10n.start_shopping),
               ),
             ],
           ),

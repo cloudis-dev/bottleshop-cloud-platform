@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/category_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
@@ -36,8 +36,8 @@ class ProductHomeTab extends HookWidget {
       children: <Widget>[
         Text(
           product.count > 0
-              ? '${product.count} ${S.of(context).inStock}'
-              : S.of(context).outOfStock,
+              ? '${product.count} ${context.l10n.inStock}'
+              : context.l10n.outOfStock,
           style: Theme.of(context)
               .textTheme
               .subtitle2!
@@ -71,7 +71,7 @@ class ProductHomeTab extends HookWidget {
           dense: true,
           contentPadding: const EdgeInsets.symmetric(vertical: 0),
           title: Text(
-            S.of(context).category,
+            context.l10n.category,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -92,7 +92,7 @@ class ProductHomeTab extends HookWidget {
             dense: true,
             contentPadding: const EdgeInsets.symmetric(vertical: 0),
             title: Text(
-              S.of(context).otherCategory,
+              context.l10n.otherCategory,
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ),

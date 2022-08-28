@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
@@ -116,7 +116,7 @@ class SearchedCategoryListItem extends HookWidget {
                       if (categoryPlainModel.id ==
                           navigationCategory.categoryDetails.id)
                         Text(
-                          S.of(context).all,
+                          context.l10n.all,
                           style: Theme.of(context).textTheme.bodyText1,
                         )
                       else

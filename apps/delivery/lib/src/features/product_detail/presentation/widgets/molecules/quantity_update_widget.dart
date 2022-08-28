@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
@@ -65,8 +65,7 @@ class QuantityUpdateWidget extends HookWidget {
                                   product.uniqueId, currentQuantity - 1);
                         } catch (e) {
                           showSimpleNotification(
-                            Text(S
-                                .of(context)
+                            Text(context.l10n
                                 .couldntChangeQuantityOfTheProductInTheCart),
                             duration: const Duration(seconds: 1),
                             slideDismissDirection: DismissDirection.horizontal,
@@ -82,7 +81,7 @@ class QuantityUpdateWidget extends HookWidget {
                 ),
               ),
               Text(
-                '${currentQuantity.toString()} ${S.of(context).inCart}',
+                '${currentQuantity.toString()} ${context.l10n.inCart}',
                 style: Theme.of(context).textTheme.button,
               ),
               InkResponse(
@@ -106,8 +105,7 @@ class QuantityUpdateWidget extends HookWidget {
                                         product.uniqueId, currentQuantity + 1);
                               } catch (e) {
                                 showSimpleNotification(
-                                  Text(S
-                                      .of(context)
+                                  Text(context.l10n
                                       .couldntChangeQuantityOfTheProductInTheCart),
                                   duration: const Duration(seconds: 1),
                                   slideDismissDirection:

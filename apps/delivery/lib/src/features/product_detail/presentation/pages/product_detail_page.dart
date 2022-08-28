@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -109,8 +109,8 @@ class _ProductDetailPageView extends HookWidget {
         data: (product) => product == null
             ? EmptyTab(
                 icon: Icons.info,
-                message: S.of(context).noSuchProduct,
-                buttonMessage: S.of(context).startExploring,
+                message: context.l10n.noSuchProduct,
+                buttonMessage: context.l10n.startExploring,
                 onButtonPressed: () {
                   context.read(navigationProvider).replaceAllWith(context, []);
                 },
@@ -126,8 +126,8 @@ class _ProductDetailPageView extends HookWidget {
 
           return EmptyTab(
             icon: Icons.error_outline,
-            message: S.of(context).upsSomethingWentWrong,
-            buttonMessage: S.of(context).tryAgain,
+            message: context.l10n.upsSomethingWentWrong,
+            buttonMessage: context.l10n.tryAgain,
             onButtonPressed: () =>
                 context.refresh(productProvider(productUid!)),
           );

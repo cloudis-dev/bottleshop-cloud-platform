@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -56,11 +56,11 @@ class AgeYearFilterToggle extends HookWidget {
             borderWidth: borderWidth.toDouble(),
             children: [
               Text(
-                S.of(context).age,
+                context.l10n.age,
                 style: Theme.of(context).textTheme.bodyText2,
               ),
               Text(
-                S.of(context).years,
+                context.l10n.years,
                 style: Theme.of(context).textTheme.bodyText2,
               ),
             ],

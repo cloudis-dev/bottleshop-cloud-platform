@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
@@ -54,7 +54,7 @@ class AddToCartButton extends HookWidget {
                       1,
                     );
                     showSimpleNotification(
-                      Text('${product.name} ${S.of(context).addedToCart}'),
+                      Text('${product.name} ${context.l10n.addedToCart}'),
                       duration: const Duration(seconds: 1),
                       slideDismissDirection: DismissDirection.horizontal,
                       context: context,
@@ -62,7 +62,7 @@ class AddToCartButton extends HookWidget {
                   } catch (e) {
                     showSimpleNotification(
                       Text(
-                          '${product.name} ${S.of(context).couldntBeAddedToTheCart}'),
+                          '${product.name} ${context.l10n.couldntBeAddedToTheCart}'),
                       duration: const Duration(seconds: 1),
                       slideDismissDirection: DismissDirection.horizontal,
                       context: context,
@@ -74,7 +74,7 @@ class AddToCartButton extends HookWidget {
                 }),
       stateWidgets: {
         ButtonState.idle: Text(
-          S.of(context).addToCart,
+          context.l10n.addToCart,
           textAlign: TextAlign.start,
         ),
         ButtonState.loading: Loader(

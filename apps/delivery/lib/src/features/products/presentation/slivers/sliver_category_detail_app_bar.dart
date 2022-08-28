@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -131,7 +131,7 @@ class SliverCategoryDetailAppBar extends HookWidget {
           : SubcategoriesTabBar(
               category!,
               _TabWrapper(
-                child: Tab(child: Text(S.of(context).all.toUpperCase())),
+                child: Tab(child: Text(context.l10n.all.toUpperCase())),
               ),
               (e) => _TabWrapper(
                 child: Tab(

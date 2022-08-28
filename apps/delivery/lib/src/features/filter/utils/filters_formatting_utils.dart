@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +24,13 @@ class FilterFormattingUtils {
   }
 
   static String getQuantityRangeString(int minQuantity, BuildContext context) {
-    return '$minQuantity - ${S.of(context).max}';
+    return '$minQuantity - ${context.l10n.max}';
   }
 
   static String getFilterVolumeRangeString(
       RangeValues volumeRange, BuildContext context) {
     if (FilterConstants.isVolumeMax(volumeRange.end)) {
-      return '${FormattingUtils.getFilterVolumeNumberString(volumeRange.start)} - ${S.of(context).max}';
+      return '${FormattingUtils.getFilterVolumeNumberString(volumeRange.start)} - ${context.l10n.max}';
     } else {
       return '${FormattingUtils.getFilterVolumeNumberString(volumeRange.start)} - '
           '${FormattingUtils.getFilterVolumeNumberString(volumeRange.end)} l';
@@ -40,7 +40,7 @@ class FilterFormattingUtils {
   static String getPriceRangeString(
       RangeValues priceRange, BuildContext context) {
     if (FilterConstants.isPriceMax(priceRange.end)) {
-      return '${FormattingUtils.getPriceNumberString(priceRange.start)} - ${S.of(context).max}';
+      return '${FormattingUtils.getPriceNumberString(priceRange.start)} - ${context.l10n.max}';
     } else {
       return '${FormattingUtils.getPriceNumberString(priceRange.start)} - '
           '${FormattingUtils.getPriceNumberString(priceRange.end, withCurrency: true)}';

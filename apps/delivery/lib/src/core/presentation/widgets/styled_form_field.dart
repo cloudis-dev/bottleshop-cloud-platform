@@ -9,7 +9,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -34,7 +34,8 @@ class StyledFormField extends StatelessWidget {
   final bool readOnly;
   final bool enabled;
 
-  const StyledFormField({Key? key,
+  const StyledFormField({
+    Key? key,
     required this.onSaved,
     required this.validator,
     this.keyboardType = TextInputType.text,
@@ -100,15 +101,15 @@ InputDecoration getInputFieldDecorator(
 
 MultiValidator createPasswordValidator(BuildContext context) {
   return MultiValidator([
-    RequiredValidator(errorText: S.of(context).passwordIsRequired),
+    RequiredValidator(errorText: context.l10n.passwordIsRequired),
     MinLengthValidator(6,
-        errorText: S.of(context).passwordMinimumRequirementsHint),
+        errorText: context.l10n.passwordMinimumRequirementsHint),
   ]);
 }
 
 MultiValidator createEmailValidator(BuildContext context) {
   return MultiValidator([
-    RequiredValidator(errorText: S.of(context).emailIsRequired),
-    EmailValidator(errorText: S.of(context).enterAValidEmail),
+    RequiredValidator(errorText: context.l10n.emailIsRequired),
+    EmailValidator(errorText: context.l10n.enterAValidEmail),
   ]);
 }

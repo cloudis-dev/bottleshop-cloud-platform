@@ -13,7 +13,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
@@ -466,17 +466,17 @@ class UserRepository extends ChangeNotifier {
     switch (errorCode) {
       case ('CANCELLED'):
       case ('FAILED'):
-        return S.of(context).unableToAuthenticatePleaseTryAgainLater;
+        return context.l10n.unableToAuthenticatePleaseTryAgainLater;
       case ('email-already-in-use'):
-        return S.of(context).userWithThisEmailAlreadyExists;
+        return context.l10n.userWithThisEmailAlreadyExists;
       case ('user-not-found'):
-        return S.of(context).userWithThisEmailNotFound;
+        return context.l10n.userWithThisEmailNotFound;
       case ('wrong-password'):
-        return S.of(context).incorrectPassword;
+        return context.l10n.incorrectPassword;
       case ('account-exists-with-different-credential'):
-        return S.of(context).userAlreadySignedUpWithDifferentProvider;
+        return context.l10n.userAlreadySignedUpWithDifferentProvider;
       default:
-        return S.of(context).unableToAuthenticatePleaseTryAgainLater;
+        return context.l10n.unableToAuthenticatePleaseTryAgainLater;
     }
   }
 }

@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -39,7 +39,7 @@ class HomePage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).home);
+      Right(context.l10n.home);
 
   @override
   String getPagePath() => pagePathBase;

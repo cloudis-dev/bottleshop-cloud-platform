@@ -11,7 +11,7 @@
 //
 
 import 'package:badges/badges.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
@@ -68,7 +68,7 @@ class MenuDrawer extends HookWidget {
                 isSelected:
                     kIsWeb ? currentBranch == NestingBranch.shop : false,
                 leading: Icons.home,
-                title: S.of(context).homeTabLabel,
+                title: context.l10n.homeTabLabel,
                 handler: () {
                   final nav = context.read(navigationProvider);
 
@@ -83,7 +83,7 @@ class MenuDrawer extends HookWidget {
                 isSelected:
                     kIsWeb ? currentBranch == NestingBranch.categories : false,
                 leading: Icons.liquor,
-                title: S.of(context).categories,
+                title: context.l10n.categories,
                 handler: () {
                   final nav = context.read(navigationProvider);
 
@@ -102,7 +102,7 @@ class MenuDrawer extends HookWidget {
                 isSelected:
                     kIsWeb ? currentBranch == NestingBranch.favorites : false,
                 leading: Icons.favorite,
-                title: S.of(context).favoriteTabLabel,
+                title: context.l10n.favoriteTabLabel,
                 handler: () {
                   final nav = context.read(navigationProvider);
 
@@ -122,7 +122,7 @@ class MenuDrawer extends HookWidget {
                   isSelected:
                       kIsWeb ? currentBranch == NestingBranch.cart : false,
                   leading: Icons.shopping_cart,
-                  title: S.of(context).shopping_cart,
+                  title: context.l10n.shopping_cart,
                   handler: () {
                     context.read(navigationProvider).setNestingBranch(
                           context,
@@ -147,14 +147,14 @@ class MenuDrawer extends HookWidget {
                     );
                   }
                 },
-                title: S.of(context).orderTabLabel,
+                title: context.l10n.orderTabLabel,
                 badgeValue: orderBadge,
               ),
               _SideMenuItem(
                 isSelected:
                     kIsWeb ? currentBranch == NestingBranch.wholesale : false,
                 leading: Icons.store,
-                title: S.of(context).wholesale,
+                title: context.l10n.wholesale,
                 handler: () {
                   final nav = context.read(navigationProvider);
 
@@ -172,14 +172,14 @@ class MenuDrawer extends HookWidget {
               ),
               _SideMenuItem(
                 dense: true,
-                title: S.of(context).applicationPreferences,
+                title: context.l10n.applicationPreferences,
                 titleStyle: Theme.of(context).textTheme.overline,
               ),
               _SideMenuItem(
                 isSelected:
                     kIsWeb ? currentBranch == NestingBranch.account : false,
                 leading: Icons.settings,
-                title: S.of(context).settings,
+                title: context.l10n.settings,
                 handler: () {
                   final nav = context.read(navigationProvider);
 
@@ -198,7 +198,7 @@ class MenuDrawer extends HookWidget {
                 isSelected:
                     kIsWeb ? currentBranch == NestingBranch.help : false,
                 leading: Icons.help_outlined,
-                title: S.of(context).helpSupport,
+                title: context.l10n.helpSupport,
                 handler: () {
                   final nav = context.read(navigationProvider);
 
@@ -223,7 +223,7 @@ class MenuDrawer extends HookWidget {
                         toParent: true,
                       );
                 },
-                title: S.of(context).menuTerms,
+                title: context.l10n.menuTerms,
               ),
               if (hasUser)
                 _SideMenuItem(
@@ -231,7 +231,7 @@ class MenuDrawer extends HookWidget {
                     await context.read(userRepositoryProvider).signOut();
                   },
                   leading: Icons.exit_to_app,
-                  title: S.of(context).logOut,
+                  title: context.l10n.logOut,
                 ),
             ],
           ),
@@ -313,7 +313,7 @@ class BottleshopAboutTile extends HookWidget {
         Icons.info,
         color: Theme.of(context).colorScheme.secondary,
       ),
-      title: Text(S.of(context).aboutUs),
+      title: Text(context.l10n.aboutUs),
       onTap: () {
         showAboutDialog(
           context: context,
@@ -327,12 +327,12 @@ class BottleshopAboutTile extends HookWidget {
               ),
             ),
           ),
-          applicationName: S.of(context).app_title,
+          applicationName: context.l10n.app_title,
           applicationVersion: version.maybeWhen(
             data: (version) => '${version.version}.${version.buildNumber}',
             orElse: () => null,
           ),
-          applicationLegalese: S.of(context).companyAndYear,
+          applicationLegalese: context.l10n.companyAndYear,
         );
 
         afterTap?.call();

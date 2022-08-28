@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -131,7 +131,7 @@ class _Body extends StatelessWidget {
             Opacity(
               opacity: 0.8,
               child: Text(
-                S.of(context).orderCompletedAndPaid,
+                context.l10n.orderCompletedAndPaid,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline4,
               ),
@@ -140,7 +140,7 @@ class _Body extends StatelessWidget {
             Opacity(
               opacity: 0.8,
               child: Text(
-                S.of(context).checkoutSuccess,
+                context.l10n.checkoutSuccess,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -161,7 +161,7 @@ class _Body extends StatelessWidget {
                     .read(navigationProvider)
                     .replaceRootStackWith([AppPageNode(page: HomePage())]);
               },
-              child: Text(S.of(context).start_shopping),
+              child: Text(context.l10n.start_shopping),
             ),
           ],
         ),

@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
@@ -77,7 +77,7 @@ class CartView extends HookWidget {
                           .read(cartRepositoryProvider)!
                           .removeItem(cart.elementAt(index).product.uniqueId);
                       showSimpleNotification(
-                        Text(S.of(context).itemRemovedFromCart),
+                        Text(context.l10n.itemRemovedFromCart),
                         position: NotificationPosition.bottom,
                         duration: const Duration(seconds: 1),
                         slideDismissDirection: DismissDirection.horizontal,
@@ -95,7 +95,7 @@ class CartView extends HookWidget {
               error: (err, stack) {
                 _logger.severe('Failed to fetch cart content', err, stack);
                 return Center(
-                  child: Text(S.of(context).failedToFetchCart),
+                  child: Text(context.l10n.failedToFetchCart),
                 );
               },
             ),
@@ -105,7 +105,7 @@ class CartView extends HookWidget {
           data: (cart) {
             return CheckoutTile(
               showPromoButton: !kIsWeb,
-              actionLabel: S.of(context).proceedToShipment,
+              actionLabel: context.l10n.proceedToShipment,
               actionCallback: () {
                 context.read(navigationProvider).pushPage(
                       context,
@@ -119,7 +119,7 @@ class CartView extends HookWidget {
           error: (err, stack) {
             _logger.severe('Failed to fetch cart', err, stack);
             return Center(
-              child: Text(S.of(context).error),
+              child: Text(context.l10n.error),
             );
           },
         ),

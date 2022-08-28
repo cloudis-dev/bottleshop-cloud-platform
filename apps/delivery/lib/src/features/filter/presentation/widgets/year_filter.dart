@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
@@ -48,7 +48,7 @@ class YearFilter extends HookWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(S.of(context).year),
+                Text(context.l10n.year),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
@@ -90,7 +90,7 @@ class YearFilter extends HookWidget {
           _logger.severe('Failed to fetch filter aggregations', err, stack);
 
           return Center(
-            child: Text(S.of(context).error),
+            child: Text(context.l10n.error),
           );
         },
       ),

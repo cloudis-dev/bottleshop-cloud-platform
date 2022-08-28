@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class ProductDescriptionTab extends HookWidget {
           dense: true,
           contentPadding: const EdgeInsets.symmetric(vertical: 0),
           title: Text(
-            S.of(context).description,
+            context.l10n.description,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -29,7 +29,7 @@ class ProductDescriptionTab extends HookWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             product.getDescription(currentLocale) ??
-                S.of(context).wereWorkingOnIt,
+                context.l10n.wereWorkingOnIt,
             style: Theme.of(context).textTheme.subtitle2,
           ),
         ),

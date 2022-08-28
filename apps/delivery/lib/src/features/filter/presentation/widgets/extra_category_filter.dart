@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
@@ -34,7 +34,7 @@ class ExtraCategoriesGroupFilter extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(S.of(context).onlyFollowingExtraCategories),
+          Text(context.l10n.onlyFollowingExtraCategories),
           const SizedBox(height: 8),
           ...categories
               .where((element) => element.categoryDetails.isExtraCategory)

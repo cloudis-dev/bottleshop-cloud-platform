@@ -10,7 +10,7 @@
 //
 //
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -52,7 +52,7 @@ class TermsConditionsPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).cart);
+      Right(context.l10n.cart);
 
   @override
   String getPagePath() => pagePathBase;
@@ -72,7 +72,7 @@ class _TermsConditionsView extends HookWidget {
           onPressed: () => context.read(navigationProvider).popPage(context),
         ),
         title: Text(
-          S.of(context).generalCommercialTermsTitle,
+          context.l10n.generalCommercialTermsTitle,
         ),
       ),
       body: useProvider(_pdfDocProvider).when(
@@ -89,7 +89,7 @@ class _TermsConditionsView extends HookWidget {
           );
         },
         loading: () => const Loader(),
-        error: (_, __) => Center(child: Text(S.of(context).errorGeneric)),
+        error: (_, __) => Center(child: Text(context.l10n.errorGeneric)),
       ),
     );
   }

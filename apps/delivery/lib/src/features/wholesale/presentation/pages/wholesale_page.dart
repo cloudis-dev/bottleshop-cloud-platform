@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
@@ -20,7 +20,7 @@ class WholeSalePage extends RoutebornPage {
   WholeSalePage() : super.builder(pagePathBase, (_) => const _WholeSalePage());
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).wholesale);
+      Right(context.l10n.wholesale);
 
   @override
   String getPagePath() => pagePathBase;
@@ -40,7 +40,7 @@ class _WholeSalePage extends HookWidget {
         key: scaffoldKey,
         drawer: const MenuDrawer(),
         appBar: AppBar(
-          title: Text(S.of(context).wholesale),
+          title: Text(context.l10n.wholesale),
           leading: MenuButton(drawerScaffoldKey: scaffoldKey),
           actions: [
             AuthPopupButton(scaffoldKey: scaffoldKey),

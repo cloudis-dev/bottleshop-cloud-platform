@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -113,7 +113,7 @@ class SocialMediaButtonsRow extends HookWidget {
   void _notifyTermsNotAgreed(BuildContext context) {
     showSimpleNotification(
       Text(
-        S.of(context).youMustFirstAgreeToTermsConditions,
+        context.l10n.youMustFirstAgreeToTermsConditions,
         style: const TextStyle(color: Colors.white),
       ),
       background: Theme.of(context).colorScheme.onSecondary,

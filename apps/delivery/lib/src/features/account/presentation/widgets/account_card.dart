@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
@@ -53,7 +53,7 @@ class AccountCard extends HookWidget {
               ListTile(
                 leading: const Icon(Icons.supervised_user_circle_outlined),
                 title: Text(
-                  S.of(context).contactDetails,
+                  context.l10n.contactDetails,
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 subtitle: const Text(''),
@@ -62,11 +62,11 @@ class AccountCard extends HookWidget {
                 dense: true,
                 leading: const Icon(Icons.email_outlined),
                 title: Text(
-                  S.of(context).email,
+                  context.l10n.email,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
-                  user?.email ?? S.of(context).anonymousUser,
+                  user?.email ?? context.l10n.anonymousUser,
                   style: Theme.of(context).textTheme.caption,
                 ),
                 trailing: ButtonTheme(
@@ -84,11 +84,11 @@ class AccountCard extends HookWidget {
                   Icons.person_outline_rounded,
                 ),
                 title: Text(
-                  S.of(context).fullName,
+                  context.l10n.fullName,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
-                  user?.name ?? S.of(context).anonymousUser,
+                  user?.name ?? context.l10n.anonymousUser,
                   style: Theme.of(context).textTheme.caption,
                 ),
               ),
@@ -98,11 +98,11 @@ class AccountCard extends HookWidget {
                   Icons.settings_phone,
                 ),
                 title: Text(
-                  S.of(context).phoneNumber,
+                  context.l10n.phoneNumber,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
-                  user?.phoneNumber ?? S.of(context).notSet,
+                  user?.phoneNumber ?? context.l10n.notSet,
                   style: Theme.of(context).textTheme.caption,
                 ),
               ),
@@ -113,14 +113,14 @@ class AccountCard extends HookWidget {
                     Icons.calendar_today,
                   ),
                   title: Text(
-                    S.of(context).birthDate,
+                    context.l10n.birthDate,
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                   subtitle: Text(
                     user?.dayOfBirth != null
                         ? FormattingUtils.getDateFormatter(currentLocale)
                             .format(user!.dayOfBirth!)
-                        : S.of(context).tellUsYourBirthdayToGetASpecialGift,
+                        : context.l10n.tellUsYourBirthdayToGetASpecialGift,
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ),
@@ -135,20 +135,20 @@ class AccountCard extends HookWidget {
                   Icons.business_outlined,
                 ),
                 title: Text(
-                  S.of(context).billingAddress,
+                  context.l10n.billingAddress,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
                   user?.billingAddress?.getAddressAsString() ??
-                      S.of(context).notSet,
+                      context.l10n.notSet,
                   style: Theme.of(context).textTheme.caption,
                 ),
                 trailing: ButtonTheme(
                   padding: const EdgeInsets.all(0),
                   minWidth: 50.0,
                   height: 25.0,
-                  child: AddressSettingsDialog(
-                      title: S.of(context).billingAddress),
+                  child:
+                      AddressSettingsDialog(title: context.l10n.billingAddress),
                 ),
               ),
               const Divider(
@@ -162,12 +162,12 @@ class AccountCard extends HookWidget {
                   Icons.home_outlined,
                 ),
                 title: Text(
-                  S.of(context).shippingAddress,
+                  context.l10n.shippingAddress,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 subtitle: Text(
                   user?.shippingAddress?.getAddressAsString() ??
-                      S.of(context).notSet,
+                      context.l10n.notSet,
                   style: Theme.of(context).textTheme.caption,
                 ),
                 trailing: ButtonTheme(
@@ -176,7 +176,7 @@ class AccountCard extends HookWidget {
                   height: 25.0,
                   child: AddressSettingsDialog(
                     addressType: AddressType.shipping,
-                    title: S.of(context).shippingAddress,
+                    title: context.l10n.shippingAddress,
                     icon: const Icon(Icons.home_outlined),
                   ),
                 ),

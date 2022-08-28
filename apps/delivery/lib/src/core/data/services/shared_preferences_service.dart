@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/preferences.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/foundation.dart';
@@ -34,9 +34,9 @@ LanguageMode locale2Language(Locale locale) {
 }
 
 Locale language2Locale(LanguageMode mode) {
-  return S.delegate.supportedLocales.firstWhere(
+  return AppLocalizations.supportedLocales.firstWhere(
     (element) => mode.toString().contains(element.languageCode),
-    orElse: () => S.delegate.supportedLocales.first,
+    orElse: () => AppLocalizations.supportedLocales.first,
   );
 }
 

@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// This is used in scrollable lists where the content is loaded.
@@ -27,7 +27,7 @@ class ListErrorWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            S.of(context).somethingWentWrong,
+            context.l10n.somethingWentWrong,
             style: Theme.of(context).textTheme.bodyText2,
           ),
           const SizedBox(
@@ -41,7 +41,7 @@ class ListErrorWidget extends StatelessWidget {
               primary: Theme.of(context).colorScheme.secondary,
             ),
             child: Text(
-              S.of(context).tryAgain,
+              context.l10n.tryAgain,
               textAlign: TextAlign.center,
             ),
           ),

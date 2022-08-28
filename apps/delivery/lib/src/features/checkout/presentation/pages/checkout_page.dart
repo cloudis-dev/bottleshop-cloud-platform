@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -91,7 +91,7 @@ class _CheckoutPageView extends HookWidget {
                         'Order #$orderId confirmed';
 
                     showSimpleNotification(
-                      Text(S.of(context).thankYouForYourOrder),
+                      Text(context.l10n.thankYouForYourOrder),
                       position: NotificationPosition.bottom,
                       context: context,
                     );
@@ -103,7 +103,7 @@ class _CheckoutPageView extends HookWidget {
                     );
                   } else {
                     showSimpleNotification(
-                      Text(S.of(context).error),
+                      Text(context.l10n.error),
                       position: NotificationPosition.bottom,
                       context: context,
                     );
@@ -152,7 +152,7 @@ class _CheckoutPageView extends HookWidget {
                     checkoutDoneMessageNotifier.value = checkoutDoneMsg;
 
                     showSimpleNotification(
-                      Text(S.of(context).thankYouForYourOrder),
+                      Text(context.l10n.thankYouForYourOrder),
                       position: NotificationPosition.bottom,
                       context: context,
                     );

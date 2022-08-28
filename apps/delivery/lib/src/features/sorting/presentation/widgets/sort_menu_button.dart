@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
 import 'package:delivery/src/features/sorting/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -52,23 +52,23 @@ class SortMenuButton extends HookWidget {
       itemBuilder: (context) => <PopupMenuEntry<_ButtonOptions>>[
         _MenuItem(
           value: _ButtonOptions.ascending,
-          text: S.of(context).sortAscending,
+          text: context.l10n.sortAscending,
           isChecked: sortModel.ascending,
         ),
         _MenuItem(
           value: _ButtonOptions.descending,
-          text: S.of(context).sortDescending,
+          text: context.l10n.sortDescending,
           isChecked: !sortModel.ascending,
         ),
         const PopupMenuDivider(),
         _MenuItem(
           value: _ButtonOptions.name,
-          text: S.of(context).name,
+          text: context.l10n.name,
           isChecked: sortModel.sortField == SortField.name,
         ),
         _MenuItem(
           value: _ButtonOptions.price,
-          text: S.of(context).price,
+          text: context.l10n.price,
           isChecked: sortModel.sortField == SortField.price,
         ),
       ],

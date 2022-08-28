@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
@@ -33,7 +33,7 @@ class OrdersPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).orderTabLabel);
+      Right(context.l10n.orderTabLabel);
 
   @override
   String getPagePath() => pagePathBase;
@@ -54,7 +54,7 @@ class _OrdersPageView extends HookWidget {
       return Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          title: Text(S.of(context).orderTabLabel),
+          title: Text(context.l10n.orderTabLabel),
           leading: CloseButton(
             onPressed: () => context.read(navigationProvider).setNestingBranch(
                   context,

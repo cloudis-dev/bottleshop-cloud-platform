@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/list_error_widget.dart';
@@ -33,10 +33,10 @@ class OrdersWidget extends HookWidget {
 
   static List<String> getOrderStepNames(BuildContext context) {
     return [
-      S.of(context).orderCreated,
-      S.of(context).orderReady,
-      S.of(context).orderShipping,
-      S.of(context).orderCompleted
+      context.l10n.orderCreated,
+      context.l10n.orderReady,
+      context.l10n.orderShipping,
+      context.l10n.orderCompleted
     ];
   }
 
@@ -51,15 +51,15 @@ class OrdersWidget extends HookWidget {
     if (!hasUser) {
       return EmptyTab(
         icon: Icons.login,
-        message: S.of(context).youNeedToLoginFirst,
-        buttonMessage: S.of(context).login,
+        message: context.l10n.youNeedToLoginFirst,
+        buttonMessage: context.l10n.login,
         onButtonPressed: () => authButtonKey.currentState!.showAccountMenu(),
       );
     } else if (ordersState.isDoneAndEmpty) {
       return EmptyTab(
           icon: Icons.fact_check_outlined,
-          message: S.of(context).noOrders,
-          buttonMessage: S.of(context).startExploring,
+          message: context.l10n.noOrders,
+          buttonMessage: context.l10n.startExploring,
           onButtonPressed: () {
             context
                 .read(navigationProvider)

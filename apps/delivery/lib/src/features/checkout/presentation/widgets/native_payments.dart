@@ -9,7 +9,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
@@ -46,7 +46,7 @@ class NativePayments extends HookWidget {
             ? Column(
                 children: [
                   Text(
-                    S.of(context).orCheckoutWith,
+                    context.l10n.orCheckoutWith,
                     style: Theme.of(context).textTheme.caption,
                   ),
                   const SizedBox(height: 20),
@@ -75,8 +75,8 @@ class NativePayments extends HookWidget {
                                 (value) => onCheckoutDone(
                                   defaultTargetPlatform ==
                                           TargetPlatform.android
-                                      ? S.of(context).successful_payment_gpay
-                                      : S.of(context).successful_payment,
+                                      ? context.l10n.successful_payment_gpay
+                                      : context.l10n.successful_payment,
                                 ),
                               );
                           await logPurchase(context, value);
@@ -88,7 +88,7 @@ class NativePayments extends HookWidget {
                             _logger.severe(
                                 'Failed to pay by native', err, stack);
                             showSimpleNotification(
-                              Text(S.of(context).errorGeneric),
+                              Text(context.l10n.errorGeneric),
                               position: NotificationPosition.bottom,
                               context: context,
                             );
@@ -96,7 +96,7 @@ class NativePayments extends HookWidget {
                         } catch (err, stack) {
                           _logger.severe('Failed to pay by native', err, stack);
                           showSimpleNotification(
-                            Text(S.of(context).errorGeneric),
+                            Text(context.l10n.errorGeneric),
                             position: NotificationPosition.bottom,
                             context: context,
                           );

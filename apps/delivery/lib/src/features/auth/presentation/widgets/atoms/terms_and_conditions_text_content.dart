@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -17,11 +17,11 @@ class TermsAndConditionsTextContent extends StatelessWidget {
     return RichText(
       softWrap: true,
       text: TextSpan(
-        text: S.of(context).termsPopUp,
+        text: context.l10n.termsPopUp,
         style: Theme.of(context).textTheme.bodyText1,
         children: [
           TextSpan(
-            text: S.of(context).termsPopUpLink,
+            text: context.l10n.termsPopUpLink,
             style: const TextStyle(
               color: Colors.blue,
               decoration: TextDecoration.underline,
@@ -30,7 +30,7 @@ class TermsAndConditionsTextContent extends StatelessWidget {
             recognizer: TapGestureRecognizer()..onTap = onNavigateToTermsPage,
           ),
           TextSpan(
-            text: S.of(context).termsPopUpCompany,
+            text: context.l10n.termsPopUpCompany,
           ),
         ],
       ),

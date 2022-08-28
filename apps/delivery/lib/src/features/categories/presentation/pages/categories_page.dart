@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
@@ -35,7 +35,7 @@ class CategoriesPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).categories);
+      Right(context.l10n.categories);
 
   @override
   String getPagePath() => pagePathBase;
@@ -56,7 +56,7 @@ class _CategoriesPage extends HookWidget {
         key: scaffoldKey,
         drawer: const MenuDrawer(),
         appBar: AppBar(
-          title: Text(S.of(context).categories),
+          title: Text(context.l10n.categories),
           leading: MenuButton(drawerScaffoldKey: scaffoldKey),
           actions: [
             const SearchIconButton(),
@@ -74,7 +74,7 @@ class _CategoriesPage extends HookWidget {
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
         // menuDrawer: const MenuDrawer(),
-        // appBarTitle: Text(S.of(context).categories),
+        // appBarTitle: Text(context.l10n.categories),
         appBarActions: [
           const LanguageDropdown(),
           const SearchIconButton(),

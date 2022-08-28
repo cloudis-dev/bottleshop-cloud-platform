@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
@@ -58,7 +58,7 @@ class PayButton extends HookWidget {
                   (value) async {
                     await logPurchase(context, this.value);
 
-                    onCheckoutDone(S.of(context).successful_payment_card);
+                    onCheckoutDone(context.l10n.successful_payment_card);
                   },
                 );
               } on PlatformException catch (err, stack) {
@@ -69,7 +69,7 @@ class PayButton extends HookWidget {
                   _logger.severe('Failed to pay by credit card', err, stack);
 
                   showSimpleNotification(
-                    Text(S.of(context).errorGeneric),
+                    Text(context.l10n.errorGeneric),
                     position: NotificationPosition.bottom,
                     context: context,
                   );
@@ -78,7 +78,7 @@ class PayButton extends HookWidget {
                 _logger.severe('Failed to pay by credit card', err, stack);
 
                 showSimpleNotification(
-                  Text(S.of(context).errorGeneric),
+                  Text(context.l10n.errorGeneric),
                   position: NotificationPosition.bottom,
                   context: context,
                 );
@@ -86,7 +86,7 @@ class PayButton extends HookWidget {
             },
             icon: const Icon(Icons.account_balance_outlined),
             label: Text(
-              S.of(context).confirmPayment,
+              context.l10n.confirmPayment,
               textAlign: TextAlign.start,
             ),
           ),

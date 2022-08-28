@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -184,8 +184,8 @@ class SectionProductItem extends HookWidget {
                             ),
                             Text(
                               product.count > 0
-                                  ? '${product.count} ${S.of(context).inStock}'
-                                  : S.of(context).outOfStock,
+                                  ? '${product.count} ${context.l10n.inStock}'
+                                  : context.l10n.outOfStock,
                               style:
                                   Theme.of(context).textTheme.caption!.copyWith(
                                         color: product.count > 0
@@ -297,11 +297,11 @@ class _FlashSaleItem extends HookWidget {
     const highlightStyle = TextStyle(fontWeight: FontWeight.bold);
 
     if (flashSaleEndsIn.inSeconds <= 0) {
-      return [TextSpan(text: S.of(context).flashSaleEnded)];
+      return [TextSpan(text: context.l10n.flashSaleEnded)];
     }
     if (flashSaleEndsIn.inDays >= 1) {
       return [
-        TextSpan(text: '${S.of(context).remainingDays}: '),
+        TextSpan(text: '${context.l10n.remainingDays}: '),
         TextSpan(
           text: flashSaleEndsIn.inDays.toString(),
           style: highlightStyle,
@@ -310,7 +310,7 @@ class _FlashSaleItem extends HookWidget {
     }
     if (flashSaleEndsIn.inHours >= 1) {
       return [
-        TextSpan(text: '${S.of(context).remainingHours}: '),
+        TextSpan(text: '${context.l10n.remainingHours}: '),
         TextSpan(
           text: flashSaleEndsIn.inHours.toString(),
           style: highlightStyle,
@@ -318,7 +318,7 @@ class _FlashSaleItem extends HookWidget {
       ];
     }
     return [
-      TextSpan(text: '${S.of(context).remainingMinutes}: '),
+      TextSpan(text: '${context.l10n.remainingMinutes}: '),
       TextSpan(
         text: flashSaleEndsIn.inMinutes.toString(),
         style: highlightStyle,

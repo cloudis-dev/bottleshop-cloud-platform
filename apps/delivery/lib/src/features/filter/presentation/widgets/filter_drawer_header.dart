@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
@@ -32,7 +32,7 @@ class FilterDrawerHeader extends HookWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(S.of(context).filter),
+          Text(context.l10n.filter),
           MaterialButton(
             onPressed: () {
               context.read(appliedFilterProvider(filterType)).state =
@@ -41,7 +41,7 @@ class FilterDrawerHeader extends HookWidget {
               Navigator.pop(context);
             },
             child: Text(
-              S.of(context).clear,
+              context.l10n.clear,
               style: Theme.of(context).textTheme.bodyText1,
             ),
           )

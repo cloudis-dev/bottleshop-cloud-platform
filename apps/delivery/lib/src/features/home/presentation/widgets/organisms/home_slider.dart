@@ -11,7 +11,7 @@
 //
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
@@ -123,7 +123,7 @@ class _Carousel extends HookWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const SizedBox(height: 200),
-                Text(S.of(context).error),
+                Text(context.l10n.error),
               ],
             ),
           );

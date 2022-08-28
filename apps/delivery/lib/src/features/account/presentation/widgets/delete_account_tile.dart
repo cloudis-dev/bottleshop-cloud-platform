@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class DeleteAccountTile extends HookWidget {
               child: TextButton(
                 style:
                     TextButton.styleFrom(primary: Theme.of(context).errorColor),
-                child: Text(S.of(context).deleteAccount),
+                child: Text(context.l10n.deleteAccount),
                 onPressed: () {
                   showDialog<void>(
                     context: context,
@@ -85,21 +85,21 @@ class _DeleteConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(S.of(context).deleteAccountDialogTitle),
-      content: Text(S.of(context).deleteAccountDialogLabel),
+      title: Text(context.l10n.deleteAccountDialogTitle),
+      content: Text(context.l10n.deleteAccountDialogLabel),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(S.of(context).deleteAccountNegativeOption),
+          child: Text(context.l10n.deleteAccountNegativeOption),
         ),
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
             _deleteAccount();
           },
-          child: Text(S.of(context).deleteAccount),
+          child: Text(context.l10n.deleteAccount),
         ),
       ],
     );

@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -224,8 +224,8 @@ class ProductGridItem extends HookWidget {
                         fit: fit,
                         child: Text(
                           product.count > 0
-                              ? '${product.count} ${S.of(context).inStock}'
-                              : S.of(context).outOfStock,
+                              ? '${product.count} ${context.l10n.inStock}'
+                              : context.l10n.outOfStock,
                           style: stockTextTheme,
                         ),
                       ),

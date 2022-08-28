@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
@@ -51,7 +51,7 @@ class ToggleWishlistButton extends HookWidget {
                       .then(
                         (value) => showSimpleNotification(
                           Text(
-                              '${product.name} ${S.of(context).removedFromWishList}'),
+                              '${product.name} ${context.l10n.removedFromWishList}'),
                           slideDismissDirection: DismissDirection.horizontal,
                           context: context,
                         ),
@@ -59,7 +59,7 @@ class ToggleWishlistButton extends HookWidget {
                       .catchError(
                         (_) => showSimpleNotification(
                           Text(
-                              '${product.name} ${S.of(context).couldntBeSuccessfullyRemovedFromWishlist}'),
+                              '${product.name} ${context.l10n.couldntBeSuccessfullyRemovedFromWishlist}'),
                           duration: const Duration(seconds: 1),
                           slideDismissDirection: DismissDirection.horizontal,
                           context: context,
@@ -78,7 +78,7 @@ class ToggleWishlistButton extends HookWidget {
                       .then(
                         (value) => showSimpleNotification(
                           Text(
-                              '${product.name} ${S.of(context).addedToWishList}'),
+                              '${product.name} ${context.l10n.addedToWishList}'),
                           duration: const Duration(seconds: 1),
                           slideDismissDirection: DismissDirection.horizontal,
                           context: context,
@@ -87,7 +87,7 @@ class ToggleWishlistButton extends HookWidget {
                       .catchError(
                         (_) => showSimpleNotification(
                           Text(
-                              '${product.name} ${S.of(context).couldntBeSuccessfullyAddedToWishlist}'),
+                              '${product.name} ${context.l10n.couldntBeSuccessfullyAddedToWishlist}'),
                           duration: const Duration(seconds: 1),
                           slideDismissDirection: DismissDirection.horizontal,
                           context: context,

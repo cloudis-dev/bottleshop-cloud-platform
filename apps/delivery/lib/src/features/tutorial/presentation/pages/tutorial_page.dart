@@ -12,7 +12,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/tutorial/presentation/providers/tutorial_providers.dart';
 import 'package:flutter/foundation.dart';
@@ -117,7 +117,7 @@ class _TutorialView extends HookWidget {
                 onPressed: () => context
                     .read(tutorialModelProvider.notifier)
                     .finishIntroScreen(context),
-                child: Text(S.of(context).skip),
+                child: Text(context.l10n.skip),
               ),
             ),
           Positioned.directional(
@@ -173,11 +173,11 @@ class _TutorialView extends HookWidget {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(S.of(context).startShopping),
+                        Text(context.l10n.startShopping),
                         const Icon(Icons.arrow_forward),
                       ],
                     )
-                  : Text(S.of(context).next),
+                  : Text(context.l10n.next),
             ),
           ),
         ],

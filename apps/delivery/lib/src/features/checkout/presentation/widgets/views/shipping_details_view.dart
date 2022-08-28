@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/account/presentation/widgets/account_card.dart';
@@ -158,19 +158,19 @@ void onUserDenied(BuildContext context, List<DeniedReason> reasons) {
 
 String buildMessage(BuildContext context, List<DeniedReason> reasons) {
   if (reasons.contains(DeniedReason.noDeliverySelected)) {
-    return S.of(context).reminderChooseDelivery;
+    return context.l10n.reminderChooseDelivery;
   }
   if (reasons.contains(DeniedReason.email) ||
       reasons.contains(DeniedReason.name) ||
       reasons.contains(DeniedReason.phoneNumber)) {
-    return S.of(context).pleaseFillOutYourEmailAndName;
+    return context.l10n.pleaseFillOutYourEmailAndName;
   } else if (reasons.contains(DeniedReason.shippingAddress) ||
       reasons.contains(DeniedReason.billingAddress)) {
-    return S.of(context).pleaseFillOutYourEmailNameBillingAndShippingAddress;
+    return context.l10n.pleaseFillOutYourEmailNameBillingAndShippingAddress;
   } else if (reasons.contains(DeniedReason.shipToCity)) {
-    return S.of(context).quickDeliveryIsPossibleOnlyInBratislava;
+    return context.l10n.quickDeliveryIsPossibleOnlyInBratislava;
   } else if (reasons.contains(DeniedReason.quickDeliveryNotice)) {
-    return S.of(context).reminderOpeningHours;
+    return context.l10n.reminderOpeningHours;
   }
   return reasons.toString();
 }
@@ -234,7 +234,7 @@ class ShippingDetailsView extends HookWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            S.of(context).delivery,
+            context.l10n.delivery,
           ),
           leading: BackButton(
             onPressed: () async {
@@ -295,13 +295,13 @@ class ShippingDetailsView extends HookWidget {
                                         Icons.notes_outlined,
                                       ),
                                       title: Text(
-                                        S.of(context).additionalRemarks,
+                                        context.l10n.additionalRemarks,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText2,
                                       ),
                                       subtitle: Text(
-                                        S.of(context).instructionsForDelivery,
+                                        context.l10n.instructionsForDelivery,
                                         style:
                                             Theme.of(context).textTheme.caption,
                                       ),
@@ -329,8 +329,8 @@ class ShippingDetailsView extends HookWidget {
                   actionLabel: context
                           .read(deliveryOptionsStateProvider.notifier)
                           .paymentRequired
-                      ? S.of(context).proceedToCheckout
-                      : S.of(context).confirmOrder,
+                      ? context.l10n.proceedToCheckout
+                      : context.l10n.confirmOrder,
                   actionCallback: context
                           .read(deliveryOptionsStateProvider.notifier)
                           .canProceed(user, selectedDeliveryOption)
@@ -358,7 +358,7 @@ class ShippingDetailsView extends HookWidget {
           error: (err, stack) {
             _logger.severe('Failed to stream current user', err, stack);
             return Center(
-              child: Text(S.of(context).error),
+              child: Text(context.l10n.error),
             );
           },
         ),
@@ -400,7 +400,7 @@ class DeliveryOptionTile extends HookWidget {
         child: Align(
           alignment: AlignmentDirectional.centerStart,
           child: Text(
-            S.of(context).payUpfront,
+            context.l10n.payUpfront,
             style: Theme.of(context)
                 .textTheme
                 .labelLarge
@@ -449,7 +449,7 @@ class DeliveryOptionTile extends HookWidget {
         child: Align(
           alignment: AlignmentDirectional.centerStart,
           child: Text(
-            S.of(context).payLater,
+            context.l10n.payLater,
             style: Theme.of(context)
                 .textTheme
                 .labelLarge
@@ -477,11 +477,11 @@ class DeliveryOptionTile extends HookWidget {
           Icons.airport_shuttle,
         ),
         title: Text(
-          S.of(context).deliveryOptions,
+          context.l10n.deliveryOptions,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         subtitle: Text(
-          S.of(context).selectDeliveryOption,
+          context.l10n.selectDeliveryOption,
           style: Theme.of(context).textTheme.caption,
         ),
         children: items,

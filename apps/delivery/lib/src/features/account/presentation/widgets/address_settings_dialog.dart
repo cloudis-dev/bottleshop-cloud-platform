@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
 import 'package:delivery/src/features/account/presentation/widgets/checkbox_list_tile_formfield.dart';
@@ -61,7 +61,7 @@ class AddressSettingsDialog extends HookWidget {
           style: TextButton.styleFrom(
               primary: Theme.of(context).colorScheme.secondary),
           child: Text(
-            S.of(context).edit,
+            context.l10n.edit,
           ),
         );
       },
@@ -69,7 +69,7 @@ class AddressSettingsDialog extends HookWidget {
       error: (err, stack) {
         _logger.severe('Failed to stream current user', err, stack);
         return Center(
-          child: Text(S.of(context).error),
+          child: Text(context.l10n.error),
         );
       },
     );
@@ -100,7 +100,7 @@ class AddressSettingsDialog extends HookWidget {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(S.of(context).cancelButton),
+              child: Text(context.l10n.cancelButton),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -125,7 +125,7 @@ class AddressSettingsDialog extends HookWidget {
                   }
                   userDb.updateData(user.uid, userData);
                   showSimpleNotification(
-                    Text(S.of(context).profileUpdatedMsg),
+                    Text(context.l10n.profileUpdatedMsg),
                     position: NotificationPosition.bottom,
                     slideDismissDirection: DismissDirection.horizontal,
                     context: context,
@@ -135,7 +135,7 @@ class AddressSettingsDialog extends HookWidget {
               },
               style: TextButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary),
-              child: Text(S.of(context).saveButton),
+              child: Text(context.l10n.saveButton),
             ),
           ],
         );
@@ -158,11 +158,11 @@ class AddressSettingsDialog extends HookWidget {
         children: <Widget>[
           StyledFormField(
             validator:
-                RequiredValidator(errorText: S.of(context).streetIsRequired),
+                RequiredValidator(errorText: context.l10n.streetIsRequired),
             style: TextStyle(color: Theme.of(context).focusColor),
             keyboardType: TextInputType.streetAddress,
-            hintText: S.of(context).bajkalska,
-            labelText: S.of(context).street,
+            hintText: context.l10n.bajkalska,
+            labelText: context.l10n.street,
             initialValue: address?.streetName,
             onSaved: (input) {
               if (input != null) {
@@ -175,10 +175,10 @@ class AddressSettingsDialog extends HookWidget {
           StyledFormField(
             style: TextStyle(color: Theme.of(context).focusColor),
             validator: RequiredValidator(
-                errorText: S.of(context).streetNumberIsRequired),
+                errorText: context.l10n.streetNumberIsRequired),
             keyboardType: TextInputType.streetAddress,
             hintText: '12/45',
-            labelText: S.of(context).streetNumber,
+            labelText: context.l10n.streetNumber,
             initialValue: address?.streetNumber,
             onSaved: (input) {
               if (input != null) {
@@ -191,10 +191,10 @@ class AddressSettingsDialog extends HookWidget {
           StyledFormField(
             style: TextStyle(color: Theme.of(context).focusColor),
             validator:
-                RequiredValidator(errorText: S.of(context).cityIsRequired),
+                RequiredValidator(errorText: context.l10n.cityIsRequired),
             keyboardType: TextInputType.text,
-            hintText: S.of(context).bratislava,
-            labelText: S.of(context).city,
+            hintText: context.l10n.bratislava,
+            labelText: context.l10n.city,
             initialValue: address?.city,
             onSaved: (input) {
               if (input != null) {
@@ -209,14 +209,14 @@ class AddressSettingsDialog extends HookWidget {
             style: TextStyle(color: Theme.of(context).focusColor),
             validator: MultiValidator(
               [
-                RequiredValidator(errorText: S.of(context).zipCodeIsRequired),
+                RequiredValidator(errorText: context.l10n.zipCodeIsRequired),
                 LengthRangeValidator(
-                    min: 5, max: 6, errorText: S.of(context).enterAValidZipCode)
+                    min: 5, max: 6, errorText: context.l10n.enterAValidZipCode)
               ],
             ),
             keyboardType: TextInputType.number,
             hintText: '841 02',
-            labelText: S.of(context).zipCode,
+            labelText: context.l10n.zipCode,
             initialValue: address?.zipCode,
             onSaved: (input) {
               if (input != null) {
@@ -231,8 +231,8 @@ class AddressSettingsDialog extends HookWidget {
             readOnly: true,
             autovalidateMode: AutovalidateMode.disabled,
             style: TextStyle(color: Theme.of(context).focusColor),
-            labelText: S.of(context).country,
-            initialValue: S.of(context).slovakiaPlaceholder,
+            labelText: context.l10n.country,
+            initialValue: context.l10n.slovakiaPlaceholder,
             onSaved: null,
             validator: null,
           ),
@@ -240,7 +240,7 @@ class AddressSettingsDialog extends HookWidget {
             CheckboxListTileFormField(
               activeColor: Theme.of(context).colorScheme.secondary,
               title: Text(
-                S.of(context).useAsShippingAddress,
+                context.l10n.useAsShippingAddress,
                 style: Theme.of(context).textTheme.bodyText2!.merge(
                       TextStyle(color: Theme.of(context).hintColor),
                     ),

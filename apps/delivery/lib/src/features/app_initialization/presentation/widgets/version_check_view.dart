@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/app_initialization/presentation/providers/providers.dart';
@@ -50,7 +50,7 @@ class _WrongAppVersionView extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            S.of(context).youreUsingAnIncompatibleVersionOfTheApp,
+            context.l10n.youreUsingAnIncompatibleVersionOfTheApp,
             style: Theme.of(context)
                 .textTheme
                 .headline6!
@@ -72,7 +72,7 @@ class _WrongAppVersionView extends HookWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    S.of(context).downloadTheUpdate,
+                    context.l10n.downloadTheUpdate,
                   ),
                 ),
               ),
@@ -80,7 +80,7 @@ class _WrongAppVersionView extends HookWidget {
             loading: () => const Loader(),
             error: (err, stack) {
               _logger.severe('Failed to get app download url', err, stack);
-              return Text(S.of(context).somethingWentWrong);
+              return Text(context.l10n.somethingWentWrong);
             },
           )
         ],

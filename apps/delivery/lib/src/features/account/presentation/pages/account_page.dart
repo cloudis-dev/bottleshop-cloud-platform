@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/dropdown.dart';
@@ -39,7 +39,7 @@ class AccountPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).settings);
+      Right(context.l10n.settings);
 
   @override
   String getPagePath() => pagePathBase;
@@ -60,7 +60,7 @@ class _AccountPageView extends HookWidget {
       return Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          title: Text(S.of(context).settings),
+          title: Text(context.l10n.settings),
           leading: CloseButton(
             onPressed: () {
               context.read(navigationProvider).setNestingBranch(
@@ -106,9 +106,9 @@ class _Body extends HookWidget {
     final user = useProvider(currentUserProvider);
 
     final themeWidgets = <DropdownListItem>[
-      DropdownListItem(label: S.of(context).system),
-      DropdownListItem(label: S.of(context).light),
-      DropdownListItem(label: S.of(context).dark),
+      DropdownListItem(label: context.l10n.system),
+      DropdownListItem(label: context.l10n.light),
+      DropdownListItem(label: context.l10n.dark),
     ];
 
     return SingleChildScrollView(
@@ -125,12 +125,12 @@ class _Body extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        user?.name ?? S.of(context).anonymousUser,
+                        user?.name ?? context.l10n.anonymousUser,
                         textAlign: TextAlign.left,
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                       Text(
-                        user?.email ?? S.of(context).na,
+                        user?.email ?? context.l10n.na,
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ],
@@ -174,14 +174,14 @@ class _Body extends HookWidget {
                         ListTile(
                           leading: const Icon(Icons.settings),
                           title: Text(
-                            S.of(context).preferences,
+                            context.l10n.preferences,
                             style: Theme.of(context).textTheme.headline6,
                           ),
                         ),
                         ListTile(
                           leading: const Icon(Icons.language),
                           title: Text(
-                            S.of(context).languages,
+                            context.l10n.languages,
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                           trailing: const LanguageDropdown(),
@@ -193,7 +193,7 @@ class _Body extends HookWidget {
                               Icons.settings_display_rounded,
                             ),
                             title: Text(
-                              S.of(context).darkMode,
+                              context.l10n.darkMode,
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
                             trailing: DropDown<ThemeMode>(

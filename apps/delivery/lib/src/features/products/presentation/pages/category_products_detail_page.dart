@@ -11,7 +11,7 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -118,8 +118,8 @@ class _CategoryProductsPageView extends HookWidget {
             loading: () => const Loader(),
             orElse: () => EmptyTab(
               icon: Icons.info,
-              message: S.of(context).noSuchCategory,
-              buttonMessage: S.of(context).startExploring,
+              message: context.l10n.noSuchCategory,
+              buttonMessage: context.l10n.startExploring,
               onButtonPressed: () {
                 context.read(navigationProvider).replaceAllWith(context, []);
               },
@@ -225,7 +225,7 @@ class _Body extends HookWidget {
             ? null
             : SubcategoriesTabBar(
                 category,
-                Tab(child: Text(S.of(context).all.toUpperCase())),
+                Tab(child: Text(context.l10n.all.toUpperCase())),
                 (e) => Tab(
                     text:
                         e.categoryDetails.getName(currentLocale).toUpperCase()),

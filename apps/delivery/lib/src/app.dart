@@ -12,7 +12,7 @@
 
 import 'dart:ui';
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/routes.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
@@ -67,14 +67,14 @@ class App extends HookWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        onGenerateTitle: (context) => S.of(context).app_title,
+        onGenerateTitle: (context) => context.l10n.app_title,
         localizationsDelegates: const [
-          S.delegate,
+          AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: S.delegate.supportedLocales,
+        supportedLocales: AppLocalizations.supportedLocales,
         locale: useProvider<Locale>(currentLocaleProvider),
         theme: appTheme,
         darkTheme: appThemeDark,
@@ -131,13 +131,13 @@ class AgeVerificationDialog extends HookWidget {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(
-        title: Text(S.of(context).ageValidationDialogTitle),
-        content: Text(S.of(context).ageValidationDialogLabel),
+        title: Text(context.l10n.ageValidationDialogTitle),
+        content: Text(context.l10n.ageValidationDialogLabel),
         actions: [
           TextButton(
             onPressed: () =>
                 launchUrlString('about:blank', webOnlyWindowName: '_self'),
-            child: Text(S.of(context).ageValidationDialogButtonNo),
+            child: Text(context.l10n.ageValidationDialogButtonNo),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -147,7 +147,7 @@ class AgeVerificationDialog extends HookWidget {
 
               Navigator.of(context).pop();
             },
-            child: Text(S.of(context).ageValidationDialogButtonYes),
+            child: Text(context.l10n.ageValidationDialogButtonYes),
           ),
         ],
       ),

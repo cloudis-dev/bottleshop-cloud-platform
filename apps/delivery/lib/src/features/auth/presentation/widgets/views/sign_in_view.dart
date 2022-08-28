@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
@@ -127,8 +127,8 @@ class SignInView extends HookWidget {
                           const TermsAndConditionsTile(),
                           Text(
                             signInToggled
-                                ? S.of(context).dontHaveAnAccount
-                                : S.of(context).account_already,
+                                ? context.l10n.dontHaveAnAccount
+                                : context.l10n.account_already,
                           ),
                           TextButton(
                             onPressed: () => context
@@ -136,8 +136,8 @@ class SignInView extends HookWidget {
                                 .toggle(),
                             child: Text(
                               !signInToggled
-                                  ? S.of(context).sign_in
-                                  : S.of(context).sign_up,
+                                  ? context.l10n.sign_in
+                                  : context.l10n.sign_up,
                             ),
                           ),
                         ],

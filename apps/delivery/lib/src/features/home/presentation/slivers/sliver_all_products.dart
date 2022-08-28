@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/home/presentation/slivers/sliver_products_heading_tile.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/presentation/slivers/sliver_products_list.dart';
@@ -32,7 +32,7 @@ class SliverAllProducts extends HookWidget {
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           sliver: SliverProductsHeadingTile(
-            title: S.of(context).allProducts,
+            title: context.l10n.allProducts,
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 12)),

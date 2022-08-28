@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
@@ -48,7 +48,7 @@ class FilterDrawerFooter extends HookWidget {
 
           context.findAncestorStateOfType<DrawerControllerState>()!.close();
         },
-        child: Text(S.of(context).applyFilters, textAlign: TextAlign.start),
+        child: Text(context.l10n.applyFilters, textAlign: TextAlign.start),
       ),
     );
   }

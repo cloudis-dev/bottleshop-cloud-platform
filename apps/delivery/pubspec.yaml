@@ -74,7 +74,6 @@ dependencies:
     git:
       url: https://github.com/KristianBalaj/flutter_scroll_to_top.git
       ref: 21d47cab93a52e83eed910d3564278623c830e88
-  intl_utils: ^2.6.1
 
 dev_dependencies:
   flutter_test:
@@ -84,10 +83,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/images/
     - assets/markdown/
     - assets/fonts/
-flutter_intl:
-  main_locale: en_US
-  enabled: true

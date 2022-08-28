@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
@@ -91,8 +91,7 @@ class ResetPasswordView extends HookWidget {
                                       debugPrint('res: $result');
                                       showSimpleNotification(
                                         Text(
-                                          S
-                                              .of(context)
+                                          context.l10n
                                               .checkYourEmailForPasswordResetInstructions,
                                         ),
                                         position: NotificationPosition.bottom,
@@ -112,12 +111,12 @@ class ResetPasswordView extends HookWidget {
                           ),
                         ),
                         Text(
-                          S.of(context).gotNewPassword,
+                          context.l10n.gotNewPassword,
                         ),
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
                           child: Text(
-                            S.of(context).sign_in,
+                            context.l10n.sign_in,
                           ),
                         ),
                       ],

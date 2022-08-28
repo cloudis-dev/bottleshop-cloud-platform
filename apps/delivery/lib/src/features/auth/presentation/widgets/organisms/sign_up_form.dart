@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
@@ -66,13 +66,13 @@ class SignUpForm extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                S.of(context).sign_up,
+                context.l10n.sign_up,
                 style: Theme.of(context).textTheme.headline4,
                 textAlign: TextAlign.center,
               ),
               StyledFormField(
                 keyboardType: TextInputType.emailAddress,
-                labelText: S.of(context).email,
+                labelText: context.l10n.email,
                 prefixIcon: const Icon(
                   Icons.mail_outline,
                 ),
@@ -81,7 +81,7 @@ class SignUpForm extends HookWidget {
                 onSaved: (value) => email.text = value!,
               ),
               StyledFormField(
-                labelText: S.of(context).password,
+                labelText: context.l10n.password,
                 prefixIcon: const Icon(
                   Icons.lock,
                 ),
@@ -97,7 +97,7 @@ class SignUpForm extends HookWidget {
                 onSaved: (value) => password.text = value!,
               ),
               StyledFormField(
-                labelText: S.of(context).password,
+                labelText: context.l10n.password,
                 prefixIcon: const Icon(
                   Icons.lock,
                 ),
@@ -109,7 +109,7 @@ class SignUpForm extends HookWidget {
                 ),
                 controller: passwordRepeat,
                 validator: (val) =>
-                    MatchValidator(errorText: S.of(context).passwordsDontMatch)
+                    MatchValidator(errorText: context.l10n.passwordsDontMatch)
                         .validateMatch(val!, password.value.text),
                 obscureText: !showPassword.value,
                 maxLines: 1,
@@ -141,7 +141,7 @@ class SignUpForm extends HookWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
                 child: Text(
-                  S.of(context).sign_up,
+                  context.l10n.sign_up,
                 ),
               ),
               const SizedBox(height: 8),

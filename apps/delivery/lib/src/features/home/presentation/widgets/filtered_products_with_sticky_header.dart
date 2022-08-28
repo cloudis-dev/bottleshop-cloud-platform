@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/home/presentation/slivers/sliver_products_heading_tile.dart';
@@ -39,8 +39,8 @@ class FilteredProductsWithStickyHeader extends HookWidget {
           const FiltersStickyHeader(filterType: FilterType.allProducts),
           EmptyTab(
             icon: Icons.block_rounded,
-            message: S.of(context).noSuchItems,
-            buttonMessage: S.of(context).modifyFilter,
+            message: context.l10n.noSuchItems,
+            buttonMessage: context.l10n.modifyFilter,
             onButtonPressed: () =>
                 // parent of parent scaffold
                 Scaffold.of(context).openEndDrawer(),
@@ -54,7 +54,7 @@ class FilteredProductsWithStickyHeader extends HookWidget {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverProductsHeadingTile(
-              title: S.of(context).filteredProducts,
+              title: context.l10n.filteredProducts,
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),

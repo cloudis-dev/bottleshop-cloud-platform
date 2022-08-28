@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/auth/presentation/dialogs/terms_and_conditions_dialog.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class TermsAndConditionsTile extends HookWidget {
         },
         value: isChecked,
         title: Text(
-          S.of(context).termsTitleMainScreen,
+          context.l10n.termsTitleMainScreen,
           textAlign: TextAlign.left,
           maxLines: 1,
           style: Theme.of(context).textTheme.bodyText2,

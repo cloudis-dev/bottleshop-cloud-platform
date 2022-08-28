@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/adaptive_bottom_navigation_scaffold.dart';
 import 'package:delivery/src/core/presentation/widgets/bottom_navigation_tab.dart';
@@ -16,7 +16,7 @@ class HomeMobileScaffold extends HookWidget {
         BottomNavigationTab(
           bottomNavigationBarItem: BottomNavigationBarItem(
             icon: const Icon(Icons.home),
-            label: S.of(context).homeTabLabel,
+            label: context.l10n.homeTabLabel,
           ),
           navigationNestingLevel: NestingBranch.shop,
           // navigatorKey: homeTabKey,
@@ -28,7 +28,7 @@ class HomeMobileScaffold extends HookWidget {
         BottomNavigationTab(
           bottomNavigationBarItem: BottomNavigationBarItem(
             icon: const Icon(Icons.liquor),
-            label: S.of(context).categories,
+            label: context.l10n.categories,
           ),
           navigationNestingLevel: NestingBranch.categories,
           // navigatorKey: categoriesTabKey,
@@ -38,7 +38,7 @@ class HomeMobileScaffold extends HookWidget {
         BottomNavigationTab(
           bottomNavigationBarItem: BottomNavigationBarItem(
             icon: const Icon(Icons.favorite),
-            label: S.of(context).favoriteTabLabel,
+            label: context.l10n.favoriteTabLabel,
           ),
           navigationNestingLevel: NestingBranch.favorites,
           // navigatorKey: favoriteTabKey,
@@ -48,7 +48,7 @@ class HomeMobileScaffold extends HookWidget {
         BottomNavigationTab(
           bottomNavigationBarItem: BottomNavigationBarItem(
             icon: const CartIconWithBadge(),
-            label: S.of(context).shopping_cart,
+            label: context.l10n.shopping_cart,
           ),
           navigationNestingLevel: NestingBranch.cart,
           // navigatorKey: cartTabKey,

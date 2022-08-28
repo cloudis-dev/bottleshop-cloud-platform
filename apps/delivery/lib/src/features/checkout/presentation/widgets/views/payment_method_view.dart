@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
@@ -43,7 +43,7 @@ class PaymentMethodView extends HookWidget {
             onPressed: onBackButton,
           ),
           title: Text(
-            S.of(context).checkout,
+            context.l10n.checkout,
           ),
         ),
         body: CupertinoScrollbar(
@@ -56,7 +56,7 @@ class PaymentMethodView extends HookWidget {
               data: (cart) => cart == null
                   ? EmptyTab(
                       icon: Icons.info_outline,
-                      message: S.of(context).youHaveAnEmptyCart,
+                      message: context.l10n.youHaveAnEmptyCart,
                     )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,7 +68,7 @@ class PaymentMethodView extends HookWidget {
                             contentPadding:
                                 const EdgeInsets.symmetric(vertical: 0),
                             title: Text(
-                              S.of(context).selectYourPreferredPaymentMode,
+                              context.l10n.selectYourPreferredPaymentMode,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.subtitle1,
@@ -96,7 +96,7 @@ class PaymentMethodView extends HookWidget {
               error: (err, stack) {
                 _logger.severe('Failed to fetch cart data', err, stack);
                 return Center(
-                  child: Text(S.of(context).error),
+                  child: Text(context.l10n.error),
                 );
               },
             ),

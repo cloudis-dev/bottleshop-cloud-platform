@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class IsSpecialEditionFilter extends HookWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(S.of(context).onlySpecialEditions),
+        Text(context.l10n.onlySpecialEditions),
         Switch(
           value: isSpecialEdition,
           onChanged: (value) {

@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -112,8 +112,8 @@ class ProductListItem extends HookWidget {
                             ),
                             Text(
                               product.count > 0
-                                  ? '${product.count} ${S.of(context).inStock}'
-                                  : S.of(context).outOfStock,
+                                  ? '${product.count} ${context.l10n.inStock}'
+                                  : context.l10n.outOfStock,
                               style: Theme.of(context)
                                   .textTheme
                                   .overline!

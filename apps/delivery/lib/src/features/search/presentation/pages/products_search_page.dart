@@ -13,7 +13,7 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -51,7 +51,7 @@ class ProductsSearchPage extends RoutebornPage {
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
-      Right(S.of(context).search);
+      Right(context.l10n.search);
 
   @override
   String getPagePath() => pagePathBase;
@@ -128,8 +128,8 @@ class _Body extends HookWidget {
       case SearchState.cleaned:
         return EmptyTab(
           icon: Icons.search,
-          message: S.of(context).hitTheSearch,
-          buttonMessage: S.of(context).startSearching,
+          message: context.l10n.hitTheSearch,
+          buttonMessage: context.l10n.startSearching,
           onButtonPressed: () =>
               FocusScope.of(context).requestFocus(_searchBarFocusNode),
         );
@@ -142,8 +142,8 @@ class _Body extends HookWidget {
       case SearchState.error:
         return EmptyTab(
           icon: Icons.error_outline,
-          message: S.of(context).upsSomethingWentWrong,
-          buttonMessage: S.of(context).tryAgain,
+          message: context.l10n.upsSomethingWentWrong,
+          buttonMessage: context.l10n.tryAgain,
           onButtonPressed: () => _onSearchChanged(scaffoldStateKey.currentState,
               context.read(_searchEditingCtrlProvider).text),
         );
@@ -164,8 +164,8 @@ class _ResultsWidget extends HookWidget {
     if (searchResults.value1.isEmpty && searchResults.value2.isEmpty) {
       return EmptyTab(
         icon: Icons.block_rounded,
-        message: S.of(context).noSuchItems,
-        buttonMessage: S.of(context).searchAgain,
+        message: context.l10n.noSuchItems,
+        buttonMessage: context.l10n.searchAgain,
         onButtonPressed: () {
           // Scaffold.of(context).
           context.read(_searchEditingCtrlProvider).clear();

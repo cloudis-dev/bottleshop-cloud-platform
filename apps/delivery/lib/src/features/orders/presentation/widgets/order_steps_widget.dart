@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
@@ -108,7 +108,7 @@ class _OrderStepRow extends HookWidget {
                             .format(order.statusStepsDates[order
                                 .orderType.orderStepsIds
                                 .indexOf(orderStepId)])
-                        : S.of(context).waiting,
+                        : context.l10n.waiting,
                     style: Theme.of(context).textTheme.subtitle2,
                     overflow: TextOverflow.ellipsis,
                   ),

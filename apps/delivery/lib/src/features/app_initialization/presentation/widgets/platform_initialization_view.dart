@@ -1,4 +1,4 @@
-import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/app_initialization/presentation/widgets/fatal_error.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/splash_view.dart';
@@ -24,7 +24,7 @@ class PlatformInitializationView extends HookWidget {
         _logger.severe('Failed to initialize platform', err, stack);
         return FatalError(
           errorMessage:
-              S.of(context).unfortunatelyTheApplicationWasUnableToStart,
+              context.l10n.unfortunatelyTheApplicationWasUnableToStart,
         );
       },
     );
