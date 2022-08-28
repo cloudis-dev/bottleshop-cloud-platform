@@ -1,9 +1,11 @@
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -16,7 +18,7 @@ final _addToCartButtonStateProvider =
   },
 );
 
-class AddToCartButton extends HookConsumerWidget {
+class AddToCartButton extends HookWidget {
   final ProductModel product;
 
   const AddToCartButton({
@@ -28,10 +30,9 @@ class AddToCartButton extends HookConsumerWidget {
   final VoidCallback? actionOverride;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final addToCartButtonState = ref.watch(
-        _addToCartButtonStateProvider(product)
-            .select<ButtonState>((value) => value));
+  Widget build(BuildContext context) {
+    final addToCartButtonState = useProvider(
+        _addToCartButtonStateProvider(product).select((value) => value.state));
 
     return ProgressButton(
       state: addToCartButtonState,
@@ -39,34 +40,41 @@ class AddToCartButton extends HookConsumerWidget {
           (product.count == 0
               ? null
               : () {
-                  ref.read(_addToCartButtonStateProvider(product).state).state =
+                  context.read(_addToCartButtonStateProvider(product)).state =
                       ButtonState.loading;
                   try {
-                    ref.read(cartRepositoryProvider)!.add(product.uniqueId, 1);
-
+                    context
+                        .read(cartRepositoryProvider)!
+                        .add(product.uniqueId, 1);
+                    logAddToCart(
+                      context,
+                      product.uniqueId,
+                      product.name,
+                      product.allCategories.first.categoryDetails.toString(),
+                      1,
+                    );
                     showSimpleNotification(
-                      Text('${product.name} ${context.l10n.addedToCart}'),
-                      duration: const Duration(seconds: 1),
+                      Text('${product.name} ${S.of(context).addedToCart}'),
+                      duration: Duration(seconds: 1),
                       slideDismissDirection: DismissDirection.horizontal,
                       context: context,
                     );
                   } catch (e) {
                     showSimpleNotification(
                       Text(
-                          '${product.name} ${context.l10n.couldntBeAddedToTheCart}'),
-                      duration: const Duration(seconds: 1),
+                          '${product.name} ${S.of(context).couldntBeAddedToTheCart}'),
+                      duration: Duration(seconds: 1),
                       slideDismissDirection: DismissDirection.horizontal,
                       context: context,
                     );
                   } finally {
-                    ref
-                        .read(_addToCartButtonStateProvider(product).state)
-                        .state = ButtonState.idle;
+                    context.read(_addToCartButtonStateProvider(product)).state =
+                        ButtonState.idle;
                   }
                 }),
       stateWidgets: {
         ButtonState.idle: Text(
-          context.l10n.addToCart,
+          S.of(context).addToCart,
           textAlign: TextAlign.start,
         ),
         ButtonState.loading: Loader(

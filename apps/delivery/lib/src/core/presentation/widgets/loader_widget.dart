@@ -35,8 +35,8 @@ class Loader extends StatelessWidget {
           child!,
           if (inAsyncCall) ...[
             const Opacity(
-              opacity: 0.4,
               child: ModalBarrier(dismissible: false, color: Colors.grey),
+              opacity: 0.4,
             ),
             ModalProgressIndicator(
               valueColor: valueColor,
@@ -71,11 +71,11 @@ class ModalProgressIndicator extends StatelessWidget {
         child: Align(
           alignment: Alignment.center,
           child: SizedBox(
-            height: 30.0,
-            width: 30.0,
             child: AdaptiveLoader(
               valueColor: valueColor,
             ),
+            height: 30.0,
+            width: 30.0,
           ),
         ),
       ),

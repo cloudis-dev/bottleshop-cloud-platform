@@ -18,7 +18,7 @@ class SortModel extends Equatable {
   final SortField sortField;
   final bool ascending;
 
-  const SortModel({
+  SortModel({
     required this.sortField,
     required this.ascending,
   });

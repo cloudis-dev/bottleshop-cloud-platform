@@ -29,24 +29,22 @@ class FilterValue<T> extends Equatable {
 }
 
 final alcoholRangeScopedProvider =
-    Provider<FilterValue<RangeValues>?>((ref) => null);
+    ScopedProvider<FilterValue<RangeValues>>(null);
 
-final quantityScopedProvider = Provider<FilterValue<int>?>((ref) => null);
+final quantityScopedProvider = ScopedProvider<FilterValue<int>>(null);
 
 final volumeRangeScopedProvider =
-    Provider<FilterValue<RangeValues>?>((ref) => null);
+    ScopedProvider<FilterValue<RangeValues>>(null);
 
-final priceRangeScopedProvider =
-    Provider<FilterValue<RangeValues>?>((ref) => null);
+final priceRangeScopedProvider = ScopedProvider<FilterValue<RangeValues>>(null);
 
-final isSpecialEditionScopedProvider =
-    Provider<FilterValue<bool>?>((ref) => null);
+final isSpecialEditionScopedProvider = ScopedProvider<FilterValue<bool>>(null);
 
 final countriesScopedProvider =
-    Provider<FilterValue<List<CountryModel>>?>((ref) => null);
+    ScopedProvider<FilterValue<List<CountryModel>>>(null);
 
-final minAgeScopedProvider = Provider<FilterValue<int>?>((ref) => null);
-final maxYearScopedProvider = Provider<FilterValue<int>?>((ref) => null);
+final minAgeScopedProvider = ScopedProvider<FilterValue<int>>(null);
+final maxYearScopedProvider = ScopedProvider<FilterValue<int>>(null);
 
 final extraCategoriesScopedProvider =
-    Provider<FilterValue<List<String>>?>((ref) => null);
+    ScopedProvider<FilterValue<List<String>>>(null);

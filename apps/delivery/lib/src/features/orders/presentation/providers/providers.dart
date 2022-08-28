@@ -17,8 +17,7 @@ import 'package:delivery/src/features/orders/data/services/db_service.dart';
 import 'package:delivery/src/features/orders/presentation/view_models/orders_state_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final orderRepositoryProvider =
-    Provider.autoDispose<OrderRepository>((_) => OrderRepository());
+final orderRepositoryProvider = Provider.autoDispose((_) => OrderRepository());
 
 final ordersProvider = ChangeNotifierProvider.autoDispose<OrdersStateNotifier>(
   (ref) {
@@ -27,7 +26,7 @@ final ordersProvider = ChangeNotifierProvider.autoDispose<OrdersStateNotifier>(
 
     return OrdersStateNotifier(
       (lastDoc) => orderRepo.getUserOrdersStream(lastDoc, currentUser),
-    );
+    )..requestData();
   },
 );
 

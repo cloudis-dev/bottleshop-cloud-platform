@@ -10,35 +10,37 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/sliver_products_heading_tile.dart';
+import 'package:delivery/src/features/home/presentation/slivers/sliver_products_heading_tile.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/presentation/slivers/sliver_products_list.dart';
 import 'package:delivery/src/features/sticky_header/presentation/widgets/filters_sticky_header.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class FilteredProductsWithStickyHeader extends HookConsumerWidget {
+class FilteredProductsWithStickyHeader extends HookWidget {
   const FilteredProductsWithStickyHeader({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final productsState = ref.watch(filteredProductsProvider(null));
+  Widget build(BuildContext context) {
+    final productsState = useProvider(
+        filteredProductsProvider(null).select((value) => value.itemsState));
 
-    if (productsState.itemsState.isDoneAndEmpty) {
+    if (productsState.isDoneAndEmpty) {
       return Column(
         children: [
           const FiltersStickyHeader(filterType: FilterType.allProducts),
           EmptyTab(
             icon: Icons.block_rounded,
-            message: context.l10n.noSuchItems,
-            buttonMessage: context.l10n.modifyFilter,
+            message: S.of(context).noSuchItems,
+            buttonMessage: S.of(context).modifyFilter,
             onButtonPressed: () =>
                 // parent of parent scaffold
                 Scaffold.of(context).openEndDrawer(),
@@ -52,14 +54,14 @@ class FilteredProductsWithStickyHeader extends HookConsumerWidget {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverProductsHeadingTile(
-              title: context.l10n.filteredProducts,
+              title: S.of(context).filteredProducts,
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
           SliverProductsList(
-            productsState: productsState.itemsState,
+            productsState: productsState,
             requestData: () =>
-                ref.read(filteredProductsProvider(null)).requestData(),
+                context.read(filteredProductsProvider(null)).requestData(),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],

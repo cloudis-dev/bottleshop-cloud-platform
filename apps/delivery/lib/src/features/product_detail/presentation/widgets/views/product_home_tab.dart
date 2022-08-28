@@ -10,15 +10,16 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/models/category_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProductHomeTab extends HookConsumerWidget {
+class ProductHomeTab extends HookWidget {
   final ProductModel product;
 
   const ProductHomeTab({
@@ -27,16 +28,16 @@ class ProductHomeTab extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           product.count > 0
-              ? '${product.count} ${context.l10n.inStock}'
-              : context.l10n.outOfStock,
+              ? '${product.count} ${S.of(context).inStock}'
+              : S.of(context).outOfStock,
           style: Theme.of(context)
               .textTheme
               .subtitle2!
@@ -68,9 +69,9 @@ class ProductHomeTab extends HookConsumerWidget {
         const SizedBox(height: 10),
         ListTile(
           dense: true,
-          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+          contentPadding: EdgeInsets.symmetric(vertical: 0),
           title: Text(
-            context.l10n.category,
+            S.of(context).category,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -89,9 +90,9 @@ class ProductHomeTab extends HookConsumerWidget {
           const SizedBox(height: 20),
           ListTile(
             dense: true,
-            contentPadding: const EdgeInsets.symmetric(vertical: 0),
+            contentPadding: EdgeInsets.symmetric(vertical: 0),
             title: Text(
-              context.l10n.otherCategory,
+              S.of(context).otherCategory,
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ),

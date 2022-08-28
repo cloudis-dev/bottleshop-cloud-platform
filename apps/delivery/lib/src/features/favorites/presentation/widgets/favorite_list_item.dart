@@ -33,10 +33,10 @@ class FavoriteListItem extends HookWidget {
       key: UniqueKey(),
       background: Container(
         color: Colors.red,
-        child: const Align(
+        child: Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Icon(
               Icons.delete_forever,
               color: Colors.white,

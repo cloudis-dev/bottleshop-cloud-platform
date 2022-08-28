@@ -10,91 +10,94 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-class AgeFilter extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((AgeFilter).toString());
+
+class AgeFilter extends HookWidget {
   const AgeFilter({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final minAge = ref.watch(
-        filterModelProvider(filterType).select<int>((value) => value.minAge));
-    final isAgeActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isAgeActive));
+    final minAge = useProvider(
+        filterModelProvider(filterType).select((value) => value.state.minAge));
+    final isAgeActive = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.isAgeActive));
 
     return Offstage(
-      offstage: !ref.watch(
+      offstage: !useProvider(
         filterModelProvider(filterType)
-            .select<bool>((value) => value.isFilterByAge),
+            .select((value) => value.state.isFilterByAge),
       ),
-      child: ref.watch(filterAggregationsProvider).when(
-            data: (args) => Column(
+      child: useProvider(filterAggregationsProvider).when(
+        data: (aggs) => Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(context.l10n.ageYears),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 6),
-                      decoration: BoxDecoration(
-                        color: isAgeActive
-                            ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context)
-                                .colorScheme
-                                .secondary
-                                .withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        FilterFormattingUtils.getAgeRangeString(
-                            minAge, args.maxAge),
-                        textAlign: TextAlign.right,
-                      ),
-                    )
-                  ],
-                ),
-                Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Slider(
-                    min: FilterConstants.minAge.toDouble(),
-                    max: args.maxAge!.toDouble(),
-                    divisions: args.maxAge! - FilterConstants.minAge,
-                    value: args.maxAge! - minAge.toDouble(),
-                    onChanged: (value) =>
-                        ref.read(filterModelProvider(filterType).state).state =
-                            ref
-                                .read(filterModelProvider(filterType).state)
-                                .state
-                                .copyWith(
-                                  minAge: args.maxAge! - value.round(),
-                                ),
-                    label: minAge.toString(),
-                    activeColor: Theme.of(context).colorScheme.secondary,
+                Text(S.of(context).ageYears),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                  decoration: BoxDecoration(
+                    color: isAgeActive
+                        ? Theme.of(context).colorScheme.secondary
+                        : Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    FilterFormattingUtils.getAgeRangeString(
+                        minAge, aggs.maxAge),
+                    textAlign: TextAlign.right,
                   ),
                 )
               ],
             ),
-            loading: () => const Loader(),
-            error: (err, stack) {
-              loggy.error('Failed to fetch filter aggregations', err, stack);
-              return Center(
-                child: Text(context.l10n.error),
-              );
-            },
-          ),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: Slider(
+                min: FilterConstants.minAge.toDouble(),
+                max: aggs.maxAge!.toDouble(),
+                divisions: aggs.maxAge! - FilterConstants.minAge,
+                value: aggs.maxAge! - minAge.toDouble(),
+                onChanged: (value) =>
+                    context.read(filterModelProvider(filterType)).state =
+                        context
+                            .read(filterModelProvider(filterType))
+                            .state
+                            .copyWith(
+                              minAge: aggs.maxAge! - value.round(),
+                            ),
+                label: '${minAge.toString()}',
+                activeColor: Theme.of(context).colorScheme.secondary,
+              ),
+            )
+          ],
+        ),
+        loading: () => const Loader(),
+        error: (err, stack) {
+          _logger.severe('Failed to fetch filter aggregations', err, stack);
+          return Center(
+            child: Text(S.of(context).error),
+          );
+        },
+      ),
     );
   }
 }

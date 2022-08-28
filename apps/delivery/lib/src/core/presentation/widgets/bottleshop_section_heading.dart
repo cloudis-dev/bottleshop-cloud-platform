@@ -17,7 +17,7 @@ class BottleshopSectionHeading extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: ListTile(
         dense: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: 0),
+        contentPadding: EdgeInsets.symmetric(vertical: 0),
         leading: leading,
         title: Text(
           label,

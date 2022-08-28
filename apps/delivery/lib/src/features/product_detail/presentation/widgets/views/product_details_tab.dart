@@ -10,16 +10,17 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/atoms/detail_row_item.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProductDetailsTab extends HookConsumerWidget {
+class ProductDetailsTab extends HookWidget {
   final ProductModel product;
 
   const ProductDetailsTab({
@@ -28,17 +29,17 @@ class ProductDetailsTab extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ListTile(
           dense: true,
-          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+          contentPadding: EdgeInsets.symmetric(vertical: 0),
           title: Text(
-            context.l10n.details,
+            S.of(context).details,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -48,12 +49,12 @@ class ProductDetailsTab extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               DetailRowItem(
-                title: context.l10n.alcoholContent,
+                title: S.of(context).alcoholContent,
                 value: FormattingUtils.getAlcoholNumberString(
                     product.alcohol ?? 0),
               ),
               DetailRowItem(
-                title: context.l10n.volume,
+                title: S.of(context).volume,
                 value:
                     '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)}',
               ),
@@ -67,7 +68,7 @@ class ProductDetailsTab extends HookConsumerWidget {
                     const SizedBox(width: 20.0),
                     Expanded(
                       child: Text(
-                        context.l10n.flashSales,
+                        S.of(context).flashSales,
                         style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
@@ -86,7 +87,7 @@ class ProductDetailsTab extends HookConsumerWidget {
                     const SizedBox(width: 20.0),
                     Expanded(
                       child: Text(
-                        context.l10n.newAdditionToOurStock,
+                        S.of(context).newAdditionToOurStock,
                         style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
@@ -105,7 +106,7 @@ class ProductDetailsTab extends HookConsumerWidget {
                     const SizedBox(width: 20.0),
                     Expanded(
                       child: Text(
-                        context.l10n.recommendedByOurStaff,
+                        S.of(context).recommendedByOurStaff,
                         style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: Theme.of(context).colorScheme.secondary),
                         maxLines: 1,
@@ -117,23 +118,23 @@ class ProductDetailsTab extends HookConsumerWidget {
               const SizedBox(height: 10.0),
               if (product.isFlashSale)
                 DetailRowItem(
-                  title: context.l10n.flashsaleUntil,
+                  title: S.of(context).flashsaleUntil,
                   value: FormattingUtils.getDateTimeFormatter(currentLocale)
                       .format(product.flashSale!.flashSaleUntil),
                 ),
               if (product.isSpecialEdition)
                 DetailRowItem(
-                  title: context.l10n.specialEdition,
+                  title: S.of(context).specialEdition,
                   value: product.edition,
                 ),
               if (product.age != null)
                 DetailRowItem(
-                  title: context.l10n.age,
+                  title: S.of(context).age,
                   value: product.age.toString(),
                 ),
               if (product.year != null)
                 DetailRowItem(
-                  title: context.l10n.year,
+                  title: S.of(context).year,
                   value: product.year.toString(),
                 ),
               Row(
@@ -142,7 +143,7 @@ class ProductDetailsTab extends HookConsumerWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      context.l10n.country,
+                      S.of(context).country,
                       style: Theme.of(context).textTheme.subtitle2,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

@@ -1,6 +1,6 @@
-import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';

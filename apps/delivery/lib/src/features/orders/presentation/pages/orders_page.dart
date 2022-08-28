@@ -10,23 +10,43 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/language_dropdown.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/orders_widget.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class OrdersPageView extends HookConsumerWidget {
-  const OrdersPageView({Key? key}) : super(key: key);
+class OrdersPage extends RoutebornPage {
+  static const String pagePathBase = 'orders';
+
+  OrdersPage() : super.builder(pagePathBase, (_) => _OrdersPageView());
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(S.of(context).orderTabLabel);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _OrdersPageView extends HookWidget {
+  const _OrdersPageView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final authButtonKey = useMemoized(() => GlobalKey<AuthPopupButtonState>());
 
@@ -34,9 +54,18 @@ class OrdersPageView extends HookConsumerWidget {
       return Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          title: Text(context.l10n.orderTabLabel),
-          leading: const CloseButton(onPressed: null),
-          actions: [AuthPopupButton(key: authButtonKey, scaffoldKey: scaffoldKey)],
+          title: Text(S.of(context).orderTabLabel),
+          leading: CloseButton(
+            onPressed: () => context.read(navigationProvider).setNestingBranch(
+                  context,
+                  RoutebornBranchParams.of(context).getBranchParam()
+                          as NestingBranch? ??
+                      NestingBranch.shop,
+                ),
+          ),
+          actions: [
+            AuthPopupButton(key: authButtonKey, scaffoldKey: scaffoldKey)
+          ],
         ),
         body: OrdersWidget(authButtonKey),
       );

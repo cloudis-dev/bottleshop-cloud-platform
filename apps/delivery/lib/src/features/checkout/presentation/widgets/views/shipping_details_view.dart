@@ -10,21 +10,21 @@
 //
 //
 
-// ignore_for_file: unused_local_variable
-
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
-import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:delivery/src/features/account/presentation/widgets/account_card.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
+import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
+import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 enum DeniedReason {
@@ -39,6 +39,8 @@ enum DeniedReason {
 }
 
 mixin DeliveryAvailableForUserCheck {
+  final _logger = Logger((DeliveryAvailableForUserCheck).toString());
+
   bool canProceed(UserModel? user, DeliveryOption deliveryOption) {
     if (user == null) {
       return false;
@@ -58,8 +60,8 @@ mixin DeliveryAvailableForUserCheck {
       return [];
     }
 
-    logInfo('validating user: ${user.uid} option: ${deliveryOption.toString()}',
-        'DeliveryAvailableForUserCheck');
+    _logger.fine(
+        'validating user: ${user.uid} option: ${deliveryOption.toString()}');
     var deniedReasons = <DeniedReason>[];
     switch (deliveryOption) {
       case DeliveryOption.pickUp:
@@ -135,7 +137,7 @@ mixin DeliveryAvailableForUserCheck {
         }
         deniedReasons.add(DeniedReason.noDeliverySelected);
     }
-    logInfo(
+    _logger.fine(
         'user can proceed: ${deniedReasons.isEmpty} reasons: $deniedReasons}');
     return deniedReasons;
   }
@@ -144,34 +146,31 @@ mixin DeliveryAvailableForUserCheck {
 void onUserDenied(BuildContext context, List<DeniedReason> reasons) {
   if (reasons.isNotEmpty) {
     var message = buildMessage(context, reasons);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-    /*showSimpleNotification(
-      Text(message),
+    showSimpleNotification(
+      Text('$message'),
       position: NotificationPosition.top,
-      duration: const Duration(seconds: 3),
+      duration: Duration(seconds: 3),
       slideDismissDirection: DismissDirection.horizontal,
       context: context,
-    );*/
+    );
   }
 }
 
 String buildMessage(BuildContext context, List<DeniedReason> reasons) {
   if (reasons.contains(DeniedReason.noDeliverySelected)) {
-    return context.l10n.reminderChooseDelivery;
+    return S.of(context).reminderChooseDelivery;
   }
   if (reasons.contains(DeniedReason.email) ||
       reasons.contains(DeniedReason.name) ||
       reasons.contains(DeniedReason.phoneNumber)) {
-    return context.l10n.pleaseFillOutYourEmailAndName;
+    return S.of(context).pleaseFillOutYourEmailAndName;
   } else if (reasons.contains(DeniedReason.shippingAddress) ||
       reasons.contains(DeniedReason.billingAddress)) {
-    return context.l10n.pleaseFillOutYourEmailNameBillingAndShippingAddress;
+    return S.of(context).pleaseFillOutYourEmailNameBillingAndShippingAddress;
   } else if (reasons.contains(DeniedReason.shipToCity)) {
-    return context.l10n.quickDeliveryIsPossibleOnlyInBratislava;
+    return S.of(context).quickDeliveryIsPossibleOnlyInBratislava;
   } else if (reasons.contains(DeniedReason.quickDeliveryNotice)) {
-    return context.l10n.reminderOpeningHours;
+    return S.of(context).reminderOpeningHours;
   }
   return reasons.toString();
 }
@@ -203,19 +202,21 @@ final deliveryOptionsStateProvider =
 
 final _isLoadingProvider = StateProvider.autoDispose<bool>((_) => false);
 
-class ShippingDetailsView extends HookConsumerWidget {
+class ShippingDetailsView extends HookWidget {
+  final _logger = Logger((ShippingDetailsView).toString());
+
   final void Function(PaymentData paymentData) onNextPage;
   final void Function() onBackButton;
 
-  const ShippingDetailsView({
+  ShippingDetailsView({
     Key? key,
     required this.onNextPage,
     required this.onBackButton,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedDeliveryOption = ref.watch(deliveryOptionsStateProvider);
+  Widget build(BuildContext context) {
+    final selectedDeliveryOption = useProvider(deliveryOptionsStateProvider);
     final remarksTextController = useTextEditingController();
     final scrollController = useScrollController();
 
@@ -226,30 +227,140 @@ class ShippingDetailsView extends HookConsumerWidget {
       return () => {};
     }, const []);
 
-    final isLoading = ref.watch(_isLoadingProvider.state).state;
+    final isLoading = useProvider(_isLoadingProvider).state;
 
     return Loader(
       inAsyncCall: isLoading,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            context.l10n.delivery,
+            S.of(context).delivery,
           ),
           leading: BackButton(
             onPressed: () async {
-              ref.read(_isLoadingProvider.state).state = true;
-              await ref
+              context.read(_isLoadingProvider).state = true;
+              await context
                   .read(cloudFunctionsProvider)
                   .removeShippingFee()
                   .whenComplete(() {
-                ref.read(_isLoadingProvider.state).state = false;
+                context.read(_isLoadingProvider).state = false;
               });
               onBackButton();
             },
           ),
         ),
-        body: Center(
-          child: Text(context.l10n.error),
+        body: useProvider(currentUserAsStream).when(
+          data: (user) {
+            return Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom + 120),
+                  padding: const EdgeInsets.only(bottom: 30),
+                  child: CupertinoScrollbar(
+                    controller: scrollController,
+                    isAlwaysShown: true,
+                    child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      controller: scrollController,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 30),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          ListView.separated(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: 3,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 5),
+                            itemBuilder: (context, index) {
+                              switch (index) {
+                                case 0:
+                                  return DeliveryOptionTile(user: user);
+                                case 1:
+                                  return AccountCard(showBirthday: false);
+                                default:
+                                  return Card(
+                                    color: Theme.of(context).primaryColor,
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 10),
+                                    child: ExpansionTile(
+                                      initiallyExpanded: false,
+                                      leading: const Icon(
+                                        Icons.notes_outlined,
+                                      ),
+                                      title: Text(
+                                        S.of(context).additionalRemarks,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
+                                      ),
+                                      subtitle: Text(
+                                        S.of(context).instructionsForDelivery,
+                                        style:
+                                            Theme.of(context).textTheme.caption,
+                                      ),
+                                      children: [
+                                        ListTile(
+                                          title: TextField(
+                                            controller: remarksTextController,
+                                            autofocus: true,
+                                            maxLines: 5,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                CheckoutTile(
+                  showShipping: true,
+                  actionLabel: context
+                          .read(deliveryOptionsStateProvider.notifier)
+                          .paymentRequired
+                      ? S.of(context).proceedToCheckout
+                      : S.of(context).confirmOrder,
+                  actionCallback: context
+                          .read(deliveryOptionsStateProvider.notifier)
+                          .canProceed(user, selectedDeliveryOption)
+                      ? () {
+                          context.refresh(deliveryOptionsStateProvider);
+                          final currentUser = context.read(currentUserProvider);
+                          onNextPage(
+                            PaymentData(
+                              userId: currentUser?.uid,
+                              customerId: currentUser?.stripeCustomerId,
+                              email: currentUser?.email,
+                              orderNote: remarksTextController.value.text,
+                              deliveryType: context
+                                  .read(deliveryOptionsStateProvider.notifier)
+                                  .label,
+                            ),
+                          );
+                        }
+                      : null,
+                ),
+              ],
+            );
+          },
+          loading: () => const Loader(),
+          error: (err, stack) {
+            _logger.severe('Failed to stream current user', err, stack);
+            return Center(
+              child: Text(S.of(context).error),
+            );
+          },
         ),
       ),
     );
@@ -259,9 +370,9 @@ class ShippingDetailsView extends HookConsumerWidget {
     if (reasons.isNotEmpty) {
       var message = buildMessage(context, reasons);
       showSimpleNotification(
-        Text(message),
+        Text('$message'),
         position: NotificationPosition.top,
-        duration: const Duration(seconds: 3),
+        duration: Duration(seconds: 3),
         slideDismissDirection: DismissDirection.horizontal,
         context: context,
       );
@@ -269,7 +380,7 @@ class ShippingDetailsView extends HookConsumerWidget {
   }
 }
 
-class DeliveryOptionTile extends HookConsumerWidget {
+class DeliveryOptionTile extends HookWidget {
   final UserModel? user;
 
   const DeliveryOptionTile({
@@ -278,18 +389,18 @@ class DeliveryOptionTile extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final orderTypes = ref.watch(commonDataRepositoryProvider
-        .select<List<OrderTypeModel>>((value) => value.data.orderTypes));
-    final selectedDeliveryOption = ref.watch(deliveryOptionsStateProvider);
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final orderTypes = useProvider(
+        commonDataRepositoryProvider.select((value) => value.orderTypes));
+    final selectedDeliveryOption = useProvider(deliveryOptionsStateProvider);
+    final currentLocale = useProvider(currentLocaleProvider);
     final items = <Widget>[
       Container(
         padding: const EdgeInsets.only(left: 68),
         child: Align(
           alignment: AlignmentDirectional.centerStart,
           child: Text(
-            context.l10n.payUpfront,
+            S.of(context).payUpfront,
             style: Theme.of(context)
                 .textTheme
                 .labelLarge
@@ -305,40 +416,38 @@ class DeliveryOptionTile extends HookConsumerWidget {
         endIndent: 980,
         color: Theme.of(context).colorScheme.secondary,
       ),
-      ...orderTypes
-          .map<Widget>(
-            (orderType) => RadioListTile<DeliveryOption>(
-              title: Text(orderType.getName(currentLocale)!,
-                  style: Theme.of(context).textTheme.bodyText1),
-              subtitle: Text(orderType.getDescription(currentLocale)!,
-                  style: Theme.of(context).textTheme.caption),
-              dense: true,
-              activeColor: Theme.of(context).colorScheme.secondary,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              value: orderType.deliveryOption,
-              groupValue: selectedDeliveryOption,
-              onChanged: (value) {
-                ref
-                    .read(deliveryOptionsStateProvider.notifier)
-                    .selectDeliveryOption(value);
-                ref.read(cloudFunctionsProvider).setShippingFee(value);
-                final deniedReasons = ref
-                    .read(deliveryOptionsStateProvider.notifier)
-                    .validate(user, value);
-                onUserDenied(context, deniedReasons);
-              },
-            ),
-          )
-          .toList(),
-    ];
+    ]..addAll(orderTypes
+        .map<Widget>(
+          (orderType) => RadioListTile<DeliveryOption>(
+            title: Text(orderType.getName(currentLocale)!,
+                style: Theme.of(context).textTheme.bodyText1),
+            subtitle: Text(orderType.getDescription(currentLocale)!,
+                style: Theme.of(context).textTheme.caption),
+            dense: true,
+            activeColor: Theme.of(context).colorScheme.secondary,
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            value: orderType.deliveryOption,
+            groupValue: selectedDeliveryOption,
+            onChanged: (value) {
+              context
+                  .read(deliveryOptionsStateProvider.notifier)
+                  .selectDeliveryOption(value);
+              context.read(cloudFunctionsProvider).setShippingFee(value);
+              final deniedReasons = context
+                  .read(deliveryOptionsStateProvider.notifier)
+                  .validate(user, value);
+              onUserDenied(context, deniedReasons);
+            },
+          ),
+        )
+        .toList());
     items.insertAll(items.length - 1, <Widget>[
       Container(
         padding: const EdgeInsets.only(left: 65),
         child: Align(
           alignment: AlignmentDirectional.centerStart,
           child: Text(
-            context.l10n.payLater,
+            S.of(context).payLater,
             style: Theme.of(context)
                 .textTheme
                 .labelLarge
@@ -358,19 +467,19 @@ class DeliveryOptionTile extends HookConsumerWidget {
 
     return Card(
       color: Theme.of(context).primaryColor,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.symmetric(horizontal: 10),
       child: ExpansionTile(
         childrenPadding: const EdgeInsets.only(bottom: 8),
         initiallyExpanded: true,
-        leading: const Icon(
+        leading: Icon(
           Icons.airport_shuttle,
         ),
         title: Text(
-          context.l10n.deliveryOptions,
+          S.of(context).deliveryOptions,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         subtitle: Text(
-          context.l10n.selectDeliveryOption,
+          S.of(context).selectDeliveryOption,
           style: Theme.of(context).textTheme.caption,
         ),
         children: items,

@@ -1,6 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Flutter needs it to communicate with the running application
-         to allow setting breakpoints, to provide hot reload, etc.
-    -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="sk.bottleshop3veze.bottleshopdeliveryapp">
+    <application android:usesCleartextTraffic="true">
+        <!-- possibly other elements -->
+    </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

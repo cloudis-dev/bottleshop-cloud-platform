@@ -11,14 +11,20 @@
 //
 
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
 import 'package:delivery/src/features/categories/presentation/widgets/category_grid_item.dart';
+import 'package:delivery/src/features/products/presentation/pages/category_products_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:routeborn/routeborn.dart';
 
-class CategoriesView extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((CategoriesView).toString());
+
+class CategoriesView extends HookWidget {
   final ScrollController? scrollCtrl;
 
   const CategoriesView({
@@ -27,16 +33,18 @@ class CategoriesView extends HookConsumerWidget with UiLoggy {
   }) : super(key: key);
 
   void onNavigateToCategory(
-    WidgetRef ref,
     BuildContext context,
     CategoriesTreeModel category,
-  ) {}
+  ) {
+    context
+        .read(navigationProvider)
+        .pushPage(context, AppPageNode(page: CategoryProductsPage(category)));
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final categories =
-        ref.watch(mainCategoriesWithoutExtraProvider.state).state;
-    final productCounts = ref.watch(categoryProductCountsProvider);
+  Widget build(BuildContext context) {
+    final categories = useProvider(mainCategoriesWithoutExtraProvider).state;
+    final productCounts = useProvider(categoryProductCountsProvider);
 
     const maxSize = 200.0;
 
@@ -44,7 +52,7 @@ class CategoriesView extends HookConsumerWidget with UiLoggy {
       controller: scrollCtrl,
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.symmetric(vertical: 20),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: maxSize,
         mainAxisSpacing: 15,
         crossAxisSpacing: 15,
@@ -61,10 +69,10 @@ class CategoriesView extends HookConsumerWidget with UiLoggy {
               res.value.getProductsCount(category.categoryDetails.id),
             ),
             error: (err) {
-              loggy.error('Failed to fetch products counts', err);
-              return const AsyncValue.loading();
+              _logger.severe('Failed to fetch products counts', err);
+              return AsyncValue.loading();
             },
-            loading: (value) => const AsyncValue.loading(),
+            loading: (value) => AsyncValue.loading(),
           ),
           maxSize: maxSize,
         );

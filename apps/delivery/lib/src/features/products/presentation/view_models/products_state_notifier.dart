@@ -10,14 +10,13 @@
 //
 //
 
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_handler.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state_stream_batch.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/paged_streams_items_state_notifier.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/single_stream_items_state_notifier.dart';
 import 'package:delivery/src/core/utils/sorting_util.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
+
+final _logger = Logger((ProductsStateNotifier).toString());
 
 class ProductsStateNotifier
     extends SingleStreamItemsStateNotifier<ProductModel, String?> {
@@ -28,7 +27,7 @@ class ProductsStateNotifier
           requestItems,
           ProductItemsHandler(sortModel),
           (err, stack) async =>
-              logError('ProductsStateNotifier error', err, stack),
+              _logger.severe('ProductsStateNotifier error', err, stack),
         );
 }
 
@@ -45,7 +44,7 @@ class PagedProductsStateNotifier<T>
           requestMoreItemsStream,
           ProductItemsHandler(sortModel),
           (err, stack) async =>
-              logError('PagedProductsStateNotifier error', err, stack),
+              _logger.severe('PagedProductsStateNotifier error', err, stack),
         );
 }
 

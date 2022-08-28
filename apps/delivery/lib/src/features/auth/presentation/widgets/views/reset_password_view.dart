@@ -10,26 +10,24 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/app_config.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/auth_form_template.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/reset_password_form.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/organisms/reset_password_form.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/templates/auth_form_template.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class ResetPasswordView extends HookConsumerWidget {
+class ResetPasswordView extends HookWidget {
   static const routeName = '/reset-password';
 
-  const ResetPasswordView({Key? key}) : super(key: key);
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref
-        .watch(userRepositoryProvider.select<bool>((value) => value.isLoading));
+  Widget build(BuildContext context) {
+    final isLoading =
+        useProvider(userRepositoryProvider.select((value) => value.isLoading));
     final scrollController = useScrollController();
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
@@ -43,7 +41,7 @@ class ResetPasswordView extends HookConsumerWidget {
             builder: (context, viewportConstraints) {
               return SingleChildScrollView(
                 reverse: true,
-                physics: const ClampingScrollPhysics(),
+                physics: ClampingScrollPhysics(),
                 controller: scrollController,
                 child: Padding(
                   padding: EdgeInsets.only(bottom: bottom),
@@ -56,7 +54,7 @@ class ResetPasswordView extends HookConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        Container(
                           height: AppConfig(context).appHeight(70),
                           child: Stack(
                             alignment: Alignment.center,
@@ -68,7 +66,7 @@ class ResetPasswordView extends HookConsumerWidget {
                                 start: 60,
                                 end: 60,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
+                                  padding: EdgeInsets.symmetric(
                                       vertical: 30, horizontal: 20),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
@@ -91,11 +89,12 @@ class ResetPasswordView extends HookConsumerWidget {
                                       debugPrint('res: $result');
                                       showSimpleNotification(
                                         Text(
-                                          context.l10n
+                                          S
+                                              .of(context)
                                               .checkYourEmailForPasswordResetInstructions,
                                         ),
                                         position: NotificationPosition.bottom,
-                                        duration: const Duration(seconds: 5),
+                                        duration: Duration(seconds: 5),
                                         slideDismissDirection:
                                             DismissDirection.horizontal,
                                         background:
@@ -111,12 +110,12 @@ class ResetPasswordView extends HookConsumerWidget {
                           ),
                         ),
                         Text(
-                          context.l10n.gotNewPassword,
+                          S.of(context).gotNewPassword,
                         ),
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
                           child: Text(
-                            context.l10n.sign_in,
+                            S.of(context).sign_in,
                           ),
                         ),
                       ],

@@ -9,7 +9,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -35,7 +35,6 @@ class StyledFormField extends StatelessWidget {
   final bool enabled;
 
   const StyledFormField({
-    Key? key,
     required this.onSaved,
     required this.validator,
     this.keyboardType = TextInputType.text,
@@ -55,7 +54,7 @@ class StyledFormField extends StatelessWidget {
     this.autoFocus = false,
     this.readOnly = false,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -101,15 +100,15 @@ InputDecoration getInputFieldDecorator(
 
 MultiValidator createPasswordValidator(BuildContext context) {
   return MultiValidator([
-    RequiredValidator(errorText: context.l10n.passwordIsRequired),
+    RequiredValidator(errorText: S.of(context).passwordIsRequired),
     MinLengthValidator(6,
-        errorText: context.l10n.passwordMinimumRequirementsHint),
+        errorText: S.of(context).passwordMinimumRequirementsHint),
   ]);
 }
 
 MultiValidator createEmailValidator(BuildContext context) {
   return MultiValidator([
-    RequiredValidator(errorText: context.l10n.emailIsRequired),
-    EmailValidator(errorText: context.l10n.enterAValidEmail),
+    RequiredValidator(errorText: S.of(context).emailIsRequired),
+    EmailValidator(errorText: S.of(context).enterAValidEmail),
   ]);
 }

@@ -48,7 +48,7 @@ class UnitModel extends Equatable {
     }
   }
 
-  const UnitModel({
+  UnitModel({
     required this.id,
     required String abbreviation,
     required String unit,

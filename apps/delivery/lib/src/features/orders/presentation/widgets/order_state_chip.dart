@@ -15,13 +15,14 @@ import 'package:delivery/src/features/orders/presentation/widgets/orders_widget.
 import 'package:flutter/material.dart';
 
 class OrderStateChip extends StatelessWidget {
-  const OrderStateChip({super.key, required this.order});
+  const OrderStateChip({required this.order});
 
   final OrderModel order;
 
   @override
   Widget build(BuildContext context) {
-    final stepText = OrdersWidget.getOrderStepNames(context)[order.statusStepId];
+    final stepText =
+        OrdersWidget.getOrderStepNames(context)[order.statusStepId];
     final textStyle = Theme.of(context).textTheme.subtitle2;
 
     return Chip(
@@ -33,7 +34,8 @@ class OrderStateChip extends StatelessWidget {
             )
           : null,
       backgroundColor: Theme.of(context).colorScheme.secondary,
-      shape: StadiumBorder(side: BorderSide(color: Theme.of(context).primaryColor)),
+      shape: StadiumBorder(
+          side: BorderSide(color: Theme.of(context).primaryColor)),
       label: Text(
         stepText,
         style: Theme.of(context).textTheme.overline,

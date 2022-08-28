@@ -1,3 +1,4 @@
+
 # Delivery
 
 ![coverage][coverage_badge]
@@ -48,6 +49,33 @@ $ flutter run --flavor production --target lib/main_production.dart
 _\*Delivery works on iOS, Android, Web, and Windows._
 
 ---
+
+## Logging
+
+We are using the [logging](https://pub.dev/packages/logging) package.
+
+For logging in a file create new `Logger` instance at the top of the file:
+
+```
+final _logger = Logger((YourPageType).toString());
+```
+
+And to log something use one of the following in the code:
+
+```
+// Basic info log message
+_logger.info('My info log');
+
+// Warning log
+_logger.warning('My info log');
+
+// For error logs
+_logger.severe('My info log');
+```
+
+## Configuration
+
+To run on localhost set run args parameter `--web-port 5000` to have auth available.
 
 ## Running Tests 🧪
 

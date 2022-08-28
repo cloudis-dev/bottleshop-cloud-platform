@@ -10,64 +10,72 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/slivers/implementations/sliver_paged_list.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/list_error_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/list_loading_widget.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/orders/data/models/order_model.dart';
+import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/order_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
-class OrdersWidget extends HookConsumerWidget {
+class OrdersWidget extends HookWidget {
   final GlobalKey<AuthPopupButtonState> authButtonKey;
 
   const OrdersWidget(this.authButtonKey, {Key? key}) : super(key: key);
 
   static List<String> getOrderStepNames(BuildContext context) {
     return [
-      context.l10n.orderCreated,
-      context.l10n.orderReady,
-      context.l10n.orderShipping,
-      context.l10n.orderCompleted
+      S.of(context).orderCreated,
+      S.of(context).orderReady,
+      S.of(context).orderShipping,
+      S.of(context).orderCompleted
     ];
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ordersState = ref.watch(ordersProvider.select<ItemsState<OrderModel>>((value) => value.itemsState));
+  Widget build(BuildContext context) {
+    final ordersState =
+        useProvider(ordersProvider.select((value) => value.itemsState));
 
-    final hasUser = ref.watch(currentUserProvider.select<bool>((value) => value != null));
+    final hasUser =
+        useProvider(currentUserProvider.select((value) => value != null));
 
     if (!hasUser) {
       return EmptyTab(
         icon: Icons.login,
-        message: context.l10n.youNeedToLoginFirst,
-        buttonMessage: context.l10n.login,
+        message: S.of(context).youNeedToLoginFirst,
+        buttonMessage: S.of(context).login,
         onButtonPressed: () => authButtonKey.currentState!.showAccountMenu(),
       );
     } else if (ordersState.isDoneAndEmpty) {
       return EmptyTab(
-        icon: Icons.fact_check_outlined,
-        message: context.l10n.noOrders,
-        buttonMessage: context.l10n.startExploring,
-        onButtonPressed: null,
-      );
+          icon: Icons.fact_check_outlined,
+          message: S.of(context).noOrders,
+          buttonMessage: S.of(context).startExploring,
+          onButtonPressed: () {
+            context
+                .read(navigationProvider)
+                .replaceRootStackWith([AppPageNode(page: HomePage())]);
+          });
     } else {
       return CustomScrollView(
         slivers: [
           SliverPagedList(
             itemsState: ordersState,
-            requestData: () => ref.read(ordersProvider).requestData(),
+            requestData: () => context.read(ordersProvider).requestData(),
             itemBuilder: (context, dynamic item, _) => OrderListItem(
               order: item,
             ),
-            errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onButtonPressed: onPressed),
+            errorWidgetBuilder: (context, onPressed) =>
+                ListErrorWidget(onPressed),
             loadingWidgetBuilder: (_) => const ListLoadingWidget(),
           ),
         ],

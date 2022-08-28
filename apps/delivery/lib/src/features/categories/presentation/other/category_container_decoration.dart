@@ -15,11 +15,11 @@ import 'package:flutter/material.dart';
 class CategoryContainerDecoration extends BoxDecoration {
   CategoryContainerDecoration(BuildContext context)
       : super(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
           boxShadow: [
             BoxShadow(
                 color: Theme.of(context).hintColor.withOpacity(0.10),
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
                 blurRadius: 10)
           ],
           gradient: LinearGradient(

@@ -10,35 +10,36 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PriceFilter extends HookConsumerWidget {
+class PriceFilter extends HookWidget {
   const PriceFilter({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final priceRange = ref.watch(filterModelProvider(filterType)
-        .select<RangeValues>((value) => value.priceRange));
-    final isPriceActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isPriceActive));
+    final priceRange = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.priceRange));
+    final isPriceActive = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.isPriceActive));
 
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(context.l10n.price),
+            Text(S.of(context).price),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               decoration: BoxDecoration(
@@ -61,16 +62,14 @@ class PriceFilter extends HookConsumerWidget {
           divisions: FilterConstants.priceDivisions,
           values: priceRange,
           onChanged: (value) {
-            ref.read(filterModelProvider(filterType).state).state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+            context.read(filterModelProvider(filterType)).state =
+                context.read(filterModelProvider(filterType)).state.copyWith(
                       priceRange: value,
                     );
           },
           labels: RangeLabels(
-            FormattingUtils.getPriceNumberString(priceRange.start),
-            FilterConstants.isPriceMax(priceRange.end)
-                ? context.l10n.max
-                : FormattingUtils.getPriceNumberString(priceRange.end),
+            '${FormattingUtils.getPriceNumberString(priceRange.start)}',
+            '${FilterConstants.isPriceMax(priceRange.end) ? S.of(context).max : FormattingUtils.getPriceNumberString(priceRange.end)}',
           ),
         ),
       ],

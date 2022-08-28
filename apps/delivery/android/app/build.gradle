@@ -21,106 +21,76 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def _compileSdkVersion = localProperties.getProperty('flutter.compileSdkVersion')
-if (_compileSdkVersion == null) {
-  _compileSdkVersion = 32
-}
-
-def _minSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
-if (_minSdkVersion == null) {
-  _minSdkVersion = 26
-}
-
-def _targetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')
-if (_targetSdkVersion == null) {
-  _targetSdkVersion = 32
-}
-
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}  else {
+    keystoreProperties.setProperty('storePassword', System.getenv('STORE_PWD'))
+    keystoreProperties.setProperty('keyAlias', System.getenv('KEY_ALIAS'))
+    keystoreProperties.setProperty('keyPassword', System.getenv('STORE_PWD'))
+    keystoreProperties.setProperty('storeFile', System.getenv('STORE_PATH'))
 }
 
-apply plugin: 'com.android.application'
-// START: FlutterFire Configuration
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
-// END: FlutterFire Configuration
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
 android {
-    compileSdkVersion _compileSdkVersion.toInteger()
-
+    compileSdkVersion 31
+	
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+	
     kotlinOptions {
-        jvmTarget = '1.8'
-    }
+          jvmTarget = '1.8'
+       }
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+       sourceSets {
+           main.java.srcDirs += 'src/main/kotlin'
+       }
+
+    lintOptions {
+        disable 'InvalidPackage'
     }
 
     defaultConfig {
         applicationId "sk.bottleshop3veze.bottleshopdeliveryapp"
-        minSdkVersion _minSdkVersion.toInteger()
-        targetSdkVersion _targetSdkVersion.toInteger()
+        minSdkVersion 24
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
-
-  signingConfigs {
-        if (System.getenv("ANDROID_KEYSTORE_PATH")) {
-            release {
-                storeFile file(System.getenv("ANDROID_KEYSTORE_PATH"))
-                keyAlias System.getenv("ANDROID_KEYSTORE_ALIAS")
-                keyPassword System.getenv("ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
-            }
-        } else {
-            release {
-                keyAlias keystoreProperties['keyAlias']
-                keyPassword keystoreProperties['keyPassword']
-                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-                storePassword keystoreProperties['storePassword']
-            }
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+            keyPassword keystoreProperties['keyPassword']
         }
     }
 
-    flavorDimensions "default"
-    productFlavors {
-        production {
-            dimension "default"
-            applicationIdSuffix ""
-            manifestPlaceholders = [appName: "Bottleshop3veže"]
-        }
-        development {
-            dimension "default"
-            applicationIdSuffix ".dev"
-            manifestPlaceholders = [appName: "[DEV] Bottleshop3veže"]
-        }
-    }
 
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
-        }
-        debug {
-            signingConfig signingConfigs.debug
         }
     }
-  lint {
-    checkReleaseBuilds false
-  }
-  namespace 'sk.bottleshop3veze.bottleshopdeliveryapp'
+
+    flavorDimensions "app"
+
+    productFlavors {
+        dev {
+            dimension "app"
+            resValue "string", "app_name", "Bottleshop 3 Veže DEV"
+            applicationId "sk.bottleshop3veze.bottleshopdeliveryapp.dev"
+            versionNameSuffix "-dev"
+        }
+        prod {
+            dimension "app"
+            resValue "string", "app_name", "Bottleshop 3 Veže"
+        }
+    }
+    buildToolsVersion '31.0.0'
 }
 
 flutter {
@@ -129,5 +99,10 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0'
 }
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'

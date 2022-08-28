@@ -10,11 +10,11 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
 import 'package:delivery/src/features/home/data/models/slider_model.dart';
 
 DatabaseService<SliderModel> homeSliderDb = DatabaseService<SliderModel>(
-  FirestoreCollections.slidersSubCollection,
+  '${FirestoreCollections.slidersSubCollection}',
   fromMapAsync: (id, data) async => SliderModel.fromMap(data, id),
 );

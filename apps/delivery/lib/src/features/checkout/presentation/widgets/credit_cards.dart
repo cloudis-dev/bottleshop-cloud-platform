@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +26,7 @@ class CreditCards extends StatelessWidget {
       alignment: AlignmentDirectional.topCenter,
       children: <Widget>[
         Container(
-          margin: const EdgeInsets.only(top: 25),
+          margin: EdgeInsets.only(top: 25),
           width: 300,
           height: 195,
           decoration: BoxDecoration(
@@ -36,7 +36,7 @@ class CreditCards extends StatelessWidget {
               BoxShadow(
                   color: Theme.of(context).hintColor.withOpacity(0.3),
                   blurRadius: 5,
-                  offset: const Offset(0, -1)),
+                  offset: Offset(0, -1)),
             ],
           ),
           child: Padding(
@@ -113,6 +113,11 @@ class CreditCards extends StatelessWidget {
                     Image.asset(
                       kAmex,
                       height: 50,
+                      width: 70,
+                    ),
+                    Image.asset(
+                      kDinersBtn,
+                      height: 42,
                       width: 70,
                     ),
                     Image.asset(

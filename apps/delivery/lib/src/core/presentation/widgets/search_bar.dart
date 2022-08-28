@@ -10,7 +10,8 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
@@ -58,9 +59,9 @@ class SearchBar extends StatelessWidget {
               onChanged: onChangedCallback,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),
-                hintText: context.l10n.search,
+                hintText: S.of(context).search,
                 prefixIcon: Hero(
-                  tag: UniqueKey(),
+                  tag: HeroTags.searchTag,
                   child: Icon(
                     Icons.search,
                     size: 20,

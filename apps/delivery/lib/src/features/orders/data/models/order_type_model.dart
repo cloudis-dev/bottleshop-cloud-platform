@@ -10,8 +10,8 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/localized_model.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';

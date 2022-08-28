@@ -10,23 +10,24 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:delivery/src/features/sticky_header/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AlcoholFilterChip extends HookConsumerWidget {
+class AlcoholFilterChip extends HookWidget {
   const AlcoholFilterChip({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final alcoholFilterValue = ref.watch(alcoholRangeScopedProvider);
+  Widget build(BuildContext context) {
+    final alcoholFilterValue = useProvider(alcoholRangeScopedProvider);
 
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
-      label: Text('${context.l10n.alcohol}: '
-          '${FilterFormattingUtils.getAlcoholRangeString(alcoholFilterValue!.value)}'),
+      label: Text('${S.of(context).alcohol}: '
+          '${FilterFormattingUtils.getAlcoholRangeString(alcoholFilterValue.value)}'),
       onDeleted: alcoholFilterValue.onDeleteFilter,
     );
   }

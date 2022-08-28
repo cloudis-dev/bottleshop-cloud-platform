@@ -13,16 +13,17 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:crypto/crypto.dart';
-import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/config/environment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+final _logger = Logger((AuthenticationService).toString());
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
@@ -30,12 +31,12 @@ class AuthenticationService {
   final FacebookAuth _facebookLogin;
 
   AuthenticationService({
-    FirebaseAuth? firebaseAuth,
+    required FirebaseAuth firebaseAuth,
     GoogleSignIn? googleSignIn,
     FacebookAuth? facebookLogin,
-  })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _googleSignIn =
-            googleSignIn ?? GoogleSignIn(scopes: kGoogleSignInScopes),
+  })  : _firebaseAuth = firebaseAuth,
+        _googleSignIn = googleSignIn ??
+            GoogleSignIn(scopes: AppEnvironment.googleSignInScopes),
         _facebookLogin = facebookLogin ?? FacebookAuth.instance;
 
   User? get currentUser => _firebaseAuth.currentUser;
@@ -112,9 +113,10 @@ class AuthenticationService {
     try {
       var facebookProvider = FacebookAuthProvider();
 
-      facebookProvider.addScope('email').setCustomParameters({
-        'display': 'popup',
-      });
+      facebookProvider.addScope('email')
+        ..setCustomParameters({
+          'display': 'popup',
+        });
       await FirebaseAuth.instance.signInWithPopup(facebookProvider);
     } catch (err) {
       throw PlatformException(
@@ -161,8 +163,8 @@ class AuthenticationService {
               AppleIDAuthorizationScopes.fullName,
             ],
             webAuthenticationOptions: WebAuthenticationOptions(
-              redirectUri: Uri.parse(Environment.appleSignInRedirect),
-              clientId: Environment.appleSignInClientId,
+              redirectUri: Uri.parse(AppEnvironment.appleSignInRedirectUri),
+              clientId: AppEnvironment.appleSignInClientId,
             ),
             nonce: sha256.convert(utf8.encode(nonce)).toString(),
           );
@@ -193,7 +195,7 @@ class AuthenticationService {
       await _facebookLogin.logOut();
       return _firebaseAuth.signOut();
     } catch (err, stack) {
-      logError('signOut failed', err, stack);
+      _logger.severe('signOut failed', err, stack);
     }
   }
 

@@ -10,15 +10,16 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/orders_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-const double _disabledOpacity = .3;
+final double _disabledOpacity = .3;
 
 class OrderStepsWidget extends StatelessWidget {
   const OrderStepsWidget({
@@ -53,7 +54,7 @@ class OrderStepsWidget extends StatelessWidget {
       );
 }
 
-class _OrderStepRow extends HookConsumerWidget {
+class _OrderStepRow extends HookWidget {
   _OrderStepRow({
     Key? key,
     required this.order,
@@ -70,8 +71,8 @@ class _OrderStepRow extends HookConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
     return Row(
       children: [
         Icon(
@@ -107,7 +108,7 @@ class _OrderStepRow extends HookConsumerWidget {
                             .format(order.statusStepsDates[order
                                 .orderType.orderStepsIds
                                 .indexOf(orderStepId)])
-                        : context.l10n.waiting,
+                        : S.of(context).waiting,
                     style: Theme.of(context).textTheme.subtitle2,
                     overflow: TextOverflow.ellipsis,
                   ),

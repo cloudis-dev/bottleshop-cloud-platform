@@ -10,34 +10,35 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AlcoholFilter extends HookConsumerWidget {
+class AlcoholFilter extends HookWidget {
   const AlcoholFilter({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final alcoholRange = ref.watch(filterModelProvider(filterType)
-        .select<RangeValues>((value) => value.alcoholRange));
-    final isAlcoholActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isAlcoholActive));
+    final alcoholRange = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.alcoholRange));
+    final isAlcoholActive = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.isAlcoholActive));
 
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(context.l10n.alcohol),
+            Text(S.of(context).alcohol),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               decoration: BoxDecoration(
@@ -60,8 +61,8 @@ class AlcoholFilter extends HookConsumerWidget {
           divisions: FilterConstants.alcoholDivisions,
           values: alcoholRange,
           onChanged: (value) {
-            ref.read(filterModelProvider(filterType).state).state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+            context.read(filterModelProvider(filterType)).state =
+                context.read(filterModelProvider(filterType)).state.copyWith(
                       alcoholRange: value,
                     );
           },

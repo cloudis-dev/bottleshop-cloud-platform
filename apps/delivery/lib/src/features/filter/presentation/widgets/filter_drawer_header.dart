@@ -10,37 +10,38 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FilterDrawerHeader extends HookConsumerWidget {
+class FilterDrawerHeader extends HookWidget {
   const FilterDrawerHeader({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
     return Padding(
       padding: const EdgeInsets.only(left: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(context.l10n.filter),
+          Text(S.of(context).filter),
           MaterialButton(
             onPressed: () {
-              ref.read(appliedFilterProvider(filterType).state).state =
+              context.read(appliedFilterProvider(filterType)).state =
                   FilterModel.empty();
 
               Navigator.pop(context);
             },
             child: Text(
-              context.l10n.clear,
+              S.of(context).clear,
               style: Theme.of(context).textTheme.bodyText1,
             ),
           )

@@ -12,10 +12,10 @@
 
 import 'dart:async';
 
-import 'package:dartz/dartz.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/data/services/product_search_service.dart';
+import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum SearchState {
@@ -40,7 +40,7 @@ final searchResultsProvider = StateProvider.autoDispose<
         SearchState,
         List<Tuple2<Map<SearchMatchField, String>, ProductModel>>,
         List<CategoryPlainModel>>>(
-  (_) => const Tuple3(SearchState.cleaned, [], []),
+  (_) => Tuple3(SearchState.cleaned, [], []),
 );
 
 final debounceTimerProvider = StateProvider.autoDispose<Timer?>(((_) => null));

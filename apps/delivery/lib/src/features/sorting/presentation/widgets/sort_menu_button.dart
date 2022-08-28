@@ -10,10 +10,11 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
 import 'package:delivery/src/features/sorting/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum _ButtonOptions {
@@ -23,19 +24,19 @@ enum _ButtonOptions {
   price,
 }
 
-class SortMenuButton extends HookConsumerWidget {
+class SortMenuButton extends HookWidget {
   const SortMenuButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final sortModel = ref.watch(sortModelProvider.notifier).state;
+  Widget build(BuildContext context) {
+    final sortModel = useProvider(sortModelProvider).state;
 
     return PopupMenuButton<_ButtonOptions>(
       icon: const Icon(
         Icons.sort_by_alpha,
       ),
       onSelected: (option) {
-        ref.read(sortModelProvider.state).state = () {
+        context.read(sortModelProvider).state = () {
           switch (option) {
             case _ButtonOptions.ascending:
             case _ButtonOptions.descending:
@@ -51,23 +52,23 @@ class SortMenuButton extends HookConsumerWidget {
       itemBuilder: (context) => <PopupMenuEntry<_ButtonOptions>>[
         _MenuItem(
           value: _ButtonOptions.ascending,
-          text: context.l10n.sortAscending,
+          text: S.of(context).sortAscending,
           isChecked: sortModel.ascending,
         ),
         _MenuItem(
           value: _ButtonOptions.descending,
-          text: context.l10n.sortDescending,
+          text: S.of(context).sortDescending,
           isChecked: !sortModel.ascending,
         ),
         const PopupMenuDivider(),
         _MenuItem(
           value: _ButtonOptions.name,
-          text: context.l10n.name,
+          text: S.of(context).name,
           isChecked: sortModel.sortField == SortField.name,
         ),
         _MenuItem(
           value: _ButtonOptions.price,
-          text: context.l10n.price,
+          text: S.of(context).price,
           isChecked: sortModel.sortField == SortField.price,
         ),
       ],

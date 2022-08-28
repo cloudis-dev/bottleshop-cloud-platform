@@ -32,14 +32,14 @@ class HelpSection extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(6),
         boxShadow: [
           BoxShadow(
               color: Theme.of(context).hintColor.withOpacity(0.3),
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
               blurRadius: 5)
         ],
       ),
@@ -58,8 +58,7 @@ class HelpSection extends HookWidget {
               subTitle,
               style: Theme.of(context).textTheme.caption,
             ),
-            childrenPadding:
-                const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            childrenPadding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
             children: [
               MarkdownBody(
                 onTapLink: (title, href, text) async {

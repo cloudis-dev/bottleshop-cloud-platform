@@ -9,18 +9,23 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/environment.dart';
+import 'package:dartz/dartz.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:native_pdf_view/native_pdf_view.dart';
+import 'package:pdfx/pdfx.dart';
+import 'package:routeborn/routeborn.dart';
 
-final _pdfUrlProvider = Provider<String>((ref) {
+final _pdfUrlProvider = Provider((ref) {
   var lang = ref.watch(currentLocaleProvider).languageCode;
-  final url = '${Environment.tcsPdfUrl}tcs_$lang.pdf?alt=media';
+  final url = '${AppEnvironment.termsPdfEndpoint}tcs_$lang.pdf?alt=media';
   return url;
 });
 
@@ -39,49 +44,53 @@ final _pdfCtrl = Provider.autoDispose.family<PdfController, PdfDocument>(
   },
 );
 
-class TermsConditionsPage extends HookConsumerWidget {
+class TermsConditionsPage extends RoutebornPage {
   static const String pagePathBase = 'terms-and-conditions';
 
-  const TermsConditionsPage({Key? key}) : super(key: key);
+  TermsConditionsPage()
+      : super.builder(pagePathBase, (_) => _TermsConditionsView());
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(S.of(context).cart);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
 }
 
-class _TermsConditionsView extends HookConsumerWidget {
+class _TermsConditionsView extends HookWidget {
   const _TermsConditionsView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(
-          onPressed: () {},
+          onPressed: () => context.read(navigationProvider).popPage(context),
         ),
         title: Text(
-          context.l10n.generalCommercialTermsTitle,
+          S.of(context).generalCommercialTermsTitle,
         ),
       ),
-      body: ref.watch(_pdfDocProvider).when(
-            data: (pdfDoc) {
-              return PdfView(
-                pageSnapping: false,
-                scrollDirection: Axis.vertical,
-                controller: ref.watch(_pdfCtrl(pdfDoc)),
-                renderer: (page) => page.render(
-                  height: 1920,
-                  width: 1080,
-                  format: PdfPageImageFormat.png,
-                ),
-                pageLoader: const Loader(),
-              );
-            },
-            loading: () => const Loader(),
-            error: (_, __) => Center(child: Text(context.l10n.errorGeneric)),
-          ),
+      body: useProvider(_pdfDocProvider).when(
+        data: (pdfDoc) {
+          return PdfView(
+            pageSnapping: false,
+            scrollDirection: Axis.vertical,
+            controller: useProvider(_pdfCtrl(pdfDoc)),
+            renderer: (page) => page.render(
+              height: 1920,
+              width: 1080,
+              format: PdfPageImageFormat.png,
+            ),
+          );
+        },
+        loading: () => const Loader(),
+        error: (_, __) => Center(child: Text(S.of(context).errorGeneric)),
+      ),
     );
   }
 }

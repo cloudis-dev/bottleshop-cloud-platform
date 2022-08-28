@@ -12,13 +12,14 @@
 
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:octo_image/octo_image.dart';
 
-final _widthScopedProvider = Provider<double>((ref) => 200.0);
+final _widthScopedProvider = ScopedProvider<double?>(null);
 
-class ProductImage extends HookConsumerWidget {
+class ProductImage extends HookWidget {
   static final borderRadius = BorderRadius.circular(6);
 
   final String? imagePath;
@@ -38,21 +39,20 @@ class ProductImage extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final path = ref.watch(defaultProductImage);
-    if (imagePath == null || imagePath == path) {
+  Widget build(BuildContext context) {
+    if (imagePath == null || imagePath == useProvider(defaultProductImage)) {
       return ProviderScope(
         overrides: [
-          _widthScopedProvider.overrideWithValue(width ?? 200),
+          _widthScopedProvider.overrideWithValue(width),
         ],
         child: const _PlaceHolderProductImage(),
       );
     } else {
-      final downloadUrl = ref.watch(downloadUrlProvider(imagePath!));
+      final downloadUrl = useProvider(downloadUrlProvider(imagePath!));
 
       return ProviderScope(
         overrides: [
-          _widthScopedProvider.overrideWithValue(width ?? 200),
+          _widthScopedProvider.overrideWithValue(width),
         ],
         child: downloadUrl.maybeWhen(
           data: (imageUrl) => imageUrl == null
@@ -83,21 +83,21 @@ class ProductImage extends HookConsumerWidget {
   }
 }
 
-class _PlaceHolderProductImage extends HookConsumerWidget {
+class _PlaceHolderProductImage extends HookWidget {
   @literal
   const _PlaceHolderProductImage({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final imagePath = ref.watch(defaultProductImage);
+  Widget build(BuildContext context) {
+    final imagePath = useProvider(defaultProductImage);
 
     return ClipRRect(
       borderRadius: ProductImage.borderRadius,
       child: Image.asset(
         imagePath,
-        width: ref.watch(_widthScopedProvider),
+        width: useProvider(_widthScopedProvider),
         fit: BoxFit.cover,
       ),
     );

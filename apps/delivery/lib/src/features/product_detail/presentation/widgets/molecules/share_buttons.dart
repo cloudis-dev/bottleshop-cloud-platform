@@ -11,11 +11,11 @@ class ProductShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.share),
+      icon: Icon(Icons.share),
       onPressed: () => showDialog<void>(
         context: context,
         builder: (context) {
-          return const ShareProductDialog();
+          return ShareProductDialog();
         },
       ),
     );
@@ -47,7 +47,7 @@ class ShareProductDialog extends HookWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close),
+                    icon: Icon(Icons.close),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -64,8 +64,8 @@ class ShareProductDialog extends HookWidget {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               primary: Theme.of(context).colorScheme.secondary,
-                              shape: const CircleBorder(),
-                              padding: const EdgeInsets.all(20),
+                              shape: CircleBorder(),
+                              padding: EdgeInsets.all(20),
                             ),
                             onPressed: () {
                               // TODO: Uri.base is usable only on the web

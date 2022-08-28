@@ -10,16 +10,20 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
+import 'package:delivery/src/features/orders/presentation/pages/order_detail_page.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/order_state_chip.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class OrderListItem extends HookConsumerWidget {
+class OrderListItem extends HookWidget {
   final OrderModel order;
 
   const OrderListItem({
@@ -28,14 +32,21 @@ class OrderListItem extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
     return Material(
       child: InkWell(
         splashColor: Theme.of(context).colorScheme.secondary,
-        onTap: () {},
+        onTap: () {
+          context.read(navigationProvider).pushPage(
+                context,
+                AppPageNode(
+                  page: OrderDetailPage(orderUniqueId: order.uniqueId),
+                ),
+              );
+        },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: ListItemContainerDecoration(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,18 +63,18 @@ class OrderListItem extends HookConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${context.l10n.order} #${order.orderId}',
+                          '${S.of(context).order} #${order.orderId}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: Theme.of(context).textTheme.headline6,
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6),
                         DefaultTextStyle(
                           style: Theme.of(context).textTheme.subtitle2!,
                           child: Table(
                             defaultVerticalAlignment:
                                 TableCellVerticalAlignment.baseline,
-                            columnWidths: const {
+                            columnWidths: {
                               0: IntrinsicColumnWidth(),
                               1: FixedColumnWidth(12),
                               2: FlexColumnWidth(),
@@ -71,7 +82,7 @@ class OrderListItem extends HookConsumerWidget {
                             textBaseline: TextBaseline.alphabetic,
                             children: [
                               TableRow(children: [
-                                Text('${context.l10n.orderType}:'),
+                                Text('${S.of(context).orderType}:'),
                                 const SizedBox(),
                                 Text(
                                   order.orderType.getName(currentLocale)!,
@@ -79,7 +90,7 @@ class OrderListItem extends HookConsumerWidget {
                                 ),
                               ]),
                               TableRow(children: [
-                                Text('${context.l10n.itemsCount}:'),
+                                Text('${S.of(context).itemsCount}:'),
                                 const SizedBox(),
                                 Text(
                                   order.cartItems
@@ -91,7 +102,7 @@ class OrderListItem extends HookConsumerWidget {
                               ]),
                               TableRow(
                                 children: [
-                                  Text('${context.l10n.created}:'),
+                                  Text('${S.of(context).created}:'),
                                   const SizedBox(),
                                   Text(
                                     FormattingUtils.getDateFormatter(

@@ -1,4 +1,4 @@
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
@@ -8,15 +8,18 @@ import 'package:delivery/src/features/product_detail/presentation/widgets/molecu
 import 'package:delivery/src/features/product_detail/presentation/widgets/molecules/toggle_wishlist_button.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-enum ProductAction {
+enum _ProductAction {
   purchase,
   favorite,
 }
 
-class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((ProductActionsWidget).toString());
+
+class ProductActionsWidget extends HookWidget {
   final ProductModel product;
   final GlobalKey<AuthPopupButtonState> authButtonKey;
 
@@ -26,29 +29,29 @@ class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
     required this.authButtonKey,
   }) : super(key: key);
 
-  void needsLoginAlert(BuildContext context, ProductAction action) {
+  void needsLoginAlert(BuildContext context, _ProductAction action) {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
           () {
             switch (action) {
-              case ProductAction.purchase:
-                return context.l10n.loginNeededForPurchase;
-              case ProductAction.favorite:
-                return context.l10n.loginNeededForFavorite;
+              case _ProductAction.purchase:
+                return S.of(context).loginNeededForPurchase;
+              case _ProductAction.favorite:
+                return S.of(context).loginNeededForFavorite;
             }
           }(),
         ),
         actions: [
           TextButton(
-            child: Text(context.l10n.cancel),
+            child: Text(S.of(context).cancel),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           ElevatedButton(
-            child: Text(context.l10n.login),
+            child: Text(S.of(context).login),
             onPressed: () {
               Navigator.of(context).pop();
               authButtonKey.currentState!.showAccountMenu();
@@ -60,53 +63,52 @@ class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final hasUser =
-        ref.watch(currentUserProvider.select<bool>((value) => value != null));
+        useProvider(currentUserProvider.select((value) => value != null));
 
     return SizedBox(
       height: 42,
-      child: ref.watch(isInCartStreamProvider(product)).maybeWhen(
-            data: (isInCart) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  ToggleWishlistButton(
-                    product: product,
-                    actionOverride: hasUser
-                        ? null
-                        : () =>
-                            needsLoginAlert(context, ProductAction.favorite),
-                  ),
-                  const SizedBox(width: 10),
-                  (isInCart ?? false)
-                      ? Expanded(
-                          child: QuantityUpdateWidget(
-                            product: product,
-                            actionOverride: hasUser
-                                ? null
-                                : () => needsLoginAlert(
-                                    context, ProductAction.purchase),
-                          ),
-                        )
-                      : Expanded(
-                          child: AddToCartButton(
-                            product: product,
-                            actionOverride: hasUser
-                                ? null
-                                : () => needsLoginAlert(
-                                    context, ProductAction.purchase),
-                          ),
-                        ),
-                ],
-              );
-            },
-            orElse: () => const Loader(),
-            error: (err, stack) {
-              loggy.error('Failed to fetch is item in cart', err, stack);
-              return Text(context.l10n.error);
-            },
-          ),
+      child: useProvider(isInCartStreamProvider(product)).maybeWhen(
+        data: (isInCart) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              ToggleWishlistButton(
+                product: product,
+                actionOverride: hasUser
+                    ? null
+                    : () => needsLoginAlert(context, _ProductAction.favorite),
+              ),
+              const SizedBox(width: 10),
+              (isInCart ?? false)
+                  ? Expanded(
+                      child: QuantityUpdateWidget(
+                        product: product,
+                        actionOverride: hasUser
+                            ? null
+                            : () => needsLoginAlert(
+                                context, _ProductAction.purchase),
+                      ),
+                    )
+                  : Expanded(
+                      child: AddToCartButton(
+                        product: product,
+                        actionOverride: hasUser
+                            ? null
+                            : () => needsLoginAlert(
+                                context, _ProductAction.purchase),
+                      ),
+                    ),
+            ],
+          );
+        },
+        orElse: () => const Loader(),
+        error: (err, stack) {
+          _logger.severe('Failed to fetch is item in cart', err, stack);
+          return Text(S.of(context).error);
+        },
+      ),
     );
   }
 }

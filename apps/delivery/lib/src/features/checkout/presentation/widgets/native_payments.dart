@@ -9,20 +9,23 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/core/data/services/wallets_availability_service.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
+import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
+import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-import '../providers/providers.dart';
+final _logger = Logger((NativePayments).toString());
 
-class NativePayments extends HookConsumerWidget with UiLoggy {
+class NativePayments extends HookWidget {
   final PaymentData paymentData;
   final double value;
   final void Function(String checkoutDoneMsg) onCheckoutDone;
@@ -35,71 +38,78 @@ class NativePayments extends HookConsumerWidget with UiLoggy {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final isSupported = ref.watch(
-        walletsAvailableProvider.select((value) => value.applePayAvailable));
-    return isSupported
-        ? Column(
-            children: [
-              Text(
-                context.l10n.orCheckoutWith,
-                style: Theme.of(context).textTheme.caption,
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 208,
-                height: 45,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: !isDarkMode ? Colors.black : Colors.white),
-                  child: Image.asset(
-                    defaultTargetPlatform == TargetPlatform.iOS
-                        ? !isDarkMode
-                            ? kApplePayBtnDark
-                            : kApplePayBtn
-                        : !isDarkMode
-                            ? kGooglePayBtnDark
-                            : kGooglePayBtn,
-                    fit: BoxFit.cover,
+    return useProvider(nativePayProvider).when(
+      data: (isSupported) {
+        return isSupported
+            ? Column(
+                children: [
+                  Text(
+                    S.of(context).orCheckoutWith,
+                    style: Theme.of(context).textTheme.caption,
                   ),
-                  onPressed: () async {
-                    try {
-                      await ref
-                          .read(checkoutStateProvider)
-                          .payByNativePay(paymentData)
-                          .then(
-                            (value) => onCheckoutDone(
-                              defaultTargetPlatform == TargetPlatform.android
-                                  ? context.l10n.successful_payment_gpay
-                                  : context.l10n.successful_payment,
-                            ),
+                  SizedBox(height: 20),
+                  SizedBox(
+                    width: 208,
+                    height: 45,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: !isDarkMode ? Colors.black : Colors.white),
+                      child: Image.asset(
+                        defaultTargetPlatform == TargetPlatform.iOS
+                            ? !isDarkMode
+                                ? kApplePayBtnDark
+                                : kApplePayBtn
+                            : !isDarkMode
+                                ? kGooglePayBtnDark
+                                : kGooglePayBtn,
+                        fit: BoxFit.cover,
+                      ),
+                      onPressed: () async {
+                        try {
+                          await context
+                              .read(checkoutStateProvider)
+                              .payByNativePay(paymentData)
+                              .then(
+                                (value) => onCheckoutDone(
+                                  defaultTargetPlatform ==
+                                          TargetPlatform.android
+                                      ? S.of(context).successful_payment_gpay
+                                      : S.of(context).successful_payment,
+                                ),
+                              );
+                          await logPurchase(context, value);
+                        } on PlatformException catch (err, stack) {
+                          if (err.code != 'cancelled' ||
+                              err.code != 'purchaseCancelled') {
+                            rethrow;
+                          } else {
+                            _logger.severe(
+                                'Failed to pay by native', err, stack);
+                            showSimpleNotification(
+                              Text(S.of(context).errorGeneric),
+                              position: NotificationPosition.bottom,
+                              context: context,
+                            );
+                          }
+                        } catch (err, stack) {
+                          _logger.severe('Failed to pay by native', err, stack);
+                          showSimpleNotification(
+                            Text(S.of(context).errorGeneric),
+                            position: NotificationPosition.bottom,
+                            context: context,
                           );
-                    } on PlatformException catch (err, stack) {
-                      if (err.code != 'cancelled' ||
-                          err.code != 'purchaseCancelled') {
-                        rethrow;
-                      } else {
-                        loggy.error('Failed to pay by native', err, stack);
-                        showSimpleNotification(
-                          Text(context.l10n.errorGeneric),
-                          position: NotificationPosition.bottom,
-                          context: context,
-                        );
-                      }
-                    } catch (err, stack) {
-                      loggy.error('Failed to pay by native', err, stack);
-                      showSimpleNotification(
-                        Text(context.l10n.errorGeneric),
-                        position: NotificationPosition.bottom,
-                        context: context,
-                      );
-                    }
-                  },
-                ),
-              ),
-            ],
-          )
-        : Container();
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : Container();
+      },
+      loading: () => const Loader(),
+      error: (_, __) => Container(),
+    );
   }
 }

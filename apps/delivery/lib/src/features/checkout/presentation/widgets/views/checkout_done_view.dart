@@ -10,8 +10,8 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/app_config.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -19,24 +19,22 @@ class CheckoutDoneView extends HookWidget {
   final void Function() onClose;
   final String checkoutDoneMessage;
 
-  const CheckoutDoneView(this.checkoutDoneMessage,
-      {Key? key, required this.onClose})
-      : super(key: key);
+  CheckoutDoneView(this.checkoutDoneMessage, {required this.onClose});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.checkout),
+        title: Text(S.of(context).checkout),
         leading: CloseButton(
           onPressed: onClose,
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.symmetric(vertical: 10),
         child: Container(
           alignment: AlignmentDirectional.center,
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           height: AppConfig(context).appHeight(60),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -91,16 +89,16 @@ class CheckoutDoneView extends HookWidget {
                   )
                 ],
               ),
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
               Opacity(
                 opacity: 0.8,
                 child: Text(
-                  context.l10n.orderCompletedAndPaid,
+                  S.of(context).orderCompletedAndPaid,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),
-              const SizedBox(height: 20.0),
+              SizedBox(height: 20.0),
               Opacity(
                 opacity: 0.8,
                 child: Text(
@@ -112,16 +110,15 @@ class CheckoutDoneView extends HookWidget {
                       .copyWith(fontSize: 20.0),
                 ),
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: 50),
               TextButton(
                 style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                   primary: Theme.of(context).colorScheme.secondary,
-                  shape: const StadiumBorder(),
+                  shape: StadiumBorder(),
                 ),
                 onPressed: onClose,
-                child: Text(context.l10n.start_shopping),
+                child: Text(S.of(context).start_shopping),
               ),
             ],
           ),

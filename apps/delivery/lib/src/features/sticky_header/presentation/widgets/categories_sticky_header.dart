@@ -11,28 +11,47 @@
 //
 
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
+import 'package:delivery/src/features/categories/presentation/pages/categories_page.dart';
 import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
+import 'package:delivery/src/features/products/presentation/pages/category_products_detail_page.dart';
 import 'package:delivery/src/features/products/presentation/widgets/category_chip.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:routeborn/routeborn.dart';
 
-class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((CategoriesStickyHeader).toString());
+
+class CategoriesStickyHeader extends HookWidget {
   const CategoriesStickyHeader({
     Key? key,
   }) : super(key: key);
 
   void onNavigateToCategory(
-    WidgetRef ref,
     BuildContext context,
     CategoriesTreeModel category,
     String heroTag,
-  ) {}
+  ) {
+    context
+        .read(navigationProvider)
+        .setNestingBranch(context, NestingBranch.categories);
+
+    context.read(navigationProvider).replaceAllWith(context, [
+      AppPageNode(page: CategoriesPage()),
+      AppPageNode(
+        page: CategoryProductsPage(
+          category,
+          categoryImgHeroTag: heroTag,
+        ),
+      ),
+    ]);
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final categories =
-        ref.watch(mainCategoriesWithoutExtraProvider.state).state;
+  Widget build(BuildContext context) {
+    final categories = useProvider(mainCategoriesWithoutExtraProvider).state;
 
     return SizedBox(
       height: 65,
@@ -52,8 +71,8 @@ class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy {
                 ),
                 itemCount: (categories.length) + 1,
                 itemBuilder: (context, index) {
-                  loggy
-                      .info(('categories: ${categories.length} index: $index'));
+                  _logger
+                      .fine('categories: ${categories.length} index: $index');
                   if (index == (categories.length)) {
                     return const SizedBox(
                       width: 12,
@@ -65,7 +84,7 @@ class CategoriesStickyHeader extends HookConsumerWidget with UiLoggy {
 
                     return CategoryChip(
                       onNavigateToCategory: (context) =>
-                          onNavigateToCategory(ref, context, category, heroTag),
+                          onNavigateToCategory(context, category, heroTag),
                       category: categories.elementAt(index),
                       heroTag: heroTag,
                     );

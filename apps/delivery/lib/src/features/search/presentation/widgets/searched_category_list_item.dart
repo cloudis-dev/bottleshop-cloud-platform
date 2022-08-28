@@ -10,22 +10,23 @@
 //
 //
 
-// ignore_for_file: unused_local_variable
-
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/categories/presentation/other/category_container_decoration.dart';
+import 'package:delivery/src/features/products/presentation/pages/category_products_detail_page.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class SearchedCategoryListItem extends HookConsumerWidget {
-  const SearchedCategoryListItem({
-    super.key,
+class SearchedCategoryListItem extends HookWidget {
+  SearchedCategoryListItem({
     required this.categoryPlainModel,
     required this.navigationCategory,
     required this.heroTag,
@@ -37,7 +38,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
   final double? bottomSideLineWidth;
   final String heroTag;
 
-  void onClick(WidgetRef ref, BuildContext context) {
+  void onClick(BuildContext context) {
     final subcategoryId = navigationCategory.categoryDetails.id !=
             categoryPlainModel.id
         ? navigationCategory.subCategories
@@ -46,11 +47,22 @@ class SearchedCategoryListItem extends HookConsumerWidget {
             .toList()
             .indexWhere((element) => element.contains(categoryPlainModel.id))
         : null;
+
+    context.read(navigationProvider).pushPage(
+          context,
+          AppPageNode(
+            page: CategoryProductsPage(
+              navigationCategory,
+              subcategoryId: subcategoryId,
+              categoryImgHeroTag: heroTag,
+            ),
+          ),
+        );
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
 
     return Container(
       decoration: ListItemContainerDecoration(
@@ -87,7 +99,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 15),
+                SizedBox(width: 15),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +115,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
                       if (categoryPlainModel.id ==
                           navigationCategory.categoryDetails.id)
                         Text(
-                          context.l10n.all,
+                          S.of(context).all,
                           style: Theme.of(context).textTheme.bodyText1,
                         )
                       else
@@ -120,7 +132,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
           Positioned.fill(
             child: Material(
               color: Colors.transparent,
-              child: InkWell(onTap: () => onClick(ref, context)),
+              child: InkWell(onTap: () => onClick(context)),
             ),
           ),
         ],

@@ -10,13 +10,13 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// This is used in scrollable lists where the content is loaded.
 /// When any error in the items loading happens, this widget should be displayed.
 class ListErrorWidget extends StatelessWidget {
-  const ListErrorWidget({super.key, required this.onButtonPressed});
+  ListErrorWidget(this.onButtonPressed);
 
   final void Function() onButtonPressed;
 
@@ -27,7 +27,7 @@ class ListErrorWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            context.l10n.somethingWentWrong,
+            S.of(context).somethingWentWrong,
             style: Theme.of(context).textTheme.bodyText2,
           ),
           const SizedBox(
@@ -41,7 +41,7 @@ class ListErrorWidget extends StatelessWidget {
               primary: Theme.of(context).colorScheme.secondary,
             ),
             child: Text(
-              context.l10n.tryAgain,
+              S.of(context).tryAgain,
               textAlign: TextAlign.center,
             ),
           ),

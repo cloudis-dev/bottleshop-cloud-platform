@@ -1,13 +1,15 @@
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
 import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/cart/data/services/cart_content_service.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-class CartRepository with NetworkLoggy {
+final _logger = Logger((CartRepository).toString());
+
+class CartRepository {
   final CloudFunctionsService cloudFunctionsService;
 
   final CartContentService cartContentService;
@@ -47,7 +49,7 @@ class CartRepository with NetworkLoggy {
   }
 
   Future<void> add(String id, int quantity) async {
-    loggy.info('adding id $id QTY: $quantity');
+    _logger.fine('adding id $id QTY: $quantity');
     final ref = cartService.db
         .collection(FirestoreCollections.productsCollection)
         .doc(id);
@@ -64,7 +66,7 @@ class CartRepository with NetworkLoggy {
   }
 
   Future<void> removeItem(String id) async {
-    loggy.info('removing $id');
+    _logger.fine('removing $id');
     return cartContentService.removeItem(id);
   }
 

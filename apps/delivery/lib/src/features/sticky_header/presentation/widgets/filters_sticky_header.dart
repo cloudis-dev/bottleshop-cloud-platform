@@ -24,9 +24,10 @@ import 'package:delivery/src/features/sticky_header/presentation/widgets/filter_
 import 'package:delivery/src/features/sticky_header/presentation/widgets/filter_chips/volume_filter_chip.dart';
 import 'package:delivery/src/features/sticky_header/presentation/widgets/filter_chips/year_filter_chip.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FiltersStickyHeader extends HookConsumerWidget {
+class FiltersStickyHeader extends HookWidget {
   const FiltersStickyHeader({
     Key? key,
     required this.filterType,
@@ -35,8 +36,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
   final FilterType filterType;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filter = ref.watch(appliedFilterProvider(filterType).state).state;
+  Widget build(BuildContext context) {
+    final filter = useProvider(appliedFilterProvider(filterType)).state;
 
     return SizedBox(
       height: 52,
@@ -46,7 +47,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
           Container(
             clipBehavior: Clip.hardEdge,
             width: 80,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(60),
                 topRight: Radius.circular(60),
@@ -57,7 +58,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
               child: Ink(
                 child: IconButton(
                   onPressed: () {
-                    ref.read(appliedFilterProvider(filterType).state).state =
+                    context.read(appliedFilterProvider(filterType)).state =
                         FilterModel.empty();
                   },
                   icon: const Icon(
@@ -71,10 +72,10 @@ class FiltersStickyHeader extends HookConsumerWidget {
           Expanded(
             child: Container(
               clipBehavior: Clip.hardEdge,
-              margin: const EdgeInsets.only(left: 10),
+              margin: EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondary.withOpacity(1),
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(60),
                   topLeft: Radius.circular(60),
                 ),
@@ -85,8 +86,8 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.alcoholRange,
                       onDeleteFilter: () {
-                        var val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                        final val =
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedAlcoholFilter();
                       },
                     ),
@@ -96,7 +97,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                       value: filter.minQuantity,
                       onDeleteFilter: () {
                         final val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedQuantityFilter();
                       },
                     ),
@@ -106,7 +107,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                       value: filter.volumeRange,
                       onDeleteFilter: () {
                         final val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedVolumeFilter();
                       },
                     ),
@@ -116,7 +117,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                       value: filter.priceRange,
                       onDeleteFilter: () {
                         final val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedPriceFilter();
                       },
                     ),
@@ -126,7 +127,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                       value: filter.isSpecialEdition,
                       onDeleteFilter: () {
                         final val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedSpecialEditionFilter();
                       },
                     ),
@@ -136,7 +137,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                       value: filter.countries,
                       onDeleteFilter: () {
                         final val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedCountriesFilter();
                       },
                     ),
@@ -146,7 +147,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                       value: filter.minAge,
                       onDeleteFilter: () {
                         final val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedAgeFilter();
                       },
                     ),
@@ -156,7 +157,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                       value: filter.maxYear,
                       onDeleteFilter: () {
                         final val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedYearFilter();
                       },
                     ),
@@ -166,7 +167,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                       value: filter.enabledExtraCategoriesIds,
                       onDeleteFilter: () {
                         final val =
-                            ref.read(appliedFilterProvider(filterType).state);
+                            context.read(appliedFilterProvider(filterType));
                         val.state = val.state.clearedExtraCategoriesFilter();
                       },
                     ),

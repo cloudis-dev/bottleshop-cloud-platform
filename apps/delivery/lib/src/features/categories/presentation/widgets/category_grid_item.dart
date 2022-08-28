@@ -12,16 +12,16 @@
 
 import 'dart:math';
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CategoryGridItem extends HookConsumerWidget {
+class CategoryGridItem extends HookWidget {
   final CategoriesTreeModel category;
   final void Function(
-    WidgetRef ref,
     BuildContext context,
     CategoriesTreeModel category,
   ) onNavigateToCategory;
@@ -29,7 +29,7 @@ class CategoryGridItem extends HookConsumerWidget {
   final double maxSize;
   final int titleMaxLines;
 
-  const CategoryGridItem({
+  CategoryGridItem({
     Key? key,
     required this.category,
     required this.onNavigateToCategory,
@@ -39,12 +39,12 @@ class CategoryGridItem extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
 
     return Material(
       child: InkWell(
-        onTap: () => onNavigateToCategory(ref, context, category),
+        onTap: () => onNavigateToCategory(context, category),
         borderRadius: BorderRadius.circular(10),
         child: Stack(
           children: [
@@ -56,7 +56,7 @@ class CategoryGridItem extends HookConsumerWidget {
                 gradient: LinearGradient(
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
-                  stops: const [.25, 1],
+                  stops: [.25, 1],
                   colors: [
                     Theme.of(context).colorScheme.secondary,
                     Theme.of(context).primaryColor.withOpacity(.9),
@@ -93,7 +93,7 @@ class CategoryGridItem extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: Align(
                 child: SingleChildScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   child: Column(
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -122,12 +122,11 @@ class CategoryGridItem extends HookConsumerWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${context.l10n.products}: '),
+                              Text('${S.of(context).products}: '),
                               productsCount!.maybeWhen(
                                 data: (count) => Text(
                                   count.toString(),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 orElse: () => const SizedBox.shrink(),
                               ),

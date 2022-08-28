@@ -10,19 +10,25 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
+import 'package:delivery/src/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:delivery/src/features/product_sections/presentation/providers/providers.dart';
 import 'package:delivery/src/features/product_sections/presentation/widgets/atoms/available_progress_bar.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:routeborn/routeborn.dart';
 
-class SectionProductItem extends HookConsumerWidget {
+final _logger = Logger((SectionProductItem).toString());
+
+class SectionProductItem extends HookWidget {
   static const double imageWidth = 160;
 
   final EdgeInsets margin;
@@ -34,11 +40,15 @@ class SectionProductItem extends HookConsumerWidget {
     required this.product,
   }) : super(key: key);
 
-  void onClick(WidgetRef ref, BuildContext context) {}
+  void onClick(BuildContext context) {
+    context
+        .read(navigationProvider)
+        .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
 
     return Container(
       margin: margin,
@@ -52,14 +62,14 @@ class SectionProductItem extends HookConsumerWidget {
               child: Stack(
                 children: [
                   Hero(
-                    tag: ValueKey(product.uniqueId),
+                    tag: HeroTags.productBaseTag + product.uniqueId,
                     child: ProductImage(imagePath: product.thumbnailPath),
                   ),
                   Positioned.fill(
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () => onClick(ref, context),
+                        onTap: () => onClick(context),
                         borderRadius: ProductImage.borderRadius,
                       ),
                     ),
@@ -74,11 +84,9 @@ class SectionProductItem extends HookConsumerWidget {
               right: 5,
               child: IgnorePointer(
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(100)),
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
                       color: Theme.of(context).colorScheme.secondary),
                   alignment: AlignmentDirectional.topEnd,
                   child: Text(
@@ -96,7 +104,7 @@ class SectionProductItem extends HookConsumerWidget {
                 child: Container(
                   width: 70,
                   height: 70,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/images/special.png')),
                   ),
@@ -123,15 +131,15 @@ class SectionProductItem extends HookConsumerWidget {
                                 color: Theme.of(context)
                                     .hintColor
                                     .withOpacity(0.15),
-                                offset: const Offset(0, 3),
+                                offset: Offset(0, 3),
                                 blurRadius: 10)
                           ],
                         ),
                         child: _FlashSaleItem(product),
                       ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 12),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                       width: imageWidth - 20,
                       height: 120,
                       decoration: BoxDecoration(
@@ -141,7 +149,7 @@ class SectionProductItem extends HookConsumerWidget {
                           BoxShadow(
                               color:
                                   Theme.of(context).hintColor.withOpacity(0.1),
-                              offset: const Offset(0, 3),
+                              offset: Offset(0, 3),
                               blurRadius: 10)
                         ],
                       ),
@@ -174,8 +182,8 @@ class SectionProductItem extends HookConsumerWidget {
                             ),
                             Text(
                               product.count > 0
-                                  ? '${product.count} ${context.l10n.inStock}'
-                                  : context.l10n.outOfStock,
+                                  ? '${product.count} ${S.of(context).inStock}'
+                                  : S.of(context).outOfStock,
                               style:
                                   Theme.of(context).textTheme.caption!.copyWith(
                                         color: product.count > 0
@@ -222,7 +230,7 @@ class SectionProductItem extends HookConsumerWidget {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () => onClick(ref, context),
+                      onTap: () => onClick(context),
                       borderRadius: ProductImage.borderRadius,
                     ),
                   ),
@@ -236,14 +244,14 @@ class SectionProductItem extends HookConsumerWidget {
   }
 }
 
-class _FlashSaleItem extends HookConsumerWidget with UiLoggy {
+class _FlashSaleItem extends HookWidget {
   final ProductModel product;
 
-  const _FlashSaleItem(this.product);
+  _FlashSaleItem(this.product);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(flashSaleEndProvider(product.flashSale!));
+  Widget build(BuildContext context) {
+    final value = useProvider(flashSaleEndProvider(product.flashSale!));
 
     return value.maybeWhen(
         data: (flashSaleEndsIn) {
@@ -276,7 +284,7 @@ class _FlashSaleItem extends HookConsumerWidget with UiLoggy {
           return const SizedBox.shrink();
         },
         error: (err, stack) {
-          loggy.error('Failed to fetch flash sale end', err, stack);
+          _logger.severe('Failed to fetch flash sale end', err, stack);
           return const SizedBox.shrink();
         },
         orElse: () => const SizedBox.shrink());
@@ -284,14 +292,14 @@ class _FlashSaleItem extends HookConsumerWidget with UiLoggy {
 
   List<TextSpan> _getFlashSaleProgressLabelTexts(
       BuildContext context, Duration flashSaleEndsIn) {
-    const highlightStyle = TextStyle(fontWeight: FontWeight.bold);
+    final highlightStyle = TextStyle(fontWeight: FontWeight.bold);
 
     if (flashSaleEndsIn.inSeconds <= 0) {
-      return [TextSpan(text: context.l10n.flashSaleEnded)];
+      return [TextSpan(text: S.of(context).flashSaleEnded)];
     }
     if (flashSaleEndsIn.inDays >= 1) {
       return [
-        TextSpan(text: '${context.l10n.remainingDays}: '),
+        TextSpan(text: '${S.of(context).remainingDays}: '),
         TextSpan(
           text: flashSaleEndsIn.inDays.toString(),
           style: highlightStyle,
@@ -300,7 +308,7 @@ class _FlashSaleItem extends HookConsumerWidget with UiLoggy {
     }
     if (flashSaleEndsIn.inHours >= 1) {
       return [
-        TextSpan(text: '${context.l10n.remainingHours}: '),
+        TextSpan(text: '${S.of(context).remainingHours}: '),
         TextSpan(
           text: flashSaleEndsIn.inHours.toString(),
           style: highlightStyle,
@@ -308,7 +316,7 @@ class _FlashSaleItem extends HookConsumerWidget with UiLoggy {
       ];
     }
     return [
-      TextSpan(text: '${context.l10n.remainingMinutes}: '),
+      TextSpan(text: '${S.of(context).remainingMinutes}: '),
       TextSpan(
         text: flashSaleEndsIn.inMinutes.toString(),
         style: highlightStyle,

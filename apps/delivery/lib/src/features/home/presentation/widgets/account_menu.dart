@@ -1,15 +1,20 @@
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/sign_in_form.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/sign_up_form.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/terms_and_conditions_text_content.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/atoms/terms_and_conditions_text_content.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/organisms/sign_in_form.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/organisms/sign_up_form.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/views/terms_conditions_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:routeborn/routeborn.dart';
+
+final _logger = Logger((AccountMenu).toString());
 
 enum _TabsState {
   menu,
@@ -40,7 +45,7 @@ class AccountMenu extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         clipBehavior: Clip.antiAlias,
         child: AnimatedSize(
-          duration: const Duration(milliseconds: 200),
+          duration: Duration(milliseconds: 200),
           child: _MenuBody(scaffoldKey: scaffoldKey),
         ),
       ),
@@ -57,7 +62,7 @@ class _MenuBody extends HookWidget {
     final tabsState = useState(_TabsState.menu);
 
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 50),
+      duration: Duration(milliseconds: 50),
       child: () {
         switch (tabsState.value) {
           case _TabsState.menu:
@@ -97,7 +102,7 @@ class _MenuBody extends HookWidget {
   }
 }
 
-class _MenuItemsTab extends HookConsumerWidget {
+class _MenuItemsTab extends HookWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final VoidCallback onLogin;
 
@@ -108,14 +113,15 @@ class _MenuItemsTab extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final scrollCtrl = useScrollController();
     final hasUser =
-        ref.watch(currentUserProvider.select<bool>((value) => value != null));
+        useProvider(currentUserProvider.select((value) => value != null));
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
         controller: scrollCtrl,
+        isAlwaysShown: true,
         child: SingleChildScrollView(
           controller: scrollCtrl,
           child: Theme(
@@ -129,40 +135,79 @@ class _MenuItemsTab extends HookConsumerWidget {
               children: [
                 if (!hasUser)
                   ListTile(
-                    leading: const Icon(Icons.login),
-                    title: Text(context.l10n.login),
+                    leading: Icon(Icons.login),
+                    title: Text(S.of(context).login),
                     onTap: onLogin,
                   ),
                 ListTile(
-                  leading: const Icon(Icons.favorite),
-                  title: Text(context.l10n.favoriteTabLabel),
-                  onTap: null,
+                  leading: Icon(Icons.favorite),
+                  title: Text(S.of(context).favoriteTabLabel),
+                  onTap: () {
+                    context.read(navigationProvider).setNestingBranch(
+                          scaffoldKey.currentContext!,
+                          NestingBranch.favorites,
+                        );
+
+                    OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                  },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: Text(context.l10n.settings),
-                  onTap: null,
+                  leading: Icon(Icons.settings),
+                  title: Text(S.of(context).settings),
+                  onTap: () {
+                    context.read(navigationProvider).setNestingBranch(
+                          scaffoldKey.currentContext!,
+                          NestingBranch.account,
+                          branchParam: scaffoldKey.currentContext!
+                              .read(navigationProvider)
+                              .getNestingBranch(
+                                scaffoldKey.currentContext!,
+                              ),
+                        );
+
+                    OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                  },
                 ),
                 BottleshopAboutTile(
                   afterTap: () =>
                       OverlaySupportEntry.of(context)!.dismiss(animate: false),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.help_outlined),
-                  title: Text(context.l10n.helpSupport),
-                  onTap: null,
+                  leading: Icon(Icons.help_outlined),
+                  title: Text(S.of(context).helpSupport),
+                  onTap: () {
+                    context.read(navigationProvider).setNestingBranch(
+                          scaffoldKey.currentContext!,
+                          NestingBranch.help,
+                          branchParam: scaffoldKey.currentContext!
+                              .read(navigationProvider)
+                              .getNestingBranch(
+                                scaffoldKey.currentContext!,
+                              ),
+                        );
+
+                    OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                  },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.gavel),
-                  title: Text(context.l10n.menuTerms),
-                  onTap: null,
+                  leading: Icon(Icons.gavel),
+                  title: Text(S.of(context).menuTerms),
+                  onTap: () {
+                    context.read(navigationProvider).pushPage(
+                          context,
+                          AppPageNode(page: TermsConditionsPage()),
+                          toParent: true,
+                        );
+                    OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                  },
                 ),
                 if (hasUser)
                   ListTile(
-                    leading: const Icon(Icons.exit_to_app),
-                    title: Text(context.l10n.logOut),
+                    leading: Icon(Icons.exit_to_app),
+                    title: Text(S.of(context).logOut),
                     onTap: () async {
-                      await ref.read(userRepositoryProvider).signOut();
+                      await context.read(userRepositoryProvider).signOut();
+                      OverlaySupportEntry.of(context)!.dismiss(animate: false);
                     },
                   )
               ],
@@ -174,7 +219,7 @@ class _MenuItemsTab extends HookConsumerWidget {
   }
 }
 
-class _TermsAndConditionsTab extends HookConsumerWidget {
+class _TermsAndConditionsTab extends HookWidget {
   final VoidCallback onAccept;
   final VoidCallback onBack;
 
@@ -185,7 +230,7 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final scrollCtrl = useScrollController();
 
     return IntrinsicHeight(
@@ -195,12 +240,13 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8, top: 8),
             child: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
+              icon: Icon(Icons.arrow_back_ios),
               onPressed: onBack,
             ),
           ),
           Expanded(
             child: CupertinoScrollbar(
+              isAlwaysShown: true,
               controller: scrollCtrl,
               child: SingleChildScrollView(
                 controller: scrollCtrl,
@@ -210,12 +256,21 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
                   child: Column(
                     children: [
                       Text(
-                        context.l10n.termsTitleMainScreen,
+                        S.of(context).termsTitleMainScreen,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       const SizedBox(height: 20),
                       TermsAndConditionsTextContent(
-                          onNavigateToTermsPage: () {})
+                        onNavigateToTermsPage: () {
+                          context.read(navigationProvider).pushPage(
+                                context,
+                                AppPageNode(page: TermsConditionsPage()),
+                              );
+
+                          OverlaySupportEntry.of(context)!
+                              .dismiss(animate: false);
+                        },
+                      )
                     ],
                   ),
                 ),
@@ -223,18 +278,18 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
             ),
           ),
           CupertinoDialogAction(
+            child: Text(S.of(context).termsPopUpYes),
             onPressed: onAccept,
             textStyle: Theme.of(context)
                 .textTheme
                 .subtitle2!
                 .copyWith(color: Theme.of(context).colorScheme.secondary),
-            child: Text(context.l10n.termsPopUpYes),
           ),
           CupertinoDialogAction(
+            child: Text(S.of(context).termsPopUpNo),
             onPressed: onBack,
             isDefaultAction: true,
             textStyle: Theme.of(context).textTheme.subtitle2,
-            child: Text(context.l10n.termsPopUpNo),
           ),
         ],
       ),
@@ -242,7 +297,7 @@ class _TermsAndConditionsTab extends HookConsumerWidget {
   }
 }
 
-class _SignUpTab extends HookWidget with UiLoggy {
+class _SignUpTab extends HookWidget {
   final VoidCallback onBack;
 
   const _SignUpTab({
@@ -256,6 +311,7 @@ class _SignUpTab extends HookWidget with UiLoggy {
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
+        isAlwaysShown: true,
         controller: scrollCtrl,
         child: SingleChildScrollView(
           controller: scrollCtrl,
@@ -267,7 +323,7 @@ class _SignUpTab extends HookWidget with UiLoggy {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
+                    icon: Icon(Icons.arrow_back_ios),
                     onPressed: onBack,
                   ),
                 ),
@@ -278,7 +334,7 @@ class _SignUpTab extends HookWidget with UiLoggy {
                   backgroundColor: Colors.transparent,
                   borderRadius: BorderRadius.zero,
                   authCallback: (val) =>
-                      loggy.info('Sign up callback status: $val'),
+                      _logger.info('Sign up callback status: $val'),
                 ),
               ),
             ],
@@ -305,6 +361,7 @@ class _LoginTab extends HookWidget {
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
+        isAlwaysShown: true,
         controller: scrollCtrl,
         child: SingleChildScrollView(
           controller: scrollCtrl,
@@ -316,7 +373,7 @@ class _LoginTab extends HookWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
+                    icon: Icon(Icons.arrow_back_ios),
                     onPressed: onBack,
                   ),
                 ),
@@ -331,7 +388,7 @@ class _LoginTab extends HookWidget {
               ),
               TextButton(
                 onPressed: onSignUp,
-                child: Text(context.l10n.dontHaveAnAccount),
+                child: Text(S.of(context).dontHaveAnAccount),
               ),
               const SizedBox(height: 24),
             ],

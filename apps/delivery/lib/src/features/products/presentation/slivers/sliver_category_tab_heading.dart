@@ -10,16 +10,17 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_section_heading.dart';
 import 'package:delivery/src/features/products/presentation/widgets/products_layout_mode_toggle.dart';
 import 'package:delivery/src/features/sorting/presentation/widgets/sort_menu_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SliverCategoryTabHeading extends HookConsumerWidget {
+class SliverCategoryTabHeading extends HookWidget {
   const SliverCategoryTabHeading({
     Key? key,
     required this.subCategory,
@@ -28,17 +29,17 @@ class SliverCategoryTabHeading extends HookConsumerWidget {
   final CategoriesTreeModel? subCategory;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
 
     return SliverToBoxAdapter(
       child: BottleshopSectionHeading(
         leading: const Icon(Icons.liquor),
         label:
-            '${subCategory!.categoryDetails.getName(currentLocale)} ${context.l10n.category}',
-        trailingWidgets: const <Widget>[
-          ProductsLayoutModeToggle(),
-          SortMenuButton()
+            '${subCategory!.categoryDetails.getName(currentLocale)} ${S.of(context).category}',
+        trailingWidgets: <Widget>[
+          const ProductsLayoutModeToggle(),
+          const SortMenuButton()
         ],
       ),
       // Padding(
@@ -50,7 +51,7 @@ class SliverCategoryTabHeading extends HookConsumerWidget {
       //       Icons.liquor,
       //     ),
       //     title: Text(
-      //       '${subCategory!.categoryDetails.getName(currentLocale)} ${context.l10n.category}',
+      //       '${subCategory!.categoryDetails.getName(currentLocale)} ${S.of(context).category}',
       //       overflow: TextOverflow.fade,
       //       softWrap: false,
       //       style: Theme.of(context).textTheme.headline6,

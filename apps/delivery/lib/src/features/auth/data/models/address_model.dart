@@ -31,8 +31,7 @@ class Address extends Equatable {
 
   factory Address.fromMap(Map<String, dynamic>? map) {
     if (map == null) {
-      return const Address(
-          streetName: '', streetNumber: '', city: '', zipCode: '');
+      return Address(streetName: '', streetNumber: '', city: '', zipCode: '');
     }
     return Address(
       streetName: map['streetName'] as String? ?? '',

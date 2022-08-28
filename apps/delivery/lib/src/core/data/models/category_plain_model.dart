@@ -38,7 +38,7 @@ class CategoryPlainModel extends Equatable {
     }
   }
 
-  const CategoryPlainModel({
+  CategoryPlainModel({
     required this.id,
     required LocalizedModel localizedName,
     required String name,

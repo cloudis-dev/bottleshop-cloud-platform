@@ -10,32 +10,35 @@
 //
 //
 
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:overlay_support/overlay_support.dart';
 
-class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((ProfileSettingsDialog).toString());
+
+class ProfileSettingsDialog extends HookWidget {
   final bool? showBirthday;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ProfileSettingsDialog({Key? key, this.showBirthday}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserProvider);
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final user = useProvider(currentUserProvider);
+    final currentLocale = useProvider(currentLocaleProvider);
     final scrollController = useScrollController();
     var profileData = <String, dynamic>{};
 
@@ -51,10 +54,11 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
                 formatter: FormattingUtils.getDateFormatter(currentLocale),
               );
             },
-      style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
       child: Text(
-        context.l10n.edit,
+        S.of(context).edit,
       ),
+      style: TextButton.styleFrom(
+          primary: Theme.of(context).colorScheme.secondary),
     );
   }
 
@@ -69,8 +73,9 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: buildDialogTitle(context, context.l10n.profileSettings),
+          title: buildDialogTitle(context, S.of(context).profileSettings),
           content: CupertinoScrollbar(
+            isAlwaysShown: true,
             controller: controller,
             child: SingleChildScrollView(
               controller: controller,
@@ -84,29 +89,30 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(context.l10n.cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
+              child: Text(S.of(context).save),
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.secondary),
               onPressed: () {
                 var isValid = _formKey.currentState!.validate();
                 if (isValid) {
                   _formKey.currentState!.save();
                   userDb.updateData(user.uid, profileData!);
-                  // showSimpleNotification(
-                  //   Text(context.l10n.profileUpdated),
-                  //   position: NotificationPosition.top,
-                  //   duration: const Duration(seconds: 2),
-                  //   slideDismissDirection: DismissDirection.horizontal,
-                  //   context: context,
-                  // );
-                  // Navigator.of(context).pop();
+                  showSimpleNotification(
+                    Text(S.of(context).profileUpdated),
+                    position: NotificationPosition.top,
+                    duration: Duration(seconds: 2),
+                    slideDismissDirection: DismissDirection.horizontal,
+                    context: context,
+                  );
+                  Navigator.of(context).pop();
                 }
               },
-              child: Text(context.l10n.save),
             ),
           ],
         );
@@ -128,51 +134,58 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
           StyledFormField(
             initialValue: user.email,
             keyboardType: TextInputType.emailAddress,
-            labelText: '${context.l10n.email}*',
+            labelText: '${S.of(context).email}*',
             onSaved: (input) {
               if (input != null) {
                 profileData![UserFields.email] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData![UserFields.email]}');
+              _logger.fine(
+                  'field saved $input, profile: ${profileData![UserFields.email]}');
             },
             validator: MultiValidator(
               <FieldValidator<dynamic>>[
-                RequiredValidator(errorText: context.l10n.emailIsRequired),
-                EmailValidator(errorText: context.l10n.email_invalid),
+                RequiredValidator(errorText: S.of(context).emailIsRequired),
+                EmailValidator(errorText: S.of(context).email_invalid),
               ],
             ),
           ),
           StyledFormField(
             keyboardType: TextInputType.name,
-            labelText: '${context.l10n.fullName}*',
+            labelText: '${S.of(context).fullName}*',
             initialValue: user.name,
             validator: MultiValidator(
               <FieldValidator<dynamic>>[
-                RequiredValidator(errorText: context.l10n.fullNameIsRequired),
-                MinLengthValidator(3, errorText: context.l10n.fullNameMustBeLonger),
+                RequiredValidator(errorText: S.of(context).fullNameIsRequired),
+                MinLengthValidator(3,
+                    errorText: S.of(context).fullNameMustBeLonger),
               ],
             ),
             onSaved: (input) {
               if (input != null) {
                 profileData![UserFields.name] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData![UserFields.name]}');
+              _logger.fine(
+                  'field saved $input, profile: ${profileData![UserFields.name]}');
             },
           ),
           StyledFormField(
             keyboardType: TextInputType.phone,
             validator: MultiValidator([
-              RequiredValidator(errorText: context.l10n.phoneNumberIsRequired),
-              LengthRangeValidator(min: 10, max: 13, errorText: context.l10n.enterValidPhoneNumber),
+              RequiredValidator(errorText: S.of(context).phoneNumberIsRequired),
+              LengthRangeValidator(
+                  min: 10,
+                  max: 13,
+                  errorText: S.of(context).enterValidPhoneNumber),
             ]),
             hintText: '+421 9xx xxx xxx',
-            labelText: '${context.l10n.phoneNumber}*',
+            labelText: '${S.of(context).phoneNumber}*',
             initialValue: user.phoneNumber,
             onSaved: (input) {
               if (input != null) {
                 profileData![UserFields.phoneNumber] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData![UserFields.phoneNumber]}');
+              _logger.fine(
+                  'field saved $input, profile: ${profileData![UserFields.phoneNumber]}');
             },
           ),
           if (showBirthday!)
@@ -180,8 +193,8 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
               resetIcon: null,
               decoration: getInputFieldDecorator(
                 context: context,
-                hintText: context.l10n.yyyymmdd,
-                labelText: context.l10n.dayOfBirth,
+                hintText: S.of(context).yyyymmdd,
+                labelText: S.of(context).dayOfBirth,
               ),
               format: formatter!,
               initialValue: user.dayOfBirth,
@@ -189,10 +202,11 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
                 final date = await showDatePicker(
                   context: context,
                   firstDate: DateTime(1900),
-                  initialDate: initialDate ?? (DateTime.now().subtract(const Duration(days: 365 * 18))),
-                  lastDate: (DateTime.now().subtract(const Duration(days: 365 * 18))),
+                  initialDate: initialDate ??
+                      (DateTime.now().subtract(Duration(days: 365 * 18))),
+                  lastDate: (DateTime.now().subtract(Duration(days: 365 * 18))),
                   initialDatePickerMode: DatePickerMode.year,
-                  helpText: context.l10n.selectYourDayOfBirth,
+                  helpText: S.of(context).selectYourDayOfBirth,
                 );
                 return date;
               },
@@ -200,7 +214,7 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
                 if (input != null) {
                   profileData![UserFields.dayOfBirth] = input;
                 }
-                loggy.info('field saved ${input.toString()}');
+                _logger.fine('field saved ${input.toString()}');
               },
             ),
         ],
@@ -211,8 +225,8 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
   Row buildDialogTitle(BuildContext context, String title) {
     return Row(
       children: <Widget>[
-        const Icon(Icons.supervised_user_circle_outlined),
-        const SizedBox(width: 10),
+        Icon(Icons.supervised_user_circle_outlined),
+        SizedBox(width: 10),
         Text(
           title,
         )

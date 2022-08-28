@@ -15,6 +15,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final sortModelProvider = StateProvider<SortModel>(
   (ref) {
-    return const SortModel(sortField: SortField.name, ascending: true);
+    return SortModel(sortField: SortField.name, ascending: true);
   },
 );

@@ -27,7 +27,7 @@ class FilterQuery {
         .where((e) => e.trim().isNotEmpty)
         .interleave(logicOp == FilterLogicOp.and ? ' AND ' : ' OR ')
         .join();
-    return query;
+    return '$query';
   }
 }
 

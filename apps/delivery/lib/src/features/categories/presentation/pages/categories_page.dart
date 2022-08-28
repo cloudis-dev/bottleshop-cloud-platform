@@ -10,26 +10,44 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/categories/presentation/widgets/categories_view.dart';
-import 'package:delivery/src/features/home/presentation/widgets/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/menu_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/search_icon_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/search_icon_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class CategoriesPage extends HookConsumerWidget {
-  const CategoriesPage({Key? key}) : super(key: key);
+class CategoriesPage extends RoutebornPage {
+  static const String pagePathBase = 'categories';
+
+  CategoriesPage() : super.builder(pagePathBase, (_) => _CategoriesPage());
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(S.of(context).categories);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _CategoriesPage extends HookWidget {
+  const _CategoriesPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
 
     if (shouldUseMobileLayout(context)) {
@@ -37,16 +55,16 @@ class CategoriesPage extends HookConsumerWidget {
         key: scaffoldKey,
         drawer: const MenuDrawer(),
         appBar: AppBar(
-          title: Text(context.l10n.categories),
+          title: Text(S.of(context).categories),
           leading: MenuButton(drawerScaffoldKey: scaffoldKey),
           actions: [
             const SearchIconButton(),
             AuthPopupButton(scaffoldKey: scaffoldKey),
           ],
         ),
-        body: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: CategoriesView(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: const CategoriesView(),
         ),
       );
     } else {
@@ -55,7 +73,7 @@ class CategoriesPage extends HookConsumerWidget {
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
         // menuDrawer: const MenuDrawer(),
-        // appBarTitle: Text(context.l10n.categories),
+        // appBarTitle: Text(S.of(context).categories),
         appBarActions: [
           const LanguageDropdown(),
           const SearchIconButton(),

@@ -10,22 +10,23 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/generated/l10n.dart';
 import 'package:delivery/src/features/sticky_header/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ExtraCategoriesFilterChip extends HookConsumerWidget {
+class ExtraCategoriesFilterChip extends HookWidget {
   const ExtraCategoriesFilterChip({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final categoriesFilterValue = ref.watch(extraCategoriesScopedProvider);
+  Widget build(BuildContext context) {
+    final categoriesFilterValue = useProvider(extraCategoriesScopedProvider);
 
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
-      label: Text(context.l10n.extraCategories),
-      onDeleted: categoriesFilterValue!.onDeleteFilter,
+      label: Text(S.of(context).extraCategories),
+      onDeleted: categoriesFilterValue.onDeleteFilter,
     );
   }
 }

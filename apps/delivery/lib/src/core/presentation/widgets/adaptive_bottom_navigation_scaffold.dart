@@ -10,14 +10,16 @@
 //
 //
 
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottom_navigation_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/cupertino_bottom_navigation_scaffold.dart';
 import 'package:delivery/src/core/presentation/widgets/material_bottom_navigation_scaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AdaptiveBottomNavigationScaffold extends HookConsumerWidget {
+class AdaptiveBottomNavigationScaffold extends HookWidget {
   final List<BottomNavigationTab> navigationBarItems;
 
   const AdaptiveBottomNavigationScaffold({
@@ -26,18 +28,48 @@ class AdaptiveBottomNavigationScaffold extends HookConsumerWidget {
   }) : super(key: key);
 
   void onTabSelected(
-    WidgetRef ref,
     BuildContext context,
+    NestingBranch currentlySelectedBranch,
+    NestingBranch newBranch,
   ) {
-    // TODO:
+    if (currentlySelectedBranch == newBranch) {
+      context.read(navigationProvider).replaceAllWith(
+            context,
+            [],
+            inChildNavigator: true,
+          );
+    } else {
+      context
+          .read(navigationProvider)
+          .setNestingBranch(context, newBranch, inChildNavigator: true);
+    }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final currentlySelectedBranch = useProvider(
+      navigationProvider.select(
+          (value) => value.getNestingBranch(context, inChildNavigator: true)),
+    );
+
     return defaultTargetPlatform != TargetPlatform.iOS
         ? MaterialBottomNavigationScaffold(
-            navigationBarItems: navigationBarItems)
+            navigationBarItems: navigationBarItems,
+            onItemSelected: (nestingBranch) => onTabSelected(
+              context,
+              currentlySelectedBranch,
+              nestingBranch,
+            ),
+            selectedBranch: currentlySelectedBranch,
+          )
         : CupertinoBottomNavigationScaffold(
-            navigationBarItems: navigationBarItems);
+            navigationBarItems: navigationBarItems,
+            onItemSelected: (newIndex) => onTabSelected(
+              context,
+              currentlySelectedBranch,
+              newIndex,
+            ),
+            selectedBranch: currentlySelectedBranch,
+          );
   }
 }
