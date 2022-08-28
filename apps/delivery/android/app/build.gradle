@@ -13,12 +13,27 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+  flutterVersionCode = '1'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+  flutterVersionName = '1.0'
+}
+
+def _compileSdkVersion = localProperties.getProperty('flutter.compileSdkVersion')
+if (_compileSdkVersion == null) {
+  _compileSdkVersion = 33
+}
+
+def _minSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
+if (_minSdkVersion == null) {
+  _minSdkVersion = 26
+}
+
+def _targetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')
+if (_targetSdkVersion == null) {
+  _targetSdkVersion = 33
 }
 
 def keystoreProperties = new Properties()
@@ -32,32 +47,36 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.setProperty('storeFile', System.getenv('STORE_PATH'))
 }
 
+apply plugin: 'com.android.application'
+// START: FlutterFire Configuration
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+// END: FlutterFire Configuration
+apply plugin: 'kotlin-android'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
 android {
-    compileSdkVersion 31
-	
+    compileSdkVersion _compileSdkVersion.toInteger()
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+      sourceCompatibility JavaVersion.VERSION_1_8
+      targetCompatibility JavaVersion.VERSION_1_8
     }
-	
+
     kotlinOptions {
-          jvmTarget = '1.8'
-       }
-
-       sourceSets {
-           main.java.srcDirs += 'src/main/kotlin'
-       }
-
-    lintOptions {
-        disable 'InvalidPackage'
+      jvmTarget = '1.8'
     }
+
+     sourceSets {
+       main.java.srcDirs += 'src/main/kotlin'
+     }
 
     defaultConfig {
-        applicationId "sk.bottleshop3veze.bottleshopdeliveryapp"
-        minSdkVersion 24
-        targetSdkVersion 31
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+      applicationId "sk.bottleshop3veze.bottleshopdeliveryapp"
+      minSdkVersion _minSdkVersion.toInteger()
+      targetSdkVersion _targetSdkVersion.toInteger()
+      versionCode flutterVersionCode.toInteger()
+      versionName flutterVersionName
     }
 
     signingConfigs {
@@ -90,7 +109,10 @@ android {
             resValue "string", "app_name", "Bottleshop 3 Veže"
         }
     }
-    buildToolsVersion '31.0.0'
+    lint {
+      checkReleaseBuilds false
+    }
+    namespace 'sk.bottleshop3veze.bottleshopdeliveryapp'
 }
 
 flutter {
@@ -98,11 +120,6 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0'
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
