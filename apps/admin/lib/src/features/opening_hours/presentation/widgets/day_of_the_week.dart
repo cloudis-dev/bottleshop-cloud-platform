@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DayOfTheWeek extends StatelessWidget {
-  DayOfTheWeek({
+  const DayOfTheWeek({
     Key? key,
     required this.day,
     required this.hours,
   }) : super(key: key);
 
-  String day = '';
-  List<dynamic> hours = [];
+  final String day;
+  final List<dynamic> hours;
 
   @override
   Widget build(BuildContext context) {

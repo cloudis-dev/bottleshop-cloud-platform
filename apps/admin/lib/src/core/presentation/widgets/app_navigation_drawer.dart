@@ -6,7 +6,7 @@ import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/auth_providers.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/detail_text.dart';
-import 'package:bottleshop_admin/src/core/presentation/widgets/opening_hours.dart';
+import 'package:bottleshop_admin/src/features/opening_hours/presentation/widgets/opening_hours_calendar.dart';
 import 'package:bottleshop_admin/src/features/login/presentation/pages/intro_activity.dart';
 
 class AppNavigationDrawer extends HookWidget {
@@ -89,7 +89,7 @@ class AppNavigationDrawer extends HookWidget {
                 ),
           ),
           const Divider(),
-          OpeningHours(),
+          OpeningHoursCalendar(),
         ],
       ),
     );
