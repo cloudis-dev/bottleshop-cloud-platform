@@ -82,6 +82,43 @@ class CountryDropdown extends HookWidget {
                             (element) => element.localizedName.local == value));
           },
         ),
+      child: DropdownSearch<String>(
+        popupProps:
+            PopupProps.menu(showSelectedItems: true, showSearchBox: true),
+        items: useProvider(constantAppDataProvider)
+            .state
+            .countries
+            .map((e) => e.localizedName.local)
+            .toList(),
+        validator: (val) {
+          if (val == null) {
+            return 'Musí byť vybraná krajina';
+          }
+          return null;
+        },
+        selectedItem: useProvider(
+          editedProductProvider.select((value) => value.state.country?.localizedName.local),
+        ),
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          textAlignVertical: TextAlignVertical.center,
+          dropdownSearchDecoration: InputDecoration(
+            hintText: '* Krajina',
+            filled: true,
+            fillColor: AppTheme.lightGreySolid,
+          ) 
+        ),
+        onChanged: (value) {
+          context.read(editedProductProvider).state = context
+              .read(editedProductProvider)
+              .state
+              .copyWith(
+                  country: context
+                      .read(constantAppDataProvider)
+                      .state
+                      .countries
+                      .firstWhere(
+                          (element) => element.localizedName.local == value));
+        },
       ),
     );
   }
