@@ -1,47 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 
-class EditOpeningHoursCheckbox extends StatefulWidget {
-   EditOpeningHoursCheckbox({
+class EditOpeningHoursCheckbox extends HookWidget {
+  const EditOpeningHoursCheckbox({
     Key? key,
     required this.rowIndex,
-    required this.weAreOpen,
-    required this.tempMap,
   }) : super(key: key);
 
   final int rowIndex;
-  bool weAreOpen;
-  final Map<String, dynamic> tempMap;
 
-  @override
-  State<EditOpeningHoursCheckbox> createState() =>
-      _EditOpeningHoursCheckboxState();
-}
-
-class _EditOpeningHoursCheckboxState extends State<EditOpeningHoursCheckbox> {
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      widget.weAreOpen;
-    });
+    final openingHoursMap = useProvider(editHoursProvider).state;
+    var weAreOpen = false;
 
-    final todayOpening = widget.tempMap[sortedWeekDays[widget.rowIndex]];
+    if (openingHoursMap![sortedWeekDays[rowIndex]][0] != '0' ||
+        openingHoursMap[sortedWeekDays[rowIndex]][1] != '0') {
+      weAreOpen = true;
+    }
 
     return Checkbox(
-      key: ValueKey(widget.rowIndex),
-      value: widget.weAreOpen,
+      key: ValueKey(rowIndex),
+      value: weAreOpen,
       onChanged: (value) {
+        final newMap = Map.fromEntries(openingHoursMap.entries);
+
         if (value == false) {
-          todayOpening[0] = '0';
-          todayOpening[1] = '0';
+          newMap[sortedWeekDays[rowIndex]][0] = '0';
+          newMap[sortedWeekDays[rowIndex]][1] = '0';
         } else {
-          todayOpening[0] = '88:88';
-          todayOpening[1] = '88:88';
+          newMap[sortedWeekDays[rowIndex]][0] = '88:88';
+          newMap[sortedWeekDays[rowIndex]][1] = '88:88';
         }
-        setState(() {
-          widget.weAreOpen = value!;
-        });
+        context.read(editHoursProvider).state = newMap;
       },
     );
   }

@@ -9,11 +9,8 @@ import 'package:bottleshop_admin/src/features/opening_hours/presentation/widgets
 class OpeningHoursDialog extends HookWidget {
   const OpeningHoursDialog({Key? key}) : super(key: key);
 
-  Future<void> editOpeningHoursDialog(
-          BuildContext context, Map<String, dynamic> tempMap) =>
-      showDialog(
-          context: context,
-          builder: (context) => EditOpeningHoursDialog(tempMap: tempMap));
+  Future<void> editOpeningHoursDialog(BuildContext context) => showDialog(
+      context: context, builder: (context) => EditOpeningHoursDialog());
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,11 @@ class OpeningHoursDialog extends HookWidget {
                   },
                 ),
                 ElevatedButton(
-                  onPressed: () => editOpeningHoursDialog(context, tempMap),
+                  onPressed: () {
+                    context.read(editHoursProvider).state =
+                        Map.fromEntries(tempMap.entries);
+                    editOpeningHoursDialog(context);
+                  },
                   child: Text('Edit opening hours'),
                 ),
               ],

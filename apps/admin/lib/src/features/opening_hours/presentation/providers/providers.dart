@@ -4,6 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final openingHoursProvider = StreamProvider((ref) =>
     FirebaseFirestore.instance.collection('opening_hours').snapshots());
 
+final editHoursProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
+
 final sortedWeekDays = [
   'Monday',
   'Tuesday',

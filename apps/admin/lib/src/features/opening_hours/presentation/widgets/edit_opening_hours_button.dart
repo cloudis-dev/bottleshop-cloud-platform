@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 
-class EditOpeningHoursButton extends StatefulWidget {
+class EditOpeningHoursButton extends HookWidget {
   const EditOpeningHoursButton({
     Key? key,
-    required this.tempMap,
     required this.rowIndex,
   }) : super(key: key);
 
-  final Map<String, dynamic> tempMap;
   final int rowIndex;
 
-  @override
-  State<EditOpeningHoursButton> createState() => _EditOpeningHoursButtonState();
-}
-
-class _EditOpeningHoursButtonState extends State<EditOpeningHoursButton> {
   Future<void> timePicker(BuildContext context) => showDialog(
         context: context,
         builder: (context) => TimePickerDialog(
@@ -24,10 +19,16 @@ class _EditOpeningHoursButtonState extends State<EditOpeningHoursButton> {
         ),
       );
 
+  String timeToString(TimeOfDay newTime) {
+    return '${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final openingHoursMap = useProvider(editHoursProvider).state;
+    final editHoursMap = context.read(editHoursProvider).state;
     final currentTime = TimeOfDay.now();
-    final todayOpening = widget.tempMap[sortedWeekDays[widget.rowIndex]];
+    final todayOpening = openingHoursMap![sortedWeekDays[rowIndex]];
     var weAreOpen = true;
 
     if (todayOpening[0] == '0' || todayOpening[1] == '0') {
@@ -48,14 +49,16 @@ class _EditOpeningHoursButtonState extends State<EditOpeningHoursButton> {
                     timePicker;
                     final newTime = await showTimePicker(
                         context: context, initialTime: currentTime);
+                    final tempMap = Map.fromEntries(editHoursMap!.entries);
                     if (newTime != null) {
-                      setState(() {
-                        todayOpening[index] =
-                            '${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}';
-                        widget.tempMap[sortedWeekDays[widget.rowIndex]][index] =
-                            todayOpening[index];
-                      });
+                      todayOpening[index] = timeToString(newTime);
+                      if (todayOpening[index] == '00:00') {
+                        todayOpening[index] = '24:00';
+                      }
                     }
+                    tempMap[sortedWeekDays[rowIndex]][index] =
+                        todayOpening[index];
+                    context.read(editHoursProvider).state = tempMap;
                   },
             child: Text(todayOpening[index]),
           );

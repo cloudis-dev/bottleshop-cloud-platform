@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/widgets/edit_opening_hours_button.dart';
@@ -7,13 +8,13 @@ import 'package:bottleshop_admin/src/features/opening_hours/presentation/widgets
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/widgets/edit_opening_hours_day_text.dart';
 
 class EditOpeningHoursDialog extends StatelessWidget {
-  const EditOpeningHoursDialog({Key? key, required this.tempMap})
-      : super(key: key);
+  const EditOpeningHoursDialog({Key? key}) : super(key: key);
 
-  final Map<String, dynamic> tempMap;
+  // final Map<String, dynamic> tempMap;
 
   @override
   Widget build(BuildContext context) {
+    final openingHoursMap = context.read(editHoursProvider).state;
     final openingHoursDoc = FirebaseFirestore.instance
         .collection('opening_hours')
         .doc('USFRRzUNHuYt4mwmjsAM');
@@ -25,29 +26,15 @@ class EditOpeningHoursDialog extends StatelessWidget {
           width: double.minPositive,
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: tempMap.length,
+            itemCount: openingHoursMap!.length,
             itemBuilder: (context, rowIndex) {
-              final todayOpening = tempMap[sortedWeekDays[rowIndex]];
-              var weAreOpen = true;
-
-              if (todayOpening[0] == '0' || todayOpening[1] == '0') {
-                weAreOpen = false;
-              }
-
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   EditOpeningHoursDayText(rowIndex: rowIndex),
-                  EditOpeningHoursButton(
-                    tempMap: tempMap,
-                    rowIndex: rowIndex,
-                  ),
-                  EditOpeningHoursCheckbox(
-                    tempMap: tempMap,
-                    rowIndex: rowIndex,
-                    weAreOpen: weAreOpen,
-                  )
+                  EditOpeningHoursButton(rowIndex: rowIndex),
+                  EditOpeningHoursCheckbox(rowIndex: rowIndex),
                 ],
               );
             },
@@ -63,7 +50,7 @@ class EditOpeningHoursDialog extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                return openingHoursDoc.update(tempMap);
+                return openingHoursDoc.update(openingHoursMap);
               },
               child: Text('Edit'),
             ),

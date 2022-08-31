@@ -8,7 +8,7 @@ import 'package:bottleshop_admin/src/features/opening_hours/presentation/provide
 class OpeningHoursToday extends HookWidget {
   const OpeningHoursToday({Key? key}) : super(key: key);
 
-  double convertHourToDouble(String getTime) {
+  double convertTimeToDouble(String getTime) {
     if (getTime != '0') {
       final time = TimeOfDay(
           hour: int.parse(getTime.split(':')[0]),
@@ -35,15 +35,16 @@ class OpeningHoursToday extends HookWidget {
         final todayOpeningHours = snapDoc[0][weekday];
         final opening = todayOpeningHours[0];
         final closing = todayOpeningHours[1];
+
         return Text(
-          nowTimeToDouble >= convertHourToDouble(opening) &&
-                  nowTimeToDouble < convertHourToDouble(closing)
+          nowTimeToDouble >= convertTimeToDouble(opening) &&
+                  nowTimeToDouble < convertTimeToDouble(closing)
               ? 'Otvorene do: $closing'
               : 'Zatvorene',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: nowTimeToDouble >= convertHourToDouble(opening) &&
-                    nowTimeToDouble < convertHourToDouble(closing)
+            color: nowTimeToDouble >= convertTimeToDouble(opening) &&
+                    nowTimeToDouble < convertTimeToDouble(closing)
                 ? Colors.green
                 : Colors.red,
           ),
