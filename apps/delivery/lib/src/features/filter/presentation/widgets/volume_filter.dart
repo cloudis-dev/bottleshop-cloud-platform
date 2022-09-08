@@ -17,21 +17,22 @@ import 'package:delivery/src/features/filter/presentation/providers/providers.da
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class VolumeFilter extends HookConsumerWidget {
+class VolumeFilter extends HookWidget {
   const VolumeFilter({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final volumeRange = ref.watch(filterModelProvider(filterType)
-        .select<RangeValues>((value) => value.volumeRange));
-    final isVolumeActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isVolumeActive));
+    final volumeRange = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.volumeRange));
+    final isVolumeActive = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.isVolumeActive));
 
     return Column(
       children: [
@@ -62,8 +63,8 @@ class VolumeFilter extends HookConsumerWidget {
           divisions: FilterConstants.volumeDivisions,
           values: volumeRange,
           onChanged: (value) {
-            ref.read(filterModelProvider(filterType).state).state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+            context.read(filterModelProvider(filterType)).state =
+                context.read(filterModelProvider(filterType)).state.copyWith(
                       volumeRange: value,
                     );
           },

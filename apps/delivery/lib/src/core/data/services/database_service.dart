@@ -13,7 +13,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
+import 'package:tuple/tuple.dart';
 
 class DatabaseService<T> {
   String collection;
@@ -29,15 +29,18 @@ class DatabaseService<T> {
 
   FirebaseFirestore get db => _db;
 
-  Future<bool> exists(String id) async {
-    final value = await _db.collection(collection).doc(id).get();
-    return value.exists;
+  Future<bool> exists(String id) {
+    return _db
+        .collection(collection)
+        .doc(id)
+        .get()
+        .then((value) => value.exists);
   }
 
   /// Gets a single record.
   /// @returns null in case the record does not exist.
   Future<T?> getSingle(String id) async {
-    final snap = await _db.collection(collection).doc().get();
+    final snap = await _db.collection(collection).doc(id).get();
     if (!snap.exists) return null;
 
     return fromMapAsync(snap.id, snap.data()!);
@@ -95,14 +98,13 @@ class DatabaseService<T> {
   }
 
   /// This is a convenience function when we don't need the [DocumentSnapshot].
-  Stream<Iterable<Tuple2<DocumentChangeType, DocumentSnapshot>>>
-      streamQueryListWithChangesAll({
+  Stream<List<Tuple2<DocumentChangeType, T>>> streamQueryListWithChangesAll({
     List<OrderBy>? orderBy,
     List<QueryArgs>? args,
   }) {
     return streamQueryListWithChanges(orderBy: orderBy, args: args).map(
-        (event) => event.map((e) =>
-            Tuple2<DocumentChangeType, DocumentSnapshot>(e.value1, e.value2)));
+      (event) => event.map((e) => Tuple2(e.item1, e.item3)).toList(),
+    );
   }
 
   Stream<List<Tuple3<DocumentChangeType, DocumentSnapshot, T>>>
@@ -187,7 +189,7 @@ class DatabaseService<T> {
     return streamCtrl.stream;
   }
 
-  Future<void> create(Map<String, dynamic> data, {String? id}) {
+  Future<dynamic> create(Map<String, dynamic> data, {String? id}) {
     if (id != null) {
       return _db
           .collection(collection)

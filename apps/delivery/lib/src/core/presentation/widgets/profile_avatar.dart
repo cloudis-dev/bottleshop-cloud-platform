@@ -10,19 +10,18 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
-class ProfileAvatar extends HookConsumerWidget {
+class ProfileAvatar extends StatelessWidget {
   final String? imageUrl;
 
   const ProfileAvatar({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    if (imageUrl != null) {
+  Widget build(BuildContext context) {
+    if (imageUrl != null && Uri.parse(imageUrl!).isAbsolute) {
       return OctoImage(
         image: NetworkImage(imageUrl!),
         fit: BoxFit.cover,

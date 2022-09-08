@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 Future<List<CategoriesTreeModel>> fetchCategories(Locale currentLocale) async {

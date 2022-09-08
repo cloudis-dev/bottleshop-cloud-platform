@@ -11,7 +11,7 @@
 //
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:equatable/equatable.dart';
 
 class PromoCodeModel extends Equatable {

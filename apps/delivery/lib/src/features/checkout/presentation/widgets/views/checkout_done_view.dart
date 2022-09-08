@@ -11,7 +11,7 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/app_config.dart';
+import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -19,9 +19,11 @@ class CheckoutDoneView extends HookWidget {
   final void Function() onClose;
   final String checkoutDoneMessage;
 
-  const CheckoutDoneView(this.checkoutDoneMessage,
-      {Key? key, required this.onClose})
-      : super(key: key);
+  const CheckoutDoneView(
+    this.checkoutDoneMessage, {
+    Key? key,
+    required this.onClose,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

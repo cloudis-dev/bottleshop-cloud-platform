@@ -14,6 +14,7 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
 import 'package:delivery/src/features/sorting/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum _ButtonOptions {
@@ -23,19 +24,19 @@ enum _ButtonOptions {
   price,
 }
 
-class SortMenuButton extends HookConsumerWidget {
+class SortMenuButton extends HookWidget {
   const SortMenuButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final sortModel = ref.watch(sortModelProvider.notifier).state;
+  Widget build(BuildContext context) {
+    final sortModel = useProvider(sortModelProvider).state;
 
     return PopupMenuButton<_ButtonOptions>(
       icon: const Icon(
         Icons.sort_by_alpha,
       ),
       onSelected: (option) {
-        ref.read(sortModelProvider.state).state = () {
+        context.read(sortModelProvider).state = () {
           switch (option) {
             case _ButtonOptions.ascending:
             case _ButtonOptions.descending:

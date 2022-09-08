@@ -14,21 +14,23 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AgeYearFilterToggle extends HookConsumerWidget {
+class AgeYearFilterToggle extends HookWidget {
   const AgeYearFilterToggle({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final isFilterByAge = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isFilterByAge));
-    final isYearOrAgeActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isYearActive || value.isAgeActive));
+    final isFilterByAge = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.isFilterByAge));
+    final isYearOrAgeActive = useProvider(filterModelProvider(filterType)
+        .select(
+            (value) => value.state.isYearActive || value.state.isAgeActive));
 
     return Container(
       margin: const EdgeInsets.only(top: 8, bottom: 16),
@@ -41,10 +43,10 @@ class AgeYearFilterToggle extends HookConsumerWidget {
             constraints: BoxConstraints.expand(
                 width: (constraints.maxWidth - borderWidth * 3) / 2),
             isSelected: [isFilterByAge, !isFilterByAge],
-            onPressed: (id) => ref
-                    .read(filterModelProvider(filterType).state)
+            onPressed: (id) => context
+                    .read(filterModelProvider(filterType))
                     .state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+                context.read(filterModelProvider(filterType)).state.copyWith(
                       isFilterByAge: id == 0,
                     ),
             borderRadius: BorderRadius.circular(2),

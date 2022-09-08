@@ -10,27 +10,32 @@
 //
 //
 
-import 'package:carousel_slider/carousel_options.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
+import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logging/logging.dart';
+
+final _logger = Logger((TutorialViewModel).toString());
 
 class TutorialViewModel extends StateNotifier<int> {
   TutorialViewModel() : super(0);
 
   dynamic pageChanged(int index, CarouselPageChangedReason reason) {
+    _logger.fine('changing index: $index reason: $reason');
     state = index;
   }
 
   int get currentIndex => state;
 
-  Future<void> finishIntroScreen(WidgetRef ref, BuildContext context) async {
-    final user = ref.read(currentUserProvider);
+  Future<void> finishIntroScreen(BuildContext context) async {
+    final user = context.read(currentUserProvider);
     if (user == null || user.introSeen) {
-      //ref.read(navigationProviderl10n.popPage(context);
+      context.read(navigationProvider).popPage(context);
     } else {
-      await ref.read(userRepositoryProvider).setUserIntroSeen();
-      //ref.read(navigationProviderl10n.popPage(context);
+      await context.read(userRepositoryProvider).setUserIntroSeen();
+      context.read(navigationProvider).popPage(context);
     }
   }
 }

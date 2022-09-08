@@ -1,0 +1,173 @@
+{
+  "project_info": {
+    "project_number": "540936468411",
+    "firebase_url": "https://bottleshop3veze-delivery.firebaseio.com",
+    "project_id": "bottleshop3veze-delivery",
+    "storage_bucket": "bottleshop3veze-delivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540936468411:android:6fabcda9c14a73f1bff69e",
+        "android_client_info": {
+          "package_name": "sk.bottleshop3veze.bottleshop_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540936468411-brmdjot9t4jk91d0gesuf4a7pjlse8o4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshop_admin",
+            "certificate_hash": "c2c5be7b6d40aa408e4ad62df8a939626b4f0add"
+          }
+        },
+        {
+          "client_id": "540936468411-nko27qbk1bq7tnmnhoacaoc9n844kq2b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshop_admin",
+            "certificate_hash": "be619de4292b3861d2465fe24ec9f2ff9f1e8344"
+          }
+        },
+        {
+          "client_id": "540936468411-tt4255628q9qbe69i8ca67p1pvvj9aq3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshop_admin",
+            "certificate_hash": "cff5895063bbf65fc38aa914e0d93bc145b3cf0a"
+          }
+        },
+        {
+          "client_id": "540936468411-44uajovjnes48qd3b6ditirj8336um5c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDahjVeWsr9m3nM6PCxGnvcLWfJugdxDh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "540936468411-44uajovjnes48qd3b6ditirj8336um5c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "540936468411-32eqnks9pqj6tamosjq8t2uik97q2fth.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sk.bottleshop3veze.bottleshopdeliveryapp",
+                "app_store_id": "1509090326"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540936468411:android:f81fc523202f0097bff69e",
+        "android_client_info": {
+          "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540936468411-2bef528sv3kf6pvnchcggc1aoqolbpsc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp",
+            "certificate_hash": "c2c5be7b6d40aa408e4ad62df8a939626b4f0add"
+          }
+        },
+        {
+          "client_id": "540936468411-a0j0i5f0hmg3fa6muh8n2r0b1hkbscfk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp",
+            "certificate_hash": "37e4e172163b561bc4ca66b65bcd8d1fd61e1ec7"
+          }
+        },
+        {
+          "client_id": "540936468411-alri88vq5k6eaqldju7sasvk27k32r9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp",
+            "certificate_hash": "be619de4292b3861d2465fe24ec9f2ff9f1e8344"
+          }
+        },
+        {
+          "client_id": "540936468411-cjvv2u6do75o9ktbagk1qaba20ifuvvq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp",
+            "certificate_hash": "46ab2c4acdef58bce2d0ce4be975d6ca1bac88bb"
+          }
+        },
+        {
+          "client_id": "540936468411-djrl76i0j5jdo3ae1ikmfvks0627upl5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp",
+            "certificate_hash": "cff5895063bbf65fc38aa914e0d93bc145b3cf0a"
+          }
+        },
+        {
+          "client_id": "540936468411-kp98jsopqml0o8mk1du8o8prkhoum2an.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp",
+            "certificate_hash": "b7aaf21f73098e8b9d00b31556c01aa3ef7bd079"
+          }
+        },
+        {
+          "client_id": "540936468411-m2as7n90f90nl8iss2t6q177agqe5e31.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp",
+            "certificate_hash": "e953a9c904e0fca440b3e0274959f9d0d150de72"
+          }
+        },
+        {
+          "client_id": "540936468411-pdhg0pdc2q1stelpn7aif6ishsmupnmu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.bottleshop3veze.bottleshopdeliveryapp",
+            "certificate_hash": "21612fd78af488a468c5ca463bea75cf1c1d6f54"
+          }
+        },
+        {
+          "client_id": "540936468411-44uajovjnes48qd3b6ditirj8336um5c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDahjVeWsr9m3nM6PCxGnvcLWfJugdxDh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "540936468411-44uajovjnes48qd3b6ditirj8336um5c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "540936468411-32eqnks9pqj6tamosjq8t2uik97q2fth.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sk.bottleshop3veze.bottleshopdeliveryapp",
+                "app_store_id": "1509090326"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

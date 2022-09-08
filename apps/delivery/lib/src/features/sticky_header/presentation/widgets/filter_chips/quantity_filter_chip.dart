@@ -14,19 +14,20 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:delivery/src/features/sticky_header/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class QuantityFilterChip extends HookConsumerWidget {
+class QuantityFilterChip extends HookWidget {
   const QuantityFilterChip({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final quantityFilterValue = ref.watch(quantityScopedProvider);
+  Widget build(BuildContext context) {
+    final quantityFilterValue = useProvider(quantityScopedProvider);
 
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
       label: Text('${context.l10n.inStockCount}: '
-          '${FilterFormattingUtils.getQuantityRangeString(quantityFilterValue!.value, context)}'),
+          '${FilterFormattingUtils.getQuantityRangeString(quantityFilterValue.value, context)}'),
       onDeleted: quantityFilterValue.onDeleteFilter,
     );
   }

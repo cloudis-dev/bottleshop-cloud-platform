@@ -10,19 +10,17 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/repositories/repository_base.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/change_status.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state_stream_batch.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/paged_streams_items_state_notifier.dart';
 import 'package:delivery/src/core/utils/change_status_util.dart';
 import 'package:delivery/src/features/products/data/models/flash_sale_model.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/sorting/data/models/sort_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
+import 'package:tuple/tuple.dart';
 
 class ProductsRepository extends RepositoryBase<ProductModel> {
   static const defaultProductsLimit = 25;
@@ -56,10 +54,12 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
     return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
             event
-                .map((e) => Tuple2(
-                      ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                      e.value2 as ProductModel,
-                    ))
+                .map(
+                  (e) => Tuple2(
+                    ChangeStatusUtil.convertFromFirestoreChange(e.item1),
+                    e.item2,
+                  ),
+                )
                 .toList(),
           ),
         );
@@ -81,9 +81,9 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
             event
                 .map(
                   (e) => Tuple3(
-                    ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                    e.value2,
-                    e.value3,
+                    ChangeStatusUtil.convertFromFirestoreChange(e.item1),
+                    e.item2,
+                    e.item3,
                   ),
                 )
                 .toList(),
@@ -105,8 +105,8 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
             event
                 .map(
                   (e) => Tuple2(
-                    ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                    e.value2 as ProductModel,
+                    ChangeStatusUtil.convertFromFirestoreChange(e.item1),
+                    e.item2,
                   ),
                 )
                 .toList(),
@@ -127,8 +127,8 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
             event
                 .map(
                   (e) => Tuple2(
-                    ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                    e.value2 as ProductModel,
+                    ChangeStatusUtil.convertFromFirestoreChange(e.item1),
+                    e.item2,
                   ),
                 )
                 .toList(),
@@ -148,9 +148,9 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
           (event) => ItemsStateStreamBatch<ProductModel>(
             event
                 .map(
-                  (e) => Tuple2<ChangeStatus, ProductModel>(
-                    ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                    e.value2 as ProductModel,
+                  (e) => Tuple2(
+                    ChangeStatusUtil.convertFromFirestoreChange(e.item1),
+                    e.item2,
                   ),
                 )
                 .toList(),
@@ -185,9 +185,9 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
             event
                 .map(
                   (e) => Tuple3(
-                    ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                    e.value2,
-                    e.value3,
+                    ChangeStatusUtil.convertFromFirestoreChange(e.item1),
+                    e.item2,
+                    e.item3,
                   ),
                 )
                 .toList(),

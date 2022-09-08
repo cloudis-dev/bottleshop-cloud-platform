@@ -1,27 +1,49 @@
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/app_config.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
+import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
+import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class StripeCheckoutSuccess extends HookConsumerWidget {
-  const StripeCheckoutSuccess({Key? key}) : super(key: key);
+class StripeCheckoutSuccessPage extends RoutebornPage {
+  static const String pagePathBase = 'success';
+
+  StripeCheckoutSuccessPage()
+      : super.builder(pagePathBase, (_) => _StripeCheckoutSuccessView());
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      const Right('Store');
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _StripeCheckoutSuccessView extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
 
     if (shouldUseMobileLayout(context)) {
       return Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          leading: const CloseButton(
-            onPressed: null,
+          leading: CloseButton(
+            onPressed: () => context
+                .read(navigationProvider)
+                .setNestingBranch(context, NestingBranch.shop),
           ),
         ),
         body: const _Body(),
@@ -41,11 +63,11 @@ class StripeCheckoutSuccess extends HookConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends StatelessWidget {
   const _Body({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
@@ -135,7 +157,9 @@ class _Body extends ConsumerWidget {
                 shape: const StadiumBorder(),
               ),
               onPressed: () {
-                //
+                context
+                    .read(navigationProvider)
+                    .replaceRootStackWith([AppPageNode(page: HomePage())]);
               },
               child: Text(context.l10n.start_shopping),
             ),

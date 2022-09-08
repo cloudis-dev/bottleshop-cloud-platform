@@ -1,33 +1,56 @@
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/drawer_state_acquirer.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/filter_icon_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_products_body.dart';
-import 'package:delivery/src/features/home/presentation/widgets/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/menu_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/search_icon_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/filter_icon_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/search_icon_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/views/home_products_body.dart';
 import 'package:delivery/src/features/product_sections/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
+import 'package:routeborn/routeborn.dart';
 
-class ProductsView extends HookConsumerWidget {
-  const ProductsView({Key? key}) : super(key: key);
+class ProductsPage extends RoutebornPage {
+  static const String pagePathBase = 'products';
+
+  ProductsPage()
+      : super.builder(
+          pagePathBase,
+          (_) => const _ProductsView(),
+        );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // This is to preserve state
-    ref.watch(flashSaleProductsProvider);
-    ref.watch(recommendedProductsProvider);
-    ref.watch(newArrivalsProductsProvider);
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(context.l10n.homeTabLabel);
 
-    ref.watch(allProductsProvider);
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _ProductsView extends HookWidget {
+  const _ProductsView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // This is to preserve state
+    useProvider(flashSaleProductsProvider);
+    useProvider(recommendedProductsProvider);
+    useProvider(newArrivalsProductsProvider);
+
+    useProvider(allProductsProvider);
 
     return const _Scaffold();
   }

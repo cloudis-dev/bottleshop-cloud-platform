@@ -11,18 +11,21 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
+import 'package:delivery/src/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class CartListItem extends HookConsumerWidget {
+class CartListItem extends HookWidget {
   final ProductModel product;
   final int quantity;
 
@@ -33,13 +36,15 @@ class CartListItem extends HookConsumerWidget {
   })  : assert(quantity > 0),
         super(key: key);
 
-  void onClick(WidgetRef ref, BuildContext context) {
-    //ref.read(navigationProviderl10n.pushPage(context, AppPageNode(page: ProductDetailPage(product)));
+  void onClick(BuildContext context) {
+    context
+        .read(navigationProvider)
+        .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
     final qtyState = useState<int>(quantity);
     return Container(
       width: double.infinity,
@@ -59,7 +64,7 @@ class CartListItem extends HookConsumerWidget {
               child: Stack(
                 children: [
                   Hero(
-                    tag: ValueKey(product.uniqueId),
+                    tag: HeroTags.productBaseTag + product.uniqueId,
                     child: ProductImage(imagePath: product.thumbnailPath),
                   ),
                   Positioned.fill(
@@ -68,7 +73,7 @@ class CartListItem extends HookConsumerWidget {
                       child: InkResponse(
                         containedInkWell: true,
                         child: InkWell(
-                          onTap: () => onClick(ref, context),
+                          onTap: () => onClick(context),
                         ),
                       ),
                     ),
@@ -152,7 +157,7 @@ class CartListItem extends HookConsumerWidget {
                   onPressed: product.count <= qtyState.value
                       ? null
                       : () async {
-                          return ref
+                          return context
                               .read(cartRepositoryProvider)!
                               .setItemQty(product.uniqueId, qtyState.value + 1);
                         },
@@ -170,12 +175,12 @@ class CartListItem extends HookConsumerWidget {
                   color: Theme.of(context).colorScheme.secondary,
                   onPressed: () async {
                     if (qtyState.value == 1) {
-                      await ref
+                      await context
                           .read(cartRepositoryProvider)!
                           .removeItem(product.uniqueId);
                     } else {
                       //qtyState.value = qtyState.value - 1;
-                      return ref
+                      return context
                           .read(cartRepositoryProvider)!
                           .setItemQty(product.uniqueId, qtyState.value - 1);
                     }

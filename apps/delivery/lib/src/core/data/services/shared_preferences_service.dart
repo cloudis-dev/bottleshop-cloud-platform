@@ -11,13 +11,16 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/preferences.dart';
-import 'package:delivery/src/core/utils/language_utils.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+enum LanguageMode {
+  en,
+  sk,
+}
 
 LanguageMode locale2Language(Locale locale) {
   switch (locale.languageCode) {
@@ -30,7 +33,7 @@ LanguageMode locale2Language(Locale locale) {
   }
 }
 
-Locale language2locale(LanguageMode mode) {
+Locale language2Locale(LanguageMode mode) {
   return AppLocalizations.supportedLocales.firstWhere(
     (element) => mode.toString().contains(element.languageCode),
     orElse: () => AppLocalizations.supportedLocales.first,
@@ -39,10 +42,11 @@ Locale language2locale(LanguageMode mode) {
 
 class SharedPreferencesService {
   final SharedPreferences sharedPreferences;
+
   SharedPreferencesService(this.sharedPreferences);
 
-  Future<void> clearPreferences() async {
-    await sharedPreferences.clear();
+  void clearPreferences() {
+    sharedPreferences.clear();
   }
 
   Future<void> setAppLocale(LanguageMode locale) async {
@@ -50,7 +54,7 @@ class SharedPreferencesService {
         AppPreferencesKeys.preferencesLanguage, locale.index);
   }
 
-  LanguageMode getAppLanguage() {
+  LanguageMode? getAppLanguage() {
     final languageId =
         sharedPreferences.getInt(AppPreferencesKeys.preferencesLanguage);
 
@@ -107,6 +111,3 @@ class SharedPreferencesService {
         AppPreferencesKeys.hasAgeVerified, verified);
   }
 }
-
-final sharedPreferencesServiceProvider =
-    Provider<SharedPreferencesService>((ref) => throw UnimplementedError());
