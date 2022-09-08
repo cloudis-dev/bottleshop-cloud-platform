@@ -64,6 +64,6 @@ final crashlyticsInitProvider = FutureProvider.autoDispose<void>((ref) =>
 
 final platformInitializedProvider =
     FutureProvider.autoDispose<void>((ref) async {
-  await ref.watch(crashlyticsInitProvider.future);
+  //await ref.watch(crashlyticsInitProvider.future);
   await ref.watch(pushNotificationsInitProvider.future);
 });

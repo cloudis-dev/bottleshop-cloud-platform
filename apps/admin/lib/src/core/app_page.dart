@@ -27,7 +27,5 @@ abstract class AppPage extends Page<dynamic> {
   final Function? onPopped;
 
   @override
-  Route<dynamic> createRoute(BuildContext context) => Platform.isIOS
-      ? CupertinoPageRoute<dynamic>(settings: this, builder: builder)
-      : MaterialPageRoute<dynamic>(settings: this, builder: builder);
+  Route<dynamic> createRoute(BuildContext context) => MaterialPageRoute<dynamic>(settings: this, builder: builder);
 }
