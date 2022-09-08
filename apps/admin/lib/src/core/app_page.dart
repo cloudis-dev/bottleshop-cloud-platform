@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -27,5 +28,12 @@ abstract class AppPage extends Page<dynamic> {
   final Function? onPopped;
 
   @override
-  Route<dynamic> createRoute(BuildContext context) => MaterialPageRoute<dynamic>(settings: this, builder: builder);
+  Route<dynamic> createRoute(BuildContext context) {
+    if (kIsWeb)
+      return MaterialPageRoute<dynamic>(settings: this, builder: builder);
+    if (Platform.isIOS)
+      return CupertinoPageRoute<dynamic>(settings: this, builder: builder);
+    else
+      return MaterialPageRoute<dynamic>(settings: this, builder: builder);
+  }
 }
