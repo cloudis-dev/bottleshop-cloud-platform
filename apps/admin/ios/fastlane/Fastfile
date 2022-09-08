@@ -7,7 +7,7 @@ platform :ios do
           app: "1:540936468411:ios:cbfa420b2201e3c7bff69e",
           service_credentials_file: "/Users/kristian/Documents/Kristian/bottleshop/bottleshop3veze-firebase_app_distribution.json",
           groups: "ios-testers",
-          ipa_path: "/Users/kristian/Documents/Kristian/bottleshop/bottleshop_admin/build/ios/ipa/Bottleshop Admin.ipa",
+          ipa_path: "/Users/kristian/Documents/Kristian/bottleshop/bottleshop-cloud-platform/apps/admin/build/ios/ipa/Bottleshop Admin.ipa",
           release_notes: "Let's go bottleroom"
      )
   end
