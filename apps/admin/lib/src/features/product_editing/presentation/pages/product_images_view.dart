@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:html' as p;
 import 'dart:typed_data';
 import 'package:bottleshop_admin/src/core/utils/snackbar_utils.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/dialogs/product_image_delete_dialog.dart';
@@ -7,12 +6,12 @@ import 'package:bottleshop_admin/src/features/product_editing/presentation/pages
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/view_models/product_image_view_model.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/widgets/product_images_view/action_buttons_column.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 
  
 
@@ -23,8 +22,13 @@ class ProductImagesView extends HookWidget {
 
   Future<void> _onPickImage(BuildContext context, ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
+    
     if (pickedFile != null) {
+      if(!kIsWeb)
+      context.read(blop).state = File(pickedFile.path).path;
+      else
       context.read(blop).state = pickedFile!.path;
+
        context.read(isImgChangedProvider).state = true;
     }
   }
@@ -117,15 +121,11 @@ class _ImageFrameContent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final b = useProvider(blop);
-     debugPrint("DEbbbib "+context.read(blop).state);
-    debugPrint("DEbib "+b.state);
     if (useProvider(isImgLoadedProvider)) {
-      final imgFile = useProvider(productImgProvider);
-
       if ( b.state == "") {
         return Image.asset('assets/images/placeholder.png');
       }
-      return Image.network(b.state);
+      return !kIsWeb ? Image.file(File(b.state)) : Image.network(b.state);
     } else {
       return const Center(
         child: SizedBox(

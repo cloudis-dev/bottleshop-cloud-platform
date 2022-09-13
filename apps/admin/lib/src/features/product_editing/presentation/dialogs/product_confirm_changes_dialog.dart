@@ -1,3 +1,5 @@
+
+import 'dart:io';
 import 'package:bottleshop_admin/src/config/app_strings.dart';
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/action_result.dart';
@@ -5,6 +7,7 @@ import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service
 import 'package:bottleshop_admin/src/core/presentation/widgets/processing_alert_dialog.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/products/data/services/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -59,7 +62,7 @@ class ProductConfirmChangesDialog extends ProcessingAlertDialog {
           );
         } else {
           final uploadResult = await FirebaseStorageService.uploadImgBytes(
-            await XFile(img).readAsBytes(),
+            !kIsWeb ? await File(img).readAsBytes() : await XFile(img).readAsBytes(),
             product.uniqueId,
           );
           product = product.copyWith(
