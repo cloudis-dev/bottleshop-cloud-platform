@@ -32,8 +32,7 @@ class ProductImageDeleteDialog extends ProcessingAlertDialog {
 
   static Future<void> _onPositiveOption(BuildContext context) async {
     try {
-      await setProductImgFile(context, null);
-
+      DeleteImage(context);
       Navigator.pop(
         context,
         ProductImageDeleteResult(

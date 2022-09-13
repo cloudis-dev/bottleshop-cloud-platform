@@ -17,6 +17,7 @@ void main() async {
             apiKey: "AIzaSyATDXyya2cT8D2V1ZFDE83ewlpUFwRZC0U",
             appId: "1:525277285012:web:79a4cedc090bcaac0ec281",
             messagingSenderId: "525277285012",
+            storageBucket: "bottleshop-3-veze-dev-54908.appspot.com",
             projectId: "bottleshop-3-veze-dev-54908"));
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;

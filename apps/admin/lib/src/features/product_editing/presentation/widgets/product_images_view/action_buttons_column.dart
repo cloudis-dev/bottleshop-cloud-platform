@@ -22,16 +22,17 @@ class ActionButtonsColumn extends HookWidget {
   final Future Function(BuildContext) onImageDelete;
 
   bool get isMobilePlatform =>
-      defaultTargetPlatform == TargetPlatform.android ||
-      defaultTargetPlatform == TargetPlatform.iOS;
+      defaultTargetPlatform != TargetPlatform.android ||
+      defaultTargetPlatform != TargetPlatform.iOS;
 
   @override
   Widget build(BuildContext context) {
-    final imageFile = useProvider(productImgProvider);
+    final imageFile = useProvider(blop);
 
     return isMobilePlatform
         ? Column(
             children: [
+              !kIsWeb ?
               ActiveActionButton(
                 style: AppTheme.buttonTextStyle,
                 icon: Icons.camera_alt,
@@ -47,6 +48,11 @@ class ActionButtonsColumn extends HookWidget {
                     debugPrint('camera is not available');
                   }
                 },
+              )
+              :
+              InactiveActionButton(
+                 text: 'Odfotiť obrázok',
+                 icon: Icons.camera_alt,
               ),
               ActiveActionButton(
                 style: AppTheme.buttonTextStyle,
@@ -64,7 +70,7 @@ class ActionButtonsColumn extends HookWidget {
                   }
                 },
               ),
-              imageFile == null
+              imageFile.state == ""
                   ? InactiveActionButton(
                       text: 'Orezať obrázok',
                       icon: Icons.crop,
@@ -75,7 +81,7 @@ class ActionButtonsColumn extends HookWidget {
                       text: 'Orezať obrázok',
                       callback: () async => onCropImage(context),
                     ),
-              imageFile == null
+              imageFile.state == ""
                   ? InactiveActionButton(
                       text: 'Odstrániť obrázok',
                       icon: Icons.delete,

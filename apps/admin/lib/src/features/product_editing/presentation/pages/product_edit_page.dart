@@ -228,7 +228,7 @@ class _ConfirmChangesButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isChanged = useProvider(isProductModelChangedProvider);
-
+final b = useProvider(blop);
     if (isChanged) {
       return useProvider(isProductImageValid).maybeWhen(
         data: (_) => IconButton(

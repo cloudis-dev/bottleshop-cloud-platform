@@ -86,6 +86,8 @@ final productImgProvider = Provider.autoDispose<File?>(
   },
 );
 
+
+
 /// This is used to provide current img in the image frame.
 final _currentProductImgFileProvider = StateProvider.autoDispose<File?>(
   (ref) => ref.watch(_productImgFileFutureProvider).when(
@@ -133,4 +135,10 @@ Future<void> setProductImgFile(BuildContext context, File? imgFile) async {
 
   context.read(isImgChangedProvider).state = true;
   context.read(_currentProductImgFileProvider).state = imgFile;
+}
+
+final blop = StateProvider.autoDispose<String>((ref) => "");
+
+void DeleteImage(BuildContext context){
+  context.read(blop).state = "";
 }

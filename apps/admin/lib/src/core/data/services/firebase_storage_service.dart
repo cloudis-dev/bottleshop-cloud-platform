@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bottleshop_admin/src/core/utils/files_util.dart';
 import 'package:bottleshop_admin/src/core/utils/image_util.dart';
@@ -106,6 +107,26 @@ class FirebaseStorageService {
     return ImageUploadResult(
       imagePath: watermarkedImagePath,
       thumbnailPath: thumbnailPath,
+    );
+  }
+
+  static Future<ImageUploadResult> uploadImgBytes(
+    Uint8List imageFile,
+    String? productUniqueId,
+  ) async {
+    final cleanImagePath = getCleanImagePath(productUniqueId);
+     try{ 
+    await FirebaseStorage.instance.ref().child(cleanImagePath).putData(
+          imageFile,
+        );
+     }
+     catch(error){
+      debugPrint(error.toString());
+     }
+  debugPrint("mdzi"+cleanImagePath);
+    return ImageUploadResult(
+      imagePath: cleanImagePath,
+      thumbnailPath: cleanImagePath,
     );
   }
 }

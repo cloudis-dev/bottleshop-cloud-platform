@@ -7,7 +7,9 @@ import 'package:bottleshop_admin/src/features/product_editing/presentation/provi
 import 'package:bottleshop_admin/src/features/products/data/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:optional/optional.dart';
+import 'package:path/path.dart';
 
 class ProductEditingResult {
   ProductEditingResult(this.result, this.message);
@@ -45,18 +47,19 @@ class ProductConfirmChangesDialog extends ProcessingAlertDialog {
     bool isCreatingNewProduct,
   ) async {
     var product = context.read(editedProductProvider).state;
-    final img = context.read(productImgProvider);
+    
+    final img = context.read(blop).state;
     try {
       if (context.read(isImgChangedProvider).state) {
-        if (img == null) {
+        if (img == "") {
           await FirebaseStorageService.deleteImgAndThumbnail(product.uniqueId);
           product = product.copyWith(
             imagePath: Optional.empty(),
             thumbnailPath: Optional.empty(),
           );
         } else {
-          final uploadResult = await FirebaseStorageService.uploadImgData(
-            img,
+          final uploadResult = await FirebaseStorageService.uploadImgBytes(
+            await XFile(img).readAsBytes(),
             product.uniqueId,
           );
           product = product.copyWith(
