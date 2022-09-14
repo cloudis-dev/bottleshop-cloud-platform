@@ -65,68 +65,75 @@ class FirebaseStorageService {
     );
   }
 
-  static Future<ImageUploadResult> uploadImgData(
-    File imageFile,
-    String? productUniqueId,
-  ) async {
-    final resultData = await ImageUtil.createResizedJpgWithWatermark(
-      file: imageFile,
-      maxWidth: maxImageWidth,
-    );
+  // static Future<ImageUploadResult> uploadImgData(
+  //   File imageFile,
+  //   String? productUniqueId,
+  // ) async {
+  //   final resultData = await ImageUtil.createResizedJpgWithWatermark(
+  //     file: await imageFile.readAsBytes(),
+  //     maxWidth: maxImageWidth,
+  //   );
 
-    final cleanImgData = resultData[0];
-    final watermarkedImgData = resultData[1];
+  //   final cleanImgData = resultData[0];
+  //   final watermarkedImgData = resultData[1];
 
-    final cleanImgFilePath =
-        await FilesUtil.getPathToFileInCache('clean_upload_img.temp');
-    final cleanImgFile =
-        await File(cleanImgFilePath).writeAsBytes(cleanImgData);
+  //   final cleanImgFilePath =
+  //       await FilesUtil.getPathToFileInCache('clean_upload_img.temp');
+  //   final cleanImgFile =
+  //       await File(cleanImgFilePath).writeAsBytes(cleanImgData);
 
-    final watermarkedImgFilePath =
-        await FilesUtil.getPathToFileInCache('watermarked_upload_img.temp');
-    final watermarkedImgFile =
-        await File(watermarkedImgFilePath).writeAsBytes(watermarkedImgData);
+  //   final watermarkedImgFilePath =
+  //       await FilesUtil.getPathToFileInCache('watermarked_upload_img.temp');
+  //   final watermarkedImgFile =
+  //       await File(watermarkedImgFilePath).writeAsBytes(watermarkedImgData);
 
-    final cleanImagePath = getCleanImagePath(productUniqueId);
-    final watermarkedImagePath = getImagePath(productUniqueId);
-    final thumbnailPath = getThumbnailPath(productUniqueId);
+  //   final cleanImagePath = getCleanImagePath(productUniqueId);
+  //   final watermarkedImagePath = getImagePath(productUniqueId);
+  //   final thumbnailPath = getThumbnailPath(productUniqueId);
 
-    await Future.wait(
-      [
-        FirebaseStorage.instance.ref().child(cleanImagePath).putFile(
-              cleanImgFile,
-              SettableMetadata(contentType: 'image/jpeg'),
-            ),
-        FirebaseStorage.instance.ref().child(watermarkedImagePath).putFile(
-              watermarkedImgFile,
-              SettableMetadata(contentType: 'image/jpeg'),
-            ),
-      ],
-    );
+  //   await Future.wait(
+  //     [
+  //       FirebaseStorage.instance.ref().child(cleanImagePath).putFile(
+  //             cleanImgFile,
+  //             SettableMetadata(contentType: 'image/jpeg'),
+  //           ),
+  //       FirebaseStorage.instance.ref().child(watermarkedImagePath).putFile(
+  //             watermarkedImgFile,
+  //             SettableMetadata(contentType: 'image/jpeg'),
+  //           ),
+  //     ],
+  //   );
 
-    return ImageUploadResult(
-      imagePath: watermarkedImagePath,
-      thumbnailPath: thumbnailPath,
-    );
-  }
+  //   return ImageUploadResult(
+  //     imagePath: watermarkedImagePath,
+  //     thumbnailPath: thumbnailPath,
+  //   );
+  // }
 
   static Future<ImageUploadResult> uploadImgBytes(
     Uint8List imageFile,
     String? productUniqueId,
   ) async {
+    final resultData = await ImageUtil.createResizedJpgWithWatermark(
+      imgBytes:  imageFile,
+      maxWidth: maxImageWidth,
+    );
+
+    final cleanImgData = resultData[0];
+    final watermarkedImgData = resultData[1];
     final cleanImagePath = getCleanImagePath(productUniqueId);
-     try{ 
+    final watermarkedImagePath = getImagePath(productUniqueId);
     await FirebaseStorage.instance.ref().child(cleanImagePath).putData(
-          imageFile,
+          cleanImgData,
+          
         );
-     }
-     catch(error){
-      debugPrint(error.toString());
-     }
-  debugPrint("mdzi"+cleanImagePath);
+    await FirebaseStorage.instance.ref().child(watermarkedImagePath).putData(
+       watermarkedImgData,
+       
+    );
     return ImageUploadResult(
       imagePath: cleanImagePath,
-      thumbnailPath: cleanImagePath,
+      thumbnailPath: watermarkedImagePath,
     );
   }
 }

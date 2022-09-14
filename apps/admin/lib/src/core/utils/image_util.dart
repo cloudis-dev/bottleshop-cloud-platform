@@ -66,12 +66,12 @@ class ImageUtil {
   }
 
   static Future<List<Uint8List>> createResizedJpgWithWatermark({
-    required File file,
+    required Uint8List imgBytes,
     required int maxWidth,
     double watermarkSizeMultiplier = .9,
     String watermarkRelativePath = 'assets/images/watermark.png',
   }) async {
-    final imgBytes = await file.readAsBytes();
+   
 
     final watermarkBytes =
         (await rootBundle.load(watermarkRelativePath)).buffer.asUint8List();
