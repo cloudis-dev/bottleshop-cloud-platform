@@ -13,8 +13,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
- 
-
 class ProductImagesView extends HookWidget {
   static const String routeName = '/images';
 
@@ -22,20 +20,20 @@ class ProductImagesView extends HookWidget {
 
   Future<void> _onPickImage(BuildContext context, ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
-    
-    if (pickedFile != null) {
-      if(!kIsWeb)
-      context.read(blop).state = File(pickedFile.path).path;
-      else
-      context.read(blop).state = pickedFile!.path;
 
-       context.read(isImgChangedProvider).state = true;
+    if (pickedFile != null) {
+      if (!kIsWeb)
+        context.read(blop).state = File(pickedFile.path).path;
+      else
+        context.read(blop).state = pickedFile!.path;
+
+      context.read(isImgChangedProvider).state = true;
     }
   }
 
   Future<void> _onCropImage(BuildContext context) async {
     final croppedImg = await ImageCropper().cropImage(
-      sourcePath: context.read(blop).state,
+      sourcePath: context.read(blop).state ?? '',
       uiSettings: [
         AndroidUiSettings(
           hideBottomControls: true,
@@ -45,34 +43,31 @@ class ProductImagesView extends HookWidget {
           resetButtonHidden: true,
         ),
         WebUiSettings(
-            context: context,
-            presentStyle: CropperPresentStyle.dialog,
-            boundary: const CroppieBoundary(
-              width: 520,
-              height: 500,
-            ),
-            viewPort:
-                const CroppieViewPort(width: 450, height: 450, type: 'rectangle'),
-            enableExif: true,
-            enableZoom: true,
-            showZoomer: true,
+          context: context,
+          presentStyle: CropperPresentStyle.dialog,
+          boundary: const CroppieBoundary(
+            width: 520,
+            height: 500,
           ),
-        
+          viewPort:
+              const CroppieViewPort(width: 450, height: 450, type: 'rectangle'),
+          enableExif: true,
+          enableZoom: true,
+          showZoomer: true,
+        ),
       ],
     );
 
     if (croppedImg != null) {
       context.read(blop).state = croppedImg.path;
-       context.read(isImgChangedProvider).state = true;
-     // final imgFile = File(croppedImg.path);
-     // await setProductImgFile(context, imgFile);
+      context.read(isImgChangedProvider).state = true;
     }
   }
 
   Future<void> _onImageDelete(BuildContext context) async {
     final res = await showDialog<ProductImageDeleteResult>(
         context: context, builder: (_) => ProductImageDeleteDialog());
-      context.read(isImgChangedProvider).state = true;
+    context.read(isImgChangedProvider).state = true;
     if (res != null) {
       SnackBarUtils.showSnackBar(
         ProductEditPage.scaffoldMessengerKey.currentState!,
@@ -121,13 +116,16 @@ class _ImageFrameContent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final b = useProvider(blop);
-    if(b == null)
-    debugPrint(b.state + "  prv");
+    final imgPath;
+    if (b.state != null)
+      imgPath = b.state!;
+    else 
+      imgPath = '';
     if (useProvider(isImgLoadedProvider)) {
-      if ( b.state == "") {
+      if (imgPath == '') {
         return Image.asset('assets/images/placeholder.png');
       }
-      return !kIsWeb ? Image.file(File(b.state)) : Image.network(b.state);
+      return !kIsWeb ? Image.file(File(imgPath)) : Image.network(imgPath);
     } else {
       return const Center(
         child: SizedBox(

@@ -47,14 +47,13 @@ final productToEditStreamProvider =
 );
 
 /// This is providing file from the server of the product.
-final _productImgFileFutureProvider = FutureProvider.autoDispose<String>(
+final _productImgFileFutureProvider = FutureProvider.autoDispose<String?>(
   (ref) {
     final imagePath = ref.watch(initialProductProvider).state.imagePath;
 
     if (imagePath == null) {
       return Future.value(null);
     } else {
-      debugPrint(imagePath + " deba");
       return FirebaseStorageService.getDownloadUrlFromPath(imagePath);
     }
   },
@@ -80,27 +79,12 @@ final productImgProvider = Provider.autoDispose<String?>(
   },
 );
 
-
-
-/// This is used to provide current img in the image frame.
-final _currentProductImgFileProvider = StateProvider.autoDispose<String?>(
-  (ref) => ref.watch(_productImgFileFutureProvider).when(
-        data: (file) => file,
-        loading: () => null,
-        error: (err, stacktrace) {
-          FirebaseCrashlytics.instance.recordError(err, stacktrace);
-          return null;
-        },
-      ),
-);
-
 const double imgRatioX = 12;
 const double imgRatioY = 16;
 const double targetImgAspect = imgRatioX / imgRatioY;
 
 /// This is the size of current product image.
-final isProductImageValid = FutureProvider.autoDispose<bool>(
-   (ref) {
+final isProductImageValid = FutureProvider.autoDispose<bool>((ref) {
   //   final currentImg = ref.watch(_currentProductImgFileProvider).state;
   //   if (currentImg == null) {
   //     return Future.value(true);
@@ -116,32 +100,25 @@ final isProductImageValid = FutureProvider.autoDispose<bool>(
   //         .then((value) async {
   //       await Future<void>.delayed(Duration(seconds: 1));
   //       return value;
-  //   
-    return Future.value(true); });
+  //
+  return Future.value(true);
+});
 
-// Future<void> setProductImgFile(BuildContext context, File? imgFile) async {
-//   final currentImgFile = context.read(_currentProductImgFileProvider).state;
-//   if (currentImgFile != null) {
-//     await currentImgFile.delete();
-//   }
-
-//   context.read(isImgChangedProvider).state = true;
-//   context.read(_currentProductImgFileProvider).state = imgFile;
-// }
-
-final blop = StateProvider.autoDispose<String>((ref) => ref.watch(_productImgFileFutureProvider).when(
+final blop = StateProvider.autoDispose<String?>(
+  (ref) => ref.watch(_productImgFileFutureProvider).when(
         data: (file) => file,
         loading: () => '',
         error: (err, stacktrace) {
           FirebaseCrashlytics.instance.recordError(err, stacktrace);
           return '';
         },
-      ),);
+      ),
+);
 
-void DeleteImage(BuildContext context){
+void DeleteImage(BuildContext context) {
   context.read(blop).state = "";
 }
 
-void SetImage(BuildContext context, String url){
+void SetImage(BuildContext context, String url) {
   context.read(blop).state = url;
 }
