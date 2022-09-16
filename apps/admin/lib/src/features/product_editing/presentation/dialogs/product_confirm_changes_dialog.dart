@@ -62,7 +62,7 @@ class ProductConfirmChangesDialog extends ProcessingAlertDialog {
           );
         } else {
           final uploadResult = await FirebaseStorageService.uploadImgBytes(
-            !kIsWeb ? await File(img).readAsBytes() : await XFile(img).readAsBytes(),
+            !kIsWeb ? await File(img!).readAsBytes() : await XFile(img!).readAsBytes(),
             product.uniqueId,
           );
           product = product.copyWith(

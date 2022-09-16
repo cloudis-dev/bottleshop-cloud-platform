@@ -121,6 +121,8 @@ class _ImageFrameContent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final b = useProvider(blop);
+    if(b == null)
+    debugPrint(b.state + "  prv");
     if (useProvider(isImgLoadedProvider)) {
       if ( b.state == "") {
         return Image.asset('assets/images/placeholder.png');

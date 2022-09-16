@@ -19,6 +19,7 @@ void main() async {
 
     runApp(ProviderScope(child: MyApp()));
   },
-      (error, stack) =>
+ 
+      (error, stack) => kIsWeb ? print(error) :
           FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
