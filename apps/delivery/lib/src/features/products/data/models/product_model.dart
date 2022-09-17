@@ -13,7 +13,7 @@
 import 'package:delivery/src/core/data/models/category_model.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/data/models/unit_model.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:delivery/src/features/products/data/models/flash_sale_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

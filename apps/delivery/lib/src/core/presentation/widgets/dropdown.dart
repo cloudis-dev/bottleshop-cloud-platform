@@ -36,7 +36,7 @@ class DropDown<T> extends StatefulWidget {
   final bool showUnderline;
 
   const DropDown({
-    super.key,
+    Key? key,
     this.dropDownType = DropDownType.button,
     required this.items,
     required this.customWidgets,
@@ -47,10 +47,10 @@ class DropDown<T> extends StatefulWidget {
     this.isCleared = false,
     this.showUnderline = true,
   })  : assert(items is! Widget),
-        assert(items.length == customWidgets.length);
+        assert(items.length == customWidgets.length),
+        super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _DropDownState<T> createState() => _DropDownState();
 }
 

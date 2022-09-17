@@ -1,15 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/models/category_model.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/data/models/unit_model.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 
 class FirestoreJsonParsingUtil {
   FirestoreJsonParsingUtil._();
@@ -43,7 +43,7 @@ class FirestoreJsonParsingUtil {
 
   /// This is used when parsing product from other
   /// data store than Firebase.
-  /// (Other in the meaning of containing all json data in placel10n.
+  /// (Other in the meaning of containing all json data in place).
   static Future<ProductModel> parseProductRaw(
     Map<String, dynamic> productJson,
   ) async {

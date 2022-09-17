@@ -10,8 +10,8 @@
 //
 //
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 

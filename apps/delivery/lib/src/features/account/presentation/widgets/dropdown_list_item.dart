@@ -15,9 +15,9 @@ import 'package:flutter/material.dart';
 class DropdownListItem extends StatelessWidget {
   final String label;
   const DropdownListItem({
-    super.key,
+    Key? key,
     required this.label,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

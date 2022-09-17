@@ -10,9 +10,9 @@
 //
 //
 
-import 'package:delivery/src/config/app_config.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/widgets/drawer_state_acquirer.dart';
+import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/widgets/age_filter.dart';
 import 'package:delivery/src/features/filter/presentation/widgets/age_year_filter_toggle.dart';
@@ -31,9 +31,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final filterTypeScopedProvider = Provider<FilterType>((ref) => FilterType.allProducts);
+final filterTypeScopedProvider = ScopedProvider<FilterType>(null);
 
-class FilterDrawer extends HookConsumerWidget {
+class FilterDrawer extends HookWidget {
   final GlobalKey<DrawerStateAcquirerState> drawerAcquirerKey;
 
   const FilterDrawer({
@@ -45,9 +45,12 @@ class FilterDrawer extends HookConsumerWidget {
   final FilterType filterType;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final scrollController = useScrollController();
-    final algoliaImage = AppConfig(context).platformBrightness() == Brightness.light ? kAlgoliaLogo : kAlgoliaLogoDark;
+    final algoliaImage =
+        AppConfig(context).platformBrightness() == Brightness.light
+            ? kAlgoliaLogo
+            : kAlgoliaLogoDark;
 
     return SizedBox(
       width: 350,
@@ -65,10 +68,12 @@ class FilterDrawer extends HookConsumerWidget {
                   const Divider(),
                   Expanded(
                     child: CupertinoScrollbar(
+                      thumbVisibility: true,
                       controller: scrollController,
                       child: ListView(
                         controller: scrollController,
-                        padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+                        padding:
+                            const EdgeInsets.only(left: 20, right: 20, top: 10),
                         primary: false,
                         children: <Widget>[
                           const AlcoholFilter(),

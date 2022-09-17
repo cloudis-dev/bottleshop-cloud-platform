@@ -1,9 +1,11 @@
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/favorites/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -17,7 +19,7 @@ final _addToWishlistButtonStateProvider =
   },
 );
 
-class ToggleWishlistButton extends HookConsumerWidget {
+class ToggleWishlistButton extends HookWidget {
   const ToggleWishlistButton({
     Key? key,
     required this.product,
@@ -28,9 +30,9 @@ class ToggleWishlistButton extends HookConsumerWidget {
   final VoidCallback? actionOverride;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final buttonState =
-        ref.watch(_addToWishlistButtonStateProvider(product).state).state;
+        useProvider(_addToWishlistButtonStateProvider(product)).state;
     final loaderColor = Theme.of(context).primaryColor;
 
     return ProgressButton(
@@ -38,12 +40,12 @@ class ToggleWishlistButton extends HookConsumerWidget {
       maxWidth: 90,
       onPressed: actionOverride ??
           () {
-            ref.read(_addToWishlistButtonStateProvider(product).state).state =
+            context.read(_addToWishlistButtonStateProvider(product)).state =
                 ButtonState.loading;
-            ref.read(isInWishListStreamProvider(product.uniqueId)).whenData(
+            context.read(isInWishListStreamProvider(product.uniqueId)).whenData(
               (isInWishList) {
                 if (isInWishList ?? false) {
-                  return ref
+                  return context
                       .read(wishListProvider)!
                       .remove(product.uniqueId)
                       .then(
@@ -64,7 +66,13 @@ class ToggleWishlistButton extends HookConsumerWidget {
                         ),
                       );
                 } else {
-                  return ref
+                  logAddToWishlist(
+                      context,
+                      product.uniqueId,
+                      product.name,
+                      product.allCategories.first.categoryDetails.toString(),
+                      1);
+                  return context
                       .read(wishListProvider)!
                       .add(product.uniqueId)
                       .then(
@@ -90,8 +98,8 @@ class ToggleWishlistButton extends HookConsumerWidget {
             ).whenData(
               (value) => value.whenComplete(
                 () => {
-                  ref
-                      .read(_addToWishlistButtonStateProvider(product).state)
+                  context
+                      .read(_addToWishlistButtonStateProvider(product))
                       .state = ButtonState.idle
                 },
               ),
@@ -100,12 +108,12 @@ class ToggleWishlistButton extends HookConsumerWidget {
       state: buttonState,
       stateWidgets: {
         ButtonState.idle: Icon(
-          ref.watch(isInWishListStreamProvider(product.uniqueId)).maybeWhen(
-                data: (isInWishList) => (isInWishList ?? false)
-                    ? Icons.favorite
-                    : Icons.favorite_border,
-                orElse: () => Icons.favorite_border,
-              ),
+          useProvider(isInWishListStreamProvider(product.uniqueId)).maybeWhen(
+            data: (isInWishList) => (isInWishList ?? false)
+                ? Icons.favorite
+                : Icons.favorite_border,
+            orElse: () => Icons.favorite_border,
+          ),
           size: 20,
           color: Theme.of(context).colorScheme.surface,
         ),

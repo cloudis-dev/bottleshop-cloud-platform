@@ -11,9 +11,6 @@
 //
 
 import 'package:delivery/src/core/data/models/preferences.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/slivers/implementations/sliver_paged_grid.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/slivers/implementations/sliver_paged_list.dart';
 import 'package:delivery/src/core/presentation/widgets/list_error_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/list_loading_widget.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
@@ -22,9 +19,11 @@ import 'package:delivery/src/features/products/presentation/widgets/product_grid
 import 'package:delivery/src/features/products/presentation/widgets/product_list_item.dart';
 import 'package:delivery/src/features/products/utils/product_sliver_grid_delegate.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
-class SliverProductsList extends HookConsumerWidget {
+class SliverProductsList extends HookWidget {
   const SliverProductsList({
     Key? key,
     required this.productsState,
@@ -35,8 +34,8 @@ class SliverProductsList extends HookConsumerWidget {
   final void Function() requestData;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final layoutMode = ref.watch(productsLayoutModeProvider.state).state;
+  Widget build(BuildContext context) {
+    final layoutMode = useProvider(productsLayoutModeProvider).state;
 
     if (layoutMode == SupportedLayoutMode.list) {
       return SliverPagedList<ProductModel>(
@@ -45,7 +44,7 @@ class SliverProductsList extends HookConsumerWidget {
         itemBuilder: (context, dynamic item, _) => ProductListItem(
           product: item,
         ),
-        errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onButtonPressed: onPressed),
+        errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onPressed),
         loadingWidgetBuilder: (_) => const ListLoadingWidget(),
       );
     } else {
@@ -58,7 +57,8 @@ class SliverProductsList extends HookConsumerWidget {
             product: item,
           ),
           gridDelegate: const ProductSliverGridDelegate(),
-          errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onButtonPressed: onPressed),
+          errorWidgetBuilder: (context, onPressed) =>
+              ListErrorWidget(onPressed),
           loadingWidgetBuilder: (_) => const ListLoadingWidget(),
         ),
       );

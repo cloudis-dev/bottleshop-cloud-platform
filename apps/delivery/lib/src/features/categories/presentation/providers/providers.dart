@@ -10,28 +10,30 @@
 //
 //
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
-import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/features/categories/data/services/db_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final categoryProvider =
     FutureProvider.autoDispose.family<CategoriesTreeModel, String>(
   (ref, uid) {
-    final categories = ref.watch(
-        commonDataRepositoryProvider.select((value) => value.data.categories));
-    return categories
-        .firstWhere((element) => element.categoryDetails.id == uid);
+    return fetchCategories(ref.watch(currentLocaleProvider)).then(
+      (value) => value.firstWhere(
+        (e) => e.categoryDetails.id == uid,
+      ),
+    );
   },
 );
 
 final mainCategoriesWithoutExtraProvider =
     StateProvider.autoDispose<List<CategoriesTreeModel>>(
   (ref) => ref
-      .watch(
-          commonDataRepositoryProvider.select((value) => value.data.categories))
+      .watch(commonDataRepositoryProvider)
+      .categories
       .where((element) => !element.categoryDetails.isExtraCategory)
       .toList(),
   name: 'mainCategoriesWithoutExtraProvider',

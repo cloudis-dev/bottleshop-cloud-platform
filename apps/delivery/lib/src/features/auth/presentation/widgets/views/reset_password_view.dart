@@ -11,25 +11,25 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/app_config.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/auth_form_template.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/reset_password_form.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/organisms/reset_password_form.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/templates/auth_form_template.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class ResetPasswordView extends HookConsumerWidget {
+class ResetPasswordView extends HookWidget {
   static const routeName = '/reset-password';
 
   const ResetPasswordView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref
-        .watch(userRepositoryProvider.select<bool>((value) => value.isLoading));
+  Widget build(BuildContext context) {
+    final isLoading =
+        useProvider(userRepositoryProvider.select((value) => value.isLoading));
     final scrollController = useScrollController();
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 

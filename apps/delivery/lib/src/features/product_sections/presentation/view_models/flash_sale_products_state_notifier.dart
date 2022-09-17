@@ -10,12 +10,12 @@
 //
 //
 
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_handler.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state_stream_batch.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/single_stream_items_state_notifier.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/utils/products_sorting_util.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
+
+final _logger = Logger((FlashSaleProductsStateNotifier).toString());
 
 class FlashSaleProductsStateNotifier
     extends SingleStreamItemsStateNotifier<ProductModel, String?> {
@@ -24,8 +24,8 @@ class FlashSaleProductsStateNotifier
   ) : super(
           requestItems,
           FlashSaleProductItemsHandler(),
-          (err, stack) async =>
-              logError('FlashSaleProductsStateNotifier error', err, stack),
+          (err, stack) async => _logger.severe(
+              'FlashSaleProductsStateNotifier error', err, stack),
         );
 
   /// Check all the products' flash sales and remove the ones

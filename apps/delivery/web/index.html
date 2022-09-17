@@ -1,75 +1,121 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Maloobchod, veľkoobchod, distribúcia a dovoz do hodiny v rámci Bratislavy. Kvalitný výber, limitované edície, raritky a zberateľský alkohol s investičným charakterom.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Bottleshop 3 Veže">
+  <meta content="540936468411-44uajovjnes48qd3b6ditirj8336um5c.apps.googleusercontent.com"
+        name="google-signin-client_id"/>
+  <link rel="apple-touch-icon" href="images/icons/icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+    <title>Bottleshop3veže</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+      .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .indicator{
+        width: 48px;
+        height: 48px;
+      }
+</style>
+</head>
+<body style="overflow: hidden; background-color: #121212;">
+<div id="loading_indicator" class="container">
+  <img class="indicator" src="images/spinner.svg" />
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-functions.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
+<script type="text/javascript">
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.worker.min.js";
+</script>
+<script>
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    firebase.initializeApp({
+      apiKey: "AIzaSyBKDk9aqNBON-PcDuahYV89cDXu3jepWj4",
+      authDomain: "bottleshop-3-veze-dev-54908.firebaseapp.com",
+      projectId: "bottleshop-3-veze-dev-54908",
+      storageBucket: "bottleshop-3-veze-dev-54908.appspot.com",
+      messagingSenderId: "525277285012",
+      appId: "1:525277285012:web:bad81f5d913e78c20ec281",
+      measurementId: "G-02K3SVS600"
+    });
+    var serviceWorkerVersion = null;
+    var scriptLoaded = false;
+    function loadMainDartJs() {
+      if (scriptLoaded) {
+        return;
+      }
+      scriptLoaded = true;
+      var scriptTag = document.createElement('script');
+      scriptTag.src = 'main.dart.js';
+      scriptTag.type = 'application/javascript';
+      document.body.append(scriptTag);
+    }
 
-  <head>
-    <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-    <base href="$FLUTTER_BASE_HREF">
-
-    <meta charset="UTF-8">
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-    <meta name="description" content="Maloobchod, veľkoobchod, distribúcia a dovoz do hodiny v rámci Bratislavy. Kvalitný výber, limitované edície, raritky a zberateľský alkohol s investičným charakterom.">
-    <meta content="540936468411-44uajovjnes48qd3b6ditirj8336um5c.apps.googleusercontent.com" name="google-signin-client_id"/>
-
-    <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Botttleshop3veze DEV">
-    <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png" />
-
-    <title>Botttleshop3veze DEV</title>
-    <link rel="manifest" href="manifest.json">
-    <script>
-      // The value below is injected by flutter build, do not touch.
-      var serviceWorkerVersion = null;
-    </script>
-    <!-- This script adds the flutter initialization JS code -->
-    <script src="flutter.js"></script>
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://unpkg.com/pdfjs-dist@2.14.305/build/pdf.min.js">
-      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@2.14.305/build/pdf.worker.min.js";
-    </script>
-<!--  <link rel="stylesheet" type="text/css" href="splash/style.css">
-  <script src="splash/splash.js"></script>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>-->
-  </head>
-
-  <body>
-<!--  <picture id="splash">
-    <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
-    <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
-    <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt=""/>
-  </picture>-->
-      <script>
-        window.addEventListener('load', function (ev) {
-          // Download main.dart.js
-          _flutter.loader.loadEntrypoint({
-            serviceWorker: {
-              serviceWorkerVersion: serviceWorkerVersion,
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register("/firebase-messaging-sw.js");
+        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+        navigator.serviceWorker.register(serviceWorkerUrl)
+          .then((reg) => {
+            function waitForActivation(serviceWorker) {
+              serviceWorker.addEventListener('statechange', () => {
+                if (serviceWorker.state == 'activated') {
+                  console.log('Installed new service worker.');
+                  loadMainDartJs();
+                }
+              });
             }
-          }).then(function (engineInitializer) {
-            //self.FIREBASE_APPCHECK_DEBUG_TOKEN = '25bc32ed-633e-4919-9c59-10136a2a3ddf';
-            return engineInitializer.initializeEngine();
-          }).then(function (appRunner) {
-            return appRunner.runApp();
-          }).catch(function (error) {
-            console.error(error);
+            if (!reg.active && (reg.installing || reg.waiting)) {
+              waitForActivation(reg.installing ?? reg.waiting);
+            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
+              console.log('New service worker available.');
+              reg.update();
+              waitForActivation(reg.installing);
+            } else {
+              console.log('Loading app from service worker.');
+              loadMainDartJs();
+            }
           });
-        });
-      </script>
-    </body>
+
+        setTimeout(() => {
+          if (!scriptLoaded) {
+            console.warn(
+              'Failed to load app from service worker. Falling back to plain tag.',
+            );
+            loadMainDartJs();
+          }
+        }, 4000);
+      });
+    } else {
+      loadMainDartJs();
+    }
+  </script>
+<script>
+  window.onload = function () {
+        setTimeout(function () {
+          var loadingIndicator = document.getElementById("loading_indicator");
+          if (loadingIndicator) {
+            loadingIndicator.remove();
+          }
+        }, 10000);
+};
+</script>
+</body>
 </html>

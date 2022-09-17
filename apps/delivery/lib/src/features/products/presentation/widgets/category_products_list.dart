@@ -12,13 +12,11 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/slivers/sliver_obstruction_injector.dart';
+import 'package:delivery/src/core/presentation/slivers/sliver_resizable_pinned_header_padding.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
-import 'package:delivery/src/core/presentation/widgets/sliver_obstruction_injector.dart';
-import 'package:delivery/src/core/presentation/widgets/sliver_resizable_pinned_header_padding.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
-import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/presentation/slivers/sliver_category_tab_heading.dart';
 import 'package:delivery/src/features/products/presentation/slivers/sliver_products_list.dart';
@@ -37,7 +35,7 @@ bool _shouldDisplayListWithSubcategories(
 const _categoryTabHeadingPadding = EdgeInsets.symmetric(vertical: 12);
 const _filtersStickyHeaderPadding = 12.0;
 
-class CategoryProductsList extends HookConsumerWidget {
+class CategoryProductsList extends HookWidget {
   const CategoryProductsList({
     Key? key,
     required this.category,
@@ -48,22 +46,19 @@ class CategoryProductsList extends HookConsumerWidget {
   final CategoriesTreeModel category;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final appliedFilter = ref
-        .watch(appliedFilterProvider(FilterType.categoryProducts).state)
-        .state;
-    final hasProducts = ref
-        .watch(
-          categoryHasProductsProvider(
-            _shouldDisplayListWithSubcategories(
-              isAllCategory,
-              category.subCategories,
-            )
-                ? category.subCategories.map((e) => e.categoryDetails).toList()
-                : [category.categoryDetails],
-          ).state,
+  Widget build(BuildContext context) {
+    final appliedFilter =
+        useProvider(appliedFilterProvider(FilterType.categoryProducts)).state;
+    final hasProducts = useProvider(
+      categoryHasProductsProvider(
+        _shouldDisplayListWithSubcategories(
+          isAllCategory,
+          category.subCategories,
         )
-        .state;
+            ? category.subCategories.map((e) => e.categoryDetails).toList()
+            : [category.categoryDetails],
+      ),
+    ).state;
 
     return SafeArea(
       top: false,
@@ -196,16 +191,15 @@ class _ProductsBody extends StatelessWidget {
   }
 }
 
-class _NoProductsBody extends HookConsumerWidget {
+class _NoProductsBody extends HookWidget {
   static const double _bottomPad = 150;
 
   const _NoProductsBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final appliedFilter = ref
-        .watch(appliedFilterProvider(FilterType.categoryProducts).state)
-        .state;
+  Widget build(BuildContext context) {
+    final appliedFilter =
+        useProvider(appliedFilterProvider(FilterType.categoryProducts)).state;
 
     if (appliedFilter.isAnyFilterActive) {
       return MultiSliver(
@@ -278,7 +272,7 @@ class _CategoryHeading extends HookWidget {
   }
 }
 
-class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
+class _ProductsListWithSubcategoriesStickyHeaders extends HookWidget {
   const _ProductsListWithSubcategoriesStickyHeaders({
     Key? key,
     required this.category,
@@ -289,12 +283,12 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
   final bool isAllCategory;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isAnyFilterActive = ref.watch(
+  Widget build(BuildContext context) {
+    final isAnyFilterActive = useProvider(
         appliedFilterProvider(FilterType.categoryProducts)
-            .select<bool>((value) => value.isAnyFilterActive));
+            .select((value) => value.state.isAnyFilterActive));
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLocale = useProvider(currentLocaleProvider);
 
     if (_shouldDisplayListWithSubcategories(
       isAllCategory,
@@ -308,8 +302,8 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
 
       final productsStates = providers
           .map(
-            (provider) => ref.watch(provider
-                .select<ItemsState<ProductModel>>((value) => value.itemsState)),
+            (provider) =>
+                useProvider(provider.select((value) => value.itemsState)),
           )
           .toList();
 
@@ -330,7 +324,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
                 ),
                 sliver: SliverProductsList(
                   productsState: productsStates[id],
-                  requestData: () => ref.read(providers[id]).requestData(),
+                  requestData: () => context.read(providers[id]).requestData(),
                 ),
               ),
             )
@@ -341,13 +335,13 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
           ? filteredProductsProvider(category.categoryDetails)
           : productsByCategoryProvider(category.categoryDetails);
 
-      final productsState = ref.watch(
-        provider.select<ItemsState<ProductModel>>((value) => value.itemsState),
+      final productsState = useProvider(
+        provider.select((value) => value.itemsState),
       );
 
       return SliverProductsList(
         productsState: productsState,
-        requestData: () => ref.read(provider).requestData(),
+        requestData: () => context.read(provider).requestData(),
       );
     }
   }

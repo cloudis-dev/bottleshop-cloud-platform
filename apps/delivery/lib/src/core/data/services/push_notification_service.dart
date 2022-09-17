@@ -12,28 +12,32 @@
 
 import 'dart:async';
 
-import 'package:delivery/src/config/environment.dart';
+import 'package:delivery/src/core/data/res/app_environment.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
+import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
+import 'package:delivery/src/features/orders/presentation/pages/order_detail_page.dart';
+import 'package:delivery/src/features/orders/presentation/pages/orders_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:routeborn/routeborn.dart';
 
-class PushNotificationService with NetworkLoggy {
-  final Ref ref;
+final _logger = Logger((PushNotificationService).toString());
+
+class PushNotificationService {
   final FirebaseMessaging _firebaseMessaging;
   final FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;
 
-  PushNotificationService(
-    this.ref, {
+  PushNotificationService({
     FirebaseMessaging? firebaseMessaging,
     FlutterLocalNotificationsPlugin? localNotificationsPlugin,
   })  : _firebaseMessaging = firebaseMessaging ?? FirebaseMessaging.instance,
         _flutterLocalNotificationsPlugin =
             localNotificationsPlugin ?? FlutterLocalNotificationsPlugin();
 
-  Future<void> init() async {
+  Future<void> init(Reader read) async {
     try {
       var settings = await _firebaseMessaging.requestPermission(
         alert: true,
@@ -45,19 +49,41 @@ class PushNotificationService with NetworkLoggy {
         sound: true,
       );
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        loggy.debug('User granted push permission');
+        _logger.fine('User granted push permission');
       } else if (settings.authorizationStatus ==
           AuthorizationStatus.provisional) {
-        loggy.debug('User granted provisional permission');
+        _logger.fine('User granted provisional permission');
       } else {
-        loggy.debug('User declined or has not accepted permission');
+        _logger.fine('User declined or has not accepted permission');
       }
       if (defaultTargetPlatform == TargetPlatform.android) {
         const initSettings = InitializationSettings(android: settingsAndroid);
         await _flutterLocalNotificationsPlugin!.initialize(initSettings,
             onSelectNotification: (orderId) async {
-          loggy.debug('foreground clicked: $orderId');
-          if (orderId!.isNotEmpty && orderId.split('__').length == 2) {}
+          _logger.fine('foreground clicked: $orderId');
+          if (orderId!.isNotEmpty && orderId.split('__').length == 2) {
+            read(navigationProvider).replaceRootStackWith(
+              [
+                AppPageNode(
+                  page: HomePage(),
+                  crossroad: NavigationCrossroad(
+                    activeBranch: NestingBranch.orders,
+                    availableBranches: {
+                      NestingBranch.orders: NavigationStack(
+                        [
+                          AppPageNode(page: OrdersPage()),
+                          AppPageNode(
+                            page: OrderDetailPage(
+                                orderUniqueId: orderId.split('__').last),
+                          ),
+                        ],
+                      )
+                    },
+                  ),
+                )
+              ],
+            );
+          }
         });
         await _flutterLocalNotificationsPlugin!
             .resolvePlatformSpecificImplementation<
@@ -75,27 +101,46 @@ class PushNotificationService with NetworkLoggy {
         var docId = message.data['document_id'] as String? ?? '';
         var orderId = message.data['order_id'] as String? ?? '';
 
-        if (orderId.isNotEmpty && docId.isNotEmpty) {}
+        if (orderId.isNotEmpty && docId.isNotEmpty) {
+          read(navigationProvider).replaceRootStackWith([
+            AppPageNode(
+              page: HomePage(),
+              crossroad: NavigationCrossroad(
+                  activeBranch: NestingBranch.orders,
+                  availableBranches: {
+                    NestingBranch.orders: NavigationStack(
+                      [
+                        AppPageNode(page: OrdersPage()),
+                        AppPageNode(
+                          page: OrderDetailPage(orderUniqueId: docId),
+                        ),
+                      ],
+                    )
+                  }),
+            )
+          ]);
+        }
       });
     } catch (err, stack) {
-      loggy.error('failed push registration', err, stack);
+      _logger.severe('failed push registration', err, stack);
     }
   }
 
   Future<String?> get currentToken async {
     String? token;
     try {
-      token = await _firebaseMessaging.getToken(vapidKey: Environment.vapidKey);
-      loggy.debug('token: $token');
+      token =
+          await _firebaseMessaging.getToken(vapidKey: AppEnvironment.vapidKey);
+      _logger.fine('token: $token');
       return token;
     } catch (e) {
-      loggy.debug('failed getting FCM token ${e.toString()}');
+      _logger.warning('failed getting FCM token ${e.toString()}');
       return token;
     }
   }
 
   void _onMessageHandler(RemoteMessage message) {
-    loggy.debug('message in foreground: ${message.data}');
+    _logger.fine('message in foreground: ${message.data}');
     var notification = message.notification;
     var android = notification?.android;
     if (notification != null && android != null) {
@@ -109,9 +154,10 @@ class PushNotificationService with NetworkLoggy {
           notification.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
-              channel.id, channel.name, channelDescription: channel.description,
-              icon: 'ic_stat_name', color: Colors.amber,
-              // other properties...
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: notification.android?.smallIcon,
             ),
           ),
           payload: payload,
@@ -128,7 +174,25 @@ class PushNotificationService with NetworkLoggy {
       var docId = initialMessage.data['document_id'] as String? ?? '';
       var orderId = initialMessage.data['order_id'] as String? ?? '';
 
-      if (docId.isNotEmpty && orderId.isNotEmpty) {}
+      if (docId.isNotEmpty && orderId.isNotEmpty) {
+        read(navigationProvider).replaceRootStackWith([
+          AppPageNode(
+            page: HomePage(),
+            crossroad: NavigationCrossroad(
+                activeBranch: NestingBranch.orders,
+                availableBranches: {
+                  NestingBranch.orders: NavigationStack(
+                    [
+                      AppPageNode(page: OrdersPage()),
+                      AppPageNode(
+                        page: OrderDetailPage(orderUniqueId: docId),
+                      ),
+                    ],
+                  )
+                }),
+          )
+        ]);
+      }
     }
   }
 }
@@ -144,7 +208,4 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   playSound: true,
 );
 
-const settingsAndroid = AndroidInitializationSettings('ic_stat_name');
-
-final pnServiceProvider =
-    Provider<PushNotificationService>((ref) => throw UnimplementedError());
+const settingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');

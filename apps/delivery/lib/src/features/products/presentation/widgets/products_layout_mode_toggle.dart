@@ -13,20 +13,21 @@
 import 'package:delivery/src/core/data/models/preferences.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProductsLayoutModeToggle extends HookConsumerWidget {
+class ProductsLayoutModeToggle extends HookWidget {
   const ProductsLayoutModeToggle({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final layoutMode = ref.watch(productsLayoutModeProvider.state).state;
+  Widget build(BuildContext context) {
+    final layoutMode = useProvider(productsLayoutModeProvider).state;
     const appIcon = Icon(Icons.apps);
     if (layoutMode == SupportedLayoutMode.grid) {
       return IconButton(
         icon: appIcon,
-        onPressed: () => ref.read(productsLayoutModeProvider.state).state =
-            ref.read(productsLayoutModeProvider.state).state ==
+        onPressed: () => context.read(productsLayoutModeProvider).state =
+            context.read(productsLayoutModeProvider).state ==
                     SupportedLayoutMode.list
                 ? SupportedLayoutMode.grid
                 : SupportedLayoutMode.list,
@@ -34,8 +35,8 @@ class ProductsLayoutModeToggle extends HookConsumerWidget {
     } else {
       return IconButton(
         icon: const Icon(Icons.format_list_bulleted),
-        onPressed: () => ref.read(productsLayoutModeProvider.state).state =
-            ref.read(productsLayoutModeProvider.state).state ==
+        onPressed: () => context.read(productsLayoutModeProvider).state =
+            context.read(productsLayoutModeProvider).state ==
                     SupportedLayoutMode.list
                 ? SupportedLayoutMode.grid
                 : SupportedLayoutMode.list,

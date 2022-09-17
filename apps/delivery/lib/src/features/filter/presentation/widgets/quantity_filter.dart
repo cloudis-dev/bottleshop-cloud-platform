@@ -16,21 +16,22 @@ import 'package:delivery/src/features/filter/presentation/providers/providers.da
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class QuantityFilter extends HookConsumerWidget {
+class QuantityFilter extends HookWidget {
   const QuantityFilter({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final minQuantity = ref.watch(filterModelProvider(filterType)
-        .select<int>((value) => value.minQuantity));
-    final isQuantityActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isQuantityActive));
+    final minQuantity = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.minQuantity));
+    final isQuantityActive = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.isQuantityActive));
 
     return Column(
       children: [
@@ -61,10 +62,10 @@ class QuantityFilter extends HookConsumerWidget {
             max: FilterConstants.maxQuantity.toDouble(),
             divisions: FilterConstants.alcoholDivisions,
             value: FilterConstants.maxQuantity - minQuantity.toDouble(),
-            onChanged: (value) => ref
-                    .read(filterModelProvider(filterType).state)
+            onChanged: (value) => context
+                    .read(filterModelProvider(filterType))
                     .state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+                context.read(filterModelProvider(filterType)).state.copyWith(
                       minQuantity: FilterConstants.maxQuantity - value.round(),
                     ),
             label: minQuantity.toString(),

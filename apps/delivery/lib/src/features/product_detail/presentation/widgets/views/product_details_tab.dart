@@ -16,10 +16,11 @@ import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/atoms/detail_row_item.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProductDetailsTab extends HookConsumerWidget {
+class ProductDetailsTab extends HookWidget {
   final ProductModel product;
 
   const ProductDetailsTab({
@@ -28,8 +29,8 @@ class ProductDetailsTab extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

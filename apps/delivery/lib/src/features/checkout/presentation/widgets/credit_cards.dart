@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -113,6 +113,11 @@ class CreditCards extends StatelessWidget {
                     Image.asset(
                       kAmex,
                       height: 50,
+                      width: 70,
+                    ),
+                    Image.asset(
+                      kDinersBtn,
+                      height: 42,
                       width: 70,
                     ),
                     Image.asset(

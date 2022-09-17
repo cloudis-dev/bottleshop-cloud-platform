@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HelpSection extends HookWidget {
   final IconData icon;
@@ -63,7 +63,7 @@ class HelpSection extends HookWidget {
             children: [
               MarkdownBody(
                 onTapLink: (title, href, text) async {
-                  await launch(href!);
+                  await launchUrlString(href!);
                 },
                 selectable: true,
                 data: mdString,

@@ -11,16 +11,20 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
-
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
+import 'package:delivery/src/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class ProductGridItem extends HookConsumerWidget {
+class ProductGridItem extends HookWidget {
   /// For rectangular image the value .56 is fine
   static const double widgetAspectRatio = .485;
 
@@ -31,10 +35,14 @@ class ProductGridItem extends HookConsumerWidget {
     required this.product,
   }) : super(key: key);
 
-  void onClick(WidgetRef ref, BuildContext context) {}
+  void onClick(BuildContext context) {
+    context
+        .read(navigationProvider)
+        .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final subtitleTheme = Theme.of(context).textTheme.subtitle1!;
     final headline6Theme = Theme.of(context).textTheme.headline6!;
     final body1Theme = Theme.of(context).textTheme.bodyText1!;
@@ -42,7 +50,7 @@ class ProductGridItem extends HookConsumerWidget {
           color: product.count > 0 ? Colors.green : Colors.red,
         );
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLocale = useProvider(currentLocaleProvider);
 
     const fit = BoxFit.fitHeight;
 
@@ -76,7 +84,7 @@ class ProductGridItem extends HookConsumerWidget {
                       alignment: AlignmentDirectional.topCenter,
                       children: <Widget>[
                         Hero(
-                          tag: ValueKey(product.uniqueId),
+                          tag: HeroTags.productBaseTag + product.uniqueId,
                           child: ProductImage(imagePath: product.thumbnailPath),
                         ),
                         if (product.discount != null)
@@ -231,7 +239,13 @@ class ProductGridItem extends HookConsumerWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () async {
-                      onClick(ref, context);
+                      await logViewItem(
+                          context,
+                          product.uniqueId,
+                          product.name,
+                          product.allCategories.first.categoryDetails
+                              .getName(currentLocale));
+                      onClick(context);
                     },
                     borderRadius: ProductImage.borderRadius,
                   ),

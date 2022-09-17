@@ -12,22 +12,22 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
-import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ExtraCategoriesGroupFilter extends HookConsumerWidget {
+class ExtraCategoriesGroupFilter extends HookWidget {
   const ExtraCategoriesGroupFilter({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(commonDataRepositoryProvider
-        .select<List<CategoriesTreeModel>>((value) => value.data.categories));
+  Widget build(BuildContext context) {
+    final categories = useProvider(
+        commonDataRepositoryProvider.select((value) => value.categories));
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -49,7 +49,7 @@ class ExtraCategoriesGroupFilter extends HookConsumerWidget {
   }
 }
 
-class _ExtraCategoryFilter extends HookConsumerWidget {
+class _ExtraCategoryFilter extends HookWidget {
   const _ExtraCategoryFilter({
     Key? key,
     this.category,
@@ -58,20 +58,19 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
   final CategoriesTreeModel? category;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLocale = useProvider(currentLocaleProvider);
 
-    final enabledCategoriesIds = ref.watch(
+    final enabledCategoriesIds = useProvider(
       filterModelProvider(filterType)
-          .select<List<String>>((value) => value.enabledExtraCategoriesIds),
+          .select((value) => value.state.enabledExtraCategoriesIds),
     );
 
-    final categoryTreeIds =
-        CategoriesTreeModel.getAllCategoryPlainModels(category!)
-            .map((e) => e.id)
-            .toList();
+    final categoryTreeIds = CategoriesTreeModel.getAllCategoryPlainModels(
+      category!,
+    ).map((e) => e.id).toList();
 
     final intersection =
         enabledCategoriesIds.toSet().intersection(categoryTreeIds.toSet());
@@ -81,9 +80,9 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
         ? true
         : (intersection.isEmpty ? false : null);
 
-    void addWholeCategoryTree(WidgetRef ref) {
-      ref.read(filterModelProvider(filterType).state).state =
-          ref.read(filterModelProvider(filterType).state).state.copyWith(
+    void addWholeCategoryTree() {
+      context.read(filterModelProvider(filterType)).state =
+          context.read(filterModelProvider(filterType)).state.copyWith(
                 enabledExtraCategoriesIds: enabledCategoriesIds
                     .toSet()
                     .union(categoryTreeIds.toSet())
@@ -91,9 +90,9 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
               );
     }
 
-    void removeWholeCategoryTree(WidgetRef ref) {
-      ref.read(filterModelProvider(filterType).state).state =
-          ref.read(filterModelProvider(filterType).state).state.copyWith(
+    void removeWholeCategoryTree() {
+      context.read(filterModelProvider(filterType)).state =
+          context.read(filterModelProvider(filterType)).state.copyWith(
                 enabledExtraCategoriesIds: enabledCategoriesIds
                     .toSet()
                     .difference(categoryTreeIds.toSet())
@@ -108,9 +107,9 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
             Checkbox(
               onChanged: (value) {
                 if (value ?? false) {
-                  addWholeCategoryTree(ref);
+                  addWholeCategoryTree();
                 } else {
-                  removeWholeCategoryTree(ref);
+                  removeWholeCategoryTree();
                 }
               },
               value: mainCategoryState,
@@ -136,9 +135,9 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
                     if (value!) {
                       if (intersection.length < categoryTreeIds.length - 2) {
                         // When not the last subcategory selected, then add just this one.
-                        ref.read(filterModelProvider(filterType).state).state =
-                            ref
-                                .read(filterModelProvider(filterType).state)
+                        context.read(filterModelProvider(filterType)).state =
+                            context
+                                .read(filterModelProvider(filterType))
                                 .state
                                 .copyWith(
                                   enabledExtraCategoriesIds:
@@ -147,13 +146,13 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
                                 );
                       } else {
                         // When all the subcategories selected, select also the main one.
-                        addWholeCategoryTree(ref);
+                        addWholeCategoryTree();
                       }
                     } else {
                       // When at least one removed, remove also the main category.
-                      ref.read(filterModelProvider(filterType).state).state =
-                          ref
-                              .read(filterModelProvider(filterType).state)
+                      context.read(filterModelProvider(filterType)).state =
+                          context
+                              .read(filterModelProvider(filterType))
                               .state
                               .copyWith(
                                 enabledExtraCategoriesIds: enabledCategoriesIds

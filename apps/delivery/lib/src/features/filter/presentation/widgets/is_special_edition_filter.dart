@@ -14,19 +14,20 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class IsSpecialEditionFilter extends HookConsumerWidget {
+class IsSpecialEditionFilter extends HookWidget {
   const IsSpecialEditionFilter({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final isSpecialEdition = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isSpecialEdition));
+    final isSpecialEdition = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.isSpecialEdition));
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,8 +36,8 @@ class IsSpecialEditionFilter extends HookConsumerWidget {
         Switch(
           value: isSpecialEdition,
           onChanged: (value) {
-            ref.read(filterModelProvider(filterType).state).state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+            context.read(filterModelProvider(filterType)).state =
+                context.read(filterModelProvider(filterType)).state.copyWith(
                       isSpecialEdition: value,
                     );
           },

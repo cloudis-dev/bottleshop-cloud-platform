@@ -2,11 +2,11 @@ import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:flutter/material.dart';
 
 class SubcategoriesTabBar extends TabBar {
-  // ignore: use_key_in_widget_constructors
   SubcategoriesTabBar(
     CategoriesTreeModel category,
     Widget allTab,
     Widget Function(CategoriesTreeModel) tabBuilder, {
+    Key? key,
     TabController? controller,
     Color? indicatorColor,
     bool isScrollable = false,
@@ -16,6 +16,7 @@ class SubcategoriesTabBar extends TabBar {
     TabBarIndicatorSize? indicatorSize,
     double indicatorWeight = 2,
   }) : super(
+          key: key,
           indicatorWeight: indicatorWeight,
           indicatorSize: indicatorSize,
           unselectedLabelColor: unselectedLabelColor,

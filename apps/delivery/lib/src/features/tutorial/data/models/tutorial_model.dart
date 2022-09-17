@@ -20,21 +20,3 @@ class TutorialModel {
     required this.labelAsset,
   });
 }
-
-class TutorialAssets {
-  static const assets = [
-    TutorialModel(
-      heroAsset: 'assets/images/onboarding-phone.webp',
-      labelAsset: 'assets/images/onboarding_text1.png',
-    ),
-    TutorialModel(
-      heroAsset: 'assets/images/onboarding-person.webp',
-      labelAsset: 'assets/images/onboarding_text2.webp',
-    ),
-    TutorialModel(
-      heroAsset: 'assets/images/onboarding-glasses.webp',
-      labelAsset: 'assets/images/onboarding_text3.webp',
-    ),
-  ];
-  static const boardingLogo = 'assets/images/onboarding-logo.webp';
-}

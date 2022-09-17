@@ -20,22 +20,25 @@ import 'package:delivery/src/core/utils/sorting_util.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-class CountryDropdownsFilterGroup extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((CountryDropdownsFilterGroup).toString());
+
+class CountryDropdownsFilterGroup extends HookWidget {
   const CountryDropdownsFilterGroup({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final countriesFilter =
-        ref.watch(filterModelProvider(filterType).select<List<CountryModel>>((value) => value.countries));
+    final countriesFilter = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.countries));
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLocale = useProvider(currentLocaleProvider);
 
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 8),
@@ -44,34 +47,37 @@ class CountryDropdownsFilterGroup extends HookConsumerWidget with UiLoggy {
         children: [
           Text(context.l10n.onlyFollowingCountries),
           const SizedBox(height: 16),
-          ...ref.watch(filterAggregationsProvider).when(
-                data: (aggs) {
-                  final selectableCountries = aggs.usedCountries.toSet().difference(countriesFilter.toSet()).toList()
-                    ..sort(
-                      (a, b) => SortingUtil.countryCompare(a, b, currentLocale),
-                    );
+          ...useProvider(filterAggregationsProvider).when(
+            data: (aggs) {
+              final selectableCountries = aggs.usedCountries
+                  .toSet()
+                  .difference(countriesFilter.toSet())
+                  .toList()
+                ..sort(
+                  (a, b) => SortingUtil.countryCompare(a, b, currentLocale),
+                );
 
-                  return List<Widget>.generate(
-                    countriesFilter.length + (selectableCountries.isEmpty ? 0 : 1),
-                    (id) => _CountryDropdownFilter(
-                      id: id,
-                      selectableCountries: selectableCountries,
-                    ),
-                  ).interleave(const SizedBox(height: 8)).toList();
-                },
-                loading: () => [const Loader()],
-                error: (err, stack) {
-                  loggy.error('Failed to fetch filter aggregations', err, stack);
-                  return [Text(context.l10n.error)];
-                },
-              ),
+              return List<Widget>.generate(
+                countriesFilter.length + (selectableCountries.isEmpty ? 0 : 1),
+                (id) => _CountryDropdownFilter(
+                  id: id,
+                  selectableCountries: selectableCountries,
+                ),
+              ).interleave(const SizedBox(height: 8)).toList();
+            },
+            loading: () => [const Loader()],
+            error: (err, stack) {
+              _logger.severe('Failed to fetch filter aggregations', err, stack);
+              return [Text(context.l10n.error)];
+            },
+          ),
         ],
       ),
     );
   }
 }
 
-class _CountryDropdownFilter extends HookConsumerWidget with UiLoggy {
+class _CountryDropdownFilter extends HookWidget {
   const _CountryDropdownFilter({
     Key? key,
     required this.id,
@@ -82,13 +88,13 @@ class _CountryDropdownFilter extends HookConsumerWidget with UiLoggy {
   final List<CountryModel> selectableCountries;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterType = ref.watch(filterTypeScopedProvider);
+  Widget build(BuildContext context) {
+    final filterType = useProvider(filterTypeScopedProvider);
 
-    final usedCountries =
-        ref.watch(filterModelProvider(filterType).select<List<CountryModel>>((value) => value.countries));
+    final usedCountries = useProvider(filterModelProvider(filterType)
+        .select((value) => value.state.countries));
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLocale = useProvider(currentLocaleProvider);
 
     final selectedValue = usedCountries.length <= id ? null : usedCountries[id];
 
@@ -99,63 +105,74 @@ class _CountryDropdownFilter extends HookConsumerWidget with UiLoggy {
             lowerBound(
               selectableCountries,
               selectedValue,
-              compare: (dynamic a, dynamic b) => SortingUtil.countryCompare(a, b, currentLocale),
+              compare: (dynamic a, dynamic b) =>
+                  SortingUtil.countryCompare(a, b, currentLocale),
             ),
             selectedValue,
           ));
 
-    return ref.watch(filterAggregationsProvider).when(
-          data: (aggs) {
-            return Row(
-              children: [
-                Expanded(
-                  child: DropdownButton<CountryModel>(
-                    value: selectedValue,
-                    isExpanded: true,
-                    hint: Text(id == 0 ? context.l10n.selectCountry : context.l10n.addAnotherCountry),
-                    items: items
-                        .map(
-                          (e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(
-                              e.getName(currentLocale)!,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) {
-                      ref.read(filterModelProvider(filterType).state).state =
-                          ref.read(filterModelProvider(filterType).state).state.copyWith(
-                                countries: usedCountries.followedBy([value!]).toList(),
-                              );
-                    },
-                  ),
-                ),
-                if (selectedValue != null)
-                  IconButton(
-                    icon: const Icon(Icons.cancel),
-                    color: Theme.of(context).colorScheme.secondary,
-                    onPressed: () {
-                      final res = ref.read(filterModelProvider(filterType).notifier).state.countries..removeAt(id);
+    return useProvider(filterAggregationsProvider).when(
+      data: (aggs) {
+        return Row(
+          children: [
+            Expanded(
+              child: DropdownButton<CountryModel>(
+                value: selectedValue,
+                isExpanded: true,
+                hint: Text(id == 0
+                    ? context.l10n.selectCountry
+                    : context.l10n.addAnotherCountry),
+                items: items
+                    .map(
+                      (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(
+                          e.getName(currentLocale)!,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  context.read(filterModelProvider(filterType)).state = context
+                      .read(filterModelProvider(filterType))
+                      .state
+                      .copyWith(
+                        countries: usedCountries.followedBy([value!]).toList(),
+                      );
+                },
+              ),
+            ),
+            if (selectedValue != null)
+              IconButton(
+                icon: const Icon(Icons.cancel),
+                color: Theme.of(context).colorScheme.secondary,
+                onPressed: () {
+                  final res = List<CountryModel>.from(context
+                      .read(filterModelProvider(filterType))
+                      .state
+                      .countries)
+                    ..removeAt(id);
 
-                      ref.read(filterModelProvider(filterType).notifier).state =
-                          ref.read(filterModelProvider(filterType).state).state.copyWith(
-                                countries: res,
-                              );
-                    },
-                  ),
-              ],
-            );
-          },
-          loading: () => const Loader(),
-          error: (err, stack) {
-            loggy.error('Failed to fetch filter aggregations', err, stack);
-
-            return Center(
-              child: Text(context.l10n.error),
-            );
-          },
+                  context.read(filterModelProvider(filterType)).state = context
+                      .read(filterModelProvider(filterType))
+                      .state
+                      .copyWith(
+                        countries: res,
+                      );
+                },
+              ),
+          ],
         );
+      },
+      loading: () => const Loader(),
+      error: (err, stack) {
+        _logger.severe('Failed to fetch filter aggregations', err, stack);
+
+        return Center(
+          child: Text(context.l10n.error),
+        );
+      },
+    );
   }
 }

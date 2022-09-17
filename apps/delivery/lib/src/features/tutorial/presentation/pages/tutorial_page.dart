@@ -9,21 +9,44 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/features/tutorial/data/models/tutorial_model.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/tutorial/presentation/providers/tutorial_providers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class TutorialPage extends HookConsumerWidget {
-  const TutorialPage({super.key});
+class TutorialPage extends RoutebornPage {
+  static const String pagePathBase = 'tutorial';
+
+  TutorialPage()
+      : super.builder(
+          pagePathBase,
+          (_) => const _TutorialView(),
+        );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final onBoardingViewModel = ref.watch(tutorialModelProvider);
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      const Right('TODO');
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _TutorialView extends HookWidget {
+  const _TutorialView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final onBoardingViewModel = useProvider(tutorialModelProvider);
     final isLast = onBoardingViewModel == TutorialAssets.assets.length - 1;
     final carouselController = useMemoized(() => CarouselController());
 
@@ -38,7 +61,7 @@ class TutorialPage extends HookConsumerWidget {
               disableCenter: true,
               viewportFraction: 1.0,
               onPageChanged:
-                  ref.read(tutorialModelProvider.notifier).pageChanged,
+                  context.read(tutorialModelProvider.notifier).pageChanged,
             ),
             items: TutorialAssets.assets
                 .map(
@@ -91,9 +114,9 @@ class TutorialPage extends HookConsumerWidget {
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
-                onPressed: () => ref
+                onPressed: () => context
                     .read(tutorialModelProvider.notifier)
-                    .finishIntroScreen(ref, context),
+                    .finishIntroScreen(context),
                 child: Text(context.l10n.skip),
               ),
             ),
@@ -142,9 +165,9 @@ class TutorialPage extends HookConsumerWidget {
                 ),
               ),
               onPressed: () => isLast
-                  ? ref
+                  ? context
                       .read(tutorialModelProvider.notifier)
-                      .finishIntroScreen(ref, context)
+                      .finishIntroScreen(context)
                   : carouselController.nextPage(curve: Curves.easeOutCubic),
               child: isLast
                   ? Row(

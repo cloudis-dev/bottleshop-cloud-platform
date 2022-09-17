@@ -20,7 +20,7 @@ final sliderStreamProvider = StreamProvider.autoDispose<List<SliderModel>>(
 );
 
 final homeSliderProvider = FutureProvider.autoDispose<List<SliderModel>>(
-  (ref) => ref.watch(sliderStreamProvider.future),
+  (ref) => ref.watch(sliderStreamProvider.last),
 );
 
 final layoutModeProvider =

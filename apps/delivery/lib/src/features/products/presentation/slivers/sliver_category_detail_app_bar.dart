@@ -13,11 +13,13 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/products/presentation/widgets/subcategories_tab_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SliverCategoryDetailAppBar extends HookConsumerWidget {
+class SliverCategoryDetailAppBar extends HookWidget {
   const SliverCategoryDetailAppBar({
     Key? key,
     required this.category,
@@ -32,128 +34,132 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
   final List<Widget> actions;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
-
+  Widget build(BuildContext context) {
+    final currentLocale = useProvider(currentLocaleProvider);
     return SliverAppBar(
-        snap: false,
-        floating: false,
-        pinned: true,
-        leading: const BackButton(
-          onPressed: null,
-        ),
-        actions: actions,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        expandedHeight: 250,
-        elevation: 0,
-        flexibleSpace: FlexibleSpaceBar(
-          collapseMode: CollapseMode.parallax,
-          background: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
+      snap: false,
+      floating: false,
+      pinned: true,
+      leading: BackButton(
+        onPressed: () => context.read(navigationProvider).popPage(context),
+      ),
+      actions: actions,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      expandedHeight: 250,
+      elevation: 0,
+      flexibleSpace: FlexibleSpaceBar(
+        collapseMode: CollapseMode.parallax,
+        background: Stack(
+          children: <Widget>[
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                // borderRadius: BorderRadius.only(
+                //     topLeft: Radius.circular(10),
+                //     bottomLeft: Radius.circular(10)),
+                // boxShadow: [
+                //   BoxShadow(
+                //       color: Theme.of(context).primaryColor.withOpacity(0.10),
+                //       offset: Offset(0, 4),
+                //       blurRadius: 10)
+                // ],
+                gradient: LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                  stops: const [.25, 1],
+                  colors: [
+                    Theme.of(context).colorScheme.secondary,
+                    Theme.of(context).primaryColor.withOpacity(.9),
+                  ],
+                ),
+              ),
+              child: const SizedBox.shrink(),
+            ),
+            Positioned(
+              right: -60,
+              bottom: -100,
+              child: Container(
+                width: 300,
+                height: 300,
                 decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Theme.of(context).primaryColor.withOpacity(0.10),
-                        offset: const Offset(0, 4),
-                        blurRadius: 10)
-                  ],
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    stops: const [.25, 1],
-                    colors: [
-                      Theme.of(context).colorScheme.secondary,
-                      Theme.of(context).primaryColor.withOpacity(.9),
-                    ],
-                  ),
-                ),
-                child: const SizedBox.shrink(),
-              ),
-              Positioned(
-                right: -60,
-                bottom: -100,
-                child: Container(
-                  width: 300,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.09),
-                    borderRadius: BorderRadius.circular(300),
-                  ),
+                  color: Theme.of(context).primaryColor.withOpacity(0.09),
+                  borderRadius: BorderRadius.circular(300),
                 ),
               ),
-              Positioned(
-                left: -30,
-                top: -80,
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.06),
-                    borderRadius: BorderRadius.circular(150),
-                  ),
+            ),
+            Positioned(
+              left: -30,
+              top: -80,
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(150),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(top: 30),
-                width: double.infinity,
-                height: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Hero(
-                      tag: categoryImgHeroTag!,
-                      child: ImageIcon(
-                        AssetImage(category!.categoryDetails.iconName!),
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 90,
-                      ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 30),
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Hero(
+                    tag: categoryImgHeroTag!,
+                    child: ImageIcon(
+                      AssetImage(category!.categoryDetails.iconName!),
+                      color: Theme.of(context).primaryIconTheme.color,
+                      size: 90,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      category!.categoryDetails.getName(currentLocale),
-                      style: Theme.of(context).textTheme.headline6,
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    category!.categoryDetails.getName(currentLocale),
+                    style: Theme.of(context).textTheme.headline6,
+                  )
+                ],
+              ),
+            )
+          ],
         ),
-        bottom: tabController == null
-            ? null
-            : SubcategoriesTabBar(
-                category!,
-                TabWrapper(
-                  child: Tab(child: Text(context.l10n.all.toUpperCase())),
-                ),
-                (e) => TabWrapper(
-                  child: Tab(
-                    child: Text(
-                      e.categoryDetails.getName(currentLocale).toUpperCase(),
-                    ),
+      ),
+      bottom: tabController == null
+          ? null
+          : SubcategoriesTabBar(
+              category!,
+              _TabWrapper(
+                child: Tab(child: Text(context.l10n.all.toUpperCase())),
+              ),
+              (e) => _TabWrapper(
+                child: Tab(
+                  child: Text(
+                    e.categoryDetails.getName(currentLocale).toUpperCase(),
                   ),
                 ),
-                controller: tabController,
-                indicatorWeight: 5,
-                indicatorSize: TabBarIndicatorSize.tab,
-                unselectedLabelColor: Theme.of(context).primaryColor.withOpacity(0.6),
-                labelColor: Theme.of(context).primaryColor,
-                unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w300),
-                isScrollable: true,
-                indicatorColor: Theme.of(context).primaryColor,
-              ));
+              ),
+              controller: tabController,
+              indicatorWeight: 5,
+              indicatorSize: TabBarIndicatorSize.tab,
+              unselectedLabelColor:
+                  Theme.of(context).primaryColor.withOpacity(0.6),
+              labelColor: Theme.of(context).primaryColor,
+              unselectedLabelStyle:
+                  const TextStyle(fontWeight: FontWeight.w300),
+              isScrollable: true,
+              indicatorColor: Theme.of(context).primaryColor,
+            ),
+    );
   }
 }
 
-class TabWrapper extends StatelessWidget {
-  const TabWrapper({
-    super.key,
+class _TabWrapper extends StatelessWidget {
+  const _TabWrapper({
+    Key? key,
     required this.child,
-  });
+  }) : super(key: key);
 
   final Tab child;
 

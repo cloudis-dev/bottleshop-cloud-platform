@@ -1,0 +1,2 @@
+package_name "sk.bottleshop3veze.bottleshopdeliveryapp"
+json_key_file("google-beta.json")
