@@ -78,7 +78,7 @@ class App extends HookWidget {
         locale: useProvider<Locale>(currentLocaleProvider),
         theme: appTheme,
         darkTheme: appThemeDark,
-        themeMode: useProvider<ThemeMode>(currentThemeModeProvider),
+        themeMode: ThemeMode.dark,
       ),
     );
   }

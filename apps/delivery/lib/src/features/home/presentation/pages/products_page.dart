@@ -20,6 +20,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:routeborn/routeborn.dart';
 
+import 'landing_page.dart';
+
 class ProductsPage extends RoutebornPage {
   static const String pagePathBase = 'products';
 
@@ -52,7 +54,7 @@ class _ProductsView extends HookWidget {
 
     useProvider(allProductsProvider);
 
-    return const _Scaffold();
+    return const Landing();
   }
 }
 
