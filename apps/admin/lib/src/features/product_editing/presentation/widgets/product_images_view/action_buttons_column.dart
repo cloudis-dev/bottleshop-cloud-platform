@@ -29,8 +29,7 @@ class ActionButtonsColumn extends HookWidget {
   Widget build(BuildContext context) {
     final imageFile = useProvider(blopProvider);
 
-    return isMobilePlatform
-        ? Column(
+    return  Column(
             children: [
               !kIsWeb ?
               ActiveActionButton(
@@ -94,7 +93,7 @@ class ActionButtonsColumn extends HookWidget {
                       callback: () async => onImageDelete(context),
                     ),
             ],
-          )
-        : Text('Na úpravu obrázka treba použiť mobil.');
+          );
+         
   }
 }
