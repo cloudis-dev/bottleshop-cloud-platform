@@ -274,15 +274,20 @@ class Footer extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Row(
                   children: [
-                      TextButton(
-                          child: Image.asset(
-                            kFacebookIcon,
-                            height: 24,
-                            width: 24,
-                          ),
-                          onPressed: () {}),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      Container(
+                        width: 35,
+                        child: TextButton(
+                          
+                            child: Image.asset(
+                              kFacebookIcon,
+                              height: 24,
+                              width: 24,
+                            ),
+                            onPressed: () {}),
+                      ),
+                    Container(
+                      margin: EdgeInsets.only(left: 6),
+                      width: 35,
                       child: TextButton(
                           child: Image.asset(
                             kInsagramIcon,
