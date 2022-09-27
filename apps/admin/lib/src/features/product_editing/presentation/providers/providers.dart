@@ -75,7 +75,7 @@ final isImgLoadedProvider = Provider.autoDispose<bool>(
 
 final productImgProvider = Provider.autoDispose<String?>(
   (ref) {
-    return ref.watch(blop).state;
+    return ref.watch(blopProvider).state;
   },
 );
 
@@ -83,28 +83,11 @@ const double imgRatioX = 12;
 const double imgRatioY = 16;
 const double targetImgAspect = imgRatioX / imgRatioY;
 
-/// This is the size of current product image.
 final isProductImageValid = FutureProvider.autoDispose<bool>((ref) {
-  //   final currentImg = ref.watch(_currentProductImgFileProvider).state;
-  //   if (currentImg == null) {
-  //     return Future.value(true);
-  //   } else {
-  //     return ImageUtil.getImageSize(currentImg)
-  //         .then(
-  //       (value) => MathUtil.approximately(
-  //         targetImgAspect,
-  //         ImageUtil.getImgSizeRatio(value),
-  //         epsilon: 0.01,
-  //       ),
-  //     )
-  //         .then((value) async {
-  //       await Future<void>.delayed(Duration(seconds: 1));
-  //       return value;
-  //
   return Future.value(true);
 });
 
-final blop = StateProvider.autoDispose<String?>(
+final blopProvider  = StateProvider.autoDispose<String?>(
   (ref) => ref.watch(_productImgFileFutureProvider).when(
         data: (file) => file,
         loading: () => '',
@@ -116,9 +99,9 @@ final blop = StateProvider.autoDispose<String?>(
 );
 
 void DeleteImage(BuildContext context) {
-  context.read(blop).state = "";
+  context.read(blopProvider).state = "";
 }
 
 void SetImage(BuildContext context, String url) {
-  context.read(blop).state = url;
+  context.read(blopProvider).state = url;
 }

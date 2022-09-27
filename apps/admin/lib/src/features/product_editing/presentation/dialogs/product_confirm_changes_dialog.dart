@@ -51,7 +51,7 @@ class ProductConfirmChangesDialog extends ProcessingAlertDialog {
   ) async {
     var product = context.read(editedProductProvider).state;
     
-    final img = context.read(blop).state;
+    final img = context.read(blopProvider).state;
     try {
       if (context.read(isImgChangedProvider).state) {
         if (img == "") {

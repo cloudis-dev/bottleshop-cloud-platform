@@ -27,7 +27,7 @@ class ActionButtonsColumn extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageFile = useProvider(blop);
+    final imageFile = useProvider(blopProvider);
 
     return isMobilePlatform
         ? Column(

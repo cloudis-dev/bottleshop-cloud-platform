@@ -23,9 +23,9 @@ class ProductImagesView extends HookWidget {
 
     if (pickedFile != null) {
       if (!kIsWeb)
-        context.read(blop).state = File(pickedFile.path).path;
+        context.read(blopProvider).state = File(pickedFile.path).path;
       else
-        context.read(blop).state = pickedFile!.path;
+        context.read(blopProvider).state = pickedFile!.path;
 
       context.read(isImgChangedProvider).state = true;
     }
@@ -33,7 +33,7 @@ class ProductImagesView extends HookWidget {
 
   Future<void> _onCropImage(BuildContext context) async {
     final croppedImg = await ImageCropper().cropImage(
-      sourcePath: context.read(blop).state ?? '',
+      sourcePath: context.read(blopProvider).state ?? '',
       uiSettings: [
         AndroidUiSettings(
           hideBottomControls: true,
@@ -59,7 +59,7 @@ class ProductImagesView extends HookWidget {
     );
 
     if (croppedImg != null) {
-      context.read(blop).state = croppedImg.path;
+      context.read(blopProvider).state = croppedImg.path;
       context.read(isImgChangedProvider).state = true;
     }
   }
@@ -115,7 +115,7 @@ class _ImageFrameContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final b = useProvider(blop);
+    final b = useProvider(blopProvider);
     final imgPath;
     if (b.state != null)
       imgPath = b.state!;
