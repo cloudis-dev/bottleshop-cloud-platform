@@ -593,5 +593,11 @@
   "findUs": "Najdete nas",
   "@findUs": {},
   "downloadApp": "Stiahnite si aplikaciu",
-  "@downloadApp": {}
+  "@downloadApp": {},
+  "openingHours": "Otvaracie hodiny",
+  "monTh": "Po-St:",
+  "fri": "Pi:",
+  "sat": "So:",
+  "sun": "Ne:",
+  "closed":" Zatvorene"
 }

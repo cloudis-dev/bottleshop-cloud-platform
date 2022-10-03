@@ -593,6 +593,12 @@
   "findUs": "Find us",
   "@findUs": {},
   "downloadApp": "Download app",
-  "@downloadApp": {}
+  "@downloadApp": {},
+  "openingHours": "Opening hours",
+  "monTh": "Mon-Thu:",
+  "fri": "Fri:",
+  "sat": "Sat:",
+  "sun": "Sun:",
+  "closed":" Closed"
 }
 

@@ -249,27 +249,27 @@ class Footer extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text("Otvaracie hodiny ",
+                child: Text(context.l10n.openingHours,
                     style: Theme.of(context).textTheme.headline2),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text("Po-St: 10:00 - 22:00",
+                child: Text(context.l10n.monTh+" 10:00 - 22:00",
                     style: Theme.of(context).textTheme.headline5),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text("Pi: 10:00 - 24:00",
+                child: Text(context.l10n.fri+" 10:00 - 24:00",
                     style: Theme.of(context).textTheme.headline5),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text("So: 12:00 - 24:00",
+                child: Text(context.l10n.sat+" 12:00 - 24:00",
                     style: Theme.of(context).textTheme.headline5),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text("Ne: Zatvorene",
+                child: Text(context.l10n.sun+context.l10n.closed,
                     style: Theme.of(context).textTheme.headline5),
               ),
             ],
