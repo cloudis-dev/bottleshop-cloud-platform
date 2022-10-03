@@ -108,21 +108,21 @@ class Header extends StatelessWidget {
                   onPressed: () {},
                   color: Color(0xFFBF8A24),
                   icon: Icon(
-                    Icons.person,
+                    Icons.shopping_cart,
                   ),
                 ),
               ),
-              Text("User", style: Theme.of(context).textTheme.headline4),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                 child: IconButton(
                   onPressed: () {},
                   color: Color(0xFFBF8A24),
                   icon: Icon(
-                    Icons.shopping_cart,
+                    Icons.person,
                   ),
                 ),
               ),
+              Text("User", style: Theme.of(context).textTheme.headline4),
             ]),
           ),
         ],
@@ -138,7 +138,7 @@ class Footer extends StatelessWidget {
       color: Colors.black,
       child: Row(children: [
         Container(
-          padding: EdgeInsets.fromLTRB(165, 100, 0, 0),
+          padding: EdgeInsets.fromLTRB(175, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -160,12 +160,15 @@ class Footer extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(
-                  context.l10n.footerDescription,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 250),
+                  child: Text(
+                    context.l10n.footerDescription,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ),
@@ -173,7 +176,7 @@ class Footer extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(100, 100, 0, 0),
+          padding: EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -184,20 +187,17 @@ class Footer extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(
-                    "Bottleroom s.r.o.",
+                child: Text("Bottleroom s.r.o.",
                     style: Theme.of(context).textTheme.headline5),
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(
-                    "Bajkalská 9/A,",
+                child: Text("Bajkalská 9/A,",
                     style: Theme.of(context).textTheme.headline5),
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(
-                    "831 04 Bratislava",
+                child: Text("831 04 Bratislava",
                     style: Theme.of(context).textTheme.headline5),
               ),
               Padding(
@@ -243,7 +243,40 @@ class Footer extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(100, 100, 0, 0),
+          padding: EdgeInsets.fromLTRB(64, 100, 0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                child: Text("Otvaracie hodiny ",
+                    style: Theme.of(context).textTheme.headline2),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                child: Text("Po-St: 10:00 - 22:00",
+                    style: Theme.of(context).textTheme.headline5),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                child: Text("Pi: 10:00 - 24:00",
+                    style: Theme.of(context).textTheme.headline5),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                child: Text("So: 12:00 - 24:00",
+                    style: Theme.of(context).textTheme.headline5),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                child: Text("Ne: Zatvorene",
+                    style: Theme.of(context).textTheme.headline5),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -252,7 +285,7 @@ class Footer extends StatelessWidget {
                 child: Text(context.l10n.informationColumn,
                     style: Theme.of(context).textTheme.headline2),
               ),
-              Link(txt: context.l10n.faq),
+              Link(txt: "F.A.Q."),
               Link(txt: context.l10n.menuTerms),
               Link(txt: context.l10n.privacyPolicy),
               Link(txt: context.l10n.shippingPayment),
@@ -261,7 +294,7 @@ class Footer extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(115, 100, 0, 0),
+          padding: EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -274,43 +307,61 @@ class Footer extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Row(
                   children: [
-                      Container(
-                        width: 35,
-                        child: TextButton(
-                          
-                            child: Image.asset(
-                              kFacebookIcon,
-                              height: 24,
-                              width: 24,
-                            ),
-                            onPressed: () {}),
-                      ),
-                    Container(
-                      margin: EdgeInsets.only(left: 6),
-                      width: 35,
-                      child: TextButton(
-                          child: Image.asset(
-                            kInsagramIcon,
-                            height: 24,
-                            width: 24,
-                          ),
-                          onPressed: () {}),
-                    ),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.zero
+                        ),
+                        child: Image.asset(
+                          kInsagramIcon,
+                          height: 24,
+                          width: 24,
+                        ),
+                        onPressed: () {}),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.fromLTRB(21, 0, 0, 0)
+                        ),
+                        child: Image.asset(
+                          kFacebookIcon,
+                          height: 24,
+                          width: 24,
+                        ),
+                        onPressed: () {}),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 25, 0, 8),
+                padding: const EdgeInsets.fromLTRB(0, 25, 0, 12),
                 child: Text(context.l10n.downloadApp,
                     style: Theme.of(context).textTheme.headline2),
               ),
               TextButton(
+                 style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.zero
+                        ),
                   child: Image.asset(
                     kAppStoreDownload,
-                    height: 38,
-                    width: 117,
+                    height: 33,
+                    width: 97,
                   ),
-                  onPressed: () {})
+                  onPressed: () {}),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                child: TextButton(
+                   style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.zero
+                        ),
+                    child: Image.asset(
+                      kGooglePlayDownload,
+                      height: 33,
+                      width: 107,
+                    ),
+                    onPressed: () {}),
+              )
             ],
           ),
         )

@@ -40,7 +40,7 @@ TextTheme workSansTextTheme = TextTheme(
   headline1: GoogleFonts.workSans(
       fontSize: 96, fontWeight: FontWeight.w300, letterSpacing: -1.5),
   headline2: GoogleFonts.workSans(
-      fontSize: 60, fontWeight: FontWeight.w600, letterSpacing: -0.5),
+      fontSize: 60,  fontWeight: FontWeight.w600, letterSpacing: -0.5),
   headline3: GoogleFonts.workSans(
       fontSize: 40, fontWeight: FontWeight.w500, letterSpacing: 0.15),
   headline4: GoogleFonts.workSans(
@@ -84,7 +84,7 @@ final appThemeDark = ThemeData(
       headline2: GoogleFonts.publicSans(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: Color(0xFFBF8A24),
               decoration: TextDecoration.none),
       headline3: GoogleFonts.publicSans(
               fontSize: 14,

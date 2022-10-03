@@ -140,6 +140,7 @@ const kDefaultProductPicDark = 'assets/images/default_product_dark.webp';
 const kSpecialEdition = 'assets/images/special.png';
 const kAppIcon = 'assets/images/app-icon.png';
 const kAppStoreDownload = 'assets/images/app-store-download.png';
+const kGooglePlayDownload = 'assets/images/google-play-download.png';
 const kFacebookIcon = 'assets/images/facebook_icon.png';
 const kInsagramIcon = 'assets/images/instagram_icon.png';
 const kSplash = 'assets/images/splash.webp';
