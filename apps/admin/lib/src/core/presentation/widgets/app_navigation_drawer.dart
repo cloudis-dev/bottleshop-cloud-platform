@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/auth_providers.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/core/presentation/widgets/detail_text.dart';
 import 'package:bottleshop_admin/src/features/login/presentation/pages/intro_activity.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:bottleshop_admin/src/features/opening_hours/presentation/widgets/opening_hours_calendar.dart';
 
 class AppNavigationDrawer extends HookWidget {
   const AppNavigationDrawer({
@@ -86,6 +88,8 @@ class AppNavigationDrawer extends HookWidget {
                   (_) => print('TODO: something went wrong'),
                 ),
           ),
+          const Divider(),
+          OpeningHoursCalendar(),
         ],
       ),
     );
