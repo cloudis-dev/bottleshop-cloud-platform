@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/dialogs/edit_opening_hours_dialog.dart';
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/widgets/day_of_the_week.dart';
@@ -16,10 +17,15 @@ class OpeningHoursDialog extends HookWidget {
   Widget build(BuildContext context) {
     return useProvider(openingHoursProvider).when(
       data: (value) {
-        late Map<String, dynamic> tempMap;
+        late Map<String, OpeningHours> tempMap;
 
         for (var element in value.docs) {
-          tempMap = element.data();
+          tempMap = element.data().map(
+                (key, value) => MapEntry(
+                  key,
+                  OpeningHours(opening: value[0], closing: value[1]),
+                ),
+              );
         }
 
         return AlertDialog(
@@ -35,7 +41,7 @@ class OpeningHoursDialog extends HookWidget {
                   itemBuilder: (context, index) {
                     return DayOfTheWeek(
                       day: sortedWeekDays[index],
-                      hours: tempMap[sortedWeekDays[index]],
+                      hours: tempMap[sortedWeekDays[index]] as OpeningHours,
                     );
                   },
                 ),

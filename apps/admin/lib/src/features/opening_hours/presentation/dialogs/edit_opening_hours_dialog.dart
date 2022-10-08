@@ -1,3 +1,4 @@
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,8 +10,6 @@ import 'package:bottleshop_admin/src/features/opening_hours/presentation/widgets
 
 class EditOpeningHoursDialog extends StatelessWidget {
   const EditOpeningHoursDialog({Key? key}) : super(key: key);
-
-  // final Map<String, dynamic> tempMap;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +48,9 @@ class EditOpeningHoursDialog extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
+                final map = context.read(editHoursProvider).state;
                 Navigator.of(context).pop();
-                return openingHoursDoc.update(openingHoursMap);
+                return openingHoursDoc.update(OpeningHours.toMap(map!));
               },
               child: Text('Edit'),
             ),

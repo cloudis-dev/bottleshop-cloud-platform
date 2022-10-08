@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 
 class EditOpeningHoursButton extends HookWidget {
@@ -29,9 +30,10 @@ class EditOpeningHoursButton extends HookWidget {
     final editHoursMap = context.read(editHoursProvider).state;
     final currentTime = TimeOfDay.now();
     final todayOpening = openingHoursMap![sortedWeekDays[rowIndex]];
+    final tempList = [todayOpening!.opening, todayOpening.closing];
     var weAreOpen = true;
 
-    if (todayOpening[0] == '0' || todayOpening[1] == '0') {
+    if (todayOpening.opening == '0' || todayOpening.closing == '0') {
       weAreOpen = false;
     }
 
@@ -40,7 +42,7 @@ class EditOpeningHoursButton extends HookWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemCount: todayOpening.length,
+        itemCount: tempList.length,
         itemBuilder: (context, index) {
           return TextButton(
             onPressed: !weAreOpen
@@ -51,16 +53,16 @@ class EditOpeningHoursButton extends HookWidget {
                         context: context, initialTime: currentTime);
                     final tempMap = Map.fromEntries(editHoursMap!.entries);
                     if (newTime != null) {
-                      todayOpening[index] = timeToString(newTime);
-                      if (todayOpening[index] == '00:00') {
-                        todayOpening[index] = '24:00';
+                      tempList[index] = timeToString(newTime);
+                      if (tempList[index] == '00:00') {
+                        tempList[index] = '24:00';
                       }
                     }
-                    tempMap[sortedWeekDays[rowIndex]][index] =
-                        todayOpening[index];
+                    tempMap[sortedWeekDays[rowIndex]] = OpeningHours(
+                        opening: tempList[0], closing: tempList[1]);
                     context.read(editHoursProvider).state = tempMap;
                   },
-            child: Text(todayOpening[index]),
+            child: Text(tempList[index]),
           );
         },
       ),
