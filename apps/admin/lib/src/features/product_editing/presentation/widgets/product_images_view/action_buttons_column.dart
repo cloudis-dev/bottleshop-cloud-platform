@@ -69,7 +69,7 @@ class ActionButtonsColumn extends HookWidget {
                   }
                 },
               ),
-              imageFile.state == ""
+              imageFile.state == null
                   ? InactiveActionButton(
                       text: 'Orezať obrázok',
                       icon: Icons.crop,
@@ -80,7 +80,7 @@ class ActionButtonsColumn extends HookWidget {
                       text: 'Orezať obrázok',
                       callback: () async => onCropImage(context),
                     ),
-              imageFile.state == ""
+              imageFile.state == null
                   ? InactiveActionButton(
                       text: 'Odstrániť obrázok',
                       icon: Icons.delete,

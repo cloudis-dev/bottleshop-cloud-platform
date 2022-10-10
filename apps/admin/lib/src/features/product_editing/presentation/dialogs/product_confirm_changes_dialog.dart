@@ -54,7 +54,7 @@ class ProductConfirmChangesDialog extends ProcessingAlertDialog {
     final img = context.read(blopProvider).state;
     try {
       if (context.read(isImgChangedProvider).state) {
-        if (img == "") {
+        if (img == null) {
           await FirebaseStorageService.deleteImgAndThumbnail(product.uniqueId);
           product = product.copyWith(
             imagePath: Optional.empty(),

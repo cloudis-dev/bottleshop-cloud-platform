@@ -78,6 +78,7 @@ class FirebaseStorageService {
     final watermarkedImgData = resultData[1];
     final cleanImagePath = getCleanImagePath(productUniqueId);
     final watermarkedImagePath = getImagePath(productUniqueId);
+    final thumbnailPath = getThumbnailPath(productUniqueId);
     await FirebaseStorage.instance.ref().child(cleanImagePath).putData(
           cleanImgData,
           
@@ -87,8 +88,8 @@ class FirebaseStorageService {
        
     );
     return ImageUploadResult(
-      imagePath: cleanImagePath,
-      thumbnailPath: watermarkedImagePath,
+      imagePath: watermarkedImagePath,
+      thumbnailPath: thumbnailPath,
     );
   }
 }

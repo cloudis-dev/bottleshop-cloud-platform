@@ -90,16 +90,16 @@ final isProductImageValid = FutureProvider.autoDispose<bool>((ref) {
 final blopProvider  = StateProvider.autoDispose<String?>(
   (ref) => ref.watch(_productImgFileFutureProvider).when(
         data: (file) => file,
-        loading: () => '',
+        loading: () => null,
         error: (err, stacktrace) {
           FirebaseCrashlytics.instance.recordError(err, stacktrace);
-          return '';
+          return null;
         },
       ),
 );
 
 void DeleteImage(BuildContext context) {
-  context.read(blopProvider).state = "";
+  context.read(blopProvider).state = null;
 }
 
 void SetImage(BuildContext context, String url) {
