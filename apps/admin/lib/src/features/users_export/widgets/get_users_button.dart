@@ -22,9 +22,12 @@ class GetUsersButton extends HookWidget {
     Future<void> getUsers() async {
       await Permission.storage.request();
       final csv = ListToCsvConverter().convert(users);
-      final dir = '${(await getExternalStorageDirectory())!.path}/mycsv.csv';
+      final dir =
+          '${(await getApplicationDocumentsDirectory()).path}/mycsv.csv';
+      print(dir);
       final file = File(dir);
       await file.writeAsString(csv);
+      // getExternalStorageDirectory
     }
 
     return useProvider(getUsersListProvider).when(
