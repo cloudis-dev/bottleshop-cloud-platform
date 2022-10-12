@@ -21,18 +21,14 @@ class ActionButtonsColumn extends HookWidget {
   final Future Function(BuildContext) onCropImage;
   final Future Function(BuildContext) onImageDelete;
 
-  bool get isMobilePlatform =>
-      defaultTargetPlatform != TargetPlatform.android ||
-      defaultTargetPlatform != TargetPlatform.iOS;
-
   @override
   Widget build(BuildContext context) {
     final imageFile = useProvider(blopProvider);
 
-    return  Column(
-            children: [
-              !kIsWeb ?
-              ActiveActionButton(
+    return Column(
+      children: [
+        !kIsWeb
+            ? ActiveActionButton(
                 style: AppTheme.buttonTextStyle,
                 icon: Icons.camera_alt,
                 text: 'Odfotiť obrázok',
@@ -48,52 +44,49 @@ class ActionButtonsColumn extends HookWidget {
                   }
                 },
               )
-              :
-              InactiveActionButton(
-                 text: 'Odfotiť obrázok',
-                 icon: Icons.camera_alt,
+            : InactiveActionButton(
+                text: 'Odfotiť obrázok',
+                icon: Icons.camera_alt,
               ),
-              ActiveActionButton(
+        ActiveActionButton(
+          style: AppTheme.buttonTextStyle,
+          icon: Icons.photo,
+          text: 'Vybrať obrázok',
+          callback: () async {
+            try {
+              final picked = await onPickImage(context, ImageSource.gallery);
+              if (picked != null) {
+                await onCropImage(context);
+              }
+            } on PlatformException {
+              debugPrint('gallery not available');
+            }
+          },
+        ),
+        imageFile.state == null
+            ? InactiveActionButton(
+                text: 'Orezať obrázok',
+                icon: Icons.crop,
+              )
+            : ActiveActionButton(
                 style: AppTheme.buttonTextStyle,
-                icon: Icons.photo,
-                text: 'Vybrať obrázok',
-                callback: () async {
-                  try {
-                    final picked =
-                        await onPickImage(context, ImageSource.gallery);
-                    if (picked != null) {
-                      await onCropImage(context);
-                    }
-                  } on PlatformException {
-                    debugPrint('gallery not available');
-                  }
-                },
+                icon: Icons.crop,
+                text: 'Orezať obrázok',
+                callback: () async => onCropImage(context),
               ),
-              imageFile.state == null
-                  ? InactiveActionButton(
-                      text: 'Orezať obrázok',
-                      icon: Icons.crop,
-                    )
-                  : ActiveActionButton(
-                      style: AppTheme.buttonTextStyle,
-                      icon: Icons.crop,
-                      text: 'Orezať obrázok',
-                      callback: () async => onCropImage(context),
-                    ),
-              imageFile.state == null
-                  ? InactiveActionButton(
-                      text: 'Odstrániť obrázok',
-                      icon: Icons.delete,
-                    )
-                  : ActiveActionButton(
-                      style: AppTheme.buttonTextStyle
-                          .copyWith(color: Colors.redAccent),
-                      icon: Icons.delete,
-                      text: 'Odstrániť obrázok',
-                      callback: () async => onImageDelete(context),
-                    ),
-            ],
-          );
-         
+        imageFile.state == null
+            ? InactiveActionButton(
+                text: 'Odstrániť obrázok',
+                icon: Icons.delete,
+              )
+            : ActiveActionButton(
+                style:
+                    AppTheme.buttonTextStyle.copyWith(color: Colors.redAccent),
+                icon: Icons.delete,
+                text: 'Odstrániť obrázok',
+                callback: () async => onImageDelete(context),
+              ),
+      ],
+    );
   }
 }
