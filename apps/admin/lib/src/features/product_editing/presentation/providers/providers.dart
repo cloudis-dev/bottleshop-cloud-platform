@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service.dart';
 import 'package:bottleshop_admin/src/core/utils/image_util.dart';
@@ -9,6 +11,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 enum ProductAction { creating, editing }
 
@@ -83,9 +86,27 @@ const double imgRatioX = 12;
 const double imgRatioY = 16;
 const double targetImgAspect = imgRatioX / imgRatioY;
 
-final isProductImageValid = FutureProvider.autoDispose<bool>((ref) {
-  return Future.value(true);
-});
+final isProductImageValid = FutureProvider.autoDispose<bool>(
+  (ref) {
+    final currentImg = ref.watch(blopProvider).state;
+    if (currentImg == null) {
+      return Future.value(true);
+    } else {
+      return ImageUtil.getImageSize(XFile(currentImg))
+          .then(
+        (value) => MathUtil.approximately(
+          targetImgAspect,
+          ImageUtil.getImgSizeRatio(value),
+          epsilon: 0.01,
+        ),
+      )
+          .then((value) async {
+        await Future<void>.delayed(Duration(seconds: 1));
+        return value;
+      });
+    }
+  },
+);
 
 final blopProvider  = StateProvider.autoDispose<String?>(
   (ref) => ref.watch(_productImgFileFutureProvider).when(
@@ -98,10 +119,10 @@ final blopProvider  = StateProvider.autoDispose<String?>(
       ),
 );
 
-void DeleteImage(BuildContext context) {
+void deleteImage(BuildContext context) {
   context.read(blopProvider).state = null;
 }
 
-void SetImage(BuildContext context, String url) {
+void setImage(BuildContext context, String url) {
   context.read(blopProvider).state = url;
 }
