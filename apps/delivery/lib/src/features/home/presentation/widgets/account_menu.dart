@@ -1,3 +1,11 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logging/logging.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:routeborn/routeborn.dart';
+
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
@@ -6,13 +14,8 @@ import 'package:delivery/src/features/auth/presentation/widgets/atoms/terms_and_
 import 'package:delivery/src/features/auth/presentation/widgets/organisms/sign_in_form.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/organisms/sign_up_form.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/terms_conditions_view.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
-import 'package:overlay_support/overlay_support.dart';
-import 'package:routeborn/routeborn.dart';
+import 'package:delivery/src/features/opening_hours/presentation/dialogs/opening_hours_dialog.dart';
+import 'package:delivery/src/features/opening_hours/presentation/widgets/opening_hours_calendar.dart';
 
 final _logger = Logger((AccountMenu).toString());
 
@@ -209,7 +212,17 @@ class _MenuItemsTab extends HookWidget {
                       await context.read(userRepositoryProvider).signOut();
                       OverlaySupportEntry.of(context)!.dismiss(animate: false);
                     },
-                  )
+                  ),
+                ListTile(
+                  title: const OpeningHoursCalendar(),
+                  onTap: () {
+                    OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                    showDialog<void>(
+                      context: context,
+                      builder: (context) => const OpeningHoursDialog(),
+                    );
+                  },
+                ),
               ],
             ),
           ),

@@ -10,13 +10,6 @@
 //
 //
 
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
-import 'package:delivery/src/features/cart/presentation/widgets/cart_list_item.dart';
-import 'package:delivery/src/features/checkout/presentation/pages/checkout_page.dart';
-import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,12 +19,18 @@ import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
 
+import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
+import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
+import 'package:delivery/src/features/cart/presentation/widgets/cart_list_item.dart';
+import 'package:delivery/src/features/checkout/presentation/pages/checkout_page.dart';
+import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
+
 final _logger = Logger((CartView).toString());
 
 class CartView extends HookWidget {
-  const CartView({
-    Key? key,
-  }) : super(key: key);
+  const CartView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
