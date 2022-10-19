@@ -17,16 +17,7 @@ class OpeningHoursDialog extends HookWidget {
   Widget build(BuildContext context) {
     return useProvider(openingHoursProvider).when(
       data: (value) {
-        late Map<String, OpeningHours> tempMap;
-
-        for (var element in value.docs) {
-          tempMap = element.data().map(
-                (key, value) => MapEntry(
-                  key,
-                  OpeningHours(opening: value[0], closing: value[1]),
-                ),
-              );
-        }
+        final tempMap = OpeningHours.fromMap(value);
 
         return AlertDialog(
           title: Text('Opening Hours', textAlign: TextAlign.center),
