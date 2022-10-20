@@ -66,44 +66,8 @@ TextTheme workSansTextTheme = TextTheme(
 
 final appTheme = buildAppTheme();
 
-final appThemeDark = ThemeData(
-    colorScheme: ColorScheme(
-      brightness: Brightness.dark,
-      primary: Color(0xBF8A24),
-      onPrimary: Color(0xBF8A24),
-      secondary: Colors.white,
-      onSecondary: Colors.white,
-      onBackground: Colors.black,
-      background: Colors.black,
-      error: Colors.red,
-      onError: Colors.red,
-      surface: Colors.grey,
-      onSurface: Colors.grey
-    ),
-    textTheme: TextTheme(
-      headline2: GoogleFonts.publicSans(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFFBF8A24),
-              decoration: TextDecoration.none),
-      headline3: GoogleFonts.publicSans(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFFBF8A24),
-              decoration: TextDecoration.none),
-      headline4: GoogleFonts.publicSans(
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-        decoration: TextDecoration.none,
-        color: Color(0xFFBF8A24),
-      ),
-      headline5: GoogleFonts.publicSans(
-        fontWeight: FontWeight.w400,
-        fontSize: 14,
-        color: Colors.white,
-      )
-    )
-);
+final appThemeDark = buildDarkAppTheme();
+
 
 final textButtonLinkTheme = TextButtonThemeData(
   style: ButtonStyle(
@@ -220,7 +184,29 @@ ThemeData buildDarkAppTheme() {
       onError: Colors.black,
       brightness: Brightness.dark,
     ),
-    textTheme: workSansTextTheme,
+     textTheme: TextTheme(
+      headline2: GoogleFonts.publicSans(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFFBF8A24),
+              decoration: TextDecoration.none),
+      headline3: GoogleFonts.publicSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFFBF8A24),
+              decoration: TextDecoration.none),
+      headline4: GoogleFonts.publicSans(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        decoration: TextDecoration.none,
+        color: Color(0xFFBF8A24),
+      ),
+      headline5: GoogleFonts.publicSans(
+        fontWeight: FontWeight.w400,
+        fontSize: 14,
+        color: Colors.white,
+      )
+    ),
   );
   return base.copyWith(
     visualDensity: VisualDensity.adaptivePlatformDensity,
