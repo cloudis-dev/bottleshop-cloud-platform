@@ -52,7 +52,8 @@ class _CartListItemState extends State<CartListItem> {
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
-      showCartNotifcation(context);
+      showCartDisclaimer(context);
+      // showCartNotifcation(context);
     });
     super.initState();
   }

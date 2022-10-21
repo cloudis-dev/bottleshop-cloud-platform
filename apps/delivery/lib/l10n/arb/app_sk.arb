@@ -571,5 +571,11 @@
   "deleteAccount": "Odstrániť",
   "deleteAccountDialogTitle": "Ste si istý, že chcete zmazať svoj účet?",
   "deleteAccountDialogLabel": "Všetky Vaše dáta spojené s účtom budú odstránené a nebude ich možné obnoviť",
-  "deleteAccountNegativeOption": "Zavrieť"
+  "deleteAccountNegativeOption": "Zavrieť",
+  "cartDisclaimerHead": "Čoskoro zatvárame! Prosím Skontrolujte si Vaše možnosti doručenia",
+  "cartDisclaimerBody": "nahradny text pre cart body",
+  "cartDisclaimerButton": "Rozumiem",
+  "openinHoursOpen": "Otvorené do",
+  "openingHoursClosed": "Zatvorené"
+
 }

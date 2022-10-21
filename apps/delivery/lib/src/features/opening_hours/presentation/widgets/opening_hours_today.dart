@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/opening_hours/presentation/providers/providers.dart';
 
 // final testProvider = FutureProvider(
@@ -45,8 +46,8 @@ class OpeningHoursToday extends HookWidget {
         return Text(
           currentTimeToDouble >= convertTimeToDouble(opening) &&
                   currentTimeToDouble < convertTimeToDouble(closing)
-              ? 'Open until: $closing'
-              : 'Closed',
+              ? '${context.l10n.openinHoursOpen}: $closing'
+              : context.l10n.openingHoursClosed,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: currentTimeToDouble >= convertTimeToDouble(opening) &&
