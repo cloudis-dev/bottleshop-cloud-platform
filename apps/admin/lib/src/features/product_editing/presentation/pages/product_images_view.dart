@@ -119,12 +119,8 @@ class _ImageFrameContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final b = useProvider(blopProvider);
-    final imgPath;
-    if (b.state != null)
-      imgPath = b.state!;
-    else 
-      imgPath = '';
+    final imgPath = useProvider(blopProvider).state ?? '';
+
     if (useProvider(isImgLoadedProvider)) {
       if (imgPath == '') {
         return Image.asset('assets/images/placeholder.png');
