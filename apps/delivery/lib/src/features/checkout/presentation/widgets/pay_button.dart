@@ -16,7 +16,6 @@ import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
