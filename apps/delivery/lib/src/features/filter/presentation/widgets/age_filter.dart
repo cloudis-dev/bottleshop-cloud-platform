@@ -37,7 +37,7 @@ class AgeFilter extends HookConsumerWidget {
         filterModelProvider(filterType).select((value) => value.isAgeActive));
 
     return Offstage(
-      offstage: ref.watch(
+      offstage: !ref.watch(
         filterModelProvider(filterType).select((value) => value.isFilterByAge),
       ),
       child: ref.watch(filterAggregationsProvider).when(
