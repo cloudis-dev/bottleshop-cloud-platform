@@ -214,6 +214,7 @@ class _MenuItemsTab extends HookWidget {
                     },
                   ),
                 ListTile(
+                  leading: const Icon(Icons.calendar_month),
                   title: const OpeningHoursCalendar(),
                   onTap: () {
                     OverlaySupportEntry.of(context)!.dismiss(animate: false);

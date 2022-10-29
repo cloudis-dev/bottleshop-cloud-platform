@@ -576,5 +576,27 @@
   "cartDisclaimerBody": "You’ve learned how to programmatically change text color based on the brightness of its background color. Continue exploring more about color stuff and other interesting things in Flutter by taking a look at the following articles: ",
   "cartDisclaimerButton": "Understood",
   "openinHoursOpen": "Open until",
-  "openingHoursClosed": "Closed"
+  "openingHoursClosed": "Closed",
+  "openingHours": "Opening Hours",
+  "weekday":"{day}",
+  "@weekday":{
+    "monday": "Monday",
+    "tuesday":"Tuesday",
+    "wednesday":"Wednesday",
+    "thursday":"Thursday",
+    "friday":"Friday",
+    "saturday":"Saturday",
+    "sunday":"Sunday"
+  },
+  "greeting": "Hi, {name}!",
+    "@greeting": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    }  
+
 }

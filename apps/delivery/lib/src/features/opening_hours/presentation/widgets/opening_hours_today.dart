@@ -6,16 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/opening_hours/presentation/providers/providers.dart';
 
-// final testProvider = FutureProvider(
-//   (ref) {
-//     ref.watch(openingHoursProvider);
-//   },
-// );
-
 final currentTime = TimeOfDay.now();
-final date = DateTime.now();
 final currentTimeToDouble =
     currentTime.hour.toDouble() + (currentTime.minute.toDouble() / 60);
+final date = DateTime.now();
 final weekday = DateFormat('EEEE').format(date);
 
 class OpeningHoursToday extends HookWidget {

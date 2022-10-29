@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/opening_hours/presentation/providers/providers.dart';
 import 'package:delivery/src/features/opening_hours/presentation/widgets/day_of_the_week.dart';
 import 'package:delivery/src/features/opening_hours/presentation/widgets/opening_hours_today.dart';
@@ -25,7 +26,7 @@ class OpeningHoursDialog extends HookWidget {
         }
 
         final header = Text(
-          'Opening Hours',
+          context.l10n.openingHours,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
@@ -57,7 +58,7 @@ class OpeningHoursDialog extends HookWidget {
           actions: [
             ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Close'),
+              child: Text(context.l10n.close),
             ),
           ],
         );

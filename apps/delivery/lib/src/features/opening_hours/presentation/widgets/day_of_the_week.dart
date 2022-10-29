@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/opening_hours/presentation/widgets/opening_hours_today.dart';
 
 class DayOfTheWeek extends StatelessWidget {
@@ -21,7 +22,7 @@ class DayOfTheWeek extends StatelessWidget {
     return Center(
       child: Text(
         (hours.opening == '0' || hours.closing == '0')
-            ? '$day: Closed'
+            ? '${AppLocalizations.of(context).greeting("Koos")}: ${context.l10n.openingHoursClosed}'
             : '$day:  ${hours.opening} - ${hours.closing}',
         style: TextStyle(
           fontWeight: FontWeight.bold,

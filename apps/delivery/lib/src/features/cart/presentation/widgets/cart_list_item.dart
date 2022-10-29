@@ -53,7 +53,6 @@ class _CartListItemState extends State<CartListItem> {
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
       showCartDisclaimer(context);
-      // showCartNotifcation(context);
     });
     super.initState();
   }
