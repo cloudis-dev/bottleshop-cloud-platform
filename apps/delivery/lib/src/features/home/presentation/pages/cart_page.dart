@@ -79,15 +79,15 @@ class _CartPageView extends HookWidget {
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   const _Body({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final isCartEmpty = useProvider(cartProvider)
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isCartEmpty = ref
+            .watch(cartProvider)
             .whenData((value) => value!.totalItems < 1)
-            .data
-            ?.value ??
+            .value ??
         true;
     return isCartEmpty
         ? EmptyTab(
@@ -95,7 +95,7 @@ class _Body extends HookWidget {
             message: context.l10n.emptyCart,
             buttonMessage: context.l10n.startExploring,
             onButtonPressed: () {
-              context
+              ref
                   .read(navigationProvider)
                   .setNestingBranch(context, NestingBranch.shop);
             },

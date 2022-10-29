@@ -15,17 +15,16 @@ import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FilterDrawerHeader extends HookWidget {
+class FilterDrawerHeader extends HookConsumerWidget {
   const FilterDrawerHeader({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final filterType = useProvider(filterTypeScopedProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filterType = ref.watch(filterTypeScopedProvider);
 
     return Padding(
       padding: const EdgeInsets.only(left: 20),
@@ -35,7 +34,7 @@ class FilterDrawerHeader extends HookWidget {
           Text(context.l10n.filter),
           MaterialButton(
             onPressed: () {
-              context.read(appliedFilterProvider(filterType)).state =
+              ref.read(appliedFilterProvider(filterType).state).state =
                   FilterModel.empty();
 
               Navigator.pop(context);

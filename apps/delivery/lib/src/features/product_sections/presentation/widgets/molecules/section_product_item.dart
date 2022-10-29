@@ -21,14 +21,13 @@ import 'package:delivery/src/features/product_sections/presentation/widgets/atom
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:routeborn/routeborn.dart';
 
 final _logger = Logger((SectionProductItem).toString());
 
-class SectionProductItem extends HookWidget {
+class SectionProductItem extends HookConsumerWidget {
   static const double imageWidth = 160;
 
   final EdgeInsets margin;
@@ -40,15 +39,15 @@ class SectionProductItem extends HookWidget {
     required this.product,
   }) : super(key: key);
 
-  void onClick(BuildContext context) {
-    context
+  void onClick(BuildContext context, WidgetRef ref) {
+    ref
         .read(navigationProvider)
         .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
   }
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     return Container(
       margin: margin,
@@ -69,7 +68,7 @@ class SectionProductItem extends HookWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () => onClick(context),
+                        onTap: () => onClick(context, ref),
                         borderRadius: ProductImage.borderRadius,
                       ),
                     ),
@@ -232,7 +231,7 @@ class SectionProductItem extends HookWidget {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () => onClick(context),
+                      onTap: () => onClick(context, ref),
                       borderRadius: ProductImage.borderRadius,
                     ),
                   ),
@@ -246,14 +245,14 @@ class SectionProductItem extends HookWidget {
   }
 }
 
-class _FlashSaleItem extends HookWidget {
+class _FlashSaleItem extends HookConsumerWidget {
   final ProductModel product;
 
   const _FlashSaleItem(this.product);
 
   @override
-  Widget build(BuildContext context) {
-    final value = useProvider(flashSaleEndProvider(product.flashSale!));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(flashSaleEndProvider(product.flashSale!));
 
     return value.maybeWhen(
         data: (flashSaleEndsIn) {

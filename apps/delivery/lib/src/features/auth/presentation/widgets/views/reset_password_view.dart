@@ -21,15 +21,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class ResetPasswordView extends HookWidget {
+class ResetPasswordView extends HookConsumerWidget {
   static const routeName = '/reset-password';
 
   const ResetPasswordView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isLoading =
-        useProvider(userRepositoryProvider.select((value) => value.isLoading));
+        ref.watch(userRepositoryProvider.select((value) => value.isLoading));
     final scrollController = useScrollController();
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 

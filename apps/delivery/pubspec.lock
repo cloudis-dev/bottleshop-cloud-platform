@@ -542,7 +542,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+3"
+    version: "1.0.4"
   flutter_scroll_to_top:
     dependency: "direct main"
     description:
@@ -652,7 +652,7 @@ packages:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+5"
+    version: "1.0.4"
   http:
     dependency: "direct main"
     description:
@@ -974,7 +974,7 @@ packages:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+3"
+    version: "1.0.3"
   routeborn:
     dependency: "direct main"
     description:

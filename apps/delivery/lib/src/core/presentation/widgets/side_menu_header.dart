@@ -15,21 +15,20 @@ import 'package:delivery/src/core/presentation/providers/navigation_providers.da
 import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SideMenuHeader extends HookWidget {
+class SideMenuHeader extends HookConsumerWidget {
   const SideMenuHeader({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final userData = useProvider(currentUserProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userData = ref.watch(currentUserProvider);
 
     return GestureDetector(
       onTap: () {
-        context.read(navigationProvider).setNestingBranch(
+        ref.read(navigationProvider).setNestingBranch(
               context,
               NestingBranch.account,
               inChildNavigator: true,

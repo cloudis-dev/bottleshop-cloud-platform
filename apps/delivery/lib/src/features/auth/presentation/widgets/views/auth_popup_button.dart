@@ -3,7 +3,6 @@ import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/account_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -64,14 +63,14 @@ class AuthPopupButtonState extends State<AuthPopupButton> {
   }
 }
 
-class _Content extends HookWidget {
+class _Content extends HookConsumerWidget {
   final VoidCallback onClick;
 
   const _Content({Key? key, required this.onClick}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final user = useProvider(currentUserProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
 
     return IconButton(
       onPressed: onClick,

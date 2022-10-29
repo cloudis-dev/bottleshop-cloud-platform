@@ -10,11 +10,11 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/filter/data/models/filter_aggregations_model.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum FilterType {
@@ -25,7 +25,7 @@ enum FilterType {
 /// This uses autodispose to discard unapplied changes.
 final filterModelProvider = StateProvider.autoDispose
     .family<FilterModel, FilterType>((ref, filterType) {
-  return ref.watch(appliedFilterProvider(filterType)).state;
+  return ref.watch(appliedFilterProvider(filterType));
 });
 
 final appliedFilterProvider = StateProvider.family<FilterModel, FilterType>(

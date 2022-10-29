@@ -4,7 +4,6 @@ import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -18,7 +17,7 @@ final _quantityUpdateButtonStateProvider =
   },
 );
 
-class QuantityUpdateWidget extends HookWidget {
+class QuantityUpdateWidget extends HookConsumerWidget {
   final ProductModel product;
 
   const QuantityUpdateWidget({
@@ -30,11 +29,13 @@ class QuantityUpdateWidget extends HookWidget {
   final VoidCallback? actionOverride;
 
   @override
-  Widget build(BuildContext context) {
-    final buttonState =
-        useProvider(_quantityUpdateButtonStateProvider(product)).state;
-    final currentQuantity = useProvider(cartQuantityStreamProvider(product))
-        .maybeWhen(data: (quantity) => quantity, orElse: () => 0);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final buttonState = ref.watch(_quantityUpdateButtonStateProvider(product));
+    final currentQuantity =
+        ref.watch(cartQuantityStreamProvider(product)).maybeWhen(
+              data: (quantity) => quantity,
+              orElse: () => 0,
+            );
 
     return ProgressButton(
       onPressed: () {},
@@ -55,14 +56,12 @@ class QuantityUpdateWidget extends HookWidget {
                       () async {
                         try {
                           if (currentQuantity == 1) {
-                            return context
+                            return ref
                                 .read(cartRepositoryProvider)!
                                 .removeItem(product.uniqueId);
                           }
-                          return context
-                              .read(cartRepositoryProvider)!
-                              .setItemQty(
-                                  product.uniqueId, currentQuantity - 1);
+                          return ref.read(cartRepositoryProvider)!.setItemQty(
+                              product.uniqueId, currentQuantity - 1);
                         } catch (e) {
                           showSimpleNotification(
                             Text(context.l10n
@@ -94,12 +93,13 @@ class QuantityUpdateWidget extends HookWidget {
                       (currentQuantity >= product.count
                           ? null
                           : () async {
-                              context
+                              ref
                                   .read(_quantityUpdateButtonStateProvider(
-                                      product))
+                                          product)
+                                      .state)
                                   .state = ButtonState.loading;
                               try {
-                                return context
+                                return ref
                                     .read(cartRepositoryProvider)!
                                     .setItemQty(
                                         product.uniqueId, currentQuantity + 1);
@@ -113,9 +113,10 @@ class QuantityUpdateWidget extends HookWidget {
                                   context: context,
                                 );
                               } finally {
-                                context
+                                ref
                                     .read(_quantityUpdateButtonStateProvider(
-                                        product))
+                                            product)
+                                        .state)
                                     .state = ButtonState.idle;
                               }
                             }),

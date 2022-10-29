@@ -202,7 +202,7 @@ final deliveryOptionsStateProvider =
 
 final _isLoadingProvider = StateProvider.autoDispose<bool>((_) => false);
 
-class ShippingDetailsView extends HookWidget {
+class ShippingDetailsView extends HookConsumerWidget {
   final _logger = Logger((ShippingDetailsView).toString());
 
   final void Function(PaymentData paymentData) onNextPage;
@@ -215,8 +215,8 @@ class ShippingDetailsView extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final selectedDeliveryOption = useProvider(deliveryOptionsStateProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedDeliveryOption = ref.watch(deliveryOptionsStateProvider);
     final remarksTextController = useTextEditingController();
     final scrollController = useScrollController();
 
@@ -227,7 +227,7 @@ class ShippingDetailsView extends HookWidget {
       return () => {};
     }, const []);
 
-    final isLoading = useProvider(_isLoadingProvider).state;
+    final isLoading = ref.watch(_isLoadingProvider);
 
     return Loader(
       inAsyncCall: isLoading,
@@ -238,130 +238,135 @@ class ShippingDetailsView extends HookWidget {
           ),
           leading: BackButton(
             onPressed: () async {
-              context.read(_isLoadingProvider).state = true;
-              await context
+              ref.read(_isLoadingProvider.state).state = true;
+              await ref
                   .read(cloudFunctionsProvider)
                   .removeShippingFee()
                   .whenComplete(() {
-                context.read(_isLoadingProvider).state = false;
+                ref.read(_isLoadingProvider.state).state = false;
               });
               onBackButton();
             },
           ),
         ),
-        body: useProvider(currentUserAsStream).when(
-          data: (user) {
-            return Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom + 120),
-                  padding: const EdgeInsets.only(bottom: 30),
-                  child: CupertinoScrollbar(
-                    controller: scrollController,
-                    thumbVisibility: true,
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      controller: scrollController,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          ListView.separated(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            primary: false,
-                            itemCount: 3,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 5),
-                            itemBuilder: (context, index) {
-                              switch (index) {
-                                case 0:
-                                  return DeliveryOptionTile(user: user);
-                                case 1:
-                                  return const AccountCard(showBirthday: false);
-                                default:
-                                  return Card(
-                                    color: Theme.of(context).primaryColor,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    child: ExpansionTile(
-                                      initiallyExpanded: false,
-                                      leading: const Icon(
-                                        Icons.notes_outlined,
-                                      ),
-                                      title: Text(
-                                        context.l10n.additionalRemarks,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2,
-                                      ),
-                                      subtitle: Text(
-                                        context.l10n.instructionsForDelivery,
-                                        style:
-                                            Theme.of(context).textTheme.caption,
-                                      ),
-                                      children: [
-                                        ListTile(
-                                          title: TextField(
-                                            controller: remarksTextController,
-                                            autofocus: true,
-                                            maxLines: 5,
+        body: ref.watch(currentUserAsStream).when(
+              data: (user) {
+                return Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom + 120),
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: CupertinoScrollbar(
+                        controller: scrollController,
+                        thumbVisibility: true,
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          controller: scrollController,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              ListView.separated(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                primary: false,
+                                itemCount: 3,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: 5),
+                                itemBuilder: (context, index) {
+                                  switch (index) {
+                                    case 0:
+                                      return DeliveryOptionTile(user: user);
+                                    case 1:
+                                      return const AccountCard(
+                                          showBirthday: false);
+                                    default:
+                                      return Card(
+                                        color: Theme.of(context).primaryColor,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        child: ExpansionTile(
+                                          initiallyExpanded: false,
+                                          leading: const Icon(
+                                            Icons.notes_outlined,
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                              }
-                            },
+                                          title: Text(
+                                            context.l10n.additionalRemarks,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2,
+                                          ),
+                                          subtitle: Text(
+                                            context
+                                                .l10n.instructionsForDelivery,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .caption,
+                                          ),
+                                          children: [
+                                            ListTile(
+                                              title: TextField(
+                                                controller:
+                                                    remarksTextController,
+                                                autofocus: true,
+                                                maxLines: 5,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                  }
+                                },
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                CheckoutTile(
-                  showShipping: true,
-                  actionLabel: context
-                          .read(deliveryOptionsStateProvider.notifier)
-                          .paymentRequired
-                      ? context.l10n.proceedToCheckout
-                      : context.l10n.confirmOrder,
-                  actionCallback: context
-                          .read(deliveryOptionsStateProvider.notifier)
-                          .canProceed(user, selectedDeliveryOption)
-                      ? () {
-                          context.refresh(deliveryOptionsStateProvider);
-                          final currentUser = context.read(currentUserProvider);
-                          onNextPage(
-                            PaymentData(
-                              userId: currentUser?.uid,
-                              customerId: currentUser?.stripeCustomerId,
-                              email: currentUser?.email,
-                              orderNote: remarksTextController.value.text,
-                              deliveryType: context
-                                  .read(deliveryOptionsStateProvider.notifier)
-                                  .label,
-                            ),
-                          );
-                        }
-                      : null,
-                ),
-              ],
-            );
-          },
-          loading: () => const Loader(),
-          error: (err, stack) {
-            _logger.severe('Failed to stream current user', err, stack);
-            return Center(
-              child: Text(context.l10n.error),
-            );
-          },
-        ),
+                    CheckoutTile(
+                      showShipping: true,
+                      actionLabel: ref
+                              .read(deliveryOptionsStateProvider.notifier)
+                              .paymentRequired
+                          ? context.l10n.proceedToCheckout
+                          : context.l10n.confirmOrder,
+                      actionCallback: ref
+                              .read(deliveryOptionsStateProvider.notifier)
+                              .canProceed(user, selectedDeliveryOption)
+                          ? () {
+                              ref.refresh(deliveryOptionsStateProvider);
+                              final currentUser = ref.read(currentUserProvider);
+                              onNextPage(
+                                PaymentData(
+                                  userId: currentUser?.uid,
+                                  customerId: currentUser?.stripeCustomerId,
+                                  email: currentUser?.email,
+                                  orderNote: remarksTextController.value.text,
+                                  deliveryType: ref
+                                      .read(
+                                          deliveryOptionsStateProvider.notifier)
+                                      .label,
+                                ),
+                              );
+                            }
+                          : null,
+                    ),
+                  ],
+                );
+              },
+              loading: () => const Loader(),
+              error: (err, stack) {
+                _logger.severe('Failed to stream current user', err, stack);
+                return Center(
+                  child: Text(context.l10n.error),
+                );
+              },
+            ),
       ),
     );
   }
@@ -380,7 +385,7 @@ class ShippingDetailsView extends HookWidget {
   }
 }
 
-class DeliveryOptionTile extends HookWidget {
+class DeliveryOptionTile extends HookConsumerWidget {
   final UserModel? user;
 
   const DeliveryOptionTile({
@@ -389,11 +394,11 @@ class DeliveryOptionTile extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final orderTypes = useProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final orderTypes = ref.watch(
         commonDataRepositoryProvider.select((value) => value.orderTypes));
-    final selectedDeliveryOption = useProvider(deliveryOptionsStateProvider);
-    final currentLocale = useProvider(currentLocaleProvider);
+    final selectedDeliveryOption = ref.watch(deliveryOptionsStateProvider);
+    final currentLocale = ref.watch(currentLocaleProvider);
     final items = <Widget>[
       Container(
         padding: const EdgeInsets.only(left: 68),
@@ -430,11 +435,11 @@ class DeliveryOptionTile extends HookWidget {
               value: orderType.deliveryOption,
               groupValue: selectedDeliveryOption,
               onChanged: (value) {
-                context
+                ref
                     .read(deliveryOptionsStateProvider.notifier)
                     .selectDeliveryOption(value);
-                context.read(cloudFunctionsProvider).setShippingFee(value);
-                final deniedReasons = context
+                ref.read(cloudFunctionsProvider).setShippingFee(value);
+                final deniedReasons = ref
                     .read(deliveryOptionsStateProvider.notifier)
                     .validate(user, value);
                 onUserDenied(context, deniedReasons);

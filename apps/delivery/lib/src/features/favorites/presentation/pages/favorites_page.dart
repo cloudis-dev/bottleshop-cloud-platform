@@ -94,75 +94,74 @@ class _FavoritesPageView extends HookWidget {
   }
 }
 
-class _SearchIconButton extends StatelessWidget {
+class _SearchIconButton extends HookConsumerWidget {
   const _SearchIconButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       tooltip: MaterialLocalizations.of(context).searchFieldLabel,
       icon: const Icon(Icons.search),
-      onPressed: () => context.read(navigationProvider).setNestingBranch(
+      onPressed: () => ref.read(navigationProvider).setNestingBranch(
             context,
             NestingBranch.search,
             resetBranchStack: true,
-            branchParam:
-                context.read(navigationProvider).getNestingBranch(context),
+            branchParam: ref.read(navigationProvider).getNestingBranch(context),
           ),
     );
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   final GlobalKey<AuthPopupButtonState>? authButtonKey;
 
   const _Body(this.authButtonKey, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return useProvider(wishListStreamProvider).when(
-      data: (favorites) {
-        if (favorites?.isNotEmpty ?? false) {
-          return _FavoritesListLayout(favorites: favorites!);
-        }
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(wishListStreamProvider).when(
+          data: (favorites) {
+            if (favorites?.isNotEmpty ?? false) {
+              return _FavoritesListLayout(favorites: favorites!);
+            }
 
-        if (favorites == null) {
-          return EmptyTab(
-            icon: Icons.login,
-            message: context.l10n.youNeedToLoginFirst,
-            buttonMessage: context.l10n.login,
-            onButtonPressed: () =>
-                authButtonKey!.currentState!.showAccountMenu(),
-          );
-        } else {
-          return EmptyTab(
-            icon: Icons.favorite_border,
-            message: context.l10n.emptyWishList,
-            buttonMessage: context.l10n.startExploring,
-            onButtonPressed: () => context
-                .read(navigationProvider)
-                .setNestingBranch(context, NestingBranch.shop),
-          );
-        }
-      },
-      loading: () => const Loader(),
-      error: (error, stack) {
-        _logger.severe('Failed to fetch favorites', error, stack);
+            if (favorites == null) {
+              return EmptyTab(
+                icon: Icons.login,
+                message: context.l10n.youNeedToLoginFirst,
+                buttonMessage: context.l10n.login,
+                onButtonPressed: () =>
+                    authButtonKey!.currentState!.showAccountMenu(),
+              );
+            } else {
+              return EmptyTab(
+                icon: Icons.favorite_border,
+                message: context.l10n.emptyWishList,
+                buttonMessage: context.l10n.startExploring,
+                onButtonPressed: () => ref
+                    .read(navigationProvider)
+                    .setNestingBranch(context, NestingBranch.shop),
+              );
+            }
+          },
+          loading: () => const Loader(),
+          error: (error, stack) {
+            _logger.severe('Failed to fetch favorites', error, stack);
 
-        return EmptyTab(
-          icon: Icons.favorite_border,
-          message: context.l10n.emptyWishList,
-          buttonMessage: context.l10n.startExploring,
-          onButtonPressed: () => context
-              .read(navigationProvider)
-              .setNestingBranch(context, NestingBranch.shop),
+            return EmptyTab(
+              icon: Icons.favorite_border,
+              message: context.l10n.emptyWishList,
+              buttonMessage: context.l10n.startExploring,
+              onButtonPressed: () => ref
+                  .read(navigationProvider)
+                  .setNestingBranch(context, NestingBranch.shop),
+            );
+          },
         );
-      },
-    );
   }
 }
 
-class _FavoritesListLayout extends HookWidget {
+class _FavoritesListLayout extends HookConsumerWidget {
   final List<ProductModel> favorites;
 
   const _FavoritesListLayout({
@@ -171,7 +170,7 @@ class _FavoritesListLayout extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final messageRemoved = context.l10n.itemRemovedFromWishList;
 
     return ListView.builder(
@@ -187,7 +186,7 @@ class _FavoritesListLayout extends HookWidget {
           product: favorites.elementAt(index),
           onDismissed: (direction) {
             _logger.fine('dismissing direction: ${direction.toString()}');
-            context
+            ref
                 .read(wishListProvider)!
                 .remove(favorites.elementAt(index).uniqueId)
                 .then(

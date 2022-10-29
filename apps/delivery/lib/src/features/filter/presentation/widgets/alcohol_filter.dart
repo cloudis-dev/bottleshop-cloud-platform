@@ -16,22 +16,21 @@ import 'package:delivery/src/features/filter/presentation/providers/providers.da
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AlcoholFilter extends HookWidget {
+class AlcoholFilter extends HookConsumerWidget {
   const AlcoholFilter({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final filterType = useProvider(filterTypeScopedProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filterType = ref.watch(filterTypeScopedProvider);
 
-    final alcoholRange = useProvider(filterModelProvider(filterType)
-        .select((value) => value.state.alcoholRange));
-    final isAlcoholActive = useProvider(filterModelProvider(filterType)
-        .select((value) => value.state.isAlcoholActive));
+    final alcoholRange = ref.watch(
+        filterModelProvider(filterType).select((value) => value.alcoholRange));
+    final isAlcoholActive = ref.watch(filterModelProvider(filterType)
+        .select((value) => value.isAlcoholActive));
 
     return Column(
       children: [
@@ -61,8 +60,8 @@ class AlcoholFilter extends HookWidget {
           divisions: FilterConstants.alcoholDivisions,
           values: alcoholRange,
           onChanged: (value) {
-            context.read(filterModelProvider(filterType)).state =
-                context.read(filterModelProvider(filterType)).state.copyWith(
+            ref.read(filterModelProvider(filterType).state).state =
+                ref.read(filterModelProvider(filterType)).copyWith(
                       alcoholRange: value,
                     );
           },

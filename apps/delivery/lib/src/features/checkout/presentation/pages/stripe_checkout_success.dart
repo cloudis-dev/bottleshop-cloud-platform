@@ -31,9 +31,9 @@ class StripeCheckoutSuccessPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _StripeCheckoutSuccessView extends HookWidget {
+class _StripeCheckoutSuccessView extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
 
     if (shouldUseMobileLayout(context)) {
@@ -41,7 +41,7 @@ class _StripeCheckoutSuccessView extends HookWidget {
         key: scaffoldKey,
         appBar: AppBar(
           leading: CloseButton(
-            onPressed: () => context
+            onPressed: () => ref
                 .read(navigationProvider)
                 .setNestingBranch(context, NestingBranch.shop),
           ),
@@ -63,11 +63,11 @@ class _StripeCheckoutSuccessView extends HookWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends ConsumerWidget {
   const _Body({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
@@ -157,7 +157,7 @@ class _Body extends StatelessWidget {
                 shape: const StadiumBorder(),
               ),
               onPressed: () {
-                context
+                ref
                     .read(navigationProvider)
                     .replaceRootStackWith([AppPageNode(page: HomePage())]);
               },

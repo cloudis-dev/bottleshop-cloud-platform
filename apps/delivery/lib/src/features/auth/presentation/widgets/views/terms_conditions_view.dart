@@ -17,7 +17,6 @@ import 'package:delivery/src/core/presentation/providers/navigation_providers.da
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdfx/pdfx.dart';
@@ -61,36 +60,36 @@ class TermsConditionsPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _TermsConditionsView extends HookWidget {
+class _TermsConditionsView extends HookConsumerWidget {
   const _TermsConditionsView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(
-          onPressed: () => context.read(navigationProvider).popPage(context),
+          onPressed: () => ref.read(navigationProvider).popPage(context),
         ),
         title: Text(
           context.l10n.generalCommercialTermsTitle,
         ),
       ),
-      body: useProvider(_pdfDocProvider).when(
-        data: (pdfDoc) {
-          return PdfView(
-            pageSnapping: false,
-            scrollDirection: Axis.vertical,
-            controller: useProvider(_pdfCtrl(pdfDoc)),
-            renderer: (page) => page.render(
-              height: 1920,
-              width: 1080,
-              format: PdfPageImageFormat.png,
-            ),
-          );
-        },
-        loading: () => const Loader(),
-        error: (_, __) => Center(child: Text(context.l10n.errorGeneric)),
-      ),
+      body: ref.watch(_pdfDocProvider).when(
+            data: (pdfDoc) {
+              return PdfView(
+                pageSnapping: false,
+                scrollDirection: Axis.vertical,
+                controller: ref.watch(_pdfCtrl(pdfDoc)),
+                renderer: (page) => page.render(
+                  height: 1920,
+                  width: 1080,
+                  format: PdfPageImageFormat.png,
+                ),
+              );
+            },
+            loading: () => const Loader(),
+            error: (_, __) => Center(child: Text(context.l10n.errorGeneric)),
+          ),
     );
   }
 }

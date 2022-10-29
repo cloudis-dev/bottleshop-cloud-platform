@@ -55,17 +55,17 @@ class SliverAllProducts extends HookWidget {
   }
 }
 
-class _AllProductsList extends HookWidget {
+class _AllProductsList extends HookConsumerWidget {
   const _AllProductsList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final productsState =
-        useProvider(allProductsProvider.select((value) => value.itemsState));
+        ref.watch(allProductsProvider.select((value) => value.itemsState));
 
     return SliverProductsList(
       productsState: productsState,
-      requestData: () => context.read(allProductsProvider).requestData(),
+      requestData: () => ref.read(allProductsProvider).requestData(),
     );
   }
 }
