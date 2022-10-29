@@ -21,12 +21,11 @@ import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/order_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
-class OrdersWidget extends HookWidget {
+class OrdersWidget extends HookConsumerWidget {
   final GlobalKey<AuthPopupButtonState> authButtonKey;
 
   const OrdersWidget(this.authButtonKey, {Key? key}) : super(key: key);
@@ -41,12 +40,12 @@ class OrdersWidget extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ordersState =
-        useProvider(ordersProvider.select((value) => value.itemsState));
+        ref.watch(ordersProvider.select((value) => value.itemsState));
 
     final hasUser =
-        useProvider(currentUserProvider.select((value) => value != null));
+        ref.watch(currentUserProvider.select((value) => value != null));
 
     if (!hasUser) {
       return EmptyTab(
@@ -61,7 +60,7 @@ class OrdersWidget extends HookWidget {
           message: context.l10n.noOrders,
           buttonMessage: context.l10n.startExploring,
           onButtonPressed: () {
-            context
+            ref
                 .read(navigationProvider)
                 .replaceRootStackWith([AppPageNode(page: HomePage())]);
           });
@@ -70,7 +69,7 @@ class OrdersWidget extends HookWidget {
         slivers: [
           SliverPagedList(
             itemsState: ordersState,
-            requestData: () => context.read(ordersProvider).requestData(),
+            requestData: () => ref.read(ordersProvider).requestData(),
             itemBuilder: (context, dynamic item, _) => OrderListItem(
               order: item,
             ),

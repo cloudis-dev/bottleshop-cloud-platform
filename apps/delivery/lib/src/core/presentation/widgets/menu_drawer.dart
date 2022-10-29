@@ -32,22 +32,20 @@ final _versionProvider = FutureProvider.autoDispose<PackageInfo>((ref) {
   return PackageInfo.fromPlatform();
 });
 
-class MenuDrawer extends HookWidget {
+class MenuDrawer extends HookConsumerWidget {
   @literal
   const MenuDrawer({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final orderBadge = useProvider(activeOrdersCountProvider)
-            .whenData((value) => value)
-            .data
-            ?.value ??
-        0;
+    final orderBadge =
+        ref.watch(activeOrdersCountProvider).whenData((value) => value).value ??
+            0;
 
     final hasUser =
-        useProvider(currentUserProvider.select((value) => value != null));
-    final currentBranch = useProvider(
+        ref.watch(currentUserProvider.select((value) => value != null));
+    final currentBranch = ref.watch(
         navigationProvider.select((value) => value.getNestingBranch(context)));
 
     return Drawer(
@@ -70,7 +68,7 @@ class MenuDrawer extends HookWidget {
                 leading: Icons.home,
                 title: context.l10n.homeTabLabel,
                 handler: () {
-                  final nav = context.read(navigationProvider);
+                  final nav = ref.read(navigationProvider);
 
                   if (nav.getNestingBranch(context) == NestingBranch.shop) {
                     nav.replaceAllWith(context, []);
@@ -85,7 +83,7 @@ class MenuDrawer extends HookWidget {
                 leading: Icons.liquor,
                 title: context.l10n.categories,
                 handler: () {
-                  final nav = context.read(navigationProvider);
+                  final nav = ref.read(navigationProvider);
 
                   if (nav.getNestingBranch(context) ==
                       NestingBranch.categories) {
@@ -104,7 +102,7 @@ class MenuDrawer extends HookWidget {
                 leading: Icons.favorite,
                 title: context.l10n.favoriteTabLabel,
                 handler: () {
-                  final nav = context.read(navigationProvider);
+                  final nav = ref.read(navigationProvider);
 
                   if (nav.getNestingBranch(context) ==
                       NestingBranch.favorites) {
@@ -124,7 +122,7 @@ class MenuDrawer extends HookWidget {
                   leading: Icons.shopping_cart,
                   title: context.l10n.shopping_cart,
                   handler: () {
-                    context.read(navigationProvider).setNestingBranch(
+                    ref.read(navigationProvider).setNestingBranch(
                           context,
                           NestingBranch.cart,
                         );
@@ -135,7 +133,7 @@ class MenuDrawer extends HookWidget {
                     kIsWeb ? currentBranch == NestingBranch.orders : false,
                 leading: Icons.fact_check_outlined,
                 handler: () {
-                  final nav = context.read(navigationProvider);
+                  final nav = ref.read(navigationProvider);
 
                   if (nav.getNestingBranch(context) == NestingBranch.orders) {
                     nav.replaceAllWith(context, []);
@@ -156,7 +154,7 @@ class MenuDrawer extends HookWidget {
                 leading: Icons.store,
                 title: context.l10n.wholesale,
                 handler: () {
-                  final nav = context.read(navigationProvider);
+                  final nav = ref.read(navigationProvider);
 
                   if (nav.getNestingBranch(context) ==
                       NestingBranch.wholesale) {
@@ -181,7 +179,7 @@ class MenuDrawer extends HookWidget {
                 leading: Icons.settings,
                 title: context.l10n.settings,
                 handler: () {
-                  final nav = context.read(navigationProvider);
+                  final nav = ref.read(navigationProvider);
 
                   if (nav.getNestingBranch(context) == NestingBranch.account) {
                     nav.replaceAllWith(context, []);
@@ -200,7 +198,7 @@ class MenuDrawer extends HookWidget {
                 leading: Icons.help_outlined,
                 title: context.l10n.helpSupport,
                 handler: () {
-                  final nav = context.read(navigationProvider);
+                  final nav = ref.read(navigationProvider);
 
                   if (nav.getNestingBranch(context) == NestingBranch.help) {
                     nav.replaceAllWith(context, []);
@@ -217,7 +215,7 @@ class MenuDrawer extends HookWidget {
               _SideMenuItem(
                 leading: Icons.gavel,
                 handler: () {
-                  context.read(navigationProvider).pushPage(
+                  ref.read(navigationProvider).pushPage(
                         context,
                         AppPageNode(page: TermsConditionsPage()),
                         toParent: true,
@@ -228,7 +226,7 @@ class MenuDrawer extends HookWidget {
               if (hasUser)
                 _SideMenuItem(
                   handler: () async {
-                    await context.read(userRepositoryProvider).signOut();
+                    await ref.read(userRepositoryProvider).signOut();
                   },
                   leading: Icons.exit_to_app,
                   title: context.l10n.logOut,
@@ -298,14 +296,14 @@ class _SideMenuItem extends StatelessWidget {
   }
 }
 
-class BottleshopAboutTile extends HookWidget {
+class BottleshopAboutTile extends HookConsumerWidget {
   final VoidCallback? afterTap;
 
   const BottleshopAboutTile({Key? key, this.afterTap}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final version = useProvider(_versionProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final version = ref.watch(_versionProvider);
 
     return ListTile(
       dense: false,

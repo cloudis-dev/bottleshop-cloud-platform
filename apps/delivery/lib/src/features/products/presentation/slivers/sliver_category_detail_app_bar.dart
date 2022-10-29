@@ -16,10 +16,9 @@ import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/products/presentation/widgets/subcategories_tab_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SliverCategoryDetailAppBar extends HookWidget {
+class SliverCategoryDetailAppBar extends HookConsumerWidget {
   const SliverCategoryDetailAppBar({
     Key? key,
     required this.category,
@@ -34,14 +33,14 @@ class SliverCategoryDetailAppBar extends HookWidget {
   final List<Widget> actions;
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
     return SliverAppBar(
       snap: false,
       floating: false,
       pinned: true,
       leading: BackButton(
-        onPressed: () => context.read(navigationProvider).popPage(context),
+        onPressed: () => ref.read(navigationProvider).popPage(context),
       ),
       actions: actions,
       backgroundColor: Theme.of(context).colorScheme.secondary,

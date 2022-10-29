@@ -35,7 +35,7 @@ dependencies:
   http: ^0.13.4
   flutter_stripe: ^2.0.2
   flutter_hooks: ^0.18.5+1
-  hooks_riverpod: ^0.14.0+5
+  hooks_riverpod: ^2.0.2
   state_notifier: ^0.7.1
   equatable: ^2.0.3
   device_info: ^2.0.3

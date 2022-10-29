@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MaterialBottomNavigationScaffold extends HookWidget {
+class MaterialBottomNavigationScaffold extends HookConsumerWidget {
   const MaterialBottomNavigationScaffold({
     required this.navigationBarItems,
     required this.onItemSelected,
@@ -29,7 +29,7 @@ class MaterialBottomNavigationScaffold extends HookWidget {
   final NestingBranch selectedBranch;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final routerKey = useMemoized(() => GlobalKey());
     final scaffoldKey = useMemoized(() => GlobalKey());
 
@@ -39,7 +39,7 @@ class MaterialBottomNavigationScaffold extends HookWidget {
     if (currentId == -1) {
       return Router(
         key: routerKey,
-        routerDelegate: useProvider(nestedRouterDelegate(null)),
+        routerDelegate: ref.watch(nestedRouterDelegate(null)),
       );
     } else {
       return Scaffold(
@@ -49,7 +49,7 @@ class MaterialBottomNavigationScaffold extends HookWidget {
           children: navigationBarItems
               .map(
                 (barItem) => Router(
-                  routerDelegate: useProvider(
+                  routerDelegate: ref.watch(
                       nestedRouterDelegate(barItem.navigationNestingLevel)),
                 ),
               )

@@ -9,24 +9,24 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger((PlatformInitializationView).toString());
 
-class PlatformInitializationView extends HookWidget {
+class PlatformInitializationView extends HookConsumerWidget {
   final Widget child;
 
   const PlatformInitializationView({Key? key, required this.child})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return useProvider(platformInitializedProvider).when(
-      data: (_) => child,
-      loading: () => const SplashView(),
-      error: (err, stack) {
-        _logger.severe('Failed to initialize platform', err, stack);
-        return FatalError(
-          errorMessage:
-              context.l10n.unfortunatelyTheApplicationWasUnableToStart,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(platformInitializedProvider).when(
+          data: (_) => child,
+          loading: () => const SplashView(),
+          error: (err, stack) {
+            _logger.severe('Failed to initialize platform', err, stack);
+            return FatalError(
+              errorMessage:
+                  context.l10n.unfortunatelyTheApplicationWasUnableToStart,
+            );
+          },
         );
-      },
-    );
   }
 }

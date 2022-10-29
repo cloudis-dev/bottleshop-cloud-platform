@@ -18,16 +18,17 @@ import 'package:delivery/src/features/auth/presentation/providers/auth_providers
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class VerifyEmailView extends HookWidget {
+class VerifyEmailView extends HookConsumerWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     useEffect(() {
       final timer = Timer.periodic(const Duration(seconds: 5), (_) async {
-        await context.read(userRepositoryProvider).checkUserVerified();
+        await ref.read(userRepositoryProvider).checkUserVerified();
       });
       return timer.cancel;
     }, const []);
@@ -52,7 +53,7 @@ class VerifyEmailView extends HookWidget {
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    await context
+                    await ref
                         .read(userRepositoryProvider)
                         .sendVerificationMail()
                         .whenComplete(
@@ -83,7 +84,7 @@ class VerifyEmailView extends HookWidget {
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    await context.read(userRepositoryProvider).signOut();
+                    await ref.read(userRepositoryProvider).signOut();
                   } catch (e) {
                     // TODO
                   }

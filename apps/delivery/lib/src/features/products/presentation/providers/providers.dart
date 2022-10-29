@@ -52,20 +52,18 @@ final productProvider = StreamProvider.autoDispose
 final filteredProductsProvider = ChangeNotifierProvider.autoDispose
     .family<PagedProductsStateNotifier<int>, CategoryPlainModel?>(
   (ref, category) {
-    final sortModel = ref.watch(sortModelProvider).state;
+    final sortModel = ref.watch(sortModelProvider);
 
     return PagedProductsStateNotifier(
       (lastPageFetched) {
         final newPageId = lastPageFetched == null ? 0 : (lastPageFetched + 1);
-        final currentAppliedFilter = ref
-            .watch(
-              appliedFilterProvider(
-                category == null
-                    ? FilterType.allProducts
-                    : FilterType.categoryProducts,
-              ),
-            )
-            .state;
+        final currentAppliedFilter = ref.watch(
+          appliedFilterProvider(
+            category == null
+                ? FilterType.allProducts
+                : FilterType.categoryProducts,
+          ),
+        );
 
         if (currentAppliedFilter.isAnyFilterActive) {
           final literUnit = ref
@@ -110,7 +108,7 @@ final filteredProductsProvider = ChangeNotifierProvider.autoDispose
 final allProductsProvider = ChangeNotifierProvider.autoDispose<
     PagedProductsStateNotifier<DocumentSnapshot>>(
   (ref) {
-    final sortModel = ref.watch(sortModelProvider).state;
+    final sortModel = ref.watch(sortModelProvider);
 
     return PagedProductsStateNotifier(
       (lastDoc) => ref
@@ -124,7 +122,7 @@ final allProductsProvider = ChangeNotifierProvider.autoDispose<
 final productsByCategoryProvider = ChangeNotifierProvider.autoDispose
     .family<PagedProductsStateNotifier<DocumentSnapshot>, CategoryPlainModel>(
   (ref, category) {
-    final sortModel = ref.watch(sortModelProvider).state;
+    final sortModel = ref.watch(sortModelProvider);
 
     return PagedProductsStateNotifier(
       (lastDocument) => ref
@@ -139,7 +137,7 @@ final categoryHasProductsProvider =
     StateProvider.autoDispose.family<bool, List<CategoryPlainModel>>(
   (ref, categories) {
     final appliedFilter =
-        ref.watch(appliedFilterProvider(FilterType.categoryProducts)).state;
+        ref.watch(appliedFilterProvider(FilterType.categoryProducts));
 
     final providers = categories
         .map((e) => appliedFilter.isAnyFilterActive

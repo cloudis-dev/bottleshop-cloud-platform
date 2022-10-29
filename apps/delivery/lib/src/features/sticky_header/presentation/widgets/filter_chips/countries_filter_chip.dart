@@ -13,15 +13,14 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/sticky_header/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CountriesFilterChip extends HookWidget {
+class CountriesFilterChip extends HookConsumerWidget {
   const CountriesFilterChip({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final countriesFilterValue = useProvider(countriesScopedProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final countriesFilterValue = ref.watch(countriesScopedProvider);
 
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,

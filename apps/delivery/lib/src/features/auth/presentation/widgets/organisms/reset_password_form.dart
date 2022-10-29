@@ -16,26 +16,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ResetPasswordForm extends HookWidget {
+class ResetPasswordForm extends HookConsumerWidget {
   final ValueChanged<bool> authCallback;
 
   const ResetPasswordForm({Key? key, required this.authCallback})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final email = useTextEditingController();
     final formKey = useMemoized(() => GlobalKey<FormState>());
-    final formValid = useProvider(formValidProvider);
+    final formValid = ref.watch(formValidProvider);
     return Form(
       key: formKey,
       autovalidateMode: AutovalidateMode.disabled,
       onChanged: () {
         if (email.text.isNotEmpty) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.read(formValidProvider.notifier).formValid =
-                formKey.currentState!.validate();
-          });
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) {
+              ref.read(formValidProvider.notifier).formValid =
+                  formKey.currentState!.validate();
+            },
+          );
         }
       },
       child: Column(
@@ -63,7 +65,7 @@ class ResetPasswordForm extends HookWidget {
                         currentFocus.focusedChild != null) {
                       FocusManager.instance.primaryFocus!.unfocus();
                     }
-                    final result = await context
+                    final result = await ref
                         .read(userRepositoryProvider)
                         .sendResetPasswordEmail(context, email.text);
                     email.clear();

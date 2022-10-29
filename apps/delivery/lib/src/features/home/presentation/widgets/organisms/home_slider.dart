@@ -37,14 +37,14 @@ class HomeSlider extends HookWidget {
   }
 }
 
-class _Carousel extends HookWidget {
+class _Carousel extends HookConsumerWidget {
   @literal
   const _Carousel({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final tabSlidesState = useState(0);
-    final sliderList = useProvider(homeSliderProvider);
+    final sliderList = ref.watch(homeSliderProvider);
 
     final ctrl = useMemoized(() => CarouselController(), const []);
 
@@ -133,14 +133,14 @@ class _Carousel extends HookWidget {
   }
 }
 
-class _SliderItem extends HookWidget {
+class _SliderItem extends HookConsumerWidget {
   final SliderModel sliderModel;
 
   const _SliderItem(this.sliderModel, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     return Container(
       decoration: BoxDecoration(

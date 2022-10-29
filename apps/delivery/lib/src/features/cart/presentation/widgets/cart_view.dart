@@ -28,13 +28,13 @@ import 'package:routeborn/routeborn.dart';
 
 final _logger = Logger((CartView).toString());
 
-class CartView extends HookWidget {
+class CartView extends HookConsumerWidget {
   const CartView({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
 
     return Stack(
@@ -47,82 +47,81 @@ class CartView extends HookWidget {
           child: CupertinoScrollbar(
             controller: scrollController,
             thumbVisibility: false,
-            child: useProvider(cartContentProvider).when(
-              data: (cart) {
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  controller: scrollController,
-                  scrollDirection: Axis.vertical,
-                  itemCount: cart.length,
-                  itemBuilder: (context, index) => Dismissible(
-                    key: UniqueKey(),
-                    background: Container(
-                      color: Colors.red,
-                      child: const Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Icon(
-                            Icons.delete_forever,
-                            color: Colors.white,
+            child: ref.watch(cartContentProvider).when(
+                  data: (cart) {
+                    return ListView.builder(
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      controller: scrollController,
+                      scrollDirection: Axis.vertical,
+                      itemCount: cart.length,
+                      itemBuilder: (context, index) => Dismissible(
+                        key: UniqueKey(),
+                        background: Container(
+                          color: Colors.red,
+                          child: const Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Icon(
+                                Icons.delete_forever,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
+                        onDismissed: (direction) async {
+                          await ref.read(cartRepositoryProvider)!.removeItem(
+                              cart.elementAt(index).product.uniqueId);
+                          showSimpleNotification(
+                            Text(context.l10n.itemRemovedFromCart),
+                            position: NotificationPosition.bottom,
+                            duration: const Duration(seconds: 1),
+                            slideDismissDirection: DismissDirection.horizontal,
+                            context: context,
+                          );
+                        },
+                        child: CartListItem(
+                          product: cart.elementAt(index).product,
+                          quantity: cart.elementAt(index).count,
+                        ),
                       ),
-                    ),
-                    onDismissed: (direction) async {
-                      await context
-                          .read(cartRepositoryProvider)!
-                          .removeItem(cart.elementAt(index).product.uniqueId);
-                      showSimpleNotification(
-                        Text(context.l10n.itemRemovedFromCart),
-                        position: NotificationPosition.bottom,
-                        duration: const Duration(seconds: 1),
-                        slideDismissDirection: DismissDirection.horizontal,
-                        context: context,
-                      );
-                    },
-                    child: CartListItem(
-                      product: cart.elementAt(index).product,
-                      quantity: cart.elementAt(index).count,
-                    ),
-                  ),
+                    );
+                  },
+                  loading: () => const Loader(),
+                  error: (err, stack) {
+                    _logger.severe('Failed to fetch cart content', err, stack);
+                    return Center(
+                      child: Text(context.l10n.failedToFetchCart),
+                    );
+                  },
+                ),
+          ),
+        ),
+        ref.watch(cartProvider).when(
+              data: (cart) {
+                return CheckoutTile(
+                  showPromoButton: !kIsWeb,
+                  actionLabel: context.l10n.proceedToShipment,
+                  actionCallback: () {
+                    ref.read(navigationProvider).pushPage(
+                          context,
+                          AppPageNode(page: CheckoutPage()),
+                          toParent: true,
+                        );
+                  },
                 );
               },
               loading: () => const Loader(),
               error: (err, stack) {
-                _logger.severe('Failed to fetch cart content', err, stack);
+                _logger.severe('Failed to fetch cart', err, stack);
                 return Center(
-                  child: Text(context.l10n.failedToFetchCart),
+                  child: Text(context.l10n.error),
                 );
               },
             ),
-          ),
-        ),
-        useProvider(cartProvider).when(
-          data: (cart) {
-            return CheckoutTile(
-              showPromoButton: !kIsWeb,
-              actionLabel: context.l10n.proceedToShipment,
-              actionCallback: () {
-                context.read(navigationProvider).pushPage(
-                      context,
-                      AppPageNode(page: CheckoutPage()),
-                      toParent: true,
-                    );
-              },
-            );
-          },
-          loading: () => const Loader(),
-          error: (err, stack) {
-            _logger.severe('Failed to fetch cart', err, stack);
-            return Center(
-              child: Text(context.l10n.error),
-            );
-          },
-        ),
       ],
     );
   }

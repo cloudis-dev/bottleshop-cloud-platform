@@ -14,15 +14,14 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:delivery/src/features/sticky_header/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class VolumeFilterChip extends HookWidget {
+class VolumeFilterChip extends HookConsumerWidget {
   const VolumeFilterChip({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final volumeFilterValue = useProvider(volumeRangeScopedProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final volumeFilterValue = ref.watch(volumeRangeScopedProvider);
 
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,

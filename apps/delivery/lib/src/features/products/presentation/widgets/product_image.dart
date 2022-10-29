@@ -12,14 +12,14 @@
 
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:octo_image/octo_image.dart';
 
-final _widthScopedProvider = ScopedProvider<double?>(null);
+final _widthScopedProvider =
+    Provider<double?>((_) => throw UnimplementedError());
 
-class ProductImage extends HookWidget {
+class ProductImage extends HookConsumerWidget {
   static final borderRadius = BorderRadius.circular(6);
 
   final String? imagePath;
@@ -39,8 +39,8 @@ class ProductImage extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    if (imagePath == null || imagePath == useProvider(defaultProductImage)) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (imagePath == null || imagePath == ref.watch(defaultProductImage)) {
       return ProviderScope(
         overrides: [
           _widthScopedProvider.overrideWithValue(width),
@@ -48,7 +48,7 @@ class ProductImage extends HookWidget {
         child: const _PlaceHolderProductImage(),
       );
     } else {
-      final downloadUrl = useProvider(downloadUrlProvider(imagePath!));
+      final downloadUrl = ref.watch(downloadUrlProvider(imagePath!));
 
       return ProviderScope(
         overrides: [
@@ -83,21 +83,21 @@ class ProductImage extends HookWidget {
   }
 }
 
-class _PlaceHolderProductImage extends HookWidget {
+class _PlaceHolderProductImage extends HookConsumerWidget {
   @literal
   const _PlaceHolderProductImage({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final imagePath = useProvider(defaultProductImage);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imagePath = ref.watch(defaultProductImage);
 
     return ClipRRect(
       borderRadius: ProductImage.borderRadius,
       child: Image.asset(
         imagePath,
-        width: useProvider(_widthScopedProvider),
+        width: ref.watch(_widthScopedProvider),
         fit: BoxFit.cover,
       ),
     );

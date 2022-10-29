@@ -16,24 +16,27 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-FirebaseAnalytics _getAnalytics(BuildContext context) =>
-    context.read<FirebaseAnalytics>(analyticsProvider);
+FirebaseAnalytics _getAnalytics(WidgetRef ref) =>
+    ref.read<FirebaseAnalytics>(analyticsProvider);
 
-Future<void> logEvent(BuildContext context, String name,
-    {Map<String, dynamic>? params}) {
-  return _getAnalytics(context).logEvent(name: name, parameters: params);
+Future<void> logEvent(
+  WidgetRef ref,
+  String name, {
+  Map<String, dynamic>? params,
+}) {
+  return _getAnalytics(ref).logEvent(name: name, parameters: params);
 }
 
-Future<void> setCurrentScreen(BuildContext context, String name) {
-  return _getAnalytics(context).setCurrentScreen(screenName: name);
+Future<void> setCurrentScreen(WidgetRef ref, String name) {
+  return _getAnalytics(ref).setCurrentScreen(screenName: name);
 }
 
-Future<void> setUserId(BuildContext context, String id) async {
-  return _getAnalytics(context).setUserId(id: id);
+Future<void> setUserId(WidgetRef ref, String id) async {
+  return _getAnalytics(ref).setUserId(id: id);
 }
 
-Future<void> logAddPaymentInfo(BuildContext context) async {
-  return _getAnalytics(context).logAddPaymentInfo();
+Future<void> logAddPaymentInfo(WidgetRef ref) async {
+  return _getAnalytics(ref).logAddPaymentInfo();
 }
 
 Future<void> logAddToCart(BuildContext context, String itemId, String itemName,
@@ -54,8 +57,8 @@ Future<void> logAddToWishlist(BuildContext context, String itemId,
       quantity: quantity);*/
 }
 
-Future<void> logPurchase(BuildContext context, double value) async {
-  return _getAnalytics(context).logPurchase(value: value, currency: 'EUR');
+Future<void> logPurchase(WidgetRef ref, double value) async {
+  return _getAnalytics(ref).logPurchase(value: value, currency: 'EUR');
 }
 
 Future<void> logViewItem(

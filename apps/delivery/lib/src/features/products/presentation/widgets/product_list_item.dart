@@ -20,11 +20,10 @@ import 'package:delivery/src/features/product_detail/presentation/pages/product_
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
 
-class ProductListItem extends HookWidget {
+class ProductListItem extends HookConsumerWidget {
   static const double imageWidth = 60;
 
   final ProductModel product;
@@ -37,15 +36,15 @@ class ProductListItem extends HookWidget {
     this.nameTextSpans,
   }) : super(key: key);
 
-  void onClick(BuildContext context) {
-    context
+  void onClick(BuildContext context, WidgetRef ref) {
+    ref
         .read(navigationProvider)
         .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
   }
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     return Container(
       decoration: ListItemContainerDecoration(context),
@@ -162,7 +161,7 @@ class ProductListItem extends HookWidget {
           Positioned.fill(
             child: Material(
               color: Colors.transparent,
-              child: InkWell(onTap: () => onClick(context)),
+              child: InkWell(onTap: () => onClick(context, ref)),
             ),
           ),
         ],
