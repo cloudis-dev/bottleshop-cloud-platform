@@ -100,7 +100,11 @@ class _PageScaffold extends HookConsumerWidget {
         title: SearchBar(
           autoFocus: true,
           showFilter: false,
-          onChangedCallback: (query) => _onSearchChanged(ref, query),
+          onChangedCallback: (query) => _onSearchChanged(
+            scaffoldStateKey.currentState,
+            context,
+            query,
+          ),
           focusNode: _searchBarFocusNode,
           editingController: searchEditingController,
         ),
@@ -141,8 +145,11 @@ class _Body extends HookConsumerWidget {
           icon: Icons.error_outline,
           message: context.l10n.upsSomethingWentWrong,
           buttonMessage: context.l10n.tryAgain,
-          onButtonPressed: () =>
-              _onSearchChanged(ref, ref.read(_searchEditingCtrlProvider).text),
+          onButtonPressed: () => _onSearchChanged(
+            scaffoldStateKey.currentState,
+            context,
+            ref.read(_searchEditingCtrlProvider).text,
+          ),
         );
     }
   }
@@ -217,47 +224,47 @@ class _ResultsWidget extends HookConsumerWidget {
 }
 
 void _onSearchChanged(
-  // ScaffoldState? pageScaffoldState,
-  WidgetRef ref,
+  ScaffoldState? pageScaffoldState,
+  BuildContext context,
   String query,
 ) async {
   /// This is to prevent continuing in search processing
   /// in case the widget is not in widget tree
-  // BuildContext _getContext() {
-  //   if (pageScaffoldState == null || !pageScaffoldState.mounted) {
-  //     throw _OutOfWidgetTreeException();
-  //   }
-  //   return pageScaffoldState.context;
-  // }
+  WidgetRef _getContext() {
+    if (pageScaffoldState == null || !pageScaffoldState.mounted) {
+      throw _OutOfWidgetTreeException();
+    }
+    return context as WidgetRef;
+  }
 
   query = query.trim();
 
-  if (ref.read(previousQuery) == query) {
+  if (_getContext().read(previousQuery) == query) {
     return;
   } else {
-    ref.read(previousQuery.state).state = query;
+    _getContext().read(previousQuery.state).state = query;
   }
 
   try {
     final currentTime = DateTime.now();
-    ref.read(lastQueriedSearchTimeProvider.state).state = currentTime;
+    _getContext().read(lastQueriedSearchTimeProvider.state).state = currentTime;
 
-    ref.read(debounceTimerProvider)?.cancel();
+    _getContext().read(debounceTimerProvider)?.cancel();
 
     if (query.isEmpty) {
-      ref.read(searchResultsProvider.state).state =
+      _getContext().read(searchResultsProvider.state).state =
           const Tuple3(SearchState.cleaned, [], []);
     } else {
-      ref.read(searchResultsProvider.state).state =
+      _getContext().read(searchResultsProvider.state).state =
           const Tuple3(SearchState.typing, [], []);
 
-      ref.read(debounceTimerProvider.state).state = Timer(
+      _getContext().read(debounceTimerProvider.state).state = Timer(
         const Duration(milliseconds: _debounceMs),
         () async {
           try {
             bool isLastQueryMade() {
               final lastQueriedTime =
-                  ref.read(lastQueriedSearchTimeProvider.state).state;
+                  _getContext().read(lastQueriedSearchTimeProvider.state).state;
               return lastQueriedTime == currentTime;
             }
 
@@ -265,7 +272,7 @@ void _onSearchChanged(
               return;
             }
 
-            ref.read(searchResultsProvider.state).state =
+            _getContext().read(searchResultsProvider.state).state =
                 const Tuple3(SearchState.waiting, [], []);
 
             final res = await ProductsSearchService.search(
@@ -279,7 +286,7 @@ void _onSearchChanged(
               return;
             }
 
-            ref.read(searchResultsProvider.state).state = Tuple3(
+            _getContext().read(searchResultsProvider.state).state = Tuple3(
               SearchState.completed,
               res.value1,
               res.value2,
@@ -287,7 +294,7 @@ void _onSearchChanged(
           } on _OutOfWidgetTreeException catch (_) {
             return;
           } catch (err, stack) {
-            ref.read(searchResultsProvider.state).state =
+            _getContext().read(searchResultsProvider.state).state =
                 const Tuple3(SearchState.error, [], []);
 
             _logger.severe('Search failed', err, stack);
@@ -298,7 +305,7 @@ void _onSearchChanged(
   } on _OutOfWidgetTreeException catch (_) {
     return;
   } catch (err, stack) {
-    ref.read(searchResultsProvider.state).state =
+    _getContext().read(searchResultsProvider.state).state =
         const Tuple3(SearchState.error, [], []);
 
     _logger.severe('search failed', err, stack);
