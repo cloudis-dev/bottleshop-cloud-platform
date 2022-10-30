@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service.dart';
 import 'package:bottleshop_admin/src/core/utils/image_util.dart';
 import 'package:bottleshop_admin/src/core/utils/math_util.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tuple/tuple.dart';
 
 enum LoadingState { none, loading, done }
@@ -53,7 +54,7 @@ class ProductImageViewModel {
             url,
             'product_img_temp.png',
           );
-          final imgSize = await ImageUtil.getImageSize(file);
+          final imgSize = await ImageUtil.getImageSize(XFile(file.path));
           _imageLoadingState = LoadingState.done;
           _hasInitialFile = true;
           setImageFile(

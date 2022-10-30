@@ -339,7 +339,6 @@ class ShippingDetailsView extends HookConsumerWidget {
                               .read(deliveryOptionsStateProvider.notifier)
                               .canProceed(user, selectedDeliveryOption)
                           ? () {
-                              ref.refresh(deliveryOptionsStateProvider);
                               final currentUser = ref.read(currentUserProvider);
                               onNextPage(
                                 PaymentData(

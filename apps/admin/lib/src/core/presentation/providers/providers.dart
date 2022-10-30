@@ -59,8 +59,14 @@ final pushNotificationsInitProvider = FutureProvider.autoDispose((ref) async {
   await pushNotifs.init();
 });
 
-final crashlyticsInitProvider = FutureProvider.autoDispose<void>((ref) =>
-    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode));
+ 
+final crashlyticsInitProvider = FutureProvider.autoDispose<void>(
+ 
+  (ref) => !kIsWeb
+      ? FirebaseCrashlytics.instance
+          .setCrashlyticsCollectionEnabled(!kDebugMode)
+      : Future<void>.value(),
+);
 
 final platformInitializedProvider =
     FutureProvider.autoDispose<void>((ref) async {

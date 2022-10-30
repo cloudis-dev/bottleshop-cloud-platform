@@ -6,6 +6,7 @@ import 'package:bottleshop_admin/src/features/product_editing/presentation/pages
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/view_models/product_image_view_model.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/widgets/product_images_view/action_buttons_column.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,18 +22,19 @@ class ProductImagesView extends HookWidget {
     final pickedFile = await ImagePicker().pickImage(source: source);
 
     if (pickedFile != null) {
-      final imgFile = File(pickedFile.path);
+      if (!kIsWeb) {
+        context.read(blopProvider).state = File(pickedFile.path).path;
+      } else {
+        context.read(blopProvider).state = pickedFile!.path;
+      }
 
-      await setProductImgFile(context, imgFile);
+      context.read(isImgChangedProvider).state = true;
     }
   }
 
   Future<void> _onCropImage(BuildContext context) async {
-    final currentImgFile = context.read(productImgProvider);
-    if (currentImgFile == null) return;
-
     final croppedImg = await ImageCropper().cropImage(
-      sourcePath: currentImgFile.path,
+      sourcePath: context.read(blopProvider).state ?? '',
       aspectRatio: CropAspectRatio(
         ratioX: ProductImageViewModel.ratioX,
         ratioY: ProductImageViewModel.ratioY,
@@ -45,19 +47,31 @@ class ProductImagesView extends HookWidget {
           rotateButtonsHidden: true,
           resetButtonHidden: true,
         ),
+        WebUiSettings(
+          context: context,
+          presentStyle: CropperPresentStyle.dialog,
+          viewPort: CroppieViewPort(
+            width: (400 * ProductImageViewModel.targetImgAspect).round(),
+            height: 400,
+            type: 'rectangle',
+          ),
+          enableExif: true,
+          enableZoom: true,
+          showZoomer: true,
+        ),
       ],
     );
 
     if (croppedImg != null) {
-      final imgFile = File(croppedImg.path);
-      await setProductImgFile(context, imgFile);
+      context.read(blopProvider).state = croppedImg.path;
+      context.read(isImgChangedProvider).state = true;
     }
   }
 
   Future<void> _onImageDelete(BuildContext context) async {
     final res = await showDialog<ProductImageDeleteResult>(
         context: context, builder: (_) => ProductImageDeleteDialog());
-
+    context.read(isImgChangedProvider).state = true;
     if (res != null) {
       SnackBarUtils.showSnackBar(
         ProductEditPage.scaffoldMessengerKey.currentState!,
@@ -105,13 +119,13 @@ class _ImageFrameContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (useProvider(isImgLoadedProvider)) {
-      final imgFile = useProvider(productImgProvider);
+    final imgPath = useProvider(blopProvider).state ?? '';
 
-      if (imgFile == null) {
+    if (useProvider(isImgLoadedProvider)) {
+      if (imgPath == '') {
         return Image.asset('assets/images/placeholder.png');
       }
-      return Image.file(imgFile);
+      return !kIsWeb ? Image.file(File(imgPath)) : Image.network(imgPath);
     } else {
       return const Center(
         child: SizedBox(
