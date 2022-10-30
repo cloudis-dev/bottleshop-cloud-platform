@@ -49,6 +49,9 @@ class PushNotificationsService {
   }
 
   Future<void> init() async {
+    if(kIsWeb){
+      return;
+    }
     try {
       final settings = await FirebaseMessaging.instance.requestPermission(
         alert: true,
