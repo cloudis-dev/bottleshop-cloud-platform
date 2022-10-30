@@ -1,3 +1,5 @@
+
+import 'dart:io';
 import 'package:bottleshop_admin/src/config/app_strings.dart';
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/action_result.dart';
@@ -5,9 +7,12 @@ import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service
 import 'package:bottleshop_admin/src/core/presentation/widgets/processing_alert_dialog.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/providers/providers.dart';
 import 'package:bottleshop_admin/src/features/products/data/services/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:optional/optional.dart';
+import 'package:path/path.dart';
 
 class ProductEditingResult {
   ProductEditingResult(this.result, this.message);
@@ -45,7 +50,8 @@ class ProductConfirmChangesDialog extends ProcessingAlertDialog {
     bool isCreatingNewProduct,
   ) async {
     var product = context.read(editedProductProvider).state;
-    final img = context.read(productImgProvider);
+    
+    final img = context.read(blopProvider).state;
     try {
       if (context.read(isImgChangedProvider).state) {
         if (img == null) {
@@ -55,8 +61,8 @@ class ProductConfirmChangesDialog extends ProcessingAlertDialog {
             thumbnailPath: Optional.empty(),
           );
         } else {
-          final uploadResult = await FirebaseStorageService.uploadImgData(
-            img,
+          final uploadResult = await FirebaseStorageService.uploadImgBytes(
+            !kIsWeb ? await File(img!).readAsBytes() : await XFile(img!).readAsBytes(),
             product.uniqueId,
           );
           product = product.copyWith(
