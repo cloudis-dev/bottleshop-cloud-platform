@@ -6,7 +6,6 @@ import 'package:bottleshop_admin/src/core/presentation/providers/auth_providers.
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AuthenticationService {
@@ -37,10 +36,9 @@ class AuthenticationService {
 
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
-    if (!kIsWeb)
-      await _providerRef
-          .read(pushNotificationsProvider)
-          .setAdminNotificationsSubscriptionActive(false);
+    await _providerRef
+        .read(pushNotificationsProvider)
+        .setAdminNotificationsSubscriptionActive(false);
     _providerRef.read(loggedUserProvider).state = null;
   }
 
@@ -54,10 +52,9 @@ class AuthenticationService {
         password: password.isEmpty ? ' ' : password,
       );
       assert(result.user != null);
-      if (!kIsWeb)
-        await _providerRef
-            .read(pushNotificationsProvider)
-            .setAdminNotificationsSubscriptionActive(true);
+      await _providerRef
+          .read(pushNotificationsProvider)
+          .setAdminNotificationsSubscriptionActive(true);
 
       await _retrieveAdminUser(result.user);
     } on FirebaseAuthException catch (_) {

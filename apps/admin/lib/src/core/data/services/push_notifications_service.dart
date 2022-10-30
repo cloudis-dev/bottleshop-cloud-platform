@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -24,12 +23,6 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 const settingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
 
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  debugPrint(
-      'backgroundMessageHandler message sent at: ${message.notification?.title}');
-}
-
 class PushNotificationsService {
   static const String adminTopic = 'ADMIN';
 
@@ -41,73 +34,79 @@ class PushNotificationsService {
   PushNotificationsService(this._providerRef);
 
   Future<void> setAdminNotificationsSubscriptionActive(bool isActive) {
-    if (isActive) {
-      return FirebaseMessaging.instance.subscribeToTopic(adminTopic);
+    if (kIsWeb) {
+      return Future.value();
     } else {
-      return FirebaseMessaging.instance.unsubscribeFromTopic(adminTopic);
+      if (isActive) {
+        return FirebaseMessaging.instance.subscribeToTopic(adminTopic);
+      } else {
+        return FirebaseMessaging.instance.unsubscribeFromTopic(adminTopic);
+      }
     }
   }
 
   Future<void> init() async {
-    if(kIsWeb){
-      return;
-    }
-    try {
-      final settings = await FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true,
-      );
-      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        print('User granted push permission');
-      } else if (settings.authorizationStatus ==
-          AuthorizationStatus.provisional) {
-        print('User granted provisional permission');
-      } else {
-        print('User declined or has not accepted permission');
-      }
-
-      await FirebaseMessaging.instance.getInitialMessage().then((msg) {
-        if (msg != null) {
-          _processNotification(msg.data);
+    if (kIsWeb) {
+      return Future.value();
+    } else {
+      try {
+        final settings = await FirebaseMessaging.instance.requestPermission(
+          alert: true,
+          announcement: false,
+          badge: true,
+          carPlay: false,
+          criticalAlert: false,
+          provisional: false,
+          sound: true,
+        );
+        if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+          print('User granted push permission');
+        } else if (settings.authorizationStatus ==
+            AuthorizationStatus.provisional) {
+          print('User granted provisional permission');
+        } else {
+          print('User declined or has not accepted permission');
         }
-      });
 
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        final initSettings = InitializationSettings(android: settingsAndroid);
+        await FirebaseMessaging.instance.getInitialMessage().then((msg) {
+          if (msg != null) {
+            _processNotification(msg.data);
+          }
+        });
 
-        await _flutterLocalNotificationsPlugin.initialize(
-          initSettings,
-          onSelectNotification: (payload) async {
-            if (payload != null) {
-              _processNotification(jsonDecode(payload) as Map<String, dynamic>);
-            }
-          },
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          final initSettings = InitializationSettings(android: settingsAndroid);
+
+          await _flutterLocalNotificationsPlugin.initialize(
+            initSettings,
+            onSelectNotification: (payload) async {
+              if (payload != null) {
+                _processNotification(
+                    jsonDecode(payload) as Map<String, dynamic>);
+              }
+            },
+          );
+
+          await _flutterLocalNotificationsPlugin
+              .resolvePlatformSpecificImplementation<
+                  AndroidFlutterLocalNotificationsPlugin>()
+              ?.createNotificationChannel(channel);
+        }
+
+        await FirebaseMessaging.instance
+            .setForegroundNotificationPresentationOptions(
+          alert: true,
+          badge: true,
+          sound: true,
         );
 
-        await _flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
-            ?.createNotificationChannel(channel);
+        FirebaseMessaging.onMessage.listen(_onMessage);
+        FirebaseMessaging.onMessageOpenedApp.listen(
+          (msg) => _processNotification(msg.data),
+        );
+      } catch (e, stack) {
+        await FirebaseCrashlytics.instance.recordError(e, stack);
       }
-
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-
-      FirebaseMessaging.onMessage.listen(_onMessage);
-      FirebaseMessaging.onMessageOpenedApp.listen(
-        (msg) => _processNotification(msg.data),
-      );
-    } catch (e, stack) {
-      await FirebaseCrashlytics.instance.recordError(e, stack);
     }
   }
 
