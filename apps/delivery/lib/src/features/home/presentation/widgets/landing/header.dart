@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/data/res/constants.dart';
 
-
-
 class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
