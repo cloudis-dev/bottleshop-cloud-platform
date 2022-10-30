@@ -20,11 +20,10 @@ import 'package:delivery/src/features/product_detail/presentation/pages/product_
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
 
-class ProductGridItem extends HookWidget {
+class ProductGridItem extends HookConsumerWidget {
   /// For rectangular image the value .56 is fine
   static const double widgetAspectRatio = .485;
 
@@ -35,14 +34,14 @@ class ProductGridItem extends HookWidget {
     required this.product,
   }) : super(key: key);
 
-  void onClick(BuildContext context) {
-    context
+  void onClick(BuildContext context, WidgetRef ref) {
+    ref
         .read(navigationProvider)
         .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final subtitleTheme = Theme.of(context).textTheme.subtitle1!;
     final headline6Theme = Theme.of(context).textTheme.headline6!;
     final body1Theme = Theme.of(context).textTheme.bodyText1!;
@@ -50,7 +49,7 @@ class ProductGridItem extends HookWidget {
           color: product.count > 0 ? Colors.green : Colors.red,
         );
 
-    final currentLocale = useProvider(currentLocaleProvider);
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     const fit = BoxFit.fitHeight;
 
@@ -245,7 +244,7 @@ class ProductGridItem extends HookWidget {
                           product.name,
                           product.allCategories.first.categoryDetails
                               .getName(currentLocale));
-                      onClick(context);
+                      onClick(context, ref);
                     },
                     borderRadius: ProductImage.borderRadius,
                   ),

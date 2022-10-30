@@ -20,7 +20,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SignUpForm extends HookWidget {
+class SignUpForm extends HookConsumerWidget {
   final ValueChanged<bool> authCallback;
 
   final BorderRadiusGeometry borderRadius;
@@ -35,13 +35,13 @@ class SignUpForm extends HookWidget {
         super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final email = useTextEditingController();
     final password = useTextEditingController();
     final passwordRepeat = useTextEditingController();
     final showPassword = useState<bool>(false);
-    final isAppleAvailable = useProvider(appleSignInAvailableProvider);
+    final isAppleAvailable = ref.watch(appleSignInAvailableProvider);
 
     return Material(
       color: backgroundColor,
@@ -56,7 +56,7 @@ class SignUpForm extends HookWidget {
                 password.text.isNotEmpty &&
                 passwordRepeat.text.isNotEmpty) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.read(signUpFormValidProvider.notifier).formValid =
+                ref.read(signUpFormValidProvider.notifier).formValid =
                     formKey.currentState!.validate();
               });
             }
@@ -118,14 +118,14 @@ class SignUpForm extends HookWidget {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: useProvider<bool>(signUpButtonEnabledProvider)
+                onPressed: ref.watch(signUpButtonEnabledProvider)
                     ? () async {
                         var currentFocus = FocusScope.of(context);
                         if (!currentFocus.hasPrimaryFocus &&
                             currentFocus.focusedChild != null) {
                           FocusManager.instance.primaryFocus!.unfocus();
                         }
-                        final result = await context
+                        final result = await ref
                             .read(userRepositoryProvider)
                             .signUpWithEmailAndPassword(
                               context,
@@ -147,13 +147,13 @@ class SignUpForm extends HookWidget {
               const SizedBox(height: 8),
               isAppleAvailable.when(
                 data: (isAppleSupported) => SocialMediaButtonsRow(
-                  enabled: useProvider(termsAcceptanceProvider),
+                  enabled: ref.watch(termsAcceptanceProvider),
                   isAppleSupported: isAppleSupported,
                   authCallback: authCallback,
                 ),
                 loading: () => const Loader(),
                 error: (_, __) => SocialMediaButtonsRow(
-                  enabled: useProvider(termsAcceptanceProvider),
+                  enabled: ref.watch(termsAcceptanceProvider),
                   authCallback: authCallback,
                 ),
               ),

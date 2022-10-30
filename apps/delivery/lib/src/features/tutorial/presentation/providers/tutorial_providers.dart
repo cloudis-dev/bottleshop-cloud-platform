@@ -10,9 +10,9 @@
 //
 //
 
+import 'package:carousel_slider/carousel_options.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
@@ -29,13 +29,13 @@ class TutorialViewModel extends StateNotifier<int> {
 
   int get currentIndex => state;
 
-  Future<void> finishIntroScreen(BuildContext context) async {
-    final user = context.read(currentUserProvider);
+  Future<void> finishIntroScreen(BuildContext context, WidgetRef ref) async {
+    final user = ref.read(currentUserProvider);
     if (user == null || user.introSeen) {
-      context.read(navigationProvider).popPage(context);
+      ref.read(navigationProvider).popPage(context);
     } else {
-      await context.read(userRepositoryProvider).setUserIntroSeen();
-      context.read(navigationProvider).popPage(context);
+      await ref.read(userRepositoryProvider).setUserIntroSeen();
+      ref.read(navigationProvider).popPage(context);
     }
   }
 }

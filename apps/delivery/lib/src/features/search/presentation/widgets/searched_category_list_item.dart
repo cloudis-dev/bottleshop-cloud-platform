@@ -21,11 +21,10 @@ import 'package:delivery/src/features/categories/presentation/other/category_con
 import 'package:delivery/src/features/products/presentation/pages/category_products_detail_page.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
 
-class SearchedCategoryListItem extends HookWidget {
+class SearchedCategoryListItem extends HookConsumerWidget {
   const SearchedCategoryListItem({
     Key? key,
     required this.categoryPlainModel,
@@ -39,7 +38,7 @@ class SearchedCategoryListItem extends HookWidget {
   final double? bottomSideLineWidth;
   final String heroTag;
 
-  void onClick(BuildContext context) {
+  void onClick(BuildContext context, WidgetRef ref) {
     final subcategoryId = navigationCategory.categoryDetails.id !=
             categoryPlainModel.id
         ? navigationCategory.subCategories
@@ -49,7 +48,7 @@ class SearchedCategoryListItem extends HookWidget {
             .indexWhere((element) => element.contains(categoryPlainModel.id))
         : null;
 
-    context.read(navigationProvider).pushPage(
+    ref.read(navigationProvider).pushPage(
           context,
           AppPageNode(
             page: CategoryProductsPage(
@@ -62,8 +61,8 @@ class SearchedCategoryListItem extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     return Container(
       decoration: ListItemContainerDecoration(
@@ -133,7 +132,7 @@ class SearchedCategoryListItem extends HookWidget {
           Positioned.fill(
             child: Material(
               color: Colors.transparent,
-              child: InkWell(onTap: () => onClick(context)),
+              child: InkWell(onTap: () => onClick(context, ref)),
             ),
           ),
         ],

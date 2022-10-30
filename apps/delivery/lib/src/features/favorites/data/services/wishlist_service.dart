@@ -9,11 +9,11 @@ import 'package:logging/logging.dart';
 final _logger = Logger((WishListService).toString());
 
 class WishListService {
-  final Reader read;
+  final Ref ref;
   late WishListDBService? db;
 
-  WishListService(this.read) {
-    final uid = read(currentUserProvider)?.uid;
+  WishListService(this.ref) {
+    final uid = ref.read(currentUserProvider)?.uid;
     db = uid == null
         ? null
         : WishListDBService(FirestorePaths.userFavorites(uid));

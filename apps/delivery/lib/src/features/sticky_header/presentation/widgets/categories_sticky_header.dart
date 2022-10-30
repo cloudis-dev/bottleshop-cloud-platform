@@ -17,28 +17,28 @@ import 'package:delivery/src/features/categories/presentation/providers/provider
 import 'package:delivery/src/features/products/presentation/pages/category_products_detail_page.dart';
 import 'package:delivery/src/features/products/presentation/widgets/category_chip.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:routeborn/routeborn.dart';
 
 final _logger = Logger((CategoriesStickyHeader).toString());
 
-class CategoriesStickyHeader extends HookWidget {
+class CategoriesStickyHeader extends HookConsumerWidget {
   const CategoriesStickyHeader({
     Key? key,
   }) : super(key: key);
 
   void onNavigateToCategory(
     BuildContext context,
+    WidgetRef ref,
     CategoriesTreeModel category,
     String heroTag,
   ) {
-    context
+    ref
         .read(navigationProvider)
         .setNestingBranch(context, NestingBranch.categories);
 
-    context.read(navigationProvider).replaceAllWith(context, [
+    ref.read(navigationProvider).replaceAllWith(context, [
       AppPageNode(page: CategoriesPage()),
       AppPageNode(
         page: CategoryProductsPage(
@@ -50,8 +50,8 @@ class CategoriesStickyHeader extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final categories = useProvider(mainCategoriesWithoutExtraProvider).state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categories = ref.watch(mainCategoriesWithoutExtraProvider);
 
     return SizedBox(
       height: 65,
@@ -84,7 +84,7 @@ class CategoriesStickyHeader extends HookWidget {
 
                     return CategoryChip(
                       onNavigateToCategory: (context) =>
-                          onNavigateToCategory(context, category, heroTag),
+                          onNavigateToCategory(context, ref, category, heroTag),
                       category: categories.elementAt(index),
                       heroTag: heroTag,
                     );

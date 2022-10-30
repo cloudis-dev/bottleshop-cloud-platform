@@ -5,7 +5,6 @@ import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -18,7 +17,7 @@ final _addToCartButtonStateProvider =
   },
 );
 
-class AddToCartButton extends HookWidget {
+class AddToCartButton extends HookConsumerWidget {
   final ProductModel product;
 
   const AddToCartButton({
@@ -30,9 +29,9 @@ class AddToCartButton extends HookWidget {
   final VoidCallback? actionOverride;
 
   @override
-  Widget build(BuildContext context) {
-    final addToCartButtonState = useProvider(
-        _addToCartButtonStateProvider(product).select((value) => value.state));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final addToCartButtonState =
+        ref.watch(_addToCartButtonStateProvider(product));
 
     return ProgressButton(
       state: addToCartButtonState,
@@ -40,12 +39,10 @@ class AddToCartButton extends HookWidget {
           (product.count == 0
               ? null
               : () {
-                  context.read(_addToCartButtonStateProvider(product)).state =
+                  ref.read(_addToCartButtonStateProvider(product).state).state =
                       ButtonState.loading;
                   try {
-                    context
-                        .read(cartRepositoryProvider)!
-                        .add(product.uniqueId, 1);
+                    ref.read(cartRepositoryProvider)!.add(product.uniqueId, 1);
                     logAddToCart(
                       context,
                       product.uniqueId,
@@ -68,8 +65,9 @@ class AddToCartButton extends HookWidget {
                       context: context,
                     );
                   } finally {
-                    context.read(_addToCartButtonStateProvider(product)).state =
-                        ButtonState.idle;
+                    ref
+                        .read(_addToCartButtonStateProvider(product).state)
+                        .state = ButtonState.idle;
                   }
                 }),
       stateWidgets: {

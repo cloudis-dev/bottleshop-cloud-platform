@@ -89,7 +89,7 @@ class ProductDetailPage extends RoutebornPage with UpdatablePageNameMixin {
 
 final _logger = Logger((ProductDetailPage).toString());
 
-class _ProductDetailPageView extends HookWidget {
+class _ProductDetailPageView extends HookConsumerWidget {
   final ProductModel? product;
   final String? productUid;
 
@@ -103,36 +103,36 @@ class _ProductDetailPageView extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (product == null) {
-      return useProvider(productProvider(productUid!)).when(
-        data: (product) => product == null
-            ? EmptyTab(
-                icon: Icons.info,
-                message: context.l10n.noSuchProduct,
-                buttonMessage: context.l10n.startExploring,
-                onButtonPressed: () {
-                  context.read(navigationProvider).replaceAllWith(context, []);
-                },
-              )
-            : _Body(
-                product: product,
-                setPageName: setPageName,
-              ),
-        loading: () => const Loader(),
-        error: (err, stack) {
-          _logger.severe(
-              'Product CMAT: $productUid failed to load!', err, stack);
+      return ref.watch(productProvider(productUid!)).when(
+            data: (product) => product == null
+                ? EmptyTab(
+                    icon: Icons.info,
+                    message: context.l10n.noSuchProduct,
+                    buttonMessage: context.l10n.startExploring,
+                    onButtonPressed: () {
+                      ref.read(navigationProvider).replaceAllWith(context, []);
+                    },
+                  )
+                : _Body(
+                    product: product,
+                    setPageName: setPageName,
+                  ),
+            loading: () => const Loader(),
+            error: (err, stack) {
+              _logger.severe(
+                  'Product CMAT: $productUid failed to load!', err, stack);
 
-          return EmptyTab(
-            icon: Icons.error_outline,
-            message: context.l10n.upsSomethingWentWrong,
-            buttonMessage: context.l10n.tryAgain,
-            onButtonPressed: () =>
-                context.refresh(productProvider(productUid!)),
+              return EmptyTab(
+                icon: Icons.error_outline,
+                message: context.l10n.upsSomethingWentWrong,
+                buttonMessage: context.l10n.tryAgain,
+                onButtonPressed: () =>
+                    ref.refresh(productProvider(productUid!)),
+              );
+            },
           );
-        },
-      );
     } else {
       return _Body(
         product: product!,
@@ -295,7 +295,7 @@ class _BodyWeb extends HookWidget {
   }
 }
 
-class _BodyMobile extends HookWidget {
+class _BodyMobile extends HookConsumerWidget {
   final ProductModel product;
 
   const _BodyMobile({
@@ -304,7 +304,7 @@ class _BodyMobile extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final authButtonKey = useMemoized(() => GlobalKey<AuthPopupButtonState>());
 
@@ -315,8 +315,7 @@ class _BodyMobile extends HookWidget {
         slivers: <Widget>[
           SliverAppBar(
             leading: BackButton(
-              onPressed: () =>
-                  context.read(navigationProvider).popPage(context),
+              onPressed: () => ref.read(navigationProvider).popPage(context),
             ),
             actions: [
               AuthPopupButton(key: authButtonKey, scaffoldKey: scaffoldKey),

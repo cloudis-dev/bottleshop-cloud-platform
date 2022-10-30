@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LanguageDropdown extends StatelessWidget {
+class LanguageDropdown extends HookConsumerWidget {
   const LanguageDropdown({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DropDown<LanguageMode>(
       showUnderline: false,
       items: LanguageMode.values,
@@ -31,14 +31,14 @@ class LanguageDropdown extends StatelessWidget {
           ),
         ),
       ],
-      initialValue: context.read(sharedPreferencesProvider).getAppLanguage() ??
+      initialValue: ref.read(sharedPreferencesProvider).getAppLanguage() ??
           LanguageMode.en,
       onChanged: (value) async {
-        await context.read(sharedPreferencesProvider).setAppLocale(value!);
-        await context
+        await ref.read(sharedPreferencesProvider).setAppLocale(value!);
+        await ref
             .read(userRepositoryProvider)
             .onUserChangedPreferredLanguage(value);
-        context.refresh(sharedPreferencesProvider);
+        ref.refresh(sharedPreferencesProvider);
       },
     );
   }

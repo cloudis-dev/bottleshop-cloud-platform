@@ -35,7 +35,7 @@ bool _shouldDisplayListWithSubcategories(
 const _categoryTabHeadingPadding = EdgeInsets.symmetric(vertical: 12);
 const _filtersStickyHeaderPadding = 12.0;
 
-class CategoryProductsList extends HookWidget {
+class CategoryProductsList extends HookConsumerWidget {
   const CategoryProductsList({
     Key? key,
     required this.category,
@@ -46,10 +46,10 @@ class CategoryProductsList extends HookWidget {
   final CategoriesTreeModel category;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final appliedFilter =
-        useProvider(appliedFilterProvider(FilterType.categoryProducts)).state;
-    final hasProducts = useProvider(
+        ref.watch(appliedFilterProvider(FilterType.categoryProducts));
+    final hasProducts = ref.watch(
       categoryHasProductsProvider(
         _shouldDisplayListWithSubcategories(
           isAllCategory,
@@ -58,7 +58,7 @@ class CategoryProductsList extends HookWidget {
             ? category.subCategories.map((e) => e.categoryDetails).toList()
             : [category.categoryDetails],
       ),
-    ).state;
+    );
 
     return SafeArea(
       top: false,
@@ -191,15 +191,15 @@ class _ProductsBody extends StatelessWidget {
   }
 }
 
-class _NoProductsBody extends HookWidget {
+class _NoProductsBody extends HookConsumerWidget {
   static const double _bottomPad = 150;
 
   const _NoProductsBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final appliedFilter =
-        useProvider(appliedFilterProvider(FilterType.categoryProducts)).state;
+        ref.watch(appliedFilterProvider(FilterType.categoryProducts));
 
     if (appliedFilter.isAnyFilterActive) {
       return MultiSliver(
@@ -272,7 +272,7 @@ class _CategoryHeading extends HookWidget {
   }
 }
 
-class _ProductsListWithSubcategoriesStickyHeaders extends HookWidget {
+class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
   const _ProductsListWithSubcategoriesStickyHeaders({
     Key? key,
     required this.category,
@@ -283,12 +283,12 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookWidget {
   final bool isAllCategory;
 
   @override
-  Widget build(BuildContext context) {
-    final isAnyFilterActive = useProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isAnyFilterActive = ref.watch(
         appliedFilterProvider(FilterType.categoryProducts)
-            .select((value) => value.state.isAnyFilterActive));
+            .select((value) => value.isAnyFilterActive));
 
-    final currentLocale = useProvider(currentLocaleProvider);
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     if (_shouldDisplayListWithSubcategories(
       isAllCategory,
@@ -303,7 +303,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookWidget {
       final productsStates = providers
           .map(
             (provider) =>
-                useProvider(provider.select((value) => value.itemsState)),
+                ref.watch(provider.select((value) => value.itemsState)),
           )
           .toList();
 
@@ -324,7 +324,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookWidget {
                 ),
                 sliver: SliverProductsList(
                   productsState: productsStates[id],
-                  requestData: () => context.read(providers[id]).requestData(),
+                  requestData: () => ref.read(providers[id]).requestData(),
                 ),
               ),
             )
@@ -335,13 +335,13 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookWidget {
           ? filteredProductsProvider(category.categoryDetails)
           : productsByCategoryProvider(category.categoryDetails);
 
-      final productsState = useProvider(
+      final productsState = ref.watch(
         provider.select((value) => value.itemsState),
       );
 
       return SliverProductsList(
         productsState: productsState,
-        requestData: () => context.read(provider).requestData(),
+        requestData: () => ref.read(provider).requestData(),
       );
     }
   }

@@ -31,7 +31,7 @@ final _loginButtonEnabledProvider = Provider.autoDispose<bool>((ref) {
   return termsAgreed && formValid;
 });
 
-class SignInForm extends HookWidget {
+class SignInForm extends HookConsumerWidget {
   final ValueChanged<bool> authCallback;
   final BorderRadiusGeometry borderRadius;
   final Color? backgroundColor;
@@ -45,11 +45,11 @@ class SignInForm extends HookWidget {
         super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final email = useTextEditingController();
     final password = useTextEditingController();
     final showPassword = useState<bool>(false);
-    final isAppleAvailable = useProvider(appleSignInAvailableProvider);
+    final isAppleAvailable = ref.watch(appleSignInAvailableProvider);
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
     return Material(
@@ -63,7 +63,7 @@ class SignInForm extends HookWidget {
           onChanged: () {
             if (email.text.isNotEmpty && password.text.isNotEmpty) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.read(_signInFormValidProvider.notifier).formValid =
+                ref.read(_signInFormValidProvider.notifier).formValid =
                     formKey.currentState!.validate();
               });
             }
@@ -125,14 +125,14 @@ class SignInForm extends HookWidget {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: useProvider(_loginButtonEnabledProvider)
+                onPressed: ref.watch(_loginButtonEnabledProvider)
                     ? () async {
                         var currentFocus = FocusScope.of(context);
                         if (!currentFocus.hasPrimaryFocus &&
                             currentFocus.focusedChild != null) {
                           FocusManager.instance.primaryFocus!.unfocus();
                         }
-                        final result = await context
+                        final result = await ref
                             .read(userRepositoryProvider)
                             .signInWithEmailAndPassword(
                               context,
@@ -152,12 +152,12 @@ class SignInForm extends HookWidget {
               const SizedBox(height: 8),
               isAppleAvailable.maybeWhen(
                 data: (data) => SocialMediaButtonsRow(
-                  enabled: useProvider(termsAcceptanceProvider),
+                  enabled: ref.watch(termsAcceptanceProvider),
                   isAppleSupported: data,
                   authCallback: authCallback,
                 ),
                 orElse: () => SocialMediaButtonsRow(
-                  enabled: useProvider(termsAcceptanceProvider),
+                  enabled: ref.watch(termsAcceptanceProvider),
                   authCallback: authCallback,
                 ),
               ),
