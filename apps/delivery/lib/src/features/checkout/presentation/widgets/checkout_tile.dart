@@ -36,7 +36,7 @@ final _proceedButtonStateProvider = StateProvider.autoDispose
 final _promoButtonStateProvider =
     StateProvider.autoDispose<ButtonState>((ref) => ButtonState.idle);
 
-class CheckoutTile extends HookWidget {
+class CheckoutTile extends HookConsumerWidget {
   final String actionLabel;
   final VoidCallback? actionCallback;
   final bool isLastStep;
@@ -53,250 +53,257 @@ class CheckoutTile extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final promoCodeTextController = useTextEditingController();
 
-    return useProvider(cartProvider).when(
-      data: (cart) {
-        return Positioned(
-          bottom: MediaQuery.of(context).padding.bottom,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 170,
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20)),
-                boxShadow: [
-                  BoxShadow(
-                      color: Theme.of(context).hintColor.withOpacity(0.2),
-                      offset: const Offset(0, -2),
-                      blurRadius: 5.0)
-                ]),
-            child: SizedBox(
-              width: AppConfig(context).appWidth(90),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Row(children: <Widget>[
-                    Expanded(
-                      child: Text(context.l10n.subtotal,
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-                    Text(
-                        FormattingUtils.getPriceNumberString(
-                          cart!.subTotal,
-                          withCurrency: true,
-                        ),
-                        style: Theme.of(context).textTheme.subtitle1),
-                  ]),
-                  Row(children: <Widget>[
-                    Expanded(
-                      child: Text(context.l10n.vat20,
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-                    Text(
-                        FormattingUtils.getPriceNumberString(
-                          cart.totalCartVat,
-                          withCurrency: true,
-                        ),
-                        style: Theme.of(context).textTheme.subtitle1)
-                  ]),
-                  if (cart.promoCode != null)
-                    Row(children: <Widget>[
-                      Expanded(
-                        child: Text(context.l10n.promoCodeLabel,
-                            style: Theme.of(context).textTheme.bodyText1),
-                      ),
-                      Text(
-                          '- ${FormattingUtils.getPriceNumberString(
-                            cart.promoCodeValue,
-                            withCurrency: true,
-                          )}',
-                          style: Theme.of(context).textTheme.subtitle1)
+    return ref.watch(cartProvider).when(
+          data: (cart) {
+            return Positioned(
+              bottom: MediaQuery.of(context).padding.bottom,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 170,
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(20)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Theme.of(context).hintColor.withOpacity(0.2),
+                          offset: const Offset(0, -2),
+                          blurRadius: 5.0)
                     ]),
-                  const Spacer(flex: 1),
-                  Row(children: <Widget>[
-                    Expanded(
-                        child: Text(context.l10n.checkout,
-                            style: Theme.of(context).textTheme.headline6)),
-                    Text(
-                      FormattingUtils.getPriceNumberString(
-                        cart.totalCartValue,
-                        withCurrency: true,
-                      ),
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ]),
-                  const Spacer(flex: 1),
-                  Row(
-                    children: [
-                      if (showPromoButton)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 14.0) +
-                              const EdgeInsets.only(right: 12),
-                          child: ProgressButton(
-                            onPressed: () async {
-                              try {
-                                if (cart.promoCode != null) {
-                                  context.read(_promoButtonStateProvider);
-                                  var res = await context
-                                      .read(cloudFunctionsProvider)
-                                      .removePromoCode();
-                                  if (res) {
-                                    showSimpleNotification(
-                                      Text(context.l10n.promoCodeRemoved),
-                                      duration: const Duration(seconds: 5),
-                                      slideDismissDirection:
-                                          DismissDirection.horizontal,
-                                      context: context,
-                                    );
-                                  }
-                                } else {
-                                  var promo = await showAddPromoDialog(
-                                      context, promoCodeTextController);
-                                  context
-                                      .read(_promoButtonStateProvider)
-                                      .state = ButtonState.loading;
-                                  if (promo != null || promo!.isNotEmpty) {
-                                    final res = await context
-                                        .read(cartRepositoryProvider)!
-                                        .promoApplied(promo);
-                                    if (res) {
-                                      showSimpleNotification(
-                                        Text(context.l10n.promoCodeApplied),
-                                        duration: const Duration(seconds: 5),
-                                        slideDismissDirection:
-                                            DismissDirection.horizontal,
-                                        context: context,
-                                      );
-                                    } else {
-                                      showSimpleNotification(
-                                        Text(context.l10n.promoCodeInvalid),
-                                        duration: const Duration(seconds: 5),
-                                        slideDismissDirection:
-                                            DismissDirection.horizontal,
-                                        context: context,
-                                      );
-                                    }
-                                  }
-                                }
-                              } finally {
-                                context.read(_promoButtonStateProvider).state =
-                                    ButtonState.idle;
-                              }
-                            },
-                            minWidth: AppConfig(context).appWidth(20),
-                            maxWidth: AppConfig(context).appWidth(20),
-                            state: useProvider(
-                              _promoButtonStateProvider
-                                  .select((value) => value.state),
-                            ),
-                            stateWidgets: {
-                              ButtonState.idle: InkResponse(
-                                splashColor:
-                                    Colors.deepOrangeAccent, // splash color
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    cart.promoCode == null
-                                        ? Text(context.l10n.promoCodeLabel)
-                                        : Icon(
-                                            Icons.receipt_long_outlined,
-                                            color: cart.promoCode != null
-                                                ? Colors.white
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                          ), // icon
-                                    // text
-                                  ],
-                                ),
-                              ),
-                              ButtonState.loading: Loader(
-                                  valueColor: Theme.of(context).primaryColor),
-                              ButtonState.success: const SizedBox.shrink(),
-                              ButtonState.fail: const SizedBox.shrink(),
-                            },
-                            stateColors: {
-                              for (var e in ButtonState.values.map((e) =>
-                                  Tuple2(e, Theme.of(context).primaryColor)))
-                                e.item1: e.item2
-                            },
-                          ),
+                child: SizedBox(
+                  width: AppConfig(context).appWidth(90),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Row(children: <Widget>[
+                        Expanded(
+                          child: Text(context.l10n.subtotal,
+                              style: Theme.of(context).textTheme.bodyText1),
                         ),
-                      Expanded(
-                        child: Stack(
-                          fit: StackFit.loose,
-                          alignment: AlignmentDirectional.centerEnd,
-                          children: <Widget>[
+                        Text(
+                            FormattingUtils.getPriceNumberString(
+                              cart!.subTotal,
+                              withCurrency: true,
+                            ),
+                            style: Theme.of(context).textTheme.subtitle1),
+                      ]),
+                      Row(children: <Widget>[
+                        Expanded(
+                          child: Text(context.l10n.vat20,
+                              style: Theme.of(context).textTheme.bodyText1),
+                        ),
+                        Text(
+                            FormattingUtils.getPriceNumberString(
+                              cart.totalCartVat,
+                              withCurrency: true,
+                            ),
+                            style: Theme.of(context).textTheme.subtitle1)
+                      ]),
+                      if (cart.promoCode != null)
+                        Row(children: <Widget>[
+                          Expanded(
+                            child: Text(context.l10n.promoCodeLabel,
+                                style: Theme.of(context).textTheme.bodyText1),
+                          ),
+                          Text(
+                              '- ${FormattingUtils.getPriceNumberString(
+                                cart.promoCodeValue,
+                                withCurrency: true,
+                              )}',
+                              style: Theme.of(context).textTheme.subtitle1)
+                        ]),
+                      const Spacer(flex: 1),
+                      Row(children: <Widget>[
+                        Expanded(
+                            child: Text(context.l10n.checkout,
+                                style: Theme.of(context).textTheme.headline6)),
+                        Text(
+                          FormattingUtils.getPriceNumberString(
+                            cart.totalCartValue,
+                            withCurrency: true,
+                          ),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ]),
+                      const Spacer(flex: 1),
+                      Row(
+                        children: [
+                          if (showPromoButton)
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 14.0) +
+                                      const EdgeInsets.only(right: 12),
                               child: ProgressButton(
-                                maxWidth: double.infinity,
-                                minWidth: double.infinity,
-                                onPressed: actionCallback == null
-                                    ? null
-                                    : () => onPrimaryButtonClick(context),
-                                state: useProvider(
-                                    _proceedButtonStateProvider(actionLabel)
-                                        .select((value) => value.state)),
+                                onPressed: () async {
+                                  try {
+                                    if (cart.promoCode != null) {
+                                      ref.read(_promoButtonStateProvider);
+                                      var res = await ref
+                                          .read(cloudFunctionsProvider)
+                                          .removePromoCode();
+                                      if (res) {
+                                        showSimpleNotification(
+                                          Text(context.l10n.promoCodeRemoved),
+                                          duration: const Duration(seconds: 5),
+                                          slideDismissDirection:
+                                              DismissDirection.horizontal,
+                                          context: context,
+                                        );
+                                      }
+                                    } else {
+                                      var promo = await showAddPromoDialog(
+                                          context, promoCodeTextController);
+                                      ref
+                                          .read(_promoButtonStateProvider.state)
+                                          .state = ButtonState.loading;
+                                      if (promo != null || promo!.isNotEmpty) {
+                                        final res = await ref
+                                            .read(cartRepositoryProvider)!
+                                            .promoApplied(promo);
+                                        if (res) {
+                                          showSimpleNotification(
+                                            Text(context.l10n.promoCodeApplied),
+                                            duration:
+                                                const Duration(seconds: 5),
+                                            slideDismissDirection:
+                                                DismissDirection.horizontal,
+                                            context: context,
+                                          );
+                                        } else {
+                                          showSimpleNotification(
+                                            Text(context.l10n.promoCodeInvalid),
+                                            duration:
+                                                const Duration(seconds: 5),
+                                            slideDismissDirection:
+                                                DismissDirection.horizontal,
+                                            context: context,
+                                          );
+                                        }
+                                      }
+                                    }
+                                  } finally {
+                                    ref
+                                        .read(_promoButtonStateProvider.state)
+                                        .state = ButtonState.idle;
+                                  }
+                                },
+                                minWidth: AppConfig(context).appWidth(20),
+                                maxWidth: AppConfig(context).appWidth(20),
+                                state: ref.watch(_promoButtonStateProvider),
                                 stateWidgets: {
-                                  ButtonState.idle: Text(
-                                    actionLabel,
-                                    textAlign: TextAlign.start,
+                                  ButtonState.idle: InkResponse(
+                                    splashColor:
+                                        Colors.deepOrangeAccent, // splash color
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        cart.promoCode == null
+                                            ? Text(context.l10n.promoCodeLabel)
+                                            : Icon(
+                                                Icons.receipt_long_outlined,
+                                                color: cart.promoCode != null
+                                                    ? Colors.white
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                              ), // icon
+                                        // text
+                                      ],
+                                    ),
                                   ),
-                                  ButtonState.loading: const Loader(),
+                                  ButtonState.loading: Loader(
+                                      valueColor:
+                                          Theme.of(context).primaryColor),
                                   ButtonState.success: const SizedBox.shrink(),
                                   ButtonState.fail: const SizedBox.shrink(),
                                 },
                                 stateColors: {
                                   for (var e in ButtonState.values.map((e) =>
                                       Tuple2(
-                                          e,
-                                          Theme.of(context)
-                                              .colorScheme
-                                              .secondary)))
+                                          e, Theme.of(context).primaryColor)))
                                     e.item1: e.item2
                                 },
                               ),
                             ),
-                            if (!isLastStep)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Theme.of(context).primaryColor,
+                          Expanded(
+                            child: Stack(
+                              fit: StackFit.loose,
+                              alignment: AlignmentDirectional.centerEnd,
+                              children: <Widget>[
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
+                                  child: ProgressButton(
+                                    maxWidth: double.infinity,
+                                    minWidth: double.infinity,
+                                    onPressed: actionCallback == null
+                                        ? null
+                                        : () =>
+                                            onPrimaryButtonClick(context, ref),
+                                    state: ref.watch(
+                                      _proceedButtonStateProvider(actionLabel),
+                                    ),
+                                    stateWidgets: {
+                                      ButtonState.idle: Text(
+                                        actionLabel,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      ButtonState.loading: const Loader(),
+                                      ButtonState.success:
+                                          const SizedBox.shrink(),
+                                      ButtonState.fail: const SizedBox.shrink(),
+                                    },
+                                    stateColors: {
+                                      for (var e in ButtonState.values.map(
+                                          (e) => Tuple2(
+                                              e,
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary)))
+                                        e.item1: e.item2
+                                    },
+                                  ),
                                 ),
-                              )
-                          ],
-                        ),
+                                if (!isLastStep)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  )
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
+          loading: () => const Loader(),
+          error: (_, __) => Center(child: Text(context.l10n.error)),
         );
-      },
-      loading: () => const Loader(),
-      error: (_, __) => Center(child: Text(context.l10n.error)),
-    );
   }
 
-  void onPrimaryButtonClick(BuildContext context) async {
+  void onPrimaryButtonClick(BuildContext context, WidgetRef ref) async {
     try {
-      context.read(_proceedButtonStateProvider(actionLabel)).state =
+      ref.read(_proceedButtonStateProvider(actionLabel).state).state =
           ButtonState.loading;
 
-      final res = await context.read(cloudFunctionsProvider).validateCart();
+      final res = await ref.read(cloudFunctionsProvider).validateCart();
       switch (res) {
         case CartStatus.ok:
           actionCallback!();
@@ -327,7 +334,7 @@ class CheckoutTile extends HookWidget {
           break;
       }
     } finally {
-      context.read(_proceedButtonStateProvider(actionLabel)).state =
+      ref.read(_proceedButtonStateProvider(actionLabel).state).state =
           ButtonState.idle;
     }
   }

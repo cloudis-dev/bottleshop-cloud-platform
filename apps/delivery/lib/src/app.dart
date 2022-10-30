@@ -30,12 +30,12 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class App extends HookWidget {
+class App extends HookConsumerWidget {
   const App({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final routerDelegate = useProvider(rootRouterDelegateProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final routerDelegate = ref.watch(rootRouterDelegateProvider);
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -56,7 +56,7 @@ class App extends HookWidget {
         scrollBehavior:
             ScrollConfiguration.of(context).copyWith(scrollbars: false),
         backButtonDispatcher: RootBackButtonDispatcher(),
-        routeInformationProvider: useProvider(routeInformationProvider),
+        routeInformationProvider: ref.watch(routeInformationProvider),
         builder: (context, router) => OverlaySupport.global(
           child: PlatformInitializationView(
             child: VersionCheckView(
@@ -75,27 +75,27 @@ class App extends HookWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        locale: useProvider<Locale>(currentLocaleProvider),
+        locale: ref.watch(currentLocaleProvider),
         theme: appTheme,
         darkTheme: appThemeDark,
-        themeMode: ThemeMode.dark,
+        themeMode: ref.watch(currentThemeModeProvider),
       ),
     );
   }
 }
 
-class _RouterWidget extends HookWidget {
+class _RouterWidget extends HookConsumerWidget {
   final Widget router;
 
   const _RouterWidget(this.router, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (kIsWeb) {
       useEffect(
         () {
-          if (!context.read(sharedPreferencesProvider).getHasAgeVerified()) {
-            final rootNavKey = context.read(navigationProvider).rootNavKey;
+          if (!ref.read(sharedPreferencesProvider).getHasAgeVerified()) {
+            final rootNavKey = ref.read(navigationProvider).rootNavKey;
 
             Future.doWhile(
               () async {
@@ -123,11 +123,11 @@ class _RouterWidget extends HookWidget {
   }
 }
 
-class AgeVerificationDialog extends HookWidget {
+class AgeVerificationDialog extends HookConsumerWidget {
   const AgeVerificationDialog({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(
@@ -141,7 +141,7 @@ class AgeVerificationDialog extends HookWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              await context
+              await ref
                   .read(sharedPreferencesProvider)
                   .setHasAgeVerified(verified: true);
 

@@ -42,17 +42,17 @@ class ProductsPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _ProductsView extends HookWidget {
+class _ProductsView extends HookConsumerWidget {
   const _ProductsView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // This is to preserve state
-    useProvider(flashSaleProductsProvider);
-    useProvider(recommendedProductsProvider);
-    useProvider(newArrivalsProductsProvider);
+    ref.watch(flashSaleProductsProvider);
+    ref.watch(recommendedProductsProvider);
+    ref.watch(newArrivalsProductsProvider);
 
-    useProvider(allProductsProvider);
+    ref.watch(allProductsProvider);
 
     return const Landing();
   }

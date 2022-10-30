@@ -43,14 +43,14 @@ class HomeProductsBody extends HookWidget {
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   const _Body({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final isAnyFilterActive = useProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isAnyFilterActive = ref.watch(
         appliedFilterProvider(FilterType.allProducts)
-            .select((value) => value.state.isAnyFilterActive));
+            .select((value) => value.isAnyFilterActive));
     final scrollCtrl = useScrollController();
 
     final children = [

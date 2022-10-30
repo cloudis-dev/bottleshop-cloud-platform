@@ -13,11 +13,10 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class SocialMediaButtonsRow extends HookWidget {
+class SocialMediaButtonsRow extends HookConsumerWidget {
   final bool isAppleSupported;
   final ValueChanged<bool> authCallback;
   final bool enabled;
@@ -30,7 +29,7 @@ class SocialMediaButtonsRow extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -40,7 +39,7 @@ class SocialMediaButtonsRow extends HookWidget {
             onTap: () async {
               if (enabled) {
                 try {
-                  final result = await context
+                  final result = await ref
                       .read(userRepositoryProvider)
                       .signUpWithFacebook(context);
                   authCallback(result);
@@ -59,7 +58,7 @@ class SocialMediaButtonsRow extends HookWidget {
           child: InkWell(
             onTap: () async {
               if (enabled) {
-                final result = await context
+                final result = await ref
                     .read(userRepositoryProvider)
                     .signUpWithGoogle(context);
                 authCallback(result);
@@ -77,7 +76,7 @@ class SocialMediaButtonsRow extends HookWidget {
               builder: (context) => InkWell(
                 onTap: () async {
                   if (enabled) {
-                    final result = await context
+                    final result = await ref
                         .read(userRepositoryProvider)
                         .signUpWithApple(context);
                     authCallback(result);
@@ -95,7 +94,7 @@ class SocialMediaButtonsRow extends HookWidget {
           child: InkWell(
             onTap: () async {
               if (enabled) {
-                final result = await context
+                final result = await ref
                     .read(userRepositoryProvider)
                     .signUpAnonymously(context);
                 authCallback(result);

@@ -102,7 +102,7 @@ class _MenuBody extends HookWidget {
   }
 }
 
-class _MenuItemsTab extends HookWidget {
+class _MenuItemsTab extends HookConsumerWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final VoidCallback onLogin;
 
@@ -113,10 +113,10 @@ class _MenuItemsTab extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scrollCtrl = useScrollController();
     final hasUser =
-        useProvider(currentUserProvider.select((value) => value != null));
+        ref.watch(currentUserProvider.select((value) => value != null));
 
     return IntrinsicHeight(
       child: CupertinoScrollbar(
@@ -143,7 +143,7 @@ class _MenuItemsTab extends HookWidget {
                   leading: const Icon(Icons.favorite),
                   title: Text(context.l10n.favoriteTabLabel),
                   onTap: () {
-                    context.read(navigationProvider).setNestingBranch(
+                    ref.read(navigationProvider).setNestingBranch(
                           scaffoldKey.currentContext!,
                           NestingBranch.favorites,
                         );
@@ -155,14 +155,13 @@ class _MenuItemsTab extends HookWidget {
                   leading: const Icon(Icons.settings),
                   title: Text(context.l10n.settings),
                   onTap: () {
-                    context.read(navigationProvider).setNestingBranch(
+                    ref.read(navigationProvider).setNestingBranch(
                           scaffoldKey.currentContext!,
                           NestingBranch.account,
-                          branchParam: scaffoldKey.currentContext!
-                              .read(navigationProvider)
-                              .getNestingBranch(
-                                scaffoldKey.currentContext!,
-                              ),
+                          branchParam:
+                              ref.read(navigationProvider).getNestingBranch(
+                                    scaffoldKey.currentContext!,
+                                  ),
                         );
 
                     OverlaySupportEntry.of(context)!.dismiss(animate: false);
@@ -176,14 +175,13 @@ class _MenuItemsTab extends HookWidget {
                   leading: const Icon(Icons.help_outlined),
                   title: Text(context.l10n.helpSupport),
                   onTap: () {
-                    context.read(navigationProvider).setNestingBranch(
+                    ref.read(navigationProvider).setNestingBranch(
                           scaffoldKey.currentContext!,
                           NestingBranch.help,
-                          branchParam: scaffoldKey.currentContext!
-                              .read(navigationProvider)
-                              .getNestingBranch(
-                                scaffoldKey.currentContext!,
-                              ),
+                          branchParam:
+                              ref.read(navigationProvider).getNestingBranch(
+                                    scaffoldKey.currentContext!,
+                                  ),
                         );
 
                     OverlaySupportEntry.of(context)!.dismiss(animate: false);
@@ -193,7 +191,7 @@ class _MenuItemsTab extends HookWidget {
                   leading: const Icon(Icons.gavel),
                   title: Text(context.l10n.menuTerms),
                   onTap: () {
-                    context.read(navigationProvider).pushPage(
+                    ref.read(navigationProvider).pushPage(
                           context,
                           AppPageNode(page: TermsConditionsPage()),
                           toParent: true,
@@ -206,7 +204,7 @@ class _MenuItemsTab extends HookWidget {
                     leading: const Icon(Icons.exit_to_app),
                     title: Text(context.l10n.logOut),
                     onTap: () async {
-                      await context.read(userRepositoryProvider).signOut();
+                      await ref.read(userRepositoryProvider).signOut();
                       OverlaySupportEntry.of(context)!.dismiss(animate: false);
                     },
                   )
@@ -219,7 +217,7 @@ class _MenuItemsTab extends HookWidget {
   }
 }
 
-class _TermsAndConditionsTab extends HookWidget {
+class _TermsAndConditionsTab extends HookConsumerWidget {
   final VoidCallback onAccept;
   final VoidCallback onBack;
 
@@ -230,7 +228,7 @@ class _TermsAndConditionsTab extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scrollCtrl = useScrollController();
 
     return IntrinsicHeight(
@@ -262,7 +260,7 @@ class _TermsAndConditionsTab extends HookWidget {
                       const SizedBox(height: 20),
                       TermsAndConditionsTextContent(
                         onNavigateToTermsPage: () {
-                          context.read(navigationProvider).pushPage(
+                          ref.read(navigationProvider).pushPage(
                                 context,
                                 AppPageNode(page: TermsConditionsPage()),
                               );

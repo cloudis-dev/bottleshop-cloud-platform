@@ -8,7 +8,6 @@ import 'package:delivery/src/features/product_detail/presentation/widgets/molecu
 import 'package:delivery/src/features/product_detail/presentation/widgets/molecules/toggle_wishlist_button.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
@@ -19,7 +18,7 @@ enum _ProductAction {
 
 final _logger = Logger((ProductActionsWidget).toString());
 
-class ProductActionsWidget extends HookWidget {
+class ProductActionsWidget extends HookConsumerWidget {
   final ProductModel product;
   final GlobalKey<AuthPopupButtonState> authButtonKey;
 
@@ -63,52 +62,53 @@ class ProductActionsWidget extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final hasUser =
-        useProvider(currentUserProvider.select((value) => value != null));
+        ref.watch(currentUserProvider.select((value) => value != null));
 
     return SizedBox(
       height: 42,
-      child: useProvider(isInCartStreamProvider(product)).maybeWhen(
-        data: (isInCart) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              ToggleWishlistButton(
-                product: product,
-                actionOverride: hasUser
-                    ? null
-                    : () => needsLoginAlert(context, _ProductAction.favorite),
-              ),
-              const SizedBox(width: 10),
-              (isInCart ?? false)
-                  ? Expanded(
-                      child: QuantityUpdateWidget(
-                        product: product,
-                        actionOverride: hasUser
-                            ? null
-                            : () => needsLoginAlert(
-                                context, _ProductAction.purchase),
-                      ),
-                    )
-                  : Expanded(
-                      child: AddToCartButton(
-                        product: product,
-                        actionOverride: hasUser
-                            ? null
-                            : () => needsLoginAlert(
-                                context, _ProductAction.purchase),
-                      ),
-                    ),
-            ],
-          );
-        },
-        orElse: () => const Loader(),
-        error: (err, stack) {
-          _logger.severe('Failed to fetch is item in cart', err, stack);
-          return Text(context.l10n.error);
-        },
-      ),
+      child: ref.watch(isInCartStreamProvider(product)).maybeWhen(
+            data: (isInCart) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  ToggleWishlistButton(
+                    product: product,
+                    actionOverride: hasUser
+                        ? null
+                        : () =>
+                            needsLoginAlert(context, _ProductAction.favorite),
+                  ),
+                  const SizedBox(width: 10),
+                  (isInCart ?? false)
+                      ? Expanded(
+                          child: QuantityUpdateWidget(
+                            product: product,
+                            actionOverride: hasUser
+                                ? null
+                                : () => needsLoginAlert(
+                                    context, _ProductAction.purchase),
+                          ),
+                        )
+                      : Expanded(
+                          child: AddToCartButton(
+                            product: product,
+                            actionOverride: hasUser
+                                ? null
+                                : () => needsLoginAlert(
+                                    context, _ProductAction.purchase),
+                          ),
+                        ),
+                ],
+              );
+            },
+            orElse: () => const Loader(),
+            error: (err, stack) {
+              _logger.severe('Failed to fetch is item in cart', err, stack);
+              return Text(context.l10n.error);
+            },
+          ),
     );
   }
 }

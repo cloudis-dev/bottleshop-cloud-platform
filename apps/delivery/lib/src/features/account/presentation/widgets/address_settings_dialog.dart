@@ -28,7 +28,7 @@ import 'package:overlay_support/overlay_support.dart';
 
 final _logger = Logger((AddressSettingsDialog).toString());
 
-class AddressSettingsDialog extends HookWidget {
+class AddressSettingsDialog extends HookConsumerWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final String title;
   final Icon icon;
@@ -42,37 +42,37 @@ class AddressSettingsDialog extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    return useProvider(currentUserAsStream).when(
-      data: (user) {
-        var profileData = <String, dynamic>{};
-        return TextButton(
-          onPressed: user == null
-              ? null
-              : () async {
-                  await showAddressDialog(
-                    context: context,
-                    controller: scrollController,
-                    user: user,
-                    profileData: profileData,
-                  );
-                },
-          style: TextButton.styleFrom(
-              primary: Theme.of(context).colorScheme.secondary),
-          child: Text(
-            context.l10n.edit,
-          ),
+    return ref.watch(currentUserAsStream).when(
+          data: (user) {
+            var profileData = <String, dynamic>{};
+            return TextButton(
+              onPressed: user == null
+                  ? null
+                  : () async {
+                      await showAddressDialog(
+                        context: context,
+                        controller: scrollController,
+                        user: user,
+                        profileData: profileData,
+                      );
+                    },
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.secondary),
+              child: Text(
+                context.l10n.edit,
+              ),
+            );
+          },
+          loading: () => const Loader(),
+          error: (err, stack) {
+            _logger.severe('Failed to stream current user', err, stack);
+            return Center(
+              child: Text(context.l10n.error),
+            );
+          },
         );
-      },
-      loading: () => const Loader(),
-      error: (err, stack) {
-        _logger.severe('Failed to stream current user', err, stack);
-        return Center(
-          child: Text(context.l10n.error),
-        );
-      },
-    );
   }
 
   Future<void> showAddressDialog({

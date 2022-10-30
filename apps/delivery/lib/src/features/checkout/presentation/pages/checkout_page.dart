@@ -54,13 +54,13 @@ class CheckoutPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _CheckoutPageView extends HookWidget {
+class _CheckoutPageView extends HookConsumerWidget {
   const _CheckoutPageView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final currentUser = useProvider(currentUserProvider);
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserProvider);
+    final currentLocale = ref.watch(currentLocaleProvider);
     final paymentDataNotifier = useValueNotifier<PaymentData?>(null, const []);
     final checkoutDoneMessageNotifier =
         useValueNotifier<String?>(null, const []);
@@ -72,20 +72,19 @@ class _CheckoutPageView extends HookWidget {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         Loader(
-          inAsyncCall: useProvider(isRedirectingProvider),
+          inAsyncCall: ref.watch(isRedirectingProvider),
           child: ShippingDetailsView(
             onNextPage: (paymentData) async {
               _logger.info('payment data: ${paymentData.toString()}');
               paymentDataNotifier.value = paymentData;
               if (kIsWeb) {
-                context.read(isRedirectingProvider.notifier).redirecting = true;
+                ref.read(isRedirectingProvider.notifier).redirecting = true;
                 if (paymentData.deliveryType == kOrderTypeCashOnDelivery) {
-                  final orderId = await context
+                  final orderId = await ref
                       .read(cloudFunctionsProvider)
                       .createCashOnDeliveryOrder(paymentData);
                   _logger.info('orderID: $orderId');
-                  context.read(isRedirectingProvider.notifier).redirecting =
-                      false;
+                  ref.read(isRedirectingProvider.notifier).redirecting = false;
                   if (orderId != null) {
                     checkoutDoneMessageNotifier.value =
                         'Order #$orderId confirmed';
@@ -116,7 +115,7 @@ class _CheckoutPageView extends HookWidget {
                     deliveryType: paymentData.deliveryType,
                     orderNote: paymentData.orderNote,
                   );
-                  final sessionId = await context
+                  final sessionId = await ref
                       .read(cloudFunctionsProvider)
                       .createStripePriceIds(sessionRequest);
                   _logger.info('sessionID: $sessionId');
@@ -131,7 +130,7 @@ class _CheckoutPageView extends HookWidget {
               }
             },
             onBackButton: () {
-              context.read(navigationProvider).popPage(context);
+              ref.read(navigationProvider).popPage(context);
             },
           ),
         ),
@@ -173,7 +172,7 @@ class _CheckoutPageView extends HookWidget {
               : CheckoutDoneView(
                   checkoutDoneMessage,
                   onClose: () {
-                    context
+                    ref
                         .read(navigationProvider)
                         .replaceRootStackWith([AppPageNode(page: HomePage())]);
                   },

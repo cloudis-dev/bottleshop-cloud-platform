@@ -6,11 +6,10 @@ import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
 import 'package:delivery/src/features/home/presentation/widgets/molecules/breadcrumbs.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class HomePageTemplate extends StatelessWidget {
+class HomePageTemplate extends ConsumerWidget {
   final Key? scaffoldKey;
   final Widget body;
 
@@ -26,7 +25,7 @@ class HomePageTemplate extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -54,7 +53,7 @@ class HomePageTemplate extends StatelessWidget {
                 cursor: MaterialStateMouseCursor.clickable,
                 child: GestureDetector(
                   onTap: () {
-                    final nav = context.read(navigationProvider);
+                    final nav = ref.read(navigationProvider);
 
                     if (nav.getNestingBranch(context) == NestingBranch.shop) {
                       nav.replaceAllWith(context, []);
@@ -93,15 +92,15 @@ class HomePageTemplate extends StatelessWidget {
   }
 }
 
-class HomeAppBarButton extends StatelessWidget {
+class HomeAppBarButton extends ConsumerWidget {
   const HomeAppBarButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return TextButton(
       child: Text(context.l10n.homeTabLabel),
       onPressed: () {
-        final nav = context.read(navigationProvider);
+        final nav = ref.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.shop) {
           nav.replaceAllWith(context, []);
         } else {
@@ -112,15 +111,15 @@ class HomeAppBarButton extends StatelessWidget {
   }
 }
 
-class CategoriesAppBarButton extends StatelessWidget {
+class CategoriesAppBarButton extends ConsumerWidget {
   const CategoriesAppBarButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return TextButton(
       child: Text(context.l10n.categories),
       onPressed: () {
-        final nav = context.read(navigationProvider);
+        final nav = ref.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.categories) {
           nav.replaceAllWith(context, []);
         } else {
@@ -134,15 +133,15 @@ class CategoriesAppBarButton extends StatelessWidget {
   }
 }
 
-class WholeSaleAppBarButton extends StatelessWidget {
+class WholeSaleAppBarButton extends ConsumerWidget {
   const WholeSaleAppBarButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return TextButton(
       child: Text(context.l10n.wholesale),
       onPressed: () {
-        final nav = context.read(navigationProvider);
+        final nav = ref.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.wholesale) {
           nav.replaceAllWith(context, []);
         } else {
@@ -153,16 +152,16 @@ class WholeSaleAppBarButton extends StatelessWidget {
   }
 }
 
-class OrdersAppBarButton extends HookWidget {
+class OrdersAppBarButton extends HookConsumerWidget {
   const OrdersAppBarButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final child = Text(context.l10n.orderTabLabel);
 
     return TextButton(
       onPressed: () {
-        final nav = context.read(navigationProvider);
+        final nav = ref.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.orders) {
           nav.replaceAllWith(context, []);
         } else {
@@ -172,28 +171,28 @@ class OrdersAppBarButton extends HookWidget {
           );
         }
       },
-      child: useProvider(activeOrdersCountProvider).maybeWhen(
-        data: (count) => BottleshopBadge(
-          showBadge: count > 0,
-          badgeText: count.toString(),
-          position: BadgePosition.topEnd(end: -15, top: -10),
-          child: child,
-        ),
-        orElse: () => child,
-      ),
+      child: ref.watch(activeOrdersCountProvider).maybeWhen(
+            data: (count) => BottleshopBadge(
+              showBadge: count > 0,
+              badgeText: count.toString(),
+              position: BadgePosition.topEnd(end: -15, top: -10),
+              child: child,
+            ),
+            orElse: () => child,
+          ),
     );
   }
 }
 
-class SaleAppBarButton extends StatelessWidget {
+class SaleAppBarButton extends ConsumerWidget {
   const SaleAppBarButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return TextButton(
       child: Text(context.l10n.sale),
       onPressed: () {
-        final nav = context.read(navigationProvider);
+        final nav = ref.read(navigationProvider);
         if (nav.getNestingBranch(context) == NestingBranch.sale) {
           nav.replaceAllWith(context, []);
         } else {

@@ -19,11 +19,10 @@ import 'package:delivery/src/features/products/presentation/widgets/product_grid
 import 'package:delivery/src/features/products/presentation/widgets/product_list_item.dart';
 import 'package:delivery/src/features/products/utils/product_sliver_grid_delegate.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
-class SliverProductsList extends HookWidget {
+class SliverProductsList extends HookConsumerWidget {
   const SliverProductsList({
     Key? key,
     required this.productsState,
@@ -34,8 +33,8 @@ class SliverProductsList extends HookWidget {
   final void Function() requestData;
 
   @override
-  Widget build(BuildContext context) {
-    final layoutMode = useProvider(productsLayoutModeProvider).state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final layoutMode = ref.watch(productsLayoutModeProvider);
 
     if (layoutMode == SupportedLayoutMode.list) {
       return SliverPagedList<ProductModel>(

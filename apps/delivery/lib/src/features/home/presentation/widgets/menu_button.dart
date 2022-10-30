@@ -2,21 +2,20 @@ import 'package:badges/badges.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MenuButton extends HookWidget {
+class MenuButton extends HookConsumerWidget {
   final GlobalKey<ScaffoldState> drawerScaffoldKey;
 
   const MenuButton({Key? key, required this.drawerScaffoldKey})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final showBadge = useProvider(activeOrdersCountProvider)
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showBadge = ref
+            .watch(activeOrdersCountProvider)
             .whenData((value) => value > 0)
-            .data
-            ?.value ??
+            .value ??
         false;
 
     return IconButton(
