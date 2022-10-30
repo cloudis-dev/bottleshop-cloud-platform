@@ -2,12 +2,16 @@ import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.
 import 'package:flutter/material.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:flutter/material.dart';
-
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../../core/data/res/constants.dart';
+import '../../../../../core/data/services/shared_preferences_service.dart';
+import '../../../../../core/presentation/providers/core_providers.dart';
 
-
-class Footer extends StatelessWidget {
-  Widget build(BuildContext context) {
+class Footer extends HookConsumerWidget {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final language = ref.watch(
+      sharedPreferencesProvider.select((value) => value.getAppLanguage()),
+    );
     return Container(
       height: 342,
       color: Colors.black,
@@ -129,22 +133,22 @@ class Footer extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(context.l10n.monTh+" 10:00 - 22:00",
+                child: Text(context.l10n.monTh + " 10:00 - 22:00",
                     style: Theme.of(context).textTheme.headline5),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(context.l10n.fri+" 10:00 - 24:00",
+                child: Text(context.l10n.fri + " 10:00 - 24:00",
                     style: Theme.of(context).textTheme.headline5),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(context.l10n.sat+" 12:00 - 24:00",
+                child: Text(context.l10n.sat + " 12:00 - 24:00",
                     style: Theme.of(context).textTheme.headline5),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(context.l10n.sun+context.l10n.closed,
+                child: Text(context.l10n.sun + context.l10n.closed,
                     style: Theme.of(context).textTheme.headline5),
               ),
             ],
@@ -184,9 +188,7 @@ class Footer extends StatelessWidget {
                   children: [
                     TextButton(
                         style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.zero
-                        ),
+                            minimumSize: Size.zero, padding: EdgeInsets.zero),
                         child: Image.asset(
                           kInsagramIcon,
                           height: 24,
@@ -194,10 +196,9 @@ class Footer extends StatelessWidget {
                         ),
                         onPressed: () {}),
                     TextButton(
-                      style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.fromLTRB(21, 0, 0, 0)
-                        ),
+                        style: TextButton.styleFrom(
+                            minimumSize: Size.zero,
+                            padding: EdgeInsets.fromLTRB(21, 0, 0, 0)),
                         child: Image.asset(
                           kFacebookIcon,
                           height: 24,
@@ -213,28 +214,27 @@ class Footer extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline2),
               ),
               TextButton(
-                 style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.zero
-                        ),
-                  child: Image.asset(
-                    kAppStoreDownload,
-                    height: 33,
-                    width: 97,
+                  style: TextButton.styleFrom(
+                      minimumSize: Size.zero, padding: EdgeInsets.zero),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 6),
+                    child: (language == LanguageMode.en)
+                        ? Image.asset(kAppStoreBadgeEn,
+                            width: 93, fit: BoxFit.contain)
+                        : Image.asset(kAppStoreBadgeSk,
+                            width: 93, fit: BoxFit.contain),
                   ),
                   onPressed: () {}),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                 child: TextButton(
-                   style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.zero
-                        ),
-                    child: Image.asset(
-                      kGooglePlayDownload,
-                      height: 33,
-                      width: 107,
-                    ),
+                    style: TextButton.styleFrom(
+                        minimumSize: Size.zero, padding: EdgeInsets.zero),
+                    child: (language == LanguageMode.en)
+                        ? Image.asset(kGooglePlayBadgeEn,
+                            width: 107, fit: BoxFit.contain)
+                        : Image.asset(kGooglePlayBadgeSk,
+                            width: 107, fit: BoxFit.contain),
                     onPressed: () {}),
               )
             ],

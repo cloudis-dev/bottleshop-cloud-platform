@@ -5,10 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:delivery/l10n/l10n.dart';
 
 class MainSection extends StatelessWidget {
-  MainSection({
-    super.key,
-  });
-
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[

@@ -2,10 +2,6 @@ import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/material.dart';
 
 class BrandSection extends StatelessWidget {
-  BrandSection({
-    super.key,
-  });
-
   @override
   Widget build(BuildContext context) {
     return Padding(

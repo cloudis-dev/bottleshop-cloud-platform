@@ -1,25 +1,18 @@
-import 'dart:js';
-
 import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/body_sections/mobile_app_section/app_feature_row.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MobileAppSection extends StatelessWidget {
-  MobileAppSection({
-    super.key,
-  });
-
+class MobileAppSection extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    // final language = ref.watch(
-    //   sharedPreferencesProvider.select((value) => value.getAppLanguage()),
-    // );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final language = ref.watch(
+      sharedPreferencesProvider.select((value) => value.getAppLanguage()),
+    );
     return Stack(children: [
       Container(
         height: 606,
@@ -104,13 +97,27 @@ class MobileAppSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(kAppStoreBadgeSk,
-                      width: 130, fit: BoxFit.contain),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                          minimumSize: Size.zero, padding: EdgeInsets.zero),
+                      child: (language == LanguageMode.en)
+                          ? Image.asset(kAppStoreBadgeEn,
+                              width: 130, fit: BoxFit.contain)
+                          : Image.asset(kAppStoreBadgeSk,
+                              width: 130, fit: BoxFit.contain),
+                      onPressed: () {}),
                   SizedBox(
                     width: 12,
                   ),
-                  Image.asset(kGooglePlayBadgeSk,
-                      width: 146, fit: BoxFit.contain)
+                  TextButton(
+                      style: TextButton.styleFrom(
+                          minimumSize: Size.zero, padding: EdgeInsets.zero),
+                      child: (language == LanguageMode.en)
+                          ? Image.asset(kGooglePlayBadgeEn,
+                              width: 168, fit: BoxFit.contain)
+                          : Image.asset(kGooglePlayBadgeSk,
+                              width: 146, fit: BoxFit.contain),
+                      onPressed: () {}),
                 ],
               )
             ],
