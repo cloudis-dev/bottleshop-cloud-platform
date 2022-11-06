@@ -47,7 +47,7 @@ export async function createOrder(
   orderId: number,
   orderNote = '',
 ): Promise<[string, Cart] | undefined> {
-  if (userId == null || deliveryType == null) {
+  if (!userId || !deliveryType) {
     return Promise.reject('createOrder failed: userId or deliveryType undefined - bad request');
   }
 
