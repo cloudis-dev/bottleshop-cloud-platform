@@ -9,12 +9,15 @@ import { tier1Region } from '../constants/other';
 import { User } from '../models/user';
 import { usersCollection } from '../constants/collections';
 
-const stripe = new Stripe(functions.config()['stripe']['api_key'], { typescript: true, apiVersion: '2020-08-27' });
+const stripe = new Stripe(functions.config().stripe.secret_key, {
+  typescript: true,
+  apiVersion: '2020-08-27',
+});
 
 export const createStripeCustomer = functions
-  .region(tier1Region).runWith({ allowInvalidAppCheckToken: true })
+  .region(tier1Region)
+  .runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: Stripe.CustomerCreateParams, context: CallableContext) => {
-
     try {
       if (context.auth && context.auth.uid) {
         const stripeCustomer = await stripe.customers.create(data);

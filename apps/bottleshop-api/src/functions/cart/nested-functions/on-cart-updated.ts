@@ -1,10 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import {
-  Cart,
-  CartRecord,
-} from '../../../models/cart';
+import { Cart } from '../../../models/cart';
 import {
   cartCollection,
   cartItemsSubCollection,
@@ -12,20 +9,11 @@ import {
   usersCollection,
 } from '../../../constants/collections';
 import { cartFields } from '../../../constants/model-constants';
-import { getCartItemFinalPrice } from '../../../utils/cart-utils';
+import { CartItem, getCart, getCartItems, getCartRef } from '../../../utils/cart-utils';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
+import { calculateProductFinalPrice } from '../../../utils/product-utils';
 import { Product } from '../../../models/product';
-import {
-  tempCartId,
-  tier1Region,
-  VAT,
-} from '../../../constants/other';
-
-export interface CartItem {
-  id?: string;
-  quantity: number;
-  product: Product;
-}
+import { tempCartId, tier1Region, VAT } from '../../../constants/other';
 
 interface Summarization {
   total_items: number;
@@ -40,7 +28,7 @@ function summarizeProductsInCart(cartItems: CartItem[]): Summarization {
   }
 
   return cartItems.reduce<Summarization>((acc, item): Summarization => {
-    const totalPrice = item.quantity * getCartItemFinalPrice(item);
+    const totalPrice = item.quantity * calculateProductFinalPrice(item.product);
 
     return {
       total_items: acc.total_items + 1,
@@ -50,38 +38,15 @@ function summarizeProductsInCart(cartItems: CartItem[]): Summarization {
   }, res);
 }
 
-export async function getCartItems(cartRef: FirebaseFirestore.DocumentReference): Promise<CartItem[]> {
-  return cartRef
-    .collection(cartItemsSubCollection)
-    .get()
-    .then((val) =>
-      Promise.all(
-        val.docs.map<Promise<CartItem | undefined>>(async (e) => {
-          const data = e.data() as CartRecord;
-          const product = await getEntityByRef<Product>(data.product_ref);
-          if (product == null) {
-            return undefined;
-          } else {
-            return {
-              id: data.product_ref.id,
-              quantity: data.quantity,
-              product,
-            };
-          }
-        }),
-      ).then((e) => e.filter((item): item is CartItem => item != null)),
-    );
-}
-
-export const areProductsInCartAvailable = async (cartRef: FirebaseFirestore.DocumentReference): Promise<boolean> => {
-  const cartItems = await getCartItems(cartRef);
+export const areProductsInCartAvailable = async (userId: string): Promise<boolean> => {
+  const cartItems = await getCartItems(userId);
 
   return Promise.all(
     cartItems.map(async (e) => {
       const currentProd = await getEntityByRef<Product>(
         admin.firestore().collection(productsCollection).doc(e.product.cmat),
       );
-      if (currentProd == null) {
+      if (currentProd === undefined) {
         return false;
       }
       return currentProd.amount >= e.quantity;
@@ -95,11 +60,10 @@ export const onCartUpdated = functions
   .onWrite(async (_, context) => {
     try {
       return admin.firestore().runTransaction<unknown>(async () => {
-        const cartRef: FirebaseFirestore.DocumentReference = admin
-          .firestore()
-          .collection(`${usersCollection}/${context.params.userId}/${cartCollection}`)
-          .doc(tempCartId);
-        const [cart, cartItems] = await Promise.all([getEntityByRef<Cart>(cartRef), getCartItems(cartRef)]);
+        const [cart, cartItems] = await Promise.all([
+          getCart(context.params.userId),
+          getCartItems(context.params.userId),
+        ]);
 
         const summarization = summarizeProductsInCart(cartItems);
 
@@ -113,12 +77,14 @@ export const onCartUpdated = functions
         newCart[cartFields.productsTotalPrice] = +summarization.products_total_price.toFixed(2);
         newCart[cartFields.productsVat] = +summarization.products_vat.toFixed(2);
 
-        return cartRef.set(newCart).then(() =>
-          functions.logger.info(`
+        return getCartRef(context.params.userId)
+          .set(newCart)
+          .then(() =>
+            functions.logger.info(`
           Cart updated to following object: ${JSON.stringify(newCart)}
           Products CMATs in cart are: ${cartItems.map((e) => `${e.product.cmat} of count ${e.quantity}`).join(', ')}
           `),
-        );
+          );
       });
     } catch (err) {
       functions.logger.error(`cart update failed ${err}`);

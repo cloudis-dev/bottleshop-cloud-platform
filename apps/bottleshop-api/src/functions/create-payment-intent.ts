@@ -3,21 +3,14 @@ import * as functions from 'firebase-functions';
 import Stripe from 'stripe';
 
 import { Cart } from '../models/cart';
-import {
-  cartCollection,
-  ordersCollection,
-  usersCollection,
-} from '../constants/collections';
+import { cartCollection, ordersCollection, usersCollection } from '../constants/collections';
 import { getCartTotalPrice } from '../utils/cart-utils';
 import { getEntityByRef } from '../utils/document-reference-utils';
 import { Order } from '../models/order';
 import { PaymentData } from '../models/payment-data';
-import {
-  tempCartId,
-  tier1Region,
-} from '../constants/other';
+import { tempCartId, tier1Region } from '../constants/other';
 
-const stripe = new Stripe(functions.config().stripe.api_key, {
+const stripe = new Stripe(functions.config().stripe.secret_key, {
   typescript: true,
   apiVersion: '2020-08-27',
 });
@@ -29,40 +22,43 @@ export async function generateNewOrderId(): Promise<string> {
   return (orders.empty ? 1 : (orders.docs[orders.size - 1].data() as Order).id + 1).toString();
 }
 
-export const createPaymentIntent = functions.region(tier1Region).runWith({ allowInvalidAppCheckToken: true}).https.onCall(async (data: PaymentData, context) => {
-  try {
-    if (context.auth && context.auth.uid) {
-      const cartRef = admin
-        .firestore()
-        .collection(usersCollection)
-        .doc(data.userId)
-        .collection(cartCollection)
-        .doc(tempCartId);
-      const cart: Cart | undefined = await getEntityByRef<Cart>(cartRef);
-      if (cart) {
-        const orderId = await generateNewOrderId();
-        return await stripe.paymentIntents.create({
-          amount: +(getCartTotalPrice(cart) * 100).toFixed(0),
-          description: `Bottleshop 3 Veze #${orderId}`,
-          customer: data.customerId,
-          currency: 'eur',
-          payment_method_types: ['card'],
-          metadata: {
-            platform: 'mobile',
-            userId: data.userId,
-            deliveryType: data.deliveryType,
-            orderNote: data.orderNote || '',
-            orderId,
-          },
-        });
-      } else {
-         return { error: 'bad request'}
+export const createPaymentIntent = functions
+  .region(tier1Region)
+  .runWith({ allowInvalidAppCheckToken: true })
+  .https.onCall(async (data: PaymentData, context) => {
+    try {
+      if (context.auth && context.auth.uid) {
+        const cartRef = admin
+          .firestore()
+          .collection(usersCollection)
+          .doc(data.userId)
+          .collection(cartCollection)
+          .doc(tempCartId);
+        const cart: Cart | undefined = await getEntityByRef<Cart>(cartRef);
+        if (cart) {
+          const orderId = await generateNewOrderId();
+          return await stripe.paymentIntents.create({
+            amount: +(getCartTotalPrice(cart) * 100).toFixed(0),
+            description: `Bottleshop 3 Veze #${orderId}`,
+            customer: data.customerId,
+            currency: 'eur',
+            payment_method_types: ['card'],
+            metadata: {
+              platform: 'mobile',
+              userId: data.userId,
+              deliveryType: data.deliveryType,
+              orderNote: data.orderNote || '',
+              orderId,
+            },
+          });
+        } else {
+          return { error: 'bad request' };
         }
-    } else {
-      return { access: 'denied' };
+      } else {
+        return { access: 'denied' };
+      }
+    } catch (e) {
+      functions.logger.error(`payment failed ${e}`);
+      return e;
     }
-  } catch (e) {
-    functions.logger.error(`payment failed ${e}`);
-    return e;
-  }
-});
+  });

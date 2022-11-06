@@ -6,13 +6,13 @@
 export const getEntityByRef = async <T>(
   userDocRef: FirebaseFirestore.DocumentReference | undefined,
 ): Promise<T | undefined> => {
-  if (userDocRef == null) {
+  if (userDocRef === undefined) {
     return undefined;
   }
 
   const doc = await userDocRef.get();
 
-  if (doc.data() == null) {
+  if (doc.data() === undefined) {
     return undefined;
   }
 

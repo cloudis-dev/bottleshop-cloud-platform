@@ -5,71 +5,40 @@ import express from 'express';
 import * as functions from 'firebase-functions';
 import Stripe from 'stripe';
 
+import { Cart } from '../models/cart';
 import {
-  Cart,
-  CartRecord,
-} from '../models/cart';
-import {
-  cartCollection,
-  cartItemsSubCollection,
   ordersCollection,
   orderTypesCollection,
-  productsCollection,
   promoCodesCollection,
   usersCollection,
 } from '../constants/collections';
 import { DeliveryType } from '../models/order-type';
-import { getCartTotalPrice } from '../utils/cart-utils';
+import { getCart, getCartItems, getCartTotalPrice } from '../utils/cart-utils';
 import { getEntityByRef } from '../utils/document-reference-utils';
-import {
-  Order,
-  OrderItem,
-} from '../models/order';
-import { Product } from '../models/product';
+import { Order, OrderItem } from '../models/order';
 import { productFields } from '../constants/model-constants';
 import { PromoCode } from '../models/promo-code';
-import {
-  tempCartId,
-  tier1Region,
-  VAT,
-} from '../constants/other';
+import { tier1Region, VAT } from '../constants/other';
 import { User } from '../models/user';
+import { getProduct, getProductRef } from '../utils/product-utils';
 
-const stripe = new Stripe(functions.config().stripe.api_key, {
+const stripe = new Stripe(functions.config().stripe.secret_key, {
   typescript: true,
   apiVersion: '2020-08-27',
 });
 const webhookSecret: string = functions.config().stripe.webhook_secret;
 
-function getCartRef(userId: string): FirebaseFirestore.DocumentReference {
-  return admin.firestore().collection(`${usersCollection}/${userId}/${cartCollection}`).doc(tempCartId);
-}
-
-function getCart(userId: string): Promise<Cart | undefined> {
-  return getEntityByRef<Cart>(getCartRef(userId));
-}
-
 async function getOrderItems(userId: string): Promise<OrderItem[]> {
-  const itemsSnap = await getCartRef(userId).collection(cartItemsSubCollection).get();
-
-  const orderItems: OrderItem[] = [];
-  for (const item of itemsSnap.docs) {
-    const cartRecord: CartRecord = item.data() as CartRecord;
-    const productDoc = await cartRecord.product_ref.get();
-    const product = productDoc.data() as Product;
-    if (product) {
-      const paidPrice = product.price_no_vat * cartRecord.quantity * (1 + VAT) * (1 - (product.discount ?? 0));
-
-      const cartItem: OrderItem = {
-        product,
+  return getCartItems(userId).then((items) =>
+    items.map((item) => {
+      const paidPrice = item.product.price_no_vat * item.quantity * (1 + VAT) * (1 - (item.product.discount ?? 0));
+      return {
+        product: item.product,
         paid_price: paidPrice,
-        count: cartRecord.quantity,
+        count: item.quantity,
       };
-      orderItems.push(cartItem);
-    }
-  }
-
-  return orderItems;
+    }),
+  );
 }
 
 export async function createOrder(
@@ -93,7 +62,7 @@ export async function createOrder(
     getCart(userId),
   ]);
 
-  if (cart == null || customer == null) {
+  if (cart === undefined || customer === undefined) {
     return Promise.reject('createOrder failed: cart or customer is null - bad request');
   }
 
@@ -149,13 +118,13 @@ export async function updateProductStockCounts(userId: string): Promise<void> {
   await admin.firestore().runTransaction(async () =>
     Promise.all(
       cartItems.map(async (item) => {
-        const prodRef = admin.firestore().collection(productsCollection).doc(item.product.cmat);
+        const product = await getProduct(item.product.cmat);
 
-        const product = await getEntityByRef<Product>(prodRef);
-        if (product == null) {
+        if (product === undefined) {
           return undefined;
         }
-        return prodRef
+
+        return getProductRef(item.product.cmat)
           .update({
             [productFields.countField]: Math.max(0, product.amount - item.count),
           })
@@ -185,7 +154,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
         const orderDocId = await admin.firestore().runTransaction<string | undefined>(async () => {
           const result = await createOrder(
             session.metadata.userId,
-            session.metadata.deliveryType as DeliveryType,
+            session.metadata.deliveryType,
             parseInt(session.metadata.orderId, 10),
             session.metadata.orderNote,
           );
@@ -220,7 +189,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
           functions.logger.log(`payment_intent.succeeded: ${userId} ${deliveryType} ${orderNote} ${orderId}`);
           const oId = await admin.firestore().runTransaction<string | undefined>(async () => {
             const result = await createOrder(userId, deliveryType as DeliveryType, parseInt(orderId, 10), orderNote);
-            if (result == null) {
+            if (result === undefined) {
               return undefined;
             }
             const [orderDoc, cart] = result;

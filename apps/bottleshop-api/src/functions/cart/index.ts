@@ -1,19 +1,10 @@
-import * as admin from 'firebase-admin';
 import { CallableContext } from 'firebase-functions/lib/providers/https';
 import * as functions from 'firebase-functions';
 
 import { areProductsInCartAvailable } from './nested-functions/on-cart-updated';
-import { Cart } from '../../models/cart';
-import {
-  cartCollection,
-  usersCollection,
-} from '../../constants/collections';
-import { getEntityByRef } from '../../utils/document-reference-utils';
 import { isPromoCodeValid } from './nested-functions/promo-codes';
-import {
-  tempCartId,
-  tier1Region,
-} from '../../constants/other';
+import { tier1Region } from '../../constants/other';
+import { getCart } from '../../utils/cart-utils';
 
 export type CartUpdateResult = { updated: string } | { error: string };
 
@@ -29,15 +20,9 @@ export const validateCart = functions
   .region(tier1Region)
   .https.onCall(async (_, context: CallableContext): Promise<ValidationResult> => {
     if (context.auth && context.auth.uid) {
-      const cartRef = admin
-        .firestore()
-        .collection(usersCollection)
-        .doc(context.auth.uid)
-        .collection(cartCollection)
-        .doc(tempCartId);
-      const cart = await getEntityByRef<Cart>(cartRef);
+      const cart = await getCart(context.auth.uid);
 
-      if (!cart) {
+      if (cart === undefined) {
         return { status: 'no-cart' };
       }
 
@@ -45,7 +30,7 @@ export const validateCart = functions
         return { status: 'invalid-promo' };
       }
 
-      if (!(await areProductsInCartAvailable(cartRef))) {
+      if (!(await areProductsInCartAvailable(context.auth.uid))) {
         return { status: 'unavailable-products' };
       }
 

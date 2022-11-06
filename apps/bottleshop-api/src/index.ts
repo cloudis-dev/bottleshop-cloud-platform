@@ -7,6 +7,7 @@ admin.firestore().settings(settings);
 
 export { createPaymentIntent } from './functions/create-payment-intent';
 export { onPaymentStatusUpdate } from './functions/on-payment-status-update';
+export { createCheckoutSession } from './functions/create-checkout-session';
 export { getCurrentTimestamp } from './functions/timestamp';
 export { onOrderWrite } from './functions/on-order-write/on-order-write';
 export { onProductWrite } from './functions/on-product-write/on-product-write';

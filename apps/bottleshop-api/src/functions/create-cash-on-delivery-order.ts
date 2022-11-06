@@ -13,7 +13,8 @@ import { PaymentData } from '../models/payment-data';
 import { tier1Region } from '../constants/other';
 
 export const createCashOnDeliveryOrder = functions
-  .region(tier1Region).runWith({ allowInvalidAppCheckToken: true })
+  .region(tier1Region)
+  .runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: PaymentData, context: functions.https.CallableContext) => {
     functions.logger.log('handler for createCashOnDeliveryOrder invoked');
     try {
@@ -24,7 +25,7 @@ export const createCashOnDeliveryOrder = functions
           functions.logger.log(`createCashOnDeliveryOrder: ${userId} ${deliveryType} ${orderNote} ${orderId}`);
           const oId = await admin.firestore().runTransaction<string | undefined>(async () => {
             const result = await createOrder(userId, deliveryType as DeliveryType, parseInt(orderId, 10), orderNote);
-            if (result == null) {
+            if (result === undefined) {
               return undefined;
             }
             const [orderDoc, cart] = result;
