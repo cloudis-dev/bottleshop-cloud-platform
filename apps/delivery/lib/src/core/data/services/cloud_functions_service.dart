@@ -10,13 +10,13 @@
 //
 //
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
 import 'package:delivery/src/features/checkout/data/models/stripe_session_request.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger((CloudFunctionsService).toString());
@@ -38,6 +38,21 @@ class CloudFunctionsService {
   HttpsCallable createPaymentIntent() {
     return _firebaseFunctions
         .httpsCallable(FirebaseCallableFunctions.createPaymentIntent);
+  }
+
+  Future<String> createCheckoutSession({
+    required String successUrl,
+    required String cancelUrl,
+  }) async {
+    final response = await _firebaseFunctions
+        .httpsCallable(FirebaseCallableFunctions.createCheckoutSession)
+        .call<dynamic>(
+      {
+        "cancel_url": cancelUrl,
+        "success_url": successUrl,
+      },
+    );
+    return response.data;
   }
 
   Future<String> createStripePriceIds(StripeSessionRequest sessionReq) async {

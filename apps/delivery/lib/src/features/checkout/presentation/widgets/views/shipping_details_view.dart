@@ -205,7 +205,7 @@ final _isLoadingProvider = StateProvider.autoDispose<bool>((_) => false);
 class ShippingDetailsView extends HookConsumerWidget {
   final _logger = Logger((ShippingDetailsView).toString());
 
-  final void Function(PaymentData paymentData) onNextPage;
+  final Future<void> Function(PaymentData paymentData) onNextPage;
   final void Function() onBackButton;
 
   ShippingDetailsView({
@@ -338,9 +338,9 @@ class ShippingDetailsView extends HookConsumerWidget {
                       actionCallback: ref
                               .read(deliveryOptionsStateProvider.notifier)
                               .canProceed(user, selectedDeliveryOption)
-                          ? () {
+                          ? () async {
                               final currentUser = ref.read(currentUserProvider);
-                              onNextPage(
+                              await onNextPage(
                                 PaymentData(
                                   userId: currentUser?.uid,
                                   customerId: currentUser?.stripeCustomerId,

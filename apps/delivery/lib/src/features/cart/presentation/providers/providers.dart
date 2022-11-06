@@ -63,19 +63,17 @@ final cartContentProvider = StreamProvider.autoDispose<List<CartItemModel>>(
   (ref) => ref.watch(cartRepositoryProvider)?.cartContent ?? Stream.value([]),
 );
 
-final cartProvider = StreamProvider.autoDispose<CartModel?>(
-  (ref) => ref.watch(cartRepositoryProvider)?.cart ?? Stream.value(null),
+final cartProvider = StreamProvider.autoDispose<CartModel>(
+  (ref) =>
+      ref.watch(cartRepositoryProvider)?.cart ??
+      Stream.value(const CartModel.empty()),
 );
 
 final isCartEmptyProvider = FutureProvider.autoDispose<bool>((ref) {
   return ref.watch(cartProvider).maybeWhen(
         data: (cart) {
-          final itemsCount = cart?.totalItems;
-          if (itemsCount == null) {
-            return false;
-          } else {
-            return itemsCount < 1;
-          }
+          final itemsCount = cart.totalItems;
+          return itemsCount < 1;
         },
         orElse: () => Future.value(false),
       );

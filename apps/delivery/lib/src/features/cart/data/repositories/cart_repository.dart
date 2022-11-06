@@ -94,8 +94,9 @@ class CartRepository {
   Stream<List<CartItemModel>> get cartContent =>
       cartContentService.getCartItemsStream();
 
-  Stream<CartModel?> get cart =>
-      cartService.streamSingle(FirestoreCollections.userCartId);
+  Stream<CartModel> get cart => cartService
+      .streamSingle(FirestoreCollections.userCartId)
+      .map((event) => event ?? const CartModel.empty());
 
   Future<CartModel?> getCartModel() {
     return cartService.getSingle(FirestoreCollections.userCartId);

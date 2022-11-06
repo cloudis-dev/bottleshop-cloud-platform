@@ -42,6 +42,16 @@ class CartModel extends Equatable {
     required this.promoCodeValue,
   });
 
+  const CartModel.empty()
+      : totalItems = 0,
+        totalProductsPrice = 0,
+        totalProductsVat = 0,
+        shipping = null,
+        shippingFeeTotal = 0,
+        shippingFeeVat = 0,
+        promoCode = null,
+        promoCodeValue = 0;
+
   factory CartModel.fromMap(Map<String, dynamic> map) {
     return CartModel(
       totalItems: int.parse(map[CartFields.totalItemsField].toString()),

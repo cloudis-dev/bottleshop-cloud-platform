@@ -38,7 +38,7 @@ final _promoButtonStateProvider =
 
 class CheckoutTile extends HookConsumerWidget {
   final String actionLabel;
-  final VoidCallback? actionCallback;
+  final Future<void> Function()? actionCallback;
   final bool isLastStep;
   final bool showShipping;
 
@@ -90,7 +90,7 @@ class CheckoutTile extends HookConsumerWidget {
                         ),
                         Text(
                             FormattingUtils.getPriceNumberString(
-                              cart!.subTotal,
+                              cart.subTotal,
                               withCurrency: true,
                             ),
                             style: Theme.of(context).textTheme.subtitle1),
@@ -306,7 +306,7 @@ class CheckoutTile extends HookConsumerWidget {
       final res = await ref.read(cloudFunctionsProvider).validateCart();
       switch (res) {
         case CartStatus.ok:
-          actionCallback!();
+          await actionCallback!();
           break;
         case CartStatus.unavailableProducts:
           showSimpleNotification(

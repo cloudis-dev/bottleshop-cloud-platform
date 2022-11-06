@@ -11,18 +11,17 @@
 //
 
 import 'package:dartz/dartz.dart';
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
-import 'package:delivery/src/features/checkout/data/models/stripe_session_request.dart';
-import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout.dart';
+import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout_failure.dart';
+import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout_success.dart';
+import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/views/checkout_done_view.dart';
-import 'package:delivery/src/features/checkout/presentation/widgets/views/payment_method_view.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/views/shipping_details_view.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
@@ -32,8 +31,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
+import 'package:stripe_checkout/stripe_checkout.dart';
 
 final _logger = Logger((CheckoutPage).toString());
 
@@ -75,95 +74,100 @@ class _CheckoutPageView extends HookConsumerWidget {
           inAsyncCall: ref.watch(isRedirectingProvider),
           child: ShippingDetailsView(
             onNextPage: (paymentData) async {
-              _logger.info('payment data: ${paymentData.toString()}');
-              paymentDataNotifier.value = paymentData;
-              if (kIsWeb) {
-                ref.read(isRedirectingProvider.notifier).redirecting = true;
-                if (paymentData.deliveryType == kOrderTypeCashOnDelivery) {
-                  final orderId = await ref
-                      .read(cloudFunctionsProvider)
-                      .createCashOnDeliveryOrder(paymentData);
-                  _logger.info('orderID: $orderId');
-                  ref.read(isRedirectingProvider.notifier).redirecting = false;
-                  if (orderId != null) {
-                    checkoutDoneMessageNotifier.value =
-                        'Order #$orderId confirmed';
-
-                    showSimpleNotification(
-                      Text(context.l10n.thankYouForYourOrder),
-                      position: NotificationPosition.bottom,
-                      context: context,
-                    );
-
-                    await pageCtrl.animateToPage(
-                      2,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeIn,
-                    );
-                  } else {
-                    showSimpleNotification(
-                      Text(context.l10n.error),
-                      position: NotificationPosition.bottom,
-                      context: context,
-                    );
-                  }
-                } else {
-                  final sessionRequest = StripeSessionRequest(
-                    userId: currentUser!.uid,
-                    domain: Uri.base.origin,
-                    locale: currentLocale.languageCode,
-                    deliveryType: paymentData.deliveryType,
-                    orderNote: paymentData.orderNote,
-                  );
-                  final sessionId = await ref
-                      .read(cloudFunctionsProvider)
-                      .createStripePriceIds(sessionRequest);
-                  _logger.info('sessionID: $sessionId');
-                  await redirectToCheckout(sessionId);
-                }
-              } else {
-                await pageCtrl.animateToPage(
-                  1,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                );
-              }
+              ref.read(isRedirectingProvider.state).state = true;
+              await getCheckout(context, ref);
+              ref.read(isRedirectingProvider.state).state = false;
             },
+            // _logger.info('payment data: ${paymentData.toString()}');
+            // paymentDataNotifier.value = paymentData;
+            // if (kIsWeb) {
+            //   ref.read(isRedirectingProvider.notifier).redirecting = true;
+            //   if (paymentData.deliveryType == kOrderTypeCashOnDelivery) {
+            //     final orderId = await ref
+            //         .read(cloudFunctionsProvider)
+            //         .createCashOnDeliveryOrder(paymentData);
+            //     _logger.info('orderID: $orderId');
+            //     ref.read(isRedirectingProvider.notifier).redirecting = false;
+            //     if (orderId != null) {
+            //       checkoutDoneMessageNotifier.value =
+            //           'Order #$orderId confirmed';
+            //
+            //       showSimpleNotification(
+            //         Text(context.l10n.thankYouForYourOrder),
+            //         position: NotificationPosition.bottom,
+            //         context: context,
+            //       );
+            //
+            //       await pageCtrl.animateToPage(
+            //         2,
+            //         duration: const Duration(milliseconds: 300),
+            //         curve: Curves.easeIn,
+            //       );
+            //     } else {
+            //       showSimpleNotification(
+            //         Text(context.l10n.error),
+            //         position: NotificationPosition.bottom,
+            //         context: context,
+            //       );
+            //     }
+            //   } else {
+            //     final sessionRequest = StripeSessionRequest(
+            //       userId: currentUser!.uid,
+            //       domain: Uri.base.origin,
+            //       locale: currentLocale.languageCode,
+            //       deliveryType: paymentData.deliveryType,
+            //       orderNote: paymentData.orderNote,
+            //     );
+            //     final sessionId = await ref
+            //         .read(cloudFunctionsProvider)
+            //         .createStripePriceIds(sessionRequest);
+            //     _logger.info('sessionID: $sessionId');
+            //     await redirectToCheckout(sessionId);
+            //   }
+            // } else {
+            // await pageCtrl.animateToPage(
+            //   1,
+            //   duration: const Duration(milliseconds: 300),
+            //   curve: Curves.easeIn,
+            // );
+            // }
             onBackButton: () {
               ref.read(navigationProvider).popPage(context);
             },
           ),
         ),
         ValueListenableBuilder<PaymentData?>(
-          valueListenable: paymentDataNotifier,
-          builder: (context, paymentData, _) => paymentData == null
-              ? const SizedBox.shrink()
-              : PaymentMethodView(
-                  paymentData,
-                  onBackButton: () {
-                    pageCtrl.animateToPage(
-                      0,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  onCheckoutDone: (checkoutDoneMsg) {
-                    checkoutDoneMessageNotifier.value = checkoutDoneMsg;
-
-                    showSimpleNotification(
-                      Text(context.l10n.thankYouForYourOrder),
-                      position: NotificationPosition.bottom,
-                      context: context,
-                    );
-
-                    pageCtrl.animateToPage(
-                      2,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                ),
-        ),
+            valueListenable: paymentDataNotifier,
+            builder: (context, paymentData, _) => const SizedBox.shrink()
+            // paymentData == null
+            //     ? const SizedBox.shrink()
+            // const PaymentScreen(),
+            // PaymentMethodView(
+            //         paymentData,
+            //         onBackButton: () {
+            //           pageCtrl.animateToPage(
+            //             0,
+            //             duration: const Duration(milliseconds: 300),
+            //             curve: Curves.easeIn,
+            //           );
+            //         },
+            //         onCheckoutDone: (checkoutDoneMsg) {
+            //           checkoutDoneMessageNotifier.value = checkoutDoneMsg;
+            //
+            //           showSimpleNotification(
+            //             Text(context.l10n.thankYouForYourOrder),
+            //             position: NotificationPosition.bottom,
+            //             context: context,
+            //           );
+            //
+            //           pageCtrl.animateToPage(
+            //             2,
+            //             duration: const Duration(milliseconds: 300),
+            //             curve: Curves.easeIn,
+            //           );
+            //         },
+            //       ),
+            ),
         ValueListenableBuilder<String?>(
           valueListenable: checkoutDoneMessageNotifier,
           builder: (context, checkoutDoneMessage, _) => checkoutDoneMessage ==
@@ -187,17 +191,31 @@ class _CheckoutPageView extends HookConsumerWidget {
       return PageBodyTemplate(child: content);
     }
   }
+
+  Future<void> getCheckout(BuildContext context, WidgetRef ref) async {
+    if (kIsWeb) {
+      final successUrl =
+          "${Uri.base.origin}/${HomePage.pagePathBase}/${StripeCheckoutSuccessPage.pagePathBase}";
+      final cancelUrl =
+          "${Uri.base.origin}/${HomePage.pagePathBase}/${StripeCheckoutFailurePage.pagePathBase}";
+
+      final sessionId =
+          await ref.read(cloudFunctionsProvider).createCheckoutSession(
+                successUrl: successUrl,
+                cancelUrl: cancelUrl,
+              );
+      final result = await redirectToCheckout(
+        context: context,
+        sessionId: sessionId,
+        publishableKey: AppEnvironment.stripePublishableKey,
+        successUrl: successUrl,
+        canceledUrl: cancelUrl,
+      );
+      // TODO: handle result
+      print(result);
+    } else {
+      throw UnimplementedError(
+          "Payments not yet implemented for mobile platform");
+    }
+  }
 }
-
-class RedirectToStripeState extends StateNotifier<bool> {
-  set redirecting(bool redirecting) => state = redirecting;
-
-  bool get redirecting => state;
-
-  RedirectToStripeState() : super(false);
-}
-
-final isRedirectingProvider =
-    StateNotifierProvider.autoDispose<RedirectToStripeState, bool>(
-  (ref) => RedirectToStripeState(),
-);

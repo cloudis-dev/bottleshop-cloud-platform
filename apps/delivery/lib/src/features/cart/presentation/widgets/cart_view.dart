@@ -105,7 +105,7 @@ class CartView extends HookConsumerWidget {
                 return CheckoutTile(
                   showPromoButton: !kIsWeb,
                   actionLabel: context.l10n.proceedToShipment,
-                  actionCallback: () {
+                  actionCallback: () async {
                     ref.read(navigationProvider).pushPage(
                           context,
                           AppPageNode(page: CheckoutPage()),

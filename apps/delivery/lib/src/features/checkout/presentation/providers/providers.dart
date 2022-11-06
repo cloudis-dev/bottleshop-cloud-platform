@@ -22,6 +22,8 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger((CheckoutState).toString());
 
+final isRedirectingProvider = StateProvider.autoDispose<bool>((ref) => false);
+
 final nativePayProvider = FutureProvider<bool>((ref) async {
   final stripe = ref.watch(stripeProvider);
   final isNativePayAvailable = await stripe.checkIfNativePayReady();

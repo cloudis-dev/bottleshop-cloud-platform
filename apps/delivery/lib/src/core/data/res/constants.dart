@@ -38,6 +38,7 @@ class FirebaseCallableFunctions {
   static const createStripePriceIds = 'createStripePriceIds';
   static const createCashOnDeliveryOrder = 'createCashOnDeliveryOrder';
   static const deleteAccount = 'deleteAccount';
+  static const createCheckoutSession = 'createCheckoutSession';
 }
 
 class FirestoreCollections {
