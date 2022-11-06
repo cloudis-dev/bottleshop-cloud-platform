@@ -11,7 +11,7 @@ import { calculateProductFinalPrice, getProductImageUrl } from '../utils/product
 export const createCheckoutSession = functions
   .region(tier1Region)
   .runWith({ allowInvalidAppCheckToken: true })
-  .https.onCall(async (data: unknown, context: functions.https.CallableContext) => {
+  .https.onCall(async (data: { cancel_url: string; success_url: string }, context: functions.https.CallableContext) => {
     const userUid = context.auth?.uid;
     if (userUid === undefined) {
       return Promise.reject('Request is unauthenticated');
@@ -48,14 +48,14 @@ export const createCheckoutSession = functions
               name: item.product.name,
               images: productUrl === undefined ? [] : [productUrl],
             },
-            unit_amount_decimal: calculateProductFinalPrice(item.product).toString(),
+            unit_amount: Math.round(calculateProductFinalPrice(item.product) * 100),
           },
           quantity: item.quantity,
         };
       }),
       mode: 'payment',
-      success_url: 'https://checkout.stripe.dev/success',
-      cancel_url: 'https://checkout.stripe.dev/cancel',
+      success_url: data.success_url,
+      cancel_url: data.cancel_url,
     });
 
     return session.id;
