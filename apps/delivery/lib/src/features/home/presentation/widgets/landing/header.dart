@@ -1,4 +1,5 @@
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +38,9 @@ class Header extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(335, 0, 0, 0),
+            margin: EdgeInsets.fromLTRB(235, 0, 0, 0),
             child: Row(children: [
+              LanguageDropdown(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                 child: IconButton(
