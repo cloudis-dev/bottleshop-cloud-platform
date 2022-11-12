@@ -1,5 +1,7 @@
 import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
+import 'package:delivery/src/features/products/presentation/pages/category_products_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:delivery/l10n/l10n.dart';
@@ -72,7 +74,12 @@ class WhiskeySection extends StatelessWidget {
                 padding: EdgeInsets.only(top: 24),
                 child: SizedBox(
                     width: 240,
-                    child: LandingPageButton(txt: context.l10n.goToWhiskeys)),
+                    child: LandingPageButton(
+                      txt: context.l10n.goToWhiskeys,
+                      nestingBranch: NestingBranch.categories,
+                      routebornPage:
+                          CategoryProductsPage.uid('yvv9lwUbzEzrIGsZUZ2R'),
+                    )),
               ),
             ],
           ),

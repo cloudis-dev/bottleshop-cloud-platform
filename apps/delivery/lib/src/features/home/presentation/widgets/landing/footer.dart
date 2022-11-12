@@ -1,8 +1,9 @@
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../core/data/res/constants.dart';
 import '../../../../../core/data/services/shared_preferences_service.dart';
 import '../../../../../core/presentation/providers/core_providers.dart';
@@ -90,12 +91,18 @@ class Footer extends HookConsumerWidget {
                       size: 14,
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(9, 0, 0, 0),
-                      child: Text("info@bottleshop3veze.sk",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5!
-                              .copyWith(decoration: TextDecoration.underline)),
+                      padding: const EdgeInsets.fromLTRB(2, 0, 0, 0),
+                      child: TextButton(
+                        child: Text("info@bottleshop3veze.sk",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline5!
+                                .copyWith(
+                                    decoration: TextDecoration.underline)),
+                        onPressed: () {
+                          launchUrlString("mailto:info@bottleshop3veze.sk");
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -164,11 +171,36 @@ class Footer extends HookConsumerWidget {
                 child: Text(context.l10n.informationColumn,
                     style: Theme.of(context).textTheme.headline2),
               ),
-              Link(txt: "F.A.Q."),
-              Link(txt: context.l10n.menuTerms),
-              Link(txt: context.l10n.privacyPolicy),
-              Link(txt: context.l10n.shippingPayment),
-              Link(txt: context.l10n.wholesale),
+              TextButton(
+                onPressed: () {
+                  ref
+                      .watch(navigationProvider)
+                      .setNestingBranch(context, NestingBranch.help);
+                },
+                child: Text("F.A.Q.",
+                    style: Theme.of(context).textTheme.headline5),
+              ),
+              BilingualLink(
+                  txt: context.l10n.menuTerms,
+                  enLink: UrlStrings.menuTermsEN,
+                  skLink: UrlStrings.menuTermsSK),
+              BilingualLink(
+                  txt: context.l10n.privacyPolicy,
+                  enLink: UrlStrings.privacyPolicyEN,
+                  skLink: UrlStrings.privacyPolicySK),
+              BilingualLink(
+                  txt: context.l10n.shippingPayment,
+                  enLink: UrlStrings.shippingPaymentEN,
+                  skLink: UrlStrings.shippingPaymentSK),
+              TextButton(
+                onPressed: () {
+                  ref
+                      .watch(navigationProvider)
+                      .setNestingBranch(context, NestingBranch.wholesale);
+                },
+                child: Text(context.l10n.wholesale,
+                    style: Theme.of(context).textTheme.headline5),
+              ),
             ],
           ),
         ),
@@ -194,7 +226,9 @@ class Footer extends HookConsumerWidget {
                           height: 24,
                           width: 24,
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          launchUrlString(UrlStrings.instagram);
+                        }),
                     TextButton(
                         style: TextButton.styleFrom(
                             minimumSize: Size.zero,
@@ -204,7 +238,9 @@ class Footer extends HookConsumerWidget {
                           height: 24,
                           width: 24,
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          launchUrlString(UrlStrings.facebook);
+                        }),
                   ],
                 ),
               ),
@@ -224,7 +260,9 @@ class Footer extends HookConsumerWidget {
                         : Image.asset(kAppStoreBadgeSk,
                             width: 93, fit: BoxFit.contain),
                   ),
-                  onPressed: () {}),
+                  onPressed: () {
+                    launchUrlString(UrlStrings.appStore);
+                  }),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                 child: TextButton(
@@ -233,9 +271,13 @@ class Footer extends HookConsumerWidget {
                     child: (language == LanguageMode.en)
                         ? Image.asset(kGooglePlayBadgeEn,
                             width: 107, fit: BoxFit.contain)
-                        : Image.asset(kGooglePlayBadgeSk,
-                            width: 107, fit: BoxFit.contain),
-                    onPressed: () {}),
+                        : Padding(
+                            padding: EdgeInsets.only(left: 6),
+                            child: Image.asset(kGooglePlayBadgeSk,
+                                width: 93, fit: BoxFit.contain)),
+                    onPressed: () {
+                      launchUrlString(UrlStrings.googlePlay);
+                    }),
               )
             ],
           ),

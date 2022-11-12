@@ -1,11 +1,35 @@
+import 'package:dartz/dartz.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/body.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:routeborn/routeborn.dart';
 import '../widgets/landing/footer.dart';
 import '../widgets/landing/header.dart';
 
-class Landing extends StatelessWidget {
-  const Landing({Key? key}) : super(key: key);
+class LandingPage extends RoutebornPage {
+  static const String pagePathBase = 'landing';
+
+  LandingPage()
+      : super.builder(
+          pagePathBase,
+          (_) => const _LandingPage(),
+        );
+
+  @override
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(context.l10n.landing);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _LandingPage extends StatelessWidget {
+  const _LandingPage({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override

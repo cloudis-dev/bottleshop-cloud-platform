@@ -210,3 +210,24 @@ const kOrderTypeHomeDelivery = 'home-delivery';
 const kOrderTypeQuickBa = 'quick-delivery-BA';
 const kOrderTypeCloseAreaBa = 'close-areas-delivery-ba';
 const kOrderTypeCashOnDelivery = 'cash-on-delivery';
+
+class UrlStrings {
+  static const String googlePlay =
+      "https://play.google.com/store/apps/details?id=sk.bottleshop3veze.bottleshopdeliveryapp";
+  static const String appStore = "https://apps.apple.com/app/id1509090326";
+  static const String facebook = "https://www.facebook.com/bottleshop3veze";
+  static const String instagram =
+      "https://www.instagram.com/bottleshop3veze/?igshid=YmMyMTA2M2Y%3D";
+  static const String shippingPaymentSK =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2FDoprava%20a%20platba.jpg?alt=media&token=8cc04823-19a8-4965-b1dc-8c28fe6a61ed';
+  static const String shippingPaymentEN =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2FShipping%20and%20payment.jpg?alt=media&token=6b6e82b6-5a3e-4943-a76f-1d9071f38b7b';
+  static const String privacyPolicySK =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_sk.pdf?alt=media#page=9';
+  static const String privacyPolicyEN =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_en.pdf?alt=media#page=9';
+  static const String menuTermsSK =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_sk.pdf?alt=media';
+  static const String menuTermsEN =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_en.pdf?alt=media';
+}

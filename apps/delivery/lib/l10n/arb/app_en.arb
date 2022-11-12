@@ -630,7 +630,8 @@
   "whiskeyBourbon" : "Whiskey/Bourbon",
   "cognac": "Cognac",
   "gin": "Gin",
-  "vodka": "Vodka"
-
+  "vodka": "Vodka",
+  "landing": "Landing",
+  "saleButton": "SALE"
 }
 

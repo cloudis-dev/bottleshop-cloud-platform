@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MobileAppSection extends HookConsumerWidget {
   @override
@@ -105,7 +106,9 @@ class MobileAppSection extends HookConsumerWidget {
                               width: 130, fit: BoxFit.contain)
                           : Image.asset(kAppStoreBadgeSk,
                               width: 130, fit: BoxFit.contain),
-                      onPressed: () {}),
+                      onPressed: () {
+                        launchUrlString(UrlStrings.appStore);
+                      }),
                   SizedBox(
                     width: 12,
                   ),
@@ -117,7 +120,9 @@ class MobileAppSection extends HookConsumerWidget {
                               width: 168, fit: BoxFit.contain)
                           : Image.asset(kGooglePlayBadgeSk,
                               width: 146, fit: BoxFit.contain),
-                      onPressed: () {}),
+                      onPressed: () {
+                        launchUrlString(UrlStrings.googlePlay);
+                      }),
                 ],
               )
             ],

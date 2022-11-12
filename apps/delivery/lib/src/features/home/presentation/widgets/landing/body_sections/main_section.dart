@@ -1,4 +1,5 @@
 import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,7 +49,10 @@ class MainSection extends StatelessWidget {
       Positioned(
           top: 385,
           left: 256,
-          child: LandingPageButton(txt: context.l10n.showMore)),
+          child: LandingPageButton(
+            txt: context.l10n.showMore,
+            nestingBranch: NestingBranch.shop,
+          )),
     ]);
   }
 }
