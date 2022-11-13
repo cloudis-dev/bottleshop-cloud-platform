@@ -14,6 +14,8 @@ import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
 
+import '../../../auth/presentation/widgets/views/feedback_view.dart';
+
 final _logger = Logger((AccountMenu).toString());
 
 enum _TabsState {
@@ -194,6 +196,18 @@ class _MenuItemsTab extends HookConsumerWidget {
                     ref.read(navigationProvider).pushPage(
                           context,
                           AppPageNode(page: TermsConditionsPage()),
+                          toParent: true,
+                        );
+                    OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.feedback),
+                  title: Text("Feedback"),
+                  onTap: () {
+                    ref.read(navigationProvider).pushPage(
+                          context,
+                          AppPageNode(page: FeedbackPage()),
                           toParent: true,
                         );
                     OverlaySupportEntry.of(context)!.dismiss(animate: false);
