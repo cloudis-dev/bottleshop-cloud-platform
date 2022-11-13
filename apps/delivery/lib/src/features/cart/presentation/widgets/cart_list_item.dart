@@ -11,7 +11,6 @@
 //
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
@@ -23,12 +22,11 @@ import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
-import 'package:delivery/src/features/cart_disclaimer/data/services/cart_disclaimer_overlay.dart';
 import 'package:delivery/src/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 
-class CartListItem extends StatefulHookWidget {
+class CartListItem extends HookWidget {
   final ProductModel product;
   final int quantity;
 
@@ -39,28 +37,16 @@ class CartListItem extends StatefulHookWidget {
   })  : assert(quantity > 0),
         super(key: key);
 
-  @override
-  State<CartListItem> createState() => _CartListItemState();
-}
-
-class _CartListItemState extends State<CartListItem> {
   void onClick(BuildContext context) {
-    context.read(navigationProvider).pushPage(
-        context, AppPageNode(page: ProductDetailPage(widget.product)));
-  }
-
-  @override
-  void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
-      showCartDisclaimer(context);
-    });
-    super.initState();
+    context
+        .read(navigationProvider)
+        .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
   }
 
   @override
   Widget build(BuildContext context) {
     final currentLocale = useProvider(currentLocaleProvider);
-    final qtyState = useState<int>(widget.quantity);
+    final qtyState = useState<int>(quantity);
     return Container(
       width: double.infinity,
       height: 150,
@@ -79,9 +65,8 @@ class _CartListItemState extends State<CartListItem> {
               child: Stack(
                 children: [
                   Hero(
-                    tag: HeroTags.productBaseTag + widget.product.uniqueId,
-                    child:
-                        ProductImage(imagePath: widget.product.thumbnailPath),
+                    tag: HeroTags.productBaseTag + product.uniqueId,
+                    child: ProductImage(imagePath: product.thumbnailPath),
                   ),
                   Positioned.fill(
                     child: Material(
@@ -105,23 +90,21 @@ class _CartListItemState extends State<CartListItem> {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Text(
-                  widget.product.name,
+                  product.name,
                   maxLines: 2,
                   overflow: TextOverflow.fade,
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 Text(
-                  '${FormattingUtils.getVolumeNumberString(widget.product.unitsCount)} ${widget.product.unitsType.getUnitAbbreviation(currentLocale)} ${FormattingUtils.getAlcoholNumberString(widget.product.alcohol ?? 0)}',
+                  '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)} ${FormattingUtils.getAlcoholNumberString(product.alcohol ?? 0)}',
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Text(
-                  widget.product.count > 0
-                      ? '${widget.product.count} ${context.l10n.inStock}'
+                  product.count > 0
+                      ? '${product.count} ${context.l10n.inStock}'
                       : context.l10n.outOfStock,
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                        color: widget.product.count > 0
-                            ? Colors.green
-                            : Colors.red,
+                        color: product.count > 0 ? Colors.green : Colors.red,
                       ),
                 ),
               ],
@@ -136,17 +119,16 @@ class _CartListItemState extends State<CartListItem> {
               children: [
                 Text(
                     FormattingUtils.getPriceNumberString(
-                        double.parse(
-                            widget.product.finalPrice.toStringAsFixed(2)),
+                        double.parse(product.finalPrice.toStringAsFixed(2)),
                         withCurrency: true),
                     style: Theme.of(context).textTheme.subtitle1),
-                if (widget.product.discount != null)
+                if (product.discount != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
                         FormattingUtils.getPriceNumberString(
                             double.parse(
-                                widget.product.priceWithVat.toStringAsFixed(2)),
+                                product.priceWithVat.toStringAsFixed(2)),
                             withCurrency: true),
                         style: Theme.of(context)
                             .textTheme
@@ -156,8 +138,7 @@ class _CartListItemState extends State<CartListItem> {
                 if (qtyState.value > 1)
                   Text(
                       FormattingUtils.getPriceNumberString(
-                          double.parse(widget.product.finalPrice
-                                  .toStringAsFixed(2)) *
+                          double.parse(product.finalPrice.toStringAsFixed(2)) *
                               int.parse(qtyState.value.toString()),
                           withCurrency: true),
                       style: Theme.of(context).textTheme.bodyText2),
@@ -174,13 +155,12 @@ class _CartListItemState extends State<CartListItem> {
                   splashRadius: 10.0,
                   splashColor: Theme.of(context).colorScheme.secondary,
                   color: Theme.of(context).colorScheme.secondary,
-                  onPressed: widget.product.count <= qtyState.value
+                  onPressed: product.count <= qtyState.value
                       ? null
                       : () async {
                           return context
                               .read(cartRepositoryProvider)!
-                              .setItemQty(
-                                  widget.product.uniqueId, qtyState.value + 1);
+                              .setItemQty(product.uniqueId, qtyState.value + 1);
                         },
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   icon: const Icon(Icons.add_circle_outline),
@@ -198,11 +178,12 @@ class _CartListItemState extends State<CartListItem> {
                     if (qtyState.value == 1) {
                       await context
                           .read(cartRepositoryProvider)!
-                          .removeItem(widget.product.uniqueId);
+                          .removeItem(product.uniqueId);
                     } else {
                       //qtyState.value = qtyState.value - 1;
-                      return context.read(cartRepositoryProvider)!.setItemQty(
-                          widget.product.uniqueId, qtyState.value - 1);
+                      return context
+                          .read(cartRepositoryProvider)!
+                          .setItemQty(product.uniqueId, qtyState.value - 1);
                     }
                   },
                   padding: const EdgeInsets.symmetric(horizontal: 5),

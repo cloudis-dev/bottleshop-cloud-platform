@@ -578,25 +578,12 @@
   "openinHoursOpen": "Open until",
   "openingHoursClosed": "Closed",
   "openingHours": "Opening Hours",
-  "weekday":"{day}",
-  "@weekday":{
-    "monday": "Monday",
-    "tuesday":"Tuesday",
-    "wednesday":"Wednesday",
-    "thursday":"Thursday",
-    "friday":"Friday",
-    "saturday":"Saturday",
-    "sunday":"Sunday"
-  },
-  "greeting": "Hi, {name}!",
-    "@greeting": {
-        "description": "Greet the user by their name.",
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Jane"
-            }
-        }
-    }  
+  "monday": "Monday",
+  "tuesday":"Tuesday",
+  "wednesday":"Wednesday",
+  "thursday":"Thursday",
+  "friday":"Friday",
+  "saturday":"Saturday",
+  "sunday":"Sunday"
 
 }

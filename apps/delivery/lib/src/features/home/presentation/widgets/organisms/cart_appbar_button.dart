@@ -1,8 +1,9 @@
-import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
-import 'package:delivery/src/features/home/presentation/widgets/molecules/cart_icon_with_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
+
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
+import 'package:delivery/src/features/home/presentation/widgets/molecules/cart_icon_with_badge.dart';
 
 class CartAppbarButton extends StatelessWidget {
   @literal

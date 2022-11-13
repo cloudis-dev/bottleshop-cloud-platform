@@ -18,6 +18,8 @@ import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
 import 'package:delivery/src/core/presentation/widgets/side_menu_header.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/terms_conditions_view.dart';
+import 'package:delivery/src/features/opening_hours/presentation/dialogs/opening_hours_dialog.dart';
+import 'package:delivery/src/features/opening_hours/presentation/widgets/opening_hours_calendar.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:routeborn/routeborn.dart';
 
@@ -233,6 +236,16 @@ class MenuDrawer extends HookWidget {
                   leading: Icons.exit_to_app,
                   title: context.l10n.logOut,
                 ),
+              ListTile(
+                leading: const Icon(Icons.calendar_month),
+                title: const OpeningHoursCalendar(),
+                onTap: () {
+                  showDialog<void>(
+                    context: context,
+                    builder: (context) => const OpeningHoursDialog(),
+                  );
+                },
+              ),
             ],
           ),
         ),

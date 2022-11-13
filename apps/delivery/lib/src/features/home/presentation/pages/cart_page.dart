@@ -32,7 +32,10 @@ import 'package:routeborn/routeborn.dart';
 class CartPage extends RoutebornPage {
   static const String pagePathBase = 'cart';
 
-  CartPage() : super.builder(pagePathBase, (_) => const _CartPageView());
+  CartPage()
+      : super.builder(pagePathBase, (_) {
+          return const _CartPageView();
+        });
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>

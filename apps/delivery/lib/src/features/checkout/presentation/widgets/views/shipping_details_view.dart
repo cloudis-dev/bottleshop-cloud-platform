@@ -17,11 +17,14 @@ import 'package:delivery/src/features/account/presentation/widgets/account_card.
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
+import 'package:delivery/src/features/opening_hours/presentation/dialogs/cart_disclaimer_dialog.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
+import 'package:delivery/src/features/opening_hours/presentation/providers/providers.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
@@ -251,6 +254,12 @@ class ShippingDetailsView extends HookWidget {
         ),
         body: useProvider(currentUserAsStream).when(
           data: (user) {
+            final seenDisclaimer = useProvider(cartDisclaimerProvider);
+            if (!seenDisclaimer.state) {
+              SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+                showCartDisclaimer(context);
+              });
+            }
             return Stack(
               fit: StackFit.expand,
               children: <Widget>[

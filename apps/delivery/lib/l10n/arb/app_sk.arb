@@ -578,25 +578,12 @@
   "openinHoursOpen": "Otvorené do",
   "openingHoursClosed": "Zatvorené",
   "openingHours": "Otváracie Hodiny",
-  "weekday":{},
-  "@weekday":{
-    "monday": "Pondelok",
-    "tuesday":"Utorok",
-    "wednesday":"Streda",
-    "thursday":"Štvrtok",
-    "friday":"Piatok",
-    "saturday":"Sobota",
-    "sunday":"Nedela"
-  },
-  "greeting": "Hi, {name}!",
-    "@greeting": {
-        "description": "Greet the user by their name.",
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Jane"
-            }
-        }
-    }
+  "monday": "Pondelok",
+  "tuesday":"Utorok",
+  "wednesday":"Streda",
+  "thursday":"Štvrtok",
+  "friday":"Piatok",
+  "saturday":"Sobota",
+  "sunday":"Nedela"
 
 }
