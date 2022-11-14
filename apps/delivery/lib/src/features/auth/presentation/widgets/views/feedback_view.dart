@@ -17,17 +17,17 @@ import 'package:delivery/src/core/presentation/providers/navigation_providers.da
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdfx/pdfx.dart';
 import 'package:routeborn/routeborn.dart';
 
-
 class FeedbackPage extends RoutebornPage {
   static const String pagePathBase = 'feedback';
 
-  FeedbackPage()
-      : super.builder(pagePathBase, (_) => const _FeedbackView());
+  FeedbackPage() : super.builder(pagePathBase, (_) => const _FeedbackView());
 
   @override
   Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
@@ -45,16 +45,107 @@ class _FeedbackView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final typE = useState<String>("problem");
     return Scaffold(
-      appBar: AppBar(
-        leading: CloseButton(
-          onPressed: () => ref.read(navigationProvider).popPage(context),
+        appBar: AppBar(
+          leading: CloseButton(
+            onPressed: () => ref.read(navigationProvider).popPage(context),
+          ),
+          title: Text(
+            "Feedback",
+          ),
         ),
-        title: Text(
-          "huj00",
-        ),
-      ),
-      
-    );
+        body: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(500, 50, 500, 0),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter your name',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(500, 50, 500, 0),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter your email',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(500, 50, 500, 25),
+                child: TextField(
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      hintText: 'Type your message',
+                      hintStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(500, 0, 500, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 65,
+                      height: 65,
+                      child: ElevatedButton(
+                        child: Icon(Icons.add),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(500, 50, 500, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        child: RadioListTile(
+                            title: Text("Problem"),
+                            value: "problem",
+                            groupValue: typE.value,
+                            onChanged: (value) {
+                              typE.value = value as String;
+                            }),
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: RadioListTile(
+                            title: Text("Suggestion"),
+                            value: "suggestion",
+                            groupValue: typE.value,
+                            onChanged: (value) {
+                              typE.value = value as String;
+                            }),
+                      )
+                    ],
+                  )),
+                  Padding(
+                    padding :const EdgeInsets.fromLTRB(500, 50, 500, 0),
+                    child: SizedBox(
+                      width: 150,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {  },
+                        child: Text('Send'),
+                      ),
+                    ),
+                  )
+            ],
+            
+          ),
+        ));
   }
 }
