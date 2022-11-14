@@ -72,8 +72,6 @@ class ImageUtil {
     double watermarkSizeMultiplier = .9,
     String watermarkRelativePath = 'assets/images/watermark.png',
   }) async {
-   
-
     final watermarkBytes =
         (await rootBundle.load(watermarkRelativePath)).buffer.asUint8List();
 

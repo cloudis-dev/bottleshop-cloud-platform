@@ -4,6 +4,8 @@
   "license": "MIT",
   "scripts": {
     "build": "nx run-many --target=build --all --parallel",
+    "build:admin": "yarn nx run admin:buildIpa && yarn nx run admin:buildApk && yarn nx run admin:buildWeb",
+    "lint:admin": "yarn nx run admin:format && yarn nx run admin:analyze",
     "test": "nx test",
     "postinstall": "patch-package",
     "start:api:dev": "nx run bottleshop-api:serve"
@@ -68,7 +70,11 @@
     "terser": ">=5.14.2"
   },
   "engines": {
-    "node": "16",
+    "node": "18",
     "yarn": "1"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "yarn": "1.22.19"
   }
 }
