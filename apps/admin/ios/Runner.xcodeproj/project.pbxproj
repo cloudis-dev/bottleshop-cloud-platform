@@ -439,7 +439,7 @@
 				DEVELOPMENT_TEAM = FH8XH7R2B5;
 				DISPLAY_NAME = "Bottleshop Admin";
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/kristian/Documents/Kristian/bottleshop/bottleshop-cloud-platform/apps/admin/lib/main_production.dart";
+				FLUTTER_TARGET = lib/main_production.dart;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -534,7 +534,7 @@
 				DEVELOPMENT_TEAM = FH8XH7R2B5;
 				DISPLAY_NAME = "[DEV] Bottleshop Admin";
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/kristian/Documents/Kristian/bottleshop/bottleshop-cloud-platform/apps/admin/lib/main_development.dart";
+				FLUTTER_TARGET = lib/main_development.dart;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -626,7 +626,7 @@
 				DEVELOPMENT_TEAM = FH8XH7R2B5;
 				DISPLAY_NAME = "[DEV] Bottleshop Admin";
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/kristian/Documents/Kristian/bottleshop/bottleshop-cloud-platform/apps/admin/lib/main_development.dart";
+				FLUTTER_TARGET = lib/main_development.dart;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -715,7 +715,7 @@
 				DEVELOPMENT_TEAM = FH8XH7R2B5;
 				DISPLAY_NAME = "[DEV] Bottleshop Admin";
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/kristian/Documents/Kristian/bottleshop/bottleshop-cloud-platform/apps/admin/lib/main_development.dart";
+				FLUTTER_TARGET = lib/main_development.dart;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -864,7 +864,7 @@
 				DEVELOPMENT_TEAM = FH8XH7R2B5;
 				DISPLAY_NAME = "Bottleshop Admin";
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/kristian/Documents/Kristian/bottleshop/bottleshop-cloud-platform/apps/admin/lib/main_production.dart";
+				FLUTTER_TARGET = lib/main_production.dart;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -902,7 +902,7 @@
 				DEVELOPMENT_TEAM = FH8XH7R2B5;
 				DISPLAY_NAME = "Bottleshop Admin";
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/kristian/Documents/Kristian/bottleshop/bottleshop-cloud-platform/apps/admin/lib/main_production.dart";
+				FLUTTER_TARGET = lib/main_production.dart;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
