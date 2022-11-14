@@ -31,10 +31,10 @@ class EditOpeningHoursCheckbox extends HookWidget {
 
         if (value == false) {
           newMap[sortedWeekDays[rowIndex]] =
-              OpeningHours(opening: '0', closing: '0');
+              OpeningHoursModel(opening: '0', closing: '0');
         } else {
           newMap[sortedWeekDays[rowIndex]] =
-              OpeningHours(opening: '88:88', closing: '88:88');
+              OpeningHoursModel(opening: '88:88', closing: '88:88');
         }
         context.read(editHoursProvider).state = newMap;
       },

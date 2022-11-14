@@ -6,7 +6,7 @@ final openingHoursProvider = StreamProvider((ref) =>
     FirebaseFirestore.instance.collection('opening_hours').snapshots());
 
 final editHoursProvider =
-    StateProvider<Map<String, OpeningHours>?>((ref) => null);
+    StateProvider<Map<String, OpeningHoursModel>?>((ref) => null);
 
 final sortedWeekDays = [
   'Monday',

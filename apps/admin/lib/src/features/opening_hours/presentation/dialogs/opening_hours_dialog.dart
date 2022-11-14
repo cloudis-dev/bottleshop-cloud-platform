@@ -17,7 +17,7 @@ class OpeningHoursDialog extends HookWidget {
   Widget build(BuildContext context) {
     return useProvider(openingHoursProvider).when(
       data: (value) {
-        final tempMap = OpeningHours.fromMap(value);
+        final tempMap = OpeningHoursModel.fromMap(value);
 
         return AlertDialog(
           title: Text('Opening Hours', textAlign: TextAlign.center),
@@ -32,7 +32,7 @@ class OpeningHoursDialog extends HookWidget {
                   itemBuilder: (context, index) {
                     return DayOfTheWeek(
                       day: sortedWeekDays[index],
-                      hours: tempMap[sortedWeekDays[index]] as OpeningHours,
+                      hours: tempMap[sortedWeekDays[index]],
                     );
                   },
                 ),

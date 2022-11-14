@@ -31,11 +31,8 @@ class EditOpeningHoursButton extends HookWidget {
     final currentTime = TimeOfDay.now();
     final todayOpening = openingHoursMap![sortedWeekDays[rowIndex]];
     final tempList = [todayOpening!.opening, todayOpening.closing];
-    var weAreOpen = true;
-
-    if (todayOpening.opening == '0' || todayOpening.closing == '0') {
-      weAreOpen = false;
-    }
+    final weAreOpen =
+        OpeningHoursModel.isOpened(todayOpening.opening, todayOpening.closing);
 
     return SizedBox(
       height: 48,
@@ -58,7 +55,7 @@ class EditOpeningHoursButton extends HookWidget {
                         tempList[index] = '24:00';
                       }
                     }
-                    tempMap[sortedWeekDays[rowIndex]] = OpeningHours(
+                    tempMap[sortedWeekDays[rowIndex]] = OpeningHoursModel(
                         opening: tempList[0], closing: tempList[1]);
                     context.read(editHoursProvider).state = tempMap;
                   },
