@@ -35,7 +35,7 @@ class DayOfTheWeek extends StatelessWidget {
       child: Text(
         (hours.opening == '0' || hours.closing == '0')
             ? '$pickedDay: ${context.l10n.openingHoursClosed}'
-            : '$pickedDay:  ${hours.opening} - ${hours.closing}',
+            : '$pickedDay: ${hours.opening} - ${hours.closing}',
         style: TextStyle(
           fontWeight: FontWeight.bold,
           height: 2,
