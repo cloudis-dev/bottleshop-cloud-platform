@@ -98,3 +98,4 @@ final commonDataRepositoryProvider =
     return CommonDataRepository(currentLocale);
   },
 );
+
