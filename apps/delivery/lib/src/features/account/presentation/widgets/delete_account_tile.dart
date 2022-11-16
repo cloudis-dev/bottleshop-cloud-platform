@@ -2,16 +2,15 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class DeleteAccountTile extends HookWidget {
+class DeleteAccountTile extends HookConsumerWidget {
   const DeleteAccountTile({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return useProvider(currentUserProvider) != null
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(currentUserProvider) != null
         ? ListTile(
             dense: true,
             leading: Icon(
@@ -38,7 +37,10 @@ class DeleteAccountTile extends HookWidget {
                   showDialog<void>(
                     context: context,
                     builder: (_) {
-                      return _DeleteConfirmationDialog(parentContext: context);
+                      return _DeleteConfirmationDialog(
+                        parentContext: context,
+                        parentRef: ref,
+                      );
                     },
                   );
                 },
@@ -51,17 +53,19 @@ class DeleteAccountTile extends HookWidget {
 
 class _DeleteConfirmationDialog extends StatelessWidget {
   final BuildContext parentContext;
+  final WidgetRef parentRef;
 
   const _DeleteConfirmationDialog({
     Key? key,
     required this.parentContext,
+    required this.parentRef,
   }) : super(key: key);
 
   Future<void> _deleteAccount() async {
     bool result;
 
     try {
-      result = await parentContext.read(cloudFunctionsProvider).deleteAccount();
+      result = await parentRef.read(cloudFunctionsProvider).deleteAccount();
     } catch (err) {
       result = false;
     }
@@ -73,7 +77,7 @@ class _DeleteConfirmationDialog extends StatelessWidget {
         context: parentContext,
       );
     } else {
-      await parentContext.read(userRepositoryProvider).signOut();
+      await parentRef.read(userRepositoryProvider).signOut();
       showSimpleNotification(
         const Text('Successfully deleted your account'),
         slideDismissDirection: DismissDirection.horizontal,

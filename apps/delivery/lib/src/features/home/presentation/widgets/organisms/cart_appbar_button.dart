@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 
-class CartAppbarButton extends StatelessWidget {
+class CartAppbarButton extends HookConsumerWidget {
   @literal
   const CartAppbarButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       icon: const CartIconWithBadge(),
       onPressed: () {
-        context
+        ref
             .read(navigationProvider)
             .setNestingBranch(context, NestingBranch.cart);
       },

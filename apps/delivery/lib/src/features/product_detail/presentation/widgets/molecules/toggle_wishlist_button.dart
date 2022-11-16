@@ -5,7 +5,6 @@ import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/favorites/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -19,7 +18,7 @@ final _addToWishlistButtonStateProvider =
   },
 );
 
-class ToggleWishlistButton extends HookWidget {
+class ToggleWishlistButton extends HookConsumerWidget {
   const ToggleWishlistButton({
     Key? key,
     required this.product,
@@ -30,9 +29,8 @@ class ToggleWishlistButton extends HookWidget {
   final VoidCallback? actionOverride;
 
   @override
-  Widget build(BuildContext context) {
-    final buttonState =
-        useProvider(_addToWishlistButtonStateProvider(product)).state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final buttonState = ref.watch(_addToWishlistButtonStateProvider(product));
     final loaderColor = Theme.of(context).primaryColor;
 
     return ProgressButton(
@@ -40,12 +38,12 @@ class ToggleWishlistButton extends HookWidget {
       maxWidth: 90,
       onPressed: actionOverride ??
           () {
-            context.read(_addToWishlistButtonStateProvider(product)).state =
+            ref.read(_addToWishlistButtonStateProvider(product).state).state =
                 ButtonState.loading;
-            context.read(isInWishListStreamProvider(product.uniqueId)).whenData(
+            ref.read(isInWishListStreamProvider(product.uniqueId)).whenData(
               (isInWishList) {
                 if (isInWishList ?? false) {
-                  return context
+                  return ref
                       .read(wishListProvider)!
                       .remove(product.uniqueId)
                       .then(
@@ -72,7 +70,7 @@ class ToggleWishlistButton extends HookWidget {
                       product.name,
                       product.allCategories.first.categoryDetails.toString(),
                       1);
-                  return context
+                  return ref
                       .read(wishListProvider)!
                       .add(product.uniqueId)
                       .then(
@@ -98,8 +96,8 @@ class ToggleWishlistButton extends HookWidget {
             ).whenData(
               (value) => value.whenComplete(
                 () => {
-                  context
-                      .read(_addToWishlistButtonStateProvider(product))
+                  ref
+                      .read(_addToWishlistButtonStateProvider(product).state)
                       .state = ButtonState.idle
                 },
               ),
@@ -108,12 +106,12 @@ class ToggleWishlistButton extends HookWidget {
       state: buttonState,
       stateWidgets: {
         ButtonState.idle: Icon(
-          useProvider(isInWishListStreamProvider(product.uniqueId)).maybeWhen(
-            data: (isInWishList) => (isInWishList ?? false)
-                ? Icons.favorite
-                : Icons.favorite_border,
-            orElse: () => Icons.favorite_border,
-          ),
+          ref.watch(isInWishListStreamProvider(product.uniqueId)).maybeWhen(
+                data: (isInWishList) => (isInWishList ?? false)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                orElse: () => Icons.favorite_border,
+              ),
           size: 20,
           color: Theme.of(context).colorScheme.surface,
         ),

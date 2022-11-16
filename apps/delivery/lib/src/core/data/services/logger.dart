@@ -19,15 +19,20 @@ final _logger = Logger((ProviderLogger).toString());
 class ProviderLogger extends ProviderObserver {
   @override
   void didUpdateProvider(
-      ProviderBase<dynamic, dynamic> provider, Object? newValue) {
+    ProviderBase<dynamic> provider,
+    Object? previousValue,
+    Object? newValue,
+    container,
+  ) {
     if (kDebugMode) {
       _logger.fine(
-          'didUpdateProvider: ${provider.name ?? provider.runtimeType} newValue: $newValue');
+        'didUpdateProvider: ${provider.name ?? provider.runtimeType} previousValue: $previousValue newValue: $newValue',
+      );
     }
   }
 
   @override
-  void didDisposeProvider(ProviderBase<dynamic, dynamic> provider) {
+  void didDisposeProvider(ProviderBase<dynamic> provider, container) {
     if (kDebugMode) {
       _logger
           .fine('didDisposeProvider: ${provider.name ?? provider.runtimeType}');

@@ -16,10 +16,9 @@ import 'package:delivery/src/core/presentation/widgets/cupertino_bottom_navigati
 import 'package:delivery/src/core/presentation/widgets/material_bottom_navigation_scaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AdaptiveBottomNavigationScaffold extends HookWidget {
+class AdaptiveBottomNavigationScaffold extends HookConsumerWidget {
   final List<BottomNavigationTab> navigationBarItems;
 
   const AdaptiveBottomNavigationScaffold({
@@ -29,25 +28,26 @@ class AdaptiveBottomNavigationScaffold extends HookWidget {
 
   void onTabSelected(
     BuildContext context,
+    WidgetRef ref,
     NestingBranch currentlySelectedBranch,
     NestingBranch newBranch,
   ) {
     if (currentlySelectedBranch == newBranch) {
-      context.read(navigationProvider).replaceAllWith(
+      ref.read(navigationProvider).replaceAllWith(
             context,
             [],
             inChildNavigator: true,
           );
     } else {
-      context
+      ref
           .read(navigationProvider)
           .setNestingBranch(context, newBranch, inChildNavigator: true);
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    final currentlySelectedBranch = useProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentlySelectedBranch = ref.watch(
       navigationProvider.select(
           (value) => value.getNestingBranch(context, inChildNavigator: true)),
     );
@@ -57,6 +57,7 @@ class AdaptiveBottomNavigationScaffold extends HookWidget {
             navigationBarItems: navigationBarItems,
             onItemSelected: (nestingBranch) => onTabSelected(
               context,
+              ref,
               currentlySelectedBranch,
               nestingBranch,
             ),
@@ -66,6 +67,7 @@ class AdaptiveBottomNavigationScaffold extends HookWidget {
             navigationBarItems: navigationBarItems,
             onItemSelected: (newIndex) => onTabSelected(
               context,
+              ref,
               currentlySelectedBranch,
               newIndex,
             ),

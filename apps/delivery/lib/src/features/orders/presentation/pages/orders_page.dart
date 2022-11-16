@@ -42,11 +42,11 @@ class OrdersPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _OrdersPageView extends HookWidget {
+class _OrdersPageView extends HookConsumerWidget {
   const _OrdersPageView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final authButtonKey = useMemoized(() => GlobalKey<AuthPopupButtonState>());
 
@@ -56,7 +56,7 @@ class _OrdersPageView extends HookWidget {
         appBar: AppBar(
           title: Text(context.l10n.orderTabLabel),
           leading: CloseButton(
-            onPressed: () => context.read(navigationProvider).setNestingBranch(
+            onPressed: () => ref.read(navigationProvider).setNestingBranch(
                   context,
                   RoutebornBranchParams.of(context).getBranchParam()
                           as NestingBranch? ??

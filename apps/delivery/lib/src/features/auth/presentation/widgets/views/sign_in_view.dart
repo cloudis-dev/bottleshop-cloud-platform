@@ -23,17 +23,17 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class SignInView extends HookWidget {
+class SignInView extends HookConsumerWidget {
   static const String routeName = '/sign-in';
 
   const SignInView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final signInToggled = useProvider<bool>(widgetToggleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final signInToggled = ref.watch(widgetToggleProvider);
     final scrollController = useScrollController();
     final isLoading =
-        useProvider(userRepositoryProvider.select((value) => value.isLoading));
+        ref.watch(userRepositoryProvider.select((value) => value.isLoading));
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
@@ -77,11 +77,11 @@ class SignInView extends HookWidget {
                                       authCallback: signInToggled
                                           ? (result) {
                                               if (result == false) {
-                                                var error = context
+                                                var error = ref
                                                     .read(
                                                         userRepositoryProvider)
                                                     .error!;
-                                                context
+                                                ref
                                                     .read(
                                                         userRepositoryProvider)
                                                     .handleFatalFailure();
@@ -101,7 +101,7 @@ class SignInView extends HookWidget {
                                               }
                                             }
                                           : (result) {
-                                              var error = context
+                                              var error = ref
                                                   .read(userRepositoryProvider)
                                                   .error;
                                               if (!result) {
@@ -131,7 +131,7 @@ class SignInView extends HookWidget {
                                 : context.l10n.account_already,
                           ),
                           TextButton(
-                            onPressed: () => context
+                            onPressed: () => ref
                                 .read(widgetToggleProvider.notifier)
                                 .toggle(),
                             child: Text(

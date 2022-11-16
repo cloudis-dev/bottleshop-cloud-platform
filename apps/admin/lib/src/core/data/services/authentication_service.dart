@@ -52,7 +52,6 @@ class AuthenticationService {
         password: password.isEmpty ? ' ' : password,
       );
       assert(result.user != null);
-
       await _providerRef
           .read(pushNotificationsProvider)
           .setAdminNotificationsSubscriptionActive(true);

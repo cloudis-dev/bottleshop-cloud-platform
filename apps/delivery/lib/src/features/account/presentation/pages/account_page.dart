@@ -48,11 +48,11 @@ class AccountPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _AccountPageView extends HookWidget {
+class _AccountPageView extends HookConsumerWidget {
   const _AccountPageView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final scrollCtrl = useScrollController();
 
@@ -63,7 +63,7 @@ class _AccountPageView extends HookWidget {
           title: Text(context.l10n.settings),
           leading: CloseButton(
             onPressed: () {
-              context.read(navigationProvider).setNestingBranch(
+              ref.read(navigationProvider).setNestingBranch(
                     context,
                     RoutebornBranchParams.of(context).getBranchParam()
                             as NestingBranch? ??
@@ -96,14 +96,14 @@ class _AccountPageView extends HookWidget {
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   final ScrollController scrollCtrl;
 
   const _Body({Key? key, required this.scrollCtrl}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final user = useProvider(currentUserProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
 
     final themeWidgets = <DropdownListItem>[
       DropdownListItem(label: context.l10n.system),
@@ -199,15 +199,15 @@ class _Body extends HookWidget {
                             trailing: DropDown<ThemeMode>(
                               items: ThemeMode.values,
                               showUnderline: false,
-                              initialValue: context
+                              initialValue: ref
                                   .read(sharedPreferencesProvider)
                                   .getThemeMode(),
                               customWidgets: themeWidgets,
                               onChanged: (value) async {
-                                await context
+                                await ref
                                     .read(sharedPreferencesProvider)
                                     .setThemeMode(value!);
-                                context.refresh(sharedPreferencesProvider);
+                                ref.refresh(sharedPreferencesProvider);
                               },
                             ),
                           ),

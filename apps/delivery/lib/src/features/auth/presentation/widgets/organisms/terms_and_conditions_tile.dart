@@ -2,15 +2,14 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/auth/presentation/dialogs/terms_and_conditions_dialog.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class TermsAndConditionsTile extends HookWidget {
+class TermsAndConditionsTile extends HookConsumerWidget {
   const TermsAndConditionsTile({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final isChecked = useProvider(termsAcceptanceProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isChecked = ref.watch(termsAcceptanceProvider);
     return IntrinsicWidth(
       child: CheckboxListTile(
         activeColor: Theme.of(context).primaryColor,
@@ -24,12 +23,12 @@ class TermsAndConditionsTile extends HookWidget {
                   builder: (context) => const TermsAndConditionsDialog(),
                 ) ==
                 true) {
-              context.read(termsAcceptanceProvider.notifier).acceptTerms();
+              ref.read(termsAcceptanceProvider.notifier).acceptTerms();
             } else {
-              context.read(termsAcceptanceProvider.notifier).rejectTerms();
+              ref.read(termsAcceptanceProvider.notifier).rejectTerms();
             }
           } else {
-            context.read(termsAcceptanceProvider.notifier).rejectTerms();
+            ref.read(termsAcceptanceProvider.notifier).rejectTerms();
           }
         },
         value: isChecked,

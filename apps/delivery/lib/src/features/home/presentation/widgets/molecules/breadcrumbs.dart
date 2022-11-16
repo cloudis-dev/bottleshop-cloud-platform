@@ -2,16 +2,17 @@ import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/iterable_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Breadcrumbs extends HookWidget {
+class Breadcrumbs extends HookConsumerWidget {
   const Breadcrumbs({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final pages = useProvider(navigationProvider
-        .select((value) => value.getNavigationStack(context))).pageNodesStack;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pages = ref
+        .watch(navigationProvider
+            .select((value) => value.getNavigationStack(context)))
+        .pageNodesStack;
 
     return pages.length <= 1
         ? const SizedBox.shrink()
@@ -45,7 +46,7 @@ class Breadcrumbs extends HookWidget {
                                 (r) => Text(r),
                               ),
                           onPressed: () {
-                            context.read(navigationProvider).popUntil(
+                            ref.read(navigationProvider).popUntil(
                                   context,
                                   (page) =>
                                       page.runtimeType == e.page.runtimeType,

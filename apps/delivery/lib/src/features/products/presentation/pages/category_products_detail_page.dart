@@ -86,7 +86,7 @@ class CategoryProductsPage extends RoutebornPage with UpdatablePageNameMixin {
   String getPagePathBase() => pagePathBase;
 }
 
-class _CategoryProductsPageView extends HookWidget {
+class _CategoryProductsPageView extends HookConsumerWidget {
   final CategoriesTreeModel? category;
   final String? categoryUid;
 
@@ -106,25 +106,25 @@ class _CategoryProductsPageView extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return category == null
-        ? useProvider(categoryProvider(categoryUid!)).maybeWhen(
-            data: (e) => _Body(
-              category: e,
-              subcategoryId: subcategoryId,
-              categoryImgHeroTag: categoryImgHeroTag,
-              setPageName: setPageName,
-            ),
-            loading: () => const Loader(),
-            orElse: () => EmptyTab(
-              icon: Icons.info,
-              message: context.l10n.noSuchCategory,
-              buttonMessage: context.l10n.startExploring,
-              onButtonPressed: () {
-                context.read(navigationProvider).replaceAllWith(context, []);
-              },
-            ),
-          )
+        ? ref.watch(categoryProvider(categoryUid!)).maybeWhen(
+              data: (e) => _Body(
+                category: e,
+                subcategoryId: subcategoryId,
+                categoryImgHeroTag: categoryImgHeroTag,
+                setPageName: setPageName,
+              ),
+              loading: () => const Loader(),
+              orElse: () => EmptyTab(
+                icon: Icons.info,
+                message: context.l10n.noSuchCategory,
+                buttonMessage: context.l10n.startExploring,
+                onButtonPressed: () {
+                  ref.read(navigationProvider).replaceAllWith(context, []);
+                },
+              ),
+            )
         : _Body(
             category: category!,
             subcategoryId: subcategoryId,
@@ -134,7 +134,7 @@ class _CategoryProductsPageView extends HookWidget {
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   final CategoriesTreeModel category;
 
   /// In case null, the `All` category is opened
@@ -152,7 +152,7 @@ class _Body extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final drawerAcquirerKey =
         useMemoized(() => GlobalKey<DrawerStateAcquirerState>());
@@ -163,7 +163,7 @@ class _Body extends HookWidget {
                 category.subCategories.length + 1, // Adding the 'all' tab
             initialIndex: subcategoryId ?? 0,
           );
-    final currentLocale = useProvider(currentLocaleProvider);
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     setPageName(category.categoryDetails.getName(currentLocale));
 
@@ -189,11 +189,11 @@ class _Body extends HookWidget {
                     icon:
                         Hero(tag: UniqueKey(), child: const Icon(Icons.search)),
                     onPressed: () =>
-                        context.read(navigationProvider).setNestingBranch(
+                        ref.read(navigationProvider).setNestingBranch(
                               context,
                               NestingBranch.search,
                               resetBranchStack: true,
-                              branchParam: context
+                              branchParam: ref
                                   .read(navigationProvider)
                                   .getNestingBranch(context),
                             ),

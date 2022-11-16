@@ -17,17 +17,16 @@ import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class OrderCartListItem extends HookWidget {
+class OrderCartListItem extends HookConsumerWidget {
   const OrderCartListItem(this.cartItem, {Key? key}) : super(key: key);
 
   final CartItemModel cartItem;
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),

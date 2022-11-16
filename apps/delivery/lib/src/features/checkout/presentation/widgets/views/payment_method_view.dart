@@ -15,7 +15,7 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger((PaymentMethodView).toString());
 
-class PaymentMethodView extends HookWidget {
+class PaymentMethodView extends HookConsumerWidget {
   final PaymentData paymentData;
 
   final void Function() onBackButton;
@@ -29,12 +29,12 @@ class PaymentMethodView extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final cartData = useProvider(cartProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartData = ref.watch(cartProvider);
     final scrollController = useScrollController();
 
     return Loader(
-      inAsyncCall: useProvider(
+      inAsyncCall: ref.watch(
         checkoutStateProvider.select((value) => value.isLoading),
       ),
       child: Scaffold(
