@@ -9,12 +9,14 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +48,9 @@ class _FeedbackView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final typE = useState<String>("problem");
+    final name = useState<String>("");
+    final email = useState<String>("");
+    final message = useState<String>("");
     return Scaffold(
         appBar: AppBar(
           leading: CloseButton(
@@ -61,6 +66,9 @@ class _FeedbackView extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(500, 50, 500, 0),
                 child: TextFormField(
+                  onChanged: (value) {
+                    name.value = value;
+                  },
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Enter your name',
@@ -70,6 +78,9 @@ class _FeedbackView extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(500, 50, 500, 0),
                 child: TextFormField(
+                  onChanged: (value) {
+                    email.value = value;
+                  },
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Enter your email',
@@ -80,6 +91,9 @@ class _FeedbackView extends HookConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(500, 50, 500, 25),
                 child: TextField(
                   maxLines: 5,
+                  onChanged: (value) {
+                    name.value = value;
+                  },
                   decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       hintText: 'Type your message',
@@ -132,19 +146,26 @@ class _FeedbackView extends HookConsumerWidget {
                       )
                     ],
                   )),
-                  Padding(
-                    padding :const EdgeInsets.fromLTRB(500, 50, 500, 0),
-                    child: SizedBox(
-                      width: 150,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {  },
-                        child: Text('Send'),
-                      ),
-                    ),
-                  )
+              Padding(
+                padding: const EdgeInsets.fromLTRB(500, 50, 500, 0),
+                child: SizedBox(
+                  width: 150,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      FirebaseFirestore.instance.collection('mail').add({
+                        'to': 'sanekgalchyn@ukr.net',
+                        'message': {
+                          'subject': 'Hello from Firebase!',
+                          'html': 'This is an <code>HTML</code> email body.',
+                        },
+                      });
+                    },
+                    child: Text('Send'),
+                  ),
+                ),
+              )
             ],
-            
           ),
         ));
   }
