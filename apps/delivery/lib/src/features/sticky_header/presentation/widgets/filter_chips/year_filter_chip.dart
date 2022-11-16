@@ -28,7 +28,7 @@ class YearFilterChip extends HookConsumerWidget {
           data: (aggs) => Chip(
             backgroundColor: Theme.of(context).backgroundColor,
             label: Text('${context.l10n.year}: '
-                '${FilterFormattingUtils.getYearRangeString(aggs.minYear, maxYearFilterValue!.value)}'),
+                '${FilterFormattingUtils.getYearRangeString(aggs.minYear, maxYearFilterValue.value)}'),
             onDeleted: maxYearFilterValue.onDeleteFilter,
           ),
           orElse: () => const SizedBox.shrink(),

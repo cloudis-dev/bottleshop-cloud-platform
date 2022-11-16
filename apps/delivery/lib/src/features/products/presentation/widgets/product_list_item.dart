@@ -11,14 +11,17 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
+import 'package:delivery/src/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
 class ProductListItem extends HookConsumerWidget {
   static const double imageWidth = 60;
@@ -28,12 +31,16 @@ class ProductListItem extends HookConsumerWidget {
   final List<TextSpan>? nameTextSpans;
 
   const ProductListItem({
-    super.key,
+    Key? key,
     required this.product,
     this.nameTextSpans,
-  });
+  }) : super(key: key);
 
-  void onClick(WidgetRef ref, BuildContext context) {}
+  void onClick(BuildContext context, WidgetRef ref) {
+    ref
+        .read(navigationProvider)
+        .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,7 +61,7 @@ class ProductListItem extends HookConsumerWidget {
                   child: AspectRatio(
                     aspectRatio: productImageAspectRatio,
                     child: Hero(
-                      tag: ValueKey(product.uniqueId),
+                      tag: HeroTags.productBaseTag + product.uniqueId,
                       child: ProductImage(imagePath: product.thumbnailPath),
                     ),
                   ),
@@ -154,7 +161,7 @@ class ProductListItem extends HookConsumerWidget {
           Positioned.fill(
             child: Material(
               color: Colors.transparent,
-              child: InkWell(onTap: () => onClick(ref, context)),
+              child: InkWell(onTap: () => onClick(context, ref)),
             ),
           ),
         ],

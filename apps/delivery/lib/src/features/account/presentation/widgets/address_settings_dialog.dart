@@ -1,7 +1,19 @@
+// Copyright 2020 cloudis.dev
+//
+// info@cloudis.dev
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+//
+
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/presentation/widgets/checkbox_list_tile_formfield.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
+import 'package:delivery/src/features/account/presentation/widgets/checkbox_list_tile_formfield.dart';
 import 'package:delivery/src/features/auth/data/models/address_model.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
@@ -11,9 +23,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:overlay_support/overlay_support.dart';
 
-class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((AddressSettingsDialog).toString());
+
+class AddressSettingsDialog extends HookConsumerWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final String title;
   final Icon icon;
@@ -52,7 +67,7 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
           },
           loading: () => const Loader(),
           error: (err, stack) {
-            loggy.error('Failed to stream current user', err, stack);
+            _logger.severe('Failed to stream current user', err, stack);
             return Center(
               child: Text(context.l10n.error),
             );
@@ -73,6 +88,7 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
           title: buildDialogTitle(context),
           content: CupertinoScrollbar(
             controller: controller,
+            thumbVisibility: true,
             child: SingleChildScrollView(
               controller: controller,
               child: buildAddressForm(
@@ -86,16 +102,16 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
             TextButton(
               child: Text(context.l10n.cancelButton),
               onPressed: () {
-                //Navigator.of(context).pop();
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
               onPressed: () {
                 var isValid = _formKey.currentState!.validate();
-                loggy.info('form valid: $isValid');
+                _logger.fine('form valid: $isValid');
                 if (isValid) {
                   _formKey.currentState!.save();
-                  loggy.info(
+                  _logger.fine(
                       'data: ${profileData['city']}, ${profileData['phoneNumber']} billingOnly: ${profileData['billingOnly']}');
                   var userData = <String, dynamic>{};
                   if (addressType == AddressType.billing) {
@@ -108,8 +124,13 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
                     userData['shipping_address'] = profileData;
                   }
                   userDb.updateData(user.uid, userData);
-                  // TODO: Notify result go back
-
+                  showSimpleNotification(
+                    Text(context.l10n.profileUpdatedMsg),
+                    position: NotificationPosition.bottom,
+                    slideDismissDirection: DismissDirection.horizontal,
+                    context: context,
+                  );
+                  Navigator.of(context).pop();
                 }
               },
               style: TextButton.styleFrom(
@@ -147,7 +168,7 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['streetName'] = input;
               }
-              loggy.info(
+              _logger.fine(
                   'field saved $input, profile: ${profileData['streetName']}');
             },
           ),
@@ -163,7 +184,7 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['streetNumber'] = input;
               }
-              loggy.info(
+              _logger.fine(
                   'field saved $input, profile: ${profileData['streetNumber']}');
             },
           ),
@@ -179,7 +200,8 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['city'] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData['city']}');
+              _logger
+                  .fine('field saved $input, profile: ${profileData['city']}');
             },
           ),
           StyledFormField(
@@ -200,7 +222,7 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData['zipCode'] = input;
               }
-              loggy.info(
+              _logger.fine(
                   'field saved $input, profile: ${profileData['zipCode']}');
             },
           ),
@@ -228,7 +250,7 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
                 if (value != null) {
                   profileData['billingOnly'] = value;
                 }
-                loggy.info(
+                _logger.fine(
                     'check saved $value, profile: ${profileData['billingOnly']}');
               },
             ),
@@ -242,9 +264,7 @@ class AddressSettingsDialog extends HookConsumerWidget with UiLoggy {
       children: <Widget>[
         icon,
         const SizedBox(width: 10),
-        Text(
-          title,
-        )
+        Text(title),
       ],
     );
   }

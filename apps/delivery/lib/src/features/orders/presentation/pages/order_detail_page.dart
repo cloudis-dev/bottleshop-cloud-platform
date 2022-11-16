@@ -10,17 +10,20 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
+import 'package:delivery/src/core/presentation/pages/page_404.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/core/utils/math_utils.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
@@ -30,14 +33,51 @@ import 'package:delivery/src/features/orders/presentation/widgets/order_steps_wi
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:routeborn/routeborn.dart';
 
-class OrderDetailPage extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((OrderDetailPage).toString());
+
+class OrderDetailPage extends RoutebornPage with UpdatablePageNameMixin {
+  static const String pagePathBase = 'order';
+
   final String orderUniqueId;
 
-  const OrderDetailPage({
+  static Tuple2<RoutebornPage, List<String>> fromPathParams(
+    List<String> remainingPathArguments,
+  ) {
+    if (remainingPathArguments.isNotEmpty) {
+      return Tuple2(
+        OrderDetailPage(orderUniqueId: remainingPathArguments.first),
+        remainingPathArguments.skip(1).toList(),
+      );
+    }
+
+    return Tuple2(Page404(), remainingPathArguments);
+  }
+
+  OrderDetailPage({required this.orderUniqueId}) : super(pagePathBase) {
+    builder = (context) => _OrderDetailPageView(
+          orderUniqueId: orderUniqueId,
+          setPageNameCallback: (str) => setPageName(context, str),
+        );
+  }
+
+  @override
+  String getPagePath() => '$pagePathBase/$orderUniqueId';
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _OrderDetailPageView extends HookConsumerWidget {
+  final String orderUniqueId;
+  final SetPageNameCallback setPageNameCallback;
+
+  const _OrderDetailPageView({
     Key? key,
     required this.orderUniqueId,
+    required this.setPageNameCallback,
   }) : super(key: key);
 
   @override
@@ -50,11 +90,15 @@ class OrderDetailPage extends HookConsumerWidget with UiLoggy {
             if (order == null) {
               return const _OrderErrorTab();
             } else {
+              setPageNameCallback('${context.l10n.order} #${order.orderId}');
+
               if (shouldUseMobileLayout(context)) {
                 return Scaffold(
                   key: scaffoldKey,
                   appBar: AppBar(
-                    leading: const BackButton(),
+                    leading: BackButton(
+                        onPressed: () =>
+                            ref.read(navigationProvider).popPage(context)),
                     title: Text('${context.l10n.order} #${order.orderId}'),
                     actions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
                   ),
@@ -82,7 +126,7 @@ class OrderDetailPage extends HookConsumerWidget with UiLoggy {
           },
           loading: () => const Loader(),
           error: (err, stack) {
-            loggy.error('Failed stream orders', err, stack);
+            _logger.severe('Failed stream orders', err, stack);
 
             return const _OrderErrorTab();
           },
@@ -96,10 +140,11 @@ class _OrderErrorTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return EmptyTab(
-        icon: Icons.error_outline,
-        message: context.l10n.upsSomethingWentWrong,
-        buttonMessage: context.l10n.backToOrders,
-        onButtonPressed: null);
+      icon: Icons.error_outline,
+      message: context.l10n.upsSomethingWentWrong,
+      buttonMessage: context.l10n.backToOrders,
+      onButtonPressed: () => ref.read(navigationProvider).popPage(context),
+    );
   }
 }
 
@@ -153,7 +198,8 @@ class _Body extends HookConsumerWidget {
                 ),
                 const SizedBox(),
                 Text(
-                  FormattingUtils.getPriceNumberString(order.totalPaid, withCurrency: true),
+                  FormattingUtils.getPriceNumberString(order.totalPaid,
+                      withCurrency: true),
                   style: Theme.of(context).textTheme.subtitle2,
                 )
               ],
@@ -172,7 +218,8 @@ class _Body extends HookConsumerWidget {
                 ),
               ],
             ),
-            if (!MathUtils.approximately(order.orderType.shippingFeeNoVat, 0)) ...[
+            if (!MathUtils.approximately(
+                order.orderType.shippingFeeNoVat, 0)) ...[
               getSizedTableRow(),
               TableRow(
                 children: [
@@ -215,7 +262,8 @@ class _Body extends HookConsumerWidget {
               },
               textBaseline: TextBaseline.alphabetic,
               children: [
-                if (order.orderType.deliveryOption != DeliveryOption.pickUp) ...[
+                if (order.orderType.deliveryOption !=
+                    DeliveryOption.pickUp) ...[
                   TableRow(
                     children: [
                       Text(
@@ -225,7 +273,9 @@ class _Body extends HookConsumerWidget {
                       const SizedBox(),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: (order.customer.shippingAddress?.getAddressPerLines() ?? [])
+                        children: (order.customer.shippingAddress
+                                    ?.getAddressPerLines() ??
+                                [])
                             .map<Widget>(
                               (e) => Text(
                                 e,
@@ -290,7 +340,8 @@ class _Body extends HookConsumerWidget {
                   children: [
                     if (order.hasPromoCode)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
                         decoration: ListItemContainerDecoration(context),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -318,7 +369,7 @@ class _Body extends HookConsumerWidget {
                           ],
                         ),
                       ),
-                    ...order.cartItems.map<Widget>((e) => OrderCartListItem(cartItem: e)),
+                    ...order.cartItems.map<Widget>((e) => OrderCartListItem(e)),
                   ],
                 ),
               ),

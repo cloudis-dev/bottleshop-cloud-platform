@@ -30,11 +30,12 @@ class QuantityUpdateWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final buttonState =
-        ref.watch(_quantityUpdateButtonStateProvider(product).state).state;
-    final currentQuantity = ref
-        .watch(cartQuantityStreamProvider(product))
-        .maybeWhen(data: (quantity) => quantity, orElse: () => 0);
+    final buttonState = ref.watch(_quantityUpdateButtonStateProvider(product));
+    final currentQuantity =
+        ref.watch(cartQuantityStreamProvider(product)).maybeWhen(
+              data: (quantity) => quantity,
+              orElse: () => 0,
+            );
 
     return ProgressButton(
       onPressed: () {},

@@ -10,9 +10,12 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
+import 'package:delivery/src/core/presentation/pages/page_404.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/drawer_state_acquirer.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
@@ -21,20 +24,69 @@ import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup
 import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
-import 'package:delivery/src/features/home/presentation/widgets/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/filter_icon_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/language_dropdown.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/search_icon_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/filter_icon_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/search_icon_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/products/presentation/slivers/sliver_category_detail_app_bar.dart';
 import 'package:delivery/src/features/products/presentation/widgets/category_products_list.dart';
 import 'package:delivery/src/features/products/presentation/widgets/subcategories_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class CategoryProductsPage extends HookConsumerWidget {
+class CategoryProductsPage extends RoutebornPage with UpdatablePageNameMixin {
+  static const String pagePathBase = 'category_products';
+
+  static Tuple2<RoutebornPage, List<String>> fromPathParams(
+    List<String> remainingPathArguments,
+  ) {
+    if (remainingPathArguments.isNotEmpty) {
+      return Tuple2(
+        CategoryProductsPage.uid(remainingPathArguments.first),
+        remainingPathArguments.skip(1).toList(),
+      );
+    }
+
+    return Tuple2(Page404(), remainingPathArguments);
+  }
+
+  final String categoryId;
+
+  CategoryProductsPage.uid(this.categoryId) : super(pagePathBase) {
+    builder = (context) => _CategoryProductsPageView(
+          categoryUid: categoryId,
+          subcategoryId: null,
+          categoryImgHeroTag: null,
+          setPageName: (pageName) => setPageName(context, pageName),
+        );
+  }
+
+  CategoryProductsPage(
+    CategoriesTreeModel category, {
+    int? subcategoryId,
+    String? categoryImgHeroTag,
+  })  : categoryId = category.categoryDetails.id,
+        super(pagePathBase) {
+    builder = (context) => _CategoryProductsPageView(
+          category: category,
+          subcategoryId: subcategoryId,
+          categoryImgHeroTag: categoryImgHeroTag,
+          setPageName: (pageName) => setPageName(context, pageName),
+        );
+  }
+
+  @override
+  String getPagePath() => '$pagePathBase/$categoryId';
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _CategoryProductsPageView extends HookConsumerWidget {
   final CategoriesTreeModel? category;
   final String? categoryUid;
 
@@ -42,12 +94,15 @@ class CategoryProductsPage extends HookConsumerWidget {
   final int? subcategoryId;
   final String? categoryImgHeroTag;
 
-  const CategoryProductsPage({
+  final SetPageNameCallback setPageName;
+
+  const _CategoryProductsPageView({
     Key? key,
     this.category,
     this.categoryUid,
     required this.subcategoryId,
     required this.categoryImgHeroTag,
+    required this.setPageName,
   }) : super(key: key);
 
   @override
@@ -58,19 +113,23 @@ class CategoryProductsPage extends HookConsumerWidget {
                 category: e,
                 subcategoryId: subcategoryId,
                 categoryImgHeroTag: categoryImgHeroTag,
+                setPageName: setPageName,
               ),
               loading: () => const Loader(),
               orElse: () => EmptyTab(
                 icon: Icons.info,
                 message: context.l10n.noSuchCategory,
                 buttonMessage: context.l10n.startExploring,
-                onButtonPressed: () {},
+                onButtonPressed: () {
+                  ref.read(navigationProvider).replaceAllWith(context, []);
+                },
               ),
             )
         : _Body(
             category: category!,
             subcategoryId: subcategoryId,
             categoryImgHeroTag: categoryImgHeroTag,
+            setPageName: setPageName,
           );
   }
 }
@@ -82,11 +141,14 @@ class _Body extends HookConsumerWidget {
   final int? subcategoryId;
   final String? categoryImgHeroTag;
 
+  final SetPageNameCallback setPageName;
+
   const _Body({
     Key? key,
     required this.category,
     required this.subcategoryId,
     required this.categoryImgHeroTag,
+    required this.setPageName,
   }) : super(key: key);
 
   @override
@@ -102,6 +164,8 @@ class _Body extends HookConsumerWidget {
             initialIndex: subcategoryId ?? 0,
           );
     final currentLocale = ref.watch(currentLocaleProvider);
+
+    setPageName(category.categoryDetails.getName(currentLocale));
 
     if (shouldUseMobileLayout(context)) {
       return Scaffold(
@@ -122,9 +186,18 @@ class _Body extends HookConsumerWidget {
                 actions: [
                   FilterIconButton(scaffoldKey, drawerAcquirerKey),
                   IconButton(
-                      icon: Hero(
-                          tag: UniqueKey(), child: const Icon(Icons.search)),
-                      onPressed: null),
+                    icon:
+                        Hero(tag: UniqueKey(), child: const Icon(Icons.search)),
+                    onPressed: () =>
+                        ref.read(navigationProvider).setNestingBranch(
+                              context,
+                              NestingBranch.search,
+                              resetBranchStack: true,
+                              branchParam: ref
+                                  .read(navigationProvider)
+                                  .getNestingBranch(context),
+                            ),
+                  ),
                   AuthPopupButton(scaffoldKey: scaffoldKey),
                 ],
               ),

@@ -1,0 +1,42 @@
+default_platform(:android)
+
+platform :android do
+  desc "Deploy to closed beta track"
+  lane :closed_beta do
+      upload_to_play_store(
+        track: 'alpha',
+        aab: '../build/app/outputs/bundle/release/app-release.aab',
+        skip_upload_metadata: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true,
+        version_code: flutter_version()["version_code"],
+      )
+  end
+  def get_version_code
+      properties = File.read("../local.properties")
+      versionCodeRegex = /(?<=flutter.versionCode=).+/
+      versionCode = versionCodeRegex.match(properties)[0]
+      versionCode
+    end
+
+    desc "Build, sign and deploy the app to beta google Play"
+    lane :beta do
+       version_code = get_version_code
+       changeLogPath = "./metadata/android/en-US/changelogs/#{version_code}.txt"
+       changelog_from_git_commits(
+          commits_count: "1",
+          merge_commit_filtering: "exclude_merges",
+          path: "../"
+       )
+       File.open(changeLogPath, 'w') do |new_file|
+        new_file.puts lane_context[SharedValues::FL_CHANGELOG]
+        new_file.puts "\n"
+       end
+       Dir.chdir "../.." do
+         sh("flutter", "clean")
+         sh("flutter", "pub", "get")
+         sh("flutter", "build", "appbundle", "--build-number=#{version_code}")
+       end
+       #upload_to_play_store(track: 'alpha', aab: '../build/app/outputs/bundle/release/app-release.aab')
+    end
+end

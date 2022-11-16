@@ -10,12 +10,12 @@
 //
 //
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_handler.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/paged_streams_items_state_notifier.dart';
-
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
-import 'package:loggy/loggy.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:logging/logging.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
+
+final _logger = Logger((OrdersStateNotifier).toString());
 
 class OrdersStateNotifier extends PagedStreamsItemsStateNotifier<OrderModel,
     DocumentSnapshot, String> {
@@ -27,7 +27,7 @@ class OrdersStateNotifier extends PagedStreamsItemsStateNotifier<OrderModel,
           createStream,
           OrdersItemsHandler(),
           (err, stack) async =>
-              logError('OrdersStateNotifier error', err, stack),
+              _logger.severe('OrdersStateNotifier error', err, stack),
         );
 }
 

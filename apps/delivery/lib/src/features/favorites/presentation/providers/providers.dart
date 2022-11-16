@@ -7,7 +7,7 @@ final wishListProvider = Provider.autoDispose<WishListService?>(
   (ref) {
     final uid = ref.watch(currentUserProvider)?.uid;
 
-    return uid == null ? null : WishListService(ref.read);
+    return uid == null ? null : WishListService(ref);
   },
 );
 

@@ -11,6 +11,7 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
@@ -24,20 +25,31 @@ class SideMenuHeader extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userData = ref.watch(currentUserProvider);
-    return UserAccountsDrawerHeader(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
-        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(35)),
+
+    return GestureDetector(
+      onTap: () {
+        ref.read(navigationProvider).setNestingBranch(
+              context,
+              NestingBranch.account,
+              inChildNavigator: true,
+            );
+      },
+      child: UserAccountsDrawerHeader(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondary,
+          borderRadius:
+              const BorderRadius.only(bottomLeft: Radius.circular(35)),
+        ),
+        accountName: Text(
+          userData?.name ?? context.l10n.anonymousUser,
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        accountEmail: Text(
+          userData?.email ?? context.l10n.anonymousUser,
+          style: Theme.of(context).textTheme.caption,
+        ),
+        currentAccountPicture: ProfileAvatar(imageUrl: userData?.avatar),
       ),
-      accountName: Text(
-        userData?.name ?? context.l10n.anonymousUser,
-        style: Theme.of(context).textTheme.headline6,
-      ),
-      accountEmail: Text(
-        userData?.email ?? context.l10n.anonymousUser,
-        style: Theme.of(context).textTheme.caption,
-      ),
-      currentAccountPicture: ProfileAvatar(imageUrl: userData?.avatar),
     );
   }
 }

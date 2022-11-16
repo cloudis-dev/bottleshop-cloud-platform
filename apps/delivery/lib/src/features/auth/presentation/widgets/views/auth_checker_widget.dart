@@ -10,11 +10,13 @@
 //
 //
 
+import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/auth/data/repositories/user_repository.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/views/sign_in_page.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/views/sign_in_view.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/splash_view.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/verify_email_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -30,14 +32,22 @@ class AuthCheckerWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserProvider);
     final authStatus = ref.watch(authStatusProvider);
-    final isLoading = ref
-        .watch(userRepositoryProvider.select<bool>((value) => value.isLoading));
+    final isLoading =
+        ref.watch(userRepositoryProvider.select((value) => value.isLoading));
 
     switch (authStatus) {
       case AuthStatus.unauthenticated:
-        return const SignInPage();
+        if (kIsWeb) {
+          return successViewBuilder(context);
+        } else {
+          return const SignInView();
+        }
       case AuthStatus.authenticating:
-        return const SignInPage();
+        if (kIsWeb) {
+          return const Scaffold(body: Loader());
+        } else {
+          return const SignInView();
+        }
       case AuthStatus.authenticated:
         if (isLoading) {
           return const SplashView();
@@ -46,6 +56,22 @@ class AuthCheckerWidget extends HookConsumerWidget {
         if (currentUser == null ||
             currentUser.isAnonymous ||
             currentUser.isEmailVerified) {
+          // TODO: This is completely broken crashes app every single time - refactor needed
+          /*useEffect(
+            () {
+              if (!(currentUser?.introSeen ?? true)) {
+                Future.microtask(
+                  () => context.read(navigationProvider).pushPage(
+                        context,
+                        AppPageNode(page: TutorialPage()),
+                      ),
+                );
+              }
+              return null;
+            },
+            const [],
+          );*/
+
           return successViewBuilder(context);
         } else {
           return const VerifyEmailView();

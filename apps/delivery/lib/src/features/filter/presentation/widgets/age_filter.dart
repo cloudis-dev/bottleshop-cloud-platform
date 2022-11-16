@@ -18,9 +18,11 @@ import 'package:delivery/src/features/filter/presentation/viewmodels/filter_mode
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-class AgeFilter extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((AgeFilter).toString());
+
+class AgeFilter extends HookConsumerWidget {
   const AgeFilter({
     Key? key,
   }) : super(key: key);
@@ -29,18 +31,17 @@ class AgeFilter extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final minAge = ref.watch(
-        filterModelProvider(filterType).select<int>((value) => value.minAge));
-    final isAgeActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isAgeActive));
+    final minAge = ref
+        .watch(filterModelProvider(filterType).select((value) => value.minAge));
+    final isAgeActive = ref.watch(
+        filterModelProvider(filterType).select((value) => value.isAgeActive));
 
     return Offstage(
       offstage: !ref.watch(
-        filterModelProvider(filterType)
-            .select<bool>((value) => value.isFilterByAge),
+        filterModelProvider(filterType).select((value) => value.isFilterByAge),
       ),
       child: ref.watch(filterAggregationsProvider).when(
-            data: (args) => Column(
+            data: (aggs) => Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,7 +61,7 @@ class AgeFilter extends HookConsumerWidget with UiLoggy {
                       ),
                       child: Text(
                         FilterFormattingUtils.getAgeRangeString(
-                            minAge, args.maxAge),
+                            minAge, aggs.maxAge),
                         textAlign: TextAlign.right,
                       ),
                     )
@@ -70,16 +71,13 @@ class AgeFilter extends HookConsumerWidget with UiLoggy {
                   textDirection: TextDirection.rtl,
                   child: Slider(
                     min: FilterConstants.minAge.toDouble(),
-                    max: args.maxAge!.toDouble(),
-                    divisions: args.maxAge! - FilterConstants.minAge,
-                    value: args.maxAge! - minAge.toDouble(),
+                    max: aggs.maxAge!.toDouble(),
+                    divisions: aggs.maxAge! - FilterConstants.minAge,
+                    value: aggs.maxAge! - minAge.toDouble(),
                     onChanged: (value) =>
                         ref.read(filterModelProvider(filterType).state).state =
-                            ref
-                                .read(filterModelProvider(filterType).state)
-                                .state
-                                .copyWith(
-                                  minAge: args.maxAge! - value.round(),
+                            ref.read(filterModelProvider(filterType)).copyWith(
+                                  minAge: aggs.maxAge! - value.round(),
                                 ),
                     label: minAge.toString(),
                     activeColor: Theme.of(context).colorScheme.secondary,
@@ -89,7 +87,7 @@ class AgeFilter extends HookConsumerWidget with UiLoggy {
             ),
             loading: () => const Loader(),
             error: (err, stack) {
-              loggy.error('Failed to fetch filter aggregations', err, stack);
+              _logger.severe('Failed to fetch filter aggregations', err, stack);
               return Center(
                 child: Text(context.l10n.error),
               );

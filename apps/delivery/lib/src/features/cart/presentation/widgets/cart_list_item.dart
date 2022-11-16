@@ -11,16 +11,19 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
+import 'package:delivery/src/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
 class CartListItem extends HookConsumerWidget {
   final ProductModel product;
@@ -33,8 +36,10 @@ class CartListItem extends HookConsumerWidget {
   })  : assert(quantity > 0),
         super(key: key);
 
-  void onClick(WidgetRef ref, BuildContext context) {
-    //ref.read(navigationProviderl10n.pushPage(context, AppPageNode(page: ProductDetailPage(product)));
+  void onClick(BuildContext context, WidgetRef ref) {
+    ref
+        .read(navigationProvider)
+        .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
   }
 
   @override
@@ -59,7 +64,7 @@ class CartListItem extends HookConsumerWidget {
               child: Stack(
                 children: [
                   Hero(
-                    tag: ValueKey(product.uniqueId),
+                    tag: HeroTags.productBaseTag + product.uniqueId,
                     child: ProductImage(imagePath: product.thumbnailPath),
                   ),
                   Positioned.fill(
@@ -68,7 +73,7 @@ class CartListItem extends HookConsumerWidget {
                       child: InkResponse(
                         containedInkWell: true,
                         child: InkWell(
-                          onTap: () => onClick(ref, context),
+                          onTap: () => onClick(context, ref),
                         ),
                       ),
                     ),

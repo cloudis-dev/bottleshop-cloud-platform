@@ -26,7 +26,7 @@ class QuantityFilterChip extends HookConsumerWidget {
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
       label: Text('${context.l10n.inStockCount}: '
-          '${FilterFormattingUtils.getQuantityRangeString(quantityFilterValue!.value, context)}'),
+          '${FilterFormattingUtils.getQuantityRangeString(quantityFilterValue.value, context)}'),
       onDeleted: quantityFilterValue.onDeleteFilter,
     );
   }

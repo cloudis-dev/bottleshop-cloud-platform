@@ -18,9 +18,11 @@ import 'package:delivery/src/features/filter/presentation/viewmodels/filter_mode
 import 'package:delivery/src/features/filter/utils/filters_formatting_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-class YearFilter extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((YearFilter).toString());
+
+class YearFilter extends HookConsumerWidget {
   const YearFilter({
     Key? key,
   }) : super(key: key);
@@ -30,14 +32,13 @@ class YearFilter extends HookConsumerWidget with UiLoggy {
     final filterType = ref.watch(filterTypeScopedProvider);
 
     final maxYear = ref.watch(
-        filterModelProvider(filterType).select<int>((value) => value.maxYear));
-    final isYearActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isYearActive));
+        filterModelProvider(filterType).select((value) => value.maxYear));
+    final isYearActive = ref.watch(
+        filterModelProvider(filterType).select((value) => value.isYearActive));
 
     return Offstage(
       offstage: ref.watch(
-        filterModelProvider(filterType)
-            .select<bool>((value) => value.isFilterByAge),
+        filterModelProvider(filterType).select((value) => value.isFilterByAge),
       ),
       child: ref.watch(filterAggregationsProvider).when(
             data: (aggs) => Column(
@@ -73,10 +74,7 @@ class YearFilter extends HookConsumerWidget with UiLoggy {
                   value: maxYear.toDouble(),
                   onChanged: (value) =>
                       ref.read(filterModelProvider(filterType).state).state =
-                          ref
-                              .read(filterModelProvider(filterType).state)
-                              .state
-                              .copyWith(
+                          ref.read(filterModelProvider(filterType)).copyWith(
                                 maxYear: value.round(),
                               ),
                   label: maxYear.toString(),
@@ -86,7 +84,7 @@ class YearFilter extends HookConsumerWidget with UiLoggy {
             ),
             loading: () => const Loader(),
             error: (err, stack) {
-              loggy.error('Failed to fetch filter aggregations', err, stack);
+              _logger.severe('Failed to fetch filter aggregations', err, stack);
 
               return Center(
                 child: Text(context.l10n.error),

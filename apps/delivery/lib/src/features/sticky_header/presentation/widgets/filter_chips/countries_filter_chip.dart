@@ -25,7 +25,7 @@ class CountriesFilterChip extends HookConsumerWidget {
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
       label: Text(context.l10n.countries),
-      onDeleted: countriesFilterValue!.onDeleteFilter,
+      onDeleted: countriesFilterValue.onDeleteFilter,
     );
   }
 }

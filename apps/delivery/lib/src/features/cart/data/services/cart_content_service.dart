@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
 import 'package:delivery/src/core/utils/firestore_json_parsing_util.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
@@ -30,23 +30,22 @@ class CartContentService extends DatabaseService<CartRecord> {
         final list = <CartItemModel>[];
         for (final item in event) {
           var data = await item.productRef.get();
-          var content = data.data();
-          if (content != null) {
-            var product = await FirestoreJsonParsingUtil.parseProductJson(
-                content as Map<String, dynamic>);
-            list.add(CartItemModel(
+          var product = await FirestoreJsonParsingUtil.parseProductJson(
+              data.data() as Map<String, dynamic>);
+          list.add(
+            CartItemModel(
               count: item.quantity,
               product: product,
               paidPrice: product.finalPrice,
-            ));
-          }
+            ),
+          );
         }
         return list;
       },
     );
   }
 
-  Future<List<CartItemModel>> getCartItems() async {
+  Future<List<CartItemModel>> getCartItems() {
     return getQueryList().then((event) async {
       final list = <CartItemModel>[];
       for (var item in event) {

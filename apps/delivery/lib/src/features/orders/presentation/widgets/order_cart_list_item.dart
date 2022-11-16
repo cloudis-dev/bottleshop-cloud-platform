@@ -10,9 +10,9 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderCartListItem extends HookConsumerWidget {
-  const OrderCartListItem({super.key, required this.cartItem});
+  const OrderCartListItem(this.cartItem, {Key? key}) : super(key: key);
 
   final CartItemModel cartItem;
 
@@ -62,7 +62,8 @@ class OrderCartListItem extends HookConsumerWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      FormattingUtils.getAlcoholNumberString(cartItem.product.alcohol ?? 0),
+                      FormattingUtils.getAlcoholNumberString(
+                          cartItem.product.alcohol ?? 0),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],
@@ -106,7 +107,9 @@ class OrderCartListItem extends HookConsumerWidget {
                 child: Chip(
                   clipBehavior: Clip.antiAlias,
                   backgroundColor: Colors.transparent,
-                  shape: StadiumBorder(side: BorderSide(color: Theme.of(context).colorScheme.secondary)),
+                  shape: StadiumBorder(
+                      side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary)),
                   label: Text(
                     '${cartItem.count}x',
                     style: Theme.of(context).textTheme.subtitle1,

@@ -12,7 +12,7 @@
 
 import 'dart:ui' show ImageFilter;
 
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/cupertino.dart';
 
 const Color _kDefaultTabBarBorderColor = CupertinoDynamicColor.withBrightness(

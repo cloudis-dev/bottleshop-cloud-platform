@@ -10,30 +10,52 @@
 //
 //
 
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottom_navigation_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
 
 class MaterialBottomNavigationScaffold extends HookConsumerWidget {
   const MaterialBottomNavigationScaffold({
     required this.navigationBarItems,
+    required this.onItemSelected,
+    required this.selectedBranch,
     Key? key,
   }) : super(key: key);
 
   final List<BottomNavigationTab> navigationBarItems;
+  final ValueChanged<NestingBranch> onItemSelected;
+  final NestingBranch selectedBranch;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final routerKey = useMemoized(() => GlobalKey());
     final scaffoldKey = useMemoized(() => GlobalKey());
 
-    final currentId = useState(0).value;
+    final currentId = navigationBarItems
+        .indexWhere((e) => e.navigationNestingLevel == selectedBranch);
 
-    return Scaffold(
-      key: scaffoldKey,
-      body: IndexedStack(index: currentId, children: const []),
-      bottomNavigationBar: BottomNavigationBar(
+    if (currentId == -1) {
+      return Router(
+        key: routerKey,
+        routerDelegate: ref.watch(nestedRouterDelegate(null)),
+      );
+    } else {
+      return Scaffold(
+        key: scaffoldKey,
+        body: IndexedStack(
+          index: currentId,
+          children: navigationBarItems
+              .map(
+                (barItem) => Router(
+                  routerDelegate: ref.watch(
+                      nestedRouterDelegate(barItem.navigationNestingLevel)),
+                ),
+              )
+              .toList(),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.transparent,
           selectedFontSize: 14,
           unselectedFontSize: 11,
@@ -44,11 +66,13 @@ class MaterialBottomNavigationScaffold extends HookConsumerWidget {
           showSelectedLabels: true,
           showUnselectedLabels: false,
           currentIndex: currentId,
-          items: navigationBarItems.map((item) => item.bottomNavigationBarItem).toList(),
-          onTap: (id) {
-            //TODO:
-            logWarning('OnTap is captured but not handle');
-          }),
-    );
+          items: navigationBarItems
+              .map((item) => item.bottomNavigationBarItem)
+              .toList(),
+          onTap: (id) =>
+              onItemSelected(navigationBarItems[id].navigationNestingLevel),
+        ),
+      );
+    }
   }
 }

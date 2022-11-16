@@ -26,7 +26,7 @@ class PriceFilterChip extends HookConsumerWidget {
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
       label: Text('${context.l10n.price}: '
-          '${FilterFormattingUtils.getPriceRangeString(priceFilterValue!.value, context)}'),
+          '${FilterFormattingUtils.getPriceRangeString(priceFilterValue.value, context)}'),
       onDeleted: priceFilterValue.onDeleteFilter,
     );
   }

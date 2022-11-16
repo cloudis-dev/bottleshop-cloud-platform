@@ -10,22 +10,45 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/help/presentation/providers/help_providers.dart';
 import 'package:delivery/src/features/help/presentation/widgets/help_section.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/language_dropdown.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class HelpPage extends HookConsumerWidget {
-  const HelpPage({super.key});
+class HelpPage extends RoutebornPage {
+  static const String pagePathBase = 'help';
+
+  HelpPage()
+      : super.builder(
+          pagePathBase,
+          (_) => _HelpPageView(),
+        );
+
+  @override
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(context.l10n.help);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _HelpPageView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
@@ -35,8 +58,13 @@ class HelpPage extends HookConsumerWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text(context.l10n.help),
-          leading: const CloseButton(
-            onPressed: null,
+          leading: CloseButton(
+            onPressed: () => ref.read(navigationProvider).setNestingBranch(
+                  context,
+                  RoutebornBranchParams.of(context).getBranchParam()
+                          as NestingBranch? ??
+                      NestingBranch.shop,
+                ),
           ),
         ),
         body: CupertinoScrollbar(
@@ -84,13 +112,13 @@ class _Body extends HookConsumerWidget {
                     icon: Icons.help,
                     title: context.l10n.faq,
                     subTitle: context.l10n.someAnswers,
-                    mdString: mds.value1,
+                    mdString: mds.item1,
                   ),
                   HelpSection(
                     icon: Icons.attractions,
                     title: context.l10n.contactDetails,
                     subTitle: context.l10n.contactInformation,
-                    mdString: mds.value2,
+                    mdString: mds.item2,
                   ),
                 ],
               );

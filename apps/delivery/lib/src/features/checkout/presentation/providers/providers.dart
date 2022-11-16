@@ -15,42 +15,78 @@ import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/cart/data/repositories/cart_repository.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-final checkoutStateProvider =
-    ChangeNotifierProvider.autoDispose<CheckoutState>((ref) {
+final _logger = Logger((CheckoutState).toString());
+
+final nativePayProvider = FutureProvider<bool>((ref) async {
+  final stripe = ref.watch(stripeProvider);
+  final isNativePayAvailable = await stripe.checkIfNativePayReady();
+  return isNativePayAvailable;
+});
+
+final checkoutStateProvider = ChangeNotifierProvider.autoDispose((ref) {
   final cartService = ref.watch(cartRepositoryProvider)!;
   final stripeService = ref.watch(stripeProvider);
   return CheckoutState(stripeService: stripeService, cartService: cartService);
 });
 
-class CheckoutState extends StateNotifier<AsyncValue<void>> with NetworkLoggy {
+class CheckoutState extends ChangeNotifier {
   final StripeService stripeService;
   final CartRepository cartService;
+  bool _isLoading = false;
 
-  CheckoutState({required this.stripeService, required this.cartService})
-      : super(const AsyncValue.data(null));
+  CheckoutState({required this.stripeService, required this.cartService});
+
+  bool get isLoading => _isLoading;
 
   Future<void> payByNativePay(PaymentData paymentData) async {
-    logInfo('payByNativePay invoked');
+    _logger.fine('payByNativePay invoked');
+    _isLoading = true;
+    notifyListeners();
     try {
-      state = const AsyncValue.loading();
-      final cart = (await cartService.getCartModel())!;
-      logInfo('cart retrieved: ${cart.toString()}');
-      final items = await cartService.cartContent.first;
-      logInfo('items retrieved: ${items.length}');
+      final canPayNatively = await stripeService.checkIfNativePayReady();
+      if (canPayNatively) {
+        _logger.fine('native pay supported');
+        final cart = (await cartService.getCartModel())!;
+        _logger.fine('cart retrieved: ${cart.toString()}');
+        final items = await cartService.cartContent.first;
+        _logger.fine('items retrieved: ${items.length}');
+        await stripeService.payByNative(
+          cart: cart,
+          items: items,
+          paymentData: paymentData,
+        );
+      } else {
+        throw Exception('native pay not supported');
+      }
     } on PlatformException catch (err, stack) {
-      loggy.error('Failed to pay by native PlatformException', err, stack);
+      _logger.severe('Failed to pay by native PlatformException', err, stack);
       rethrow;
     } catch (err, stack) {
-      loggy.error('Failed to pay by native', err, stack);
+      _logger.severe('Failed to pay by native', err, stack);
       rethrow;
-    } finally {}
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
-  payByCreditCard(PaymentData paymentData) {
-    //
+  Future<void> payByCreditCard(PaymentData paymentData) async {
+    _isLoading = true;
+    notifyListeners();
+    _logger.fine('payByCreditCard invoked');
+    try {
+      await stripeService.payByCard(paymentData);
+    } catch (err, stack) {
+      _logger.severe('Failed to pay by credit card', err, stack);
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

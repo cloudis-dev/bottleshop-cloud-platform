@@ -56,7 +56,7 @@ class _ProductEditView extends HookWidget {
     useProvider(productFormStateKeyProvider);
     useProvider(isProductModelChangedProvider);
     useProvider(isCreatingNewProductProvider);
-
+    useProvider(blopProvider);
     useProvider(productImgProvider);
     useProvider(isImgLoadedProvider);
     useProvider(isProductImageValid);
@@ -228,7 +228,6 @@ class _ConfirmChangesButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isChanged = useProvider(isProductModelChangedProvider);
-
     if (isChanged) {
       return useProvider(isProductImageValid).maybeWhen(
         data: (_) => IconButton(

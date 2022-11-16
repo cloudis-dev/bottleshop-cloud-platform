@@ -26,7 +26,7 @@ class AlcoholFilterChip extends HookConsumerWidget {
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
       label: Text('${context.l10n.alcohol}: '
-          '${FilterFormattingUtils.getAlcoholRangeString(alcoholFilterValue!.value)}'),
+          '${FilterFormattingUtils.getAlcoholRangeString(alcoholFilterValue.value)}'),
       onDeleted: alcoholFilterValue.onDeleteFilter,
     );
   }

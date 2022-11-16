@@ -31,7 +31,7 @@ class IsSpecialEditionFilterChip extends HookConsumerWidget {
           const Icon(Icons.check),
         ],
       ),
-      onDeleted: isSpecialEditionFilterValue!.onDeleteFilter,
+      onDeleted: isSpecialEditionFilterValue.onDeleteFilter,
     );
   }
 }

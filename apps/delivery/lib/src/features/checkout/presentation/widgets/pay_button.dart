@@ -11,15 +11,18 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class PayButton extends HookConsumerWidget with NetworkLoggy {
+final _logger = Logger((PayButton).toString());
+
+class PayButton extends HookConsumerWidget {
   final PaymentData paymentData;
   final double value;
   final void Function(String checkoutDoneMsg) onCheckoutDone;
@@ -52,7 +55,7 @@ class PayButton extends HookConsumerWidget with NetworkLoggy {
                     .payByCreditCard(paymentData)
                     .then(
                   (value) async {
-                    await logPurchase(ref, context, this.value);
+                    await logPurchase(ref, this.value);
 
                     onCheckoutDone(context.l10n.successful_payment_card);
                   },
@@ -62,7 +65,7 @@ class PayButton extends HookConsumerWidget with NetworkLoggy {
                     err.code != 'purchaseCancelled') {
                   rethrow;
                 } else {
-                  loggy.error('Failed to pay by credit card', err, stack);
+                  _logger.severe('Failed to pay by credit card', err, stack);
 
                   showSimpleNotification(
                     Text(context.l10n.errorGeneric),
@@ -71,7 +74,7 @@ class PayButton extends HookConsumerWidget with NetworkLoggy {
                   );
                 }
               } catch (err, stack) {
-                loggy.error('Failed to pay by credit card', err, stack);
+                _logger.severe('Failed to pay by credit card', err, stack);
 
                 showSimpleNotification(
                   Text(context.l10n.errorGeneric),
@@ -90,6 +93,4 @@ class PayButton extends HookConsumerWidget with NetworkLoggy {
       ],
     );
   }
-
-  logPurchase(WidgetRef ref, BuildContext context, double value) {}
 }

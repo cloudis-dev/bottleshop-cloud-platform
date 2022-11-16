@@ -9,14 +9,22 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BottomNavigationTab {
   const BottomNavigationTab({
     required this.bottomNavigationBarItem,
+    required this.navigationNestingLevel,
+    // required this.navigatorKey,
+    // required this.scaffoldKey,
+    // required this.initialPageBuilder,
   });
 
+  final NestingBranch navigationNestingLevel;
   final BottomNavigationBarItem bottomNavigationBarItem;
+  // final GlobalKey<NavigatorState> navigatorKey;
+  // final GlobalKey<ScaffoldState> scaffoldKey;
+  // final WidgetBuilder initialPageBuilder;
 }

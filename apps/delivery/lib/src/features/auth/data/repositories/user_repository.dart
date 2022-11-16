@@ -14,22 +14,21 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
-import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:delivery/src/features/auth/data/models/device_model.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/services/user_db_service.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/streams.dart';
 
 enum AuthStatus {
@@ -39,7 +38,9 @@ enum AuthStatus {
   unauthenticated
 }
 
-class UserRepository extends ChangeNotifier with NetworkLoggy {
+final _logger = Logger((UserRepository).toString());
+
+class UserRepository extends ChangeNotifier {
   final AuthenticationService _auth;
   final PushNotificationService _notificationService;
   final CloudFunctionsService _cloudFunctionsService;
@@ -78,7 +79,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
   }
 
   Future<void> _onAuthStateChanged(User? firebaseUser) async {
-    loggy.info('authStateChanges: ${firebaseUser?.uid}');
+    _logger.fine('authStateChanges: ${firebaseUser?.uid}');
     if (firebaseUser == null) {
       await _userListener?.cancel();
       _status = AuthStatus.unauthenticated;
@@ -110,7 +111,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
   }
 
   Future<void> onUserChangedPreferredLanguage(LanguageMode mode) async {
-    return setPreferredLanguage(language2locale(mode).languageCode);
+    return setPreferredLanguage(language2Locale(mode).languageCode);
   }
 
   Future<void> sendVerificationMail() async {
@@ -119,6 +120,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
 
   Future<void> checkUserVerified() async {
     await _auth.currentUser?.reload();
+    // Why do we do this twice??? await _auth.currentUser?.reload();
     if (_auth.currentUser?.emailVerified ?? false) {
       await userDb.updateData(_auth.currentUser!.uid, {
         UserFields.isEmailVerified: true,
@@ -131,12 +133,14 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
     final userModel = UserModel.fromFirebaseUser(user: firebaseUser);
 
     if (userModel == null) return;
+
+    // final existingUser = await userDb.exists(firebaseUser.uid);
     if (!await userDb.exists(firebaseUser.uid)) {
       final stripeId =
           await _cloudFunctionsService.createStripeCustomer(userModel);
 
       if (stripeId == null) {
-        loggy.error('Could not create stripe customer');
+        _logger.severe('Could not create stripe customer');
       } else {
         await userDb.create(
           userModel
@@ -162,39 +166,43 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
     }
     String deviceId;
     DeviceDetails? deviceDescription;
-    var devicePlugin = DeviceInfoPlugin();
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      var deviceInfo = await devicePlugin.androidInfo;
-      deviceId = deviceInfo.androidId ?? 'unknown';
-      deviceDescription = DeviceDetails(
-        device: deviceInfo.device,
-        model: deviceInfo.model,
-        osVersion: deviceInfo.version.sdkInt.toString(),
-        platform: 'android',
-      );
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      var deviceInfo = await devicePlugin.iosInfo;
-      deviceId = deviceInfo.identifierForVendor ?? 'unknown';
-      deviceDescription = DeviceDetails(
-        osVersion: deviceInfo.systemVersion,
-        device: deviceInfo.name,
-        model: deviceInfo.utsname.machine,
-        platform: 'ios',
-      );
+    if (!kIsWeb) {
+      var devicePlugin = DeviceInfoPlugin();
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        var deviceInfo = await devicePlugin.androidInfo;
+        deviceId = deviceInfo.androidId;
+        deviceDescription = DeviceDetails(
+          device: deviceInfo.device,
+          model: deviceInfo.model,
+          osVersion: deviceInfo.version.sdkInt.toString(),
+          platform: 'android',
+        );
+      } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+        var deviceInfo = await devicePlugin.iosInfo;
+        deviceId = deviceInfo.identifierForVendor;
+        deviceDescription = DeviceDetails(
+          osVersion: deviceInfo.systemVersion,
+          device: deviceInfo.name,
+          model: deviceInfo.utsname.machine,
+          platform: 'ios',
+        );
+      } else {
+        throw PlatformException(code: 'No such platform');
+      }
     } else {
-      var deviceInfo = await devicePlugin.webBrowserInfo;
-      deviceId = deviceInfo.userAgent ?? 'unknown';
+      deviceId = 'browser';
       deviceDescription = DeviceDetails(
-        device: deviceInfo.appName,
-        model: deviceInfo.appCodeName,
-        osVersion: deviceInfo.appVersion,
+        device: 'browser',
+        model: 'N/A',
+        osVersion: 'N/A',
         platform: 'web',
       );
     }
+
     userDeviceDb.collection = FirestorePaths.userDevices(uid);
     final existing = await userDeviceDb.getSingle(deviceId);
     var token = await _notificationService.currentToken;
-    loggy.info('FCM Token: $token');
+    _logger.fine('FCM Token: $token');
     if (existing != null) {
       if (token != null) {
         await userDeviceDb.updateData(deviceId, {
@@ -219,7 +227,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       final uid = _fsUser?.uid;
       await _saveDevice(uid);
     }
-    loggy.info('onTokenRefreshed: $token');
+    _logger.fine('onTokenRefreshed: $token');
   }
 
   Future<bool> sendResetPasswordEmail(
@@ -232,12 +240,12 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error(
+      _logger.severe(
           'sendResetPasswordEmail FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       return false;
     } catch (err, stack) {
-      loggy.error('sendResetPasswordEmail error', err, stack);
+      _logger.severe('sendResetPasswordEmail error', err, stack);
       _error = _getAuthenticationErrorMessage(context, '');
       return false;
     } finally {
@@ -259,15 +267,16 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       // TODO: if createStripeCustomer fails, user is in Auth but not in Firestore!
       // Then creating user throws an email-already-in-use exception code.
       await sendVerificationMail();
+      // Why do we do this twice???? await _auth.currentUser!.sendEmailVerification();
       _error = '';
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error(
+      _logger.severe(
           'signUpWithEmailAndPassword FirebaseAuthException error', err, stack);
 
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
     } catch (err, stack) {
-      loggy.error('signUpWithEmailAndPassword error', err, stack);
+      _logger.severe('signUpWithEmailAndPassword error', err, stack);
 
       _error = _getAuthenticationErrorMessage(context, '');
       _status = AuthStatus.unauthenticated;
@@ -302,7 +311,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error(
+      _logger.severe(
           'signInWithEmailAndPassword FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
@@ -310,7 +319,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       notifyListeners();
       return false;
     } catch (err, stack) {
-      loggy.error('signInWithEmailAndPassword error', err, stack);
+      _logger.severe('signInWithEmailAndPassword error', err, stack);
       _error = _getAuthenticationErrorMessage(context, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
@@ -332,14 +341,15 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('signUpWithGoogle FirebaseAuthException error', err, stack);
+      _logger.severe(
+          'signUpWithGoogle FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
       return false;
     } catch (err, stack) {
-      loggy.error('signUpWithGoogle error', err, stack);
+      _logger.severe('signUpWithGoogle error', err, stack);
       _error = _getAuthenticationErrorMessage(context, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
@@ -361,7 +371,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       _error = '';
       return true;
     } on PlatformException catch (err, stack) {
-      loggy.error('signUpWithFacebook PlatformException error', err, stack);
+      _logger.severe('signUpWithFacebook PlatformException error', err, stack);
 
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
@@ -369,7 +379,8 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       notifyListeners();
       return false;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('signUpWithFacebook FirebaseAuthException error', err, stack);
+      _logger.severe(
+          'signUpWithFacebook FirebaseAuthException error', err, stack);
 
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
@@ -377,7 +388,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       notifyListeners();
       return false;
     } catch (err, stack) {
-      loggy.error('signUpWithFacebook error', err, stack);
+      _logger.severe('signUpWithFacebook error', err, stack);
       _error = _getAuthenticationErrorMessage(context, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
@@ -395,14 +406,15 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('signUpAnonymously FirebaseAuthException error', err, stack);
+      _logger.severe(
+          'signUpAnonymously FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
       return false;
     } catch (err, stack) {
-      loggy.error('signUpAnonymously error', err, stack);
+      _logger.severe('signUpAnonymously error', err, stack);
       _error = _getAuthenticationErrorMessage(context, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
@@ -420,14 +432,14 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
       _error = '';
       return true;
     } on FirebaseAuthException catch (err, stack) {
-      loggy.error('signUpWithApple FirebaseAuthException error', err, stack);
+      _logger.severe('signUpWithApple FirebaseAuthException error', err, stack);
       _error = _getAuthenticationErrorMessage(context, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
       return false;
     } catch (err, stack) {
-      loggy.error('signUpWithApple error', err, stack);
+      _logger.severe('signUpWithApple error', err, stack);
       _error = _getAuthenticationErrorMessage(context, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
@@ -444,7 +456,7 @@ class UserRepository extends ChangeNotifier with NetworkLoggy {
 
   @override
   void dispose() {
-    loggy.info('authState: disposed');
+    _logger.fine('authState: disposed');
     _userListener?.cancel();
     super.dispose();
   }

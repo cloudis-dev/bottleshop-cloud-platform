@@ -28,7 +28,7 @@ class AgeFilterChip extends HookConsumerWidget {
           data: (aggs) => Chip(
             backgroundColor: Theme.of(context).backgroundColor,
             label: Text('${context.l10n.ageYears}: '
-                '${FilterFormattingUtils.getAgeRangeString(minAgeFilterValue!.value, aggs.maxAge)}'),
+                '${FilterFormattingUtils.getAgeRangeString(minAgeFilterValue.value, aggs.maxAge)}'),
             onDeleted: minAgeFilterValue.onDeleteFilter,
           ),
           orElse: () => const SizedBox.shrink(),

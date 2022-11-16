@@ -11,18 +11,19 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/slivers/implementations/sliver_paged_list.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/list_error_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/list_loading_widget.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/orders/data/models/order_model.dart';
+import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/order_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
 class OrdersWidget extends HookConsumerWidget {
   final GlobalKey<AuthPopupButtonState> authButtonKey;
@@ -40,9 +41,11 @@ class OrdersWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ordersState = ref.watch(ordersProvider.select<ItemsState<OrderModel>>((value) => value.itemsState));
+    final ordersState =
+        ref.watch(ordersProvider.select((value) => value.itemsState));
 
-    final hasUser = ref.watch(currentUserProvider.select<bool>((value) => value != null));
+    final hasUser =
+        ref.watch(currentUserProvider.select((value) => value != null));
 
     if (!hasUser) {
       return EmptyTab(
@@ -53,11 +56,14 @@ class OrdersWidget extends HookConsumerWidget {
       );
     } else if (ordersState.isDoneAndEmpty) {
       return EmptyTab(
-        icon: Icons.fact_check_outlined,
-        message: context.l10n.noOrders,
-        buttonMessage: context.l10n.startExploring,
-        onButtonPressed: null,
-      );
+          icon: Icons.fact_check_outlined,
+          message: context.l10n.noOrders,
+          buttonMessage: context.l10n.startExploring,
+          onButtonPressed: () {
+            ref
+                .read(navigationProvider)
+                .replaceRootStackWith([AppPageNode(page: HomePage())]);
+          });
     } else {
       return CustomScrollView(
         slivers: [
@@ -67,7 +73,8 @@ class OrdersWidget extends HookConsumerWidget {
             itemBuilder: (context, dynamic item, _) => OrderListItem(
               order: item,
             ),
-            errorWidgetBuilder: (context, onPressed) => ListErrorWidget(onButtonPressed: onPressed),
+            errorWidgetBuilder: (context, onPressed) =>
+                ListErrorWidget(onPressed),
             loadingWidgetBuilder: (_) => const ListLoadingWidget(),
           ),
         ],

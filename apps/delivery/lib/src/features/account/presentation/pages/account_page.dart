@@ -10,8 +10,10 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/dropdown.dart';
 import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -20,17 +22,34 @@ import 'package:delivery/src/features/account/presentation/widgets/delete_accoun
 import 'package:delivery/src/features/account/presentation/widgets/dropdown_list_item.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/language_dropdown.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
-class AccountPageView extends HookConsumerWidget {
-  const AccountPageView({Key? key}) : super(key: key);
+class AccountPage extends RoutebornPage {
+  static const String pagePathBase = 'account';
+
+  AccountPage() : super.builder(pagePathBase, (_) => const _AccountPageView());
+
+  @override
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(context.l10n.settings);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _AccountPageView extends HookConsumerWidget {
+  const _AccountPageView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,7 +62,14 @@ class AccountPageView extends HookConsumerWidget {
         appBar: AppBar(
           title: Text(context.l10n.settings),
           leading: CloseButton(
-            onPressed: () {},
+            onPressed: () {
+              ref.read(navigationProvider).setNestingBranch(
+                    context,
+                    RoutebornBranchParams.of(context).getBranchParam()
+                            as NestingBranch? ??
+                        NestingBranch.shop,
+                  );
+            },
           ),
           actions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
         ),
@@ -84,9 +110,6 @@ class _Body extends HookConsumerWidget {
       DropdownListItem(label: context.l10n.light),
       DropdownListItem(label: context.l10n.dark),
     ];
-
-    final themeProvider = ref.watch(sharedPreferencesServiceProvider
-        .select((value) => value.getThemeMode()));
 
     return SingleChildScrollView(
       controller: scrollCtrl,
@@ -176,13 +199,15 @@ class _Body extends HookConsumerWidget {
                             trailing: DropDown<ThemeMode>(
                               items: ThemeMode.values,
                               showUnderline: false,
-                              initialValue: themeProvider,
+                              initialValue: ref
+                                  .read(sharedPreferencesProvider)
+                                  .getThemeMode(),
                               customWidgets: themeWidgets,
                               onChanged: (value) async {
                                 await ref
-                                    .read(sharedPreferencesServiceProvider)
+                                    .read(sharedPreferencesProvider)
                                     .setThemeMode(value!);
-                                ref.refresh(sharedPreferencesServiceProvider);
+                                ref.refresh(sharedPreferencesProvider);
                               },
                             ),
                           ),

@@ -10,21 +10,21 @@
 //
 //
 
-// ignore_for_file: unused_local_variable
-
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
-import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:delivery/src/features/account/presentation/widgets/account_card.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
+import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
+import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 enum DeniedReason {
@@ -39,6 +39,8 @@ enum DeniedReason {
 }
 
 mixin DeliveryAvailableForUserCheck {
+  final _logger = Logger((DeliveryAvailableForUserCheck).toString());
+
   bool canProceed(UserModel? user, DeliveryOption deliveryOption) {
     if (user == null) {
       return false;
@@ -58,8 +60,8 @@ mixin DeliveryAvailableForUserCheck {
       return [];
     }
 
-    logInfo('validating user: ${user.uid} option: ${deliveryOption.toString()}',
-        'DeliveryAvailableForUserCheck');
+    _logger.fine(
+        'validating user: ${user.uid} option: ${deliveryOption.toString()}');
     var deniedReasons = <DeniedReason>[];
     switch (deliveryOption) {
       case DeliveryOption.pickUp:
@@ -135,7 +137,7 @@ mixin DeliveryAvailableForUserCheck {
         }
         deniedReasons.add(DeniedReason.noDeliverySelected);
     }
-    logInfo(
+    _logger.fine(
         'user can proceed: ${deniedReasons.isEmpty} reasons: $deniedReasons}');
     return deniedReasons;
   }
@@ -144,16 +146,13 @@ mixin DeliveryAvailableForUserCheck {
 void onUserDenied(BuildContext context, List<DeniedReason> reasons) {
   if (reasons.isNotEmpty) {
     var message = buildMessage(context, reasons);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-    /*showSimpleNotification(
+    showSimpleNotification(
       Text(message),
       position: NotificationPosition.top,
       duration: const Duration(seconds: 3),
       slideDismissDirection: DismissDirection.horizontal,
       context: context,
-    );*/
+    );
   }
 }
 
@@ -204,10 +203,12 @@ final deliveryOptionsStateProvider =
 final _isLoadingProvider = StateProvider.autoDispose<bool>((_) => false);
 
 class ShippingDetailsView extends HookConsumerWidget {
+  final _logger = Logger((ShippingDetailsView).toString());
+
   final void Function(PaymentData paymentData) onNextPage;
   final void Function() onBackButton;
 
-  const ShippingDetailsView({
+  ShippingDetailsView({
     Key? key,
     required this.onNextPage,
     required this.onBackButton,
@@ -226,7 +227,7 @@ class ShippingDetailsView extends HookConsumerWidget {
       return () => {};
     }, const []);
 
-    final isLoading = ref.watch(_isLoadingProvider.state).state;
+    final isLoading = ref.watch(_isLoadingProvider);
 
     return Loader(
       inAsyncCall: isLoading,
@@ -248,9 +249,123 @@ class ShippingDetailsView extends HookConsumerWidget {
             },
           ),
         ),
-        body: Center(
-          child: Text(context.l10n.error),
-        ),
+        body: ref.watch(currentUserAsStream).when(
+              data: (user) {
+                return Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom + 120),
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: CupertinoScrollbar(
+                        controller: scrollController,
+                        thumbVisibility: true,
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          controller: scrollController,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              ListView.separated(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                primary: false,
+                                itemCount: 3,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: 5),
+                                itemBuilder: (context, index) {
+                                  switch (index) {
+                                    case 0:
+                                      return DeliveryOptionTile(user: user);
+                                    case 1:
+                                      return const AccountCard(
+                                          showBirthday: false);
+                                    default:
+                                      return Card(
+                                        color: Theme.of(context).primaryColor,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        child: ExpansionTile(
+                                          initiallyExpanded: false,
+                                          leading: const Icon(
+                                            Icons.notes_outlined,
+                                          ),
+                                          title: Text(
+                                            context.l10n.additionalRemarks,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2,
+                                          ),
+                                          subtitle: Text(
+                                            context
+                                                .l10n.instructionsForDelivery,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .caption,
+                                          ),
+                                          children: [
+                                            ListTile(
+                                              title: TextField(
+                                                controller:
+                                                    remarksTextController,
+                                                autofocus: true,
+                                                maxLines: 5,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    CheckoutTile(
+                      showShipping: true,
+                      actionLabel: ref
+                              .read(deliveryOptionsStateProvider.notifier)
+                              .paymentRequired
+                          ? context.l10n.proceedToCheckout
+                          : context.l10n.confirmOrder,
+                      actionCallback: ref
+                              .read(deliveryOptionsStateProvider.notifier)
+                              .canProceed(user, selectedDeliveryOption)
+                          ? () {
+                              final currentUser = ref.read(currentUserProvider);
+                              onNextPage(
+                                PaymentData(
+                                  userId: currentUser?.uid,
+                                  customerId: currentUser?.stripeCustomerId,
+                                  email: currentUser?.email,
+                                  orderNote: remarksTextController.value.text,
+                                  deliveryType: ref
+                                      .read(
+                                          deliveryOptionsStateProvider.notifier)
+                                      .label,
+                                ),
+                              );
+                            }
+                          : null,
+                    ),
+                  ],
+                );
+              },
+              loading: () => const Loader(),
+              error: (err, stack) {
+                _logger.severe('Failed to stream current user', err, stack);
+                return Center(
+                  child: Text(context.l10n.error),
+                );
+              },
+            ),
       ),
     );
   }
@@ -279,8 +394,8 @@ class DeliveryOptionTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orderTypes = ref.watch(commonDataRepositoryProvider
-        .select<List<OrderTypeModel>>((value) => value.data.orderTypes));
+    final orderTypes = ref.watch(
+        commonDataRepositoryProvider.select((value) => value.orderTypes));
     final selectedDeliveryOption = ref.watch(deliveryOptionsStateProvider);
     final currentLocale = ref.watch(currentLocaleProvider);
     final items = <Widget>[

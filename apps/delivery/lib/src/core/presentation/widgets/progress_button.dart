@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/material.dart';
 
 enum ButtonState { idle, loading, success, fail }
@@ -28,8 +28,8 @@ class ProgressButton extends StatefulWidget {
   final EdgeInsets buttonContentPadding;
   final ShapeBorder shape;
 
-  const ProgressButton({
-    super.key,
+  ProgressButton({
+    Key? key,
     required this.stateWidgets,
     required this.stateColors,
     this.state = ButtonState.idle,
@@ -41,7 +41,15 @@ class ProgressButton extends StatefulWidget {
     this.animationMillisecondsDuration = 200,
     this.buttonContentPadding = EdgeInsets.zero,
     this.shape = const StadiumBorder(),
-  });
+  })  : assert(
+          stateWidgets.keys.toSet().containsAll(ButtonState.values.toSet()),
+          'Must be non-null widgetds provided in map of stateWidgets. Missing keys => ${ButtonState.values.toSet().difference(stateWidgets.keys.toSet())}',
+        ),
+        assert(
+          stateColors.keys.toSet().containsAll(ButtonState.values.toSet()),
+          'Must be non-null widgetds provided in map of stateWidgets. Missing keys => ${ButtonState.values.toSet().difference(stateColors.keys.toSet())}',
+        ),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() {
