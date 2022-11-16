@@ -85,6 +85,29 @@
         "command": "flutter build web --target lib/main_production.dart --release",
         "cwd": "apps/admin"
       }
+    },
+    "build":{
+      "executor": "nx:run-commands",
+      "options": {
+        "commands":[
+          "nx run admin:buildIpa",
+          "nx run admin:buildApk",
+          "nx run admin:buildWeb"
+        ],
+        "parallel": false
+      }
+
+    },
+    "lint":{
+      "executor": "nx:run-commands",
+      "options": {
+        "commands":[
+          "nx run admin:format",
+          "nx run admin:analyze"
+        ],
+        "parallel": false
+      }
+
     }
   },
   "tags": ["scope:flutter", "type:app"]

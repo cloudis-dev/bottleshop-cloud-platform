@@ -4,8 +4,13 @@
   "license": "MIT",
   "scripts": {
     "build": "nx run-many --target=build --all --parallel",
-    "build:admin": "yarn nx run admin:buildIpa && yarn nx run admin:buildApk && yarn nx run admin:buildWeb",
-    "lint:admin": "yarn nx run admin:format && yarn nx run admin:analyze",
+    "lint": "nx run-many --target=lint --all --parallel",
+    "build:admin": "nx run admin:build",
+    "lint:admin": "nx run admin:lint",
+    "build:delivery": "nx run delivery:build",
+    "lint:delivery": "nx run delivery:lint",
+    "build:bottleshop-api": "nx run bottleshop-api:build",
+    "lint:bottleshop-api": "nx run bottleshop-api:lint",
     "test": "nx test",
     "postinstall": "patch-package",
     "start:api:dev": "nx run bottleshop-api:serve"
