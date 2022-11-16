@@ -29,9 +29,9 @@ abstract class AppPage extends Page<dynamic> {
 
   @override
   Route<dynamic> createRoute(BuildContext context) {
-    if (kIsWeb||Platform.isAndroid)
+    if (kIsWeb || Platform.isAndroid)
       return MaterialPageRoute<dynamic>(settings: this, builder: builder);
-    else 
+    else
       return CupertinoPageRoute<dynamic>(settings: this, builder: builder);
   }
 }

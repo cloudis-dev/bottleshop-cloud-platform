@@ -108,7 +108,7 @@ final isProductImageValid = FutureProvider.autoDispose<bool>(
   },
 );
 
-final blopProvider  = StateProvider.autoDispose<String?>(
+final blopProvider = StateProvider.autoDispose<String?>(
   (ref) => ref.watch(_productImgFileFutureProvider).when(
         data: (file) => file,
         loading: () => null,

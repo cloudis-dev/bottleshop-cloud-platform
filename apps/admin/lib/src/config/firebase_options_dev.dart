@@ -14,7 +14,7 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-class DefaultFirebaseOptions {
+class DevelopmentFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       return web;
@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC6IPUoa-KnOsnnpEdAc45GTV6_4WzZJ0I',
-    appId: '1:525277285012:android:ea6182df001e656f0ec281',
+    appId: '1:525277285012:android:0f87085b8c1f810c0ec281',
     messagingSenderId: '525277285012',
     projectId: 'bottleshop-3-veze-dev-54908',
     storageBucket: 'bottleshop-3-veze-dev-54908.appspot.com',
@@ -66,14 +66,14 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC-pxRhFXXAVhDQcTTa-GV3TMw8Bp5b8A4',
-    appId: '1:525277285012:ios:6e46848dd770f9b20ec281',
+    appId: '1:525277285012:ios:bac199295b308f380ec281',
     messagingSenderId: '525277285012',
     projectId: 'bottleshop-3-veze-dev-54908',
     storageBucket: 'bottleshop-3-veze-dev-54908.appspot.com',
     androidClientId:
-        '525277285012-6qj6rf3lr3o7sdkovn4qoefhhd31686h.apps.googleusercontent.com',
+        '525277285012-45dklmq4o9v954pq74mr23rq7kiufr4m.apps.googleusercontent.com',
     iosClientId:
-        '525277285012-70gfp9hmp4f8b0skego1aebj52pjllto.apps.googleusercontent.com',
-    iosBundleId: 'sk.bottleshop3veze.bottleshopdeliveryapp',
+        '525277285012-vfa169vjaaldc6fud3ma69dkjcfdkvss.apps.googleusercontent.com',
+    iosBundleId: 'sk.bottleshop3veze.bottleshopAdmin.dev',
   );
 }
