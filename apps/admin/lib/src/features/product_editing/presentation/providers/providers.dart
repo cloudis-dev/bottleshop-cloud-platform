@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service.dart';
 import 'package:bottleshop_admin/src/core/utils/image_util.dart';
 import 'package:bottleshop_admin/src/core/utils/math_util.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 enum ProductAction { creating, editing }
 
@@ -51,12 +54,18 @@ final productToEditStreamProvider =
 
 /// This is providing file from the server of the product.
 final _productImgFileFutureProvider = FutureProvider.autoDispose<String?>(
-  (ref) {
+  (ref) async {
     final imagePath = ref.watch(initialProductProvider).state.imagePath;
-
     if (imagePath == null) {
       return Future.value(null);
     } else {
+      if (!kIsWeb) {
+      var rng = Random();
+      var response = await http.get(Uri.parse(await FirebaseStorageService.getDownloadUrlFromPath(imagePath)));
+      final tempDir = await getTemporaryDirectory();
+       var f =await File('${tempDir.path}/${rng.nextInt(100)}.jpg').writeAsBytes(response.bodyBytes);
+       return f.path;
+    }
       return FirebaseStorageService.getDownloadUrlFromPath(imagePath);
     }
   },
@@ -94,11 +103,12 @@ final isProductImageValid = FutureProvider.autoDispose<bool>(
     } else {
       return ImageUtil.getImageSize(XFile(currentImg))
           .then(
-        (value) => MathUtil.approximately(
+        (value){ 
+           return MathUtil.approximately(
           targetImgAspect,
           ImageUtil.getImgSizeRatio(value),
           epsilon: 0.01,
-        ),
+        );}
       )
           .then((value) async {
         await Future<void>.delayed(Duration(seconds: 1));
