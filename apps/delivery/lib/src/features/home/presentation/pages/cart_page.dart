@@ -13,6 +13,7 @@ import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
+import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
@@ -27,7 +28,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logging/logging.dart';
 import 'package:routeborn/routeborn.dart';
+
+final _logger = Logger((CartPage).toString());
 
 class CartPage extends RoutebornPage {
   static const String pagePathBase = 'cart';
@@ -79,27 +83,35 @@ class _CartPageView extends HookWidget {
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   const _Body({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final isCartEmpty = useProvider(cartProvider)
-            .whenData((value) => value!.totalItems < 1)
-            .data
-            ?.value ??
-        true;
-    return isCartEmpty
-        ? EmptyTab(
-            icon: Icons.shopping_cart_outlined,
-            message: context.l10n.emptyCart,
-            buttonMessage: context.l10n.startExploring,
-            onButtonPressed: () {
-              context
-                  .read(navigationProvider)
-                  .setNestingBranch(context, NestingBranch.shop);
-            },
-          )
-        : const CartView();
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(isCartEmptyProvider).when(
+          data: (isCartEmpty) {
+            return isCartEmpty
+                ? EmptyTab(
+                    icon: Icons.shopping_cart_outlined,
+                    message: context.l10n.emptyCart,
+                    buttonMessage: context.l10n.startExploring,
+                    onButtonPressed: () {
+                      ref
+                          .read(navigationProvider)
+                          .setNestingBranch(context, NestingBranch.shop);
+                    },
+                  )
+                : const CartView();
+          },
+          error: (err, stack) {
+            _logger.severe('Cart failed to load', err, stack);
+
+            return EmptyTab(
+              icon: Icons.error_outline,
+              message: context.l10n.upsSomethingWentWrong,
+            );
+          },
+          loading: () => const Loader(),
+        );
   }
 }

@@ -41,12 +41,12 @@ class TutorialPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _TutorialView extends HookWidget {
+class _TutorialView extends HookConsumerWidget {
   const _TutorialView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final onBoardingViewModel = useProvider(tutorialModelProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final onBoardingViewModel = ref.watch(tutorialModelProvider);
     final isLast = onBoardingViewModel == TutorialAssets.assets.length - 1;
     final carouselController = useMemoized(() => CarouselController());
 
@@ -61,7 +61,7 @@ class _TutorialView extends HookWidget {
               disableCenter: true,
               viewportFraction: 1.0,
               onPageChanged:
-                  context.read(tutorialModelProvider.notifier).pageChanged,
+                  ref.read(tutorialModelProvider.notifier).pageChanged,
             ),
             items: TutorialAssets.assets
                 .map(
@@ -114,9 +114,9 @@ class _TutorialView extends HookWidget {
                   primary: Theme.of(context).colorScheme.secondary,
                   shape: const StadiumBorder(),
                 ),
-                onPressed: () => context
+                onPressed: () => ref
                     .read(tutorialModelProvider.notifier)
-                    .finishIntroScreen(context),
+                    .finishIntroScreen(context, ref),
                 child: Text(context.l10n.skip),
               ),
             ),
@@ -165,9 +165,9 @@ class _TutorialView extends HookWidget {
                 ),
               ),
               onPressed: () => isLast
-                  ? context
+                  ? ref
                       .read(tutorialModelProvider.notifier)
-                      .finishIntroScreen(context)
+                      .finishIntroScreen(context, ref)
                   : carouselController.nextPage(curve: Curves.easeOutCubic),
               child: isLast
                   ? Row(

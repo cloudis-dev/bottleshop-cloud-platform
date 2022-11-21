@@ -37,7 +37,7 @@ class PushNotificationService {
         _flutterLocalNotificationsPlugin =
             localNotificationsPlugin ?? FlutterLocalNotificationsPlugin();
 
-  Future<void> init(Reader read) async {
+  Future<void> init(Ref ref) async {
     try {
       var settings = await _firebaseMessaging.requestPermission(
         alert: true,
@@ -62,7 +62,7 @@ class PushNotificationService {
             onSelectNotification: (orderId) async {
           _logger.fine('foreground clicked: $orderId');
           if (orderId!.isNotEmpty && orderId.split('__').length == 2) {
-            read(navigationProvider).replaceRootStackWith(
+            ref.read(navigationProvider).replaceRootStackWith(
               [
                 AppPageNode(
                   page: HomePage(),
@@ -102,7 +102,7 @@ class PushNotificationService {
         var orderId = message.data['order_id'] as String? ?? '';
 
         if (orderId.isNotEmpty && docId.isNotEmpty) {
-          read(navigationProvider).replaceRootStackWith([
+          ref.read(navigationProvider).replaceRootStackWith([
             AppPageNode(
               page: HomePage(),
               crossroad: NavigationCrossroad(
@@ -168,14 +168,14 @@ class PushNotificationService {
 
   Stream<String> get onTokenRefreshed => _firebaseMessaging.onTokenRefresh;
 
-  static Future<void> handleMessageOpenedApp(Reader read) async {
+  static Future<void> handleMessageOpenedApp(WidgetRef ref) async {
     var initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       var docId = initialMessage.data['document_id'] as String? ?? '';
       var orderId = initialMessage.data['order_id'] as String? ?? '';
 
       if (docId.isNotEmpty && orderId.isNotEmpty) {
-        read(navigationProvider).replaceRootStackWith([
+        ref.read(navigationProvider).replaceRootStackWith([
           AppPageNode(
             page: HomePage(),
             crossroad: NavigationCrossroad(

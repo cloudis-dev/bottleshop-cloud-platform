@@ -25,7 +25,7 @@ class ProductImagesView extends HookWidget {
       if (!kIsWeb) {
         context.read(blopProvider).state = File(pickedFile.path).path;
       } else {
-        context.read(blopProvider).state = pickedFile!.path;
+        context.read(blopProvider).state = pickedFile.path;
       }
 
       context.read(isImgChangedProvider).state = true;

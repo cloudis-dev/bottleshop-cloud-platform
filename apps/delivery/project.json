@@ -3,7 +3,7 @@
   "sourceRoot": "apps/delivery/src",
   "projectType": "application",
   "targets": {
-    "analyze": {
+      "analyze": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "flutter analyze",
@@ -20,7 +20,7 @@
     "format": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter format .",
+        "command": "flutter format lib . --set-exit-if-changed",
         "cwd": "apps/delivery"
       }
     },
@@ -48,28 +48,28 @@
     "run": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter run --flavor development --target lib/main_development.dart",
+        "command": "flutter run --flavor development --target lib/main_dev.dart",
         "cwd": "apps/delivery"
       }
     },
     "buildAppbundle": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build appbundle --flavor production --target lib/main_production.dart",
+        "command": "flutter build appbundle --flavor production --target lib/main.dart",
         "cwd": "apps/delivery"
       }
     },
     "buildIpa": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build ipa --flavor production --target lib/main_production.dart",
+        "command": "flutter build ipa --flavor production --target lib/mai.dart",
         "cwd": "apps/delivery"
       }
     },
     "buildPwa": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build web --release --target lib/main_production.dart",
+        "command": "flutter build web --release --target lib/main_web.dart",
         "cwd": "apps/delivery"
       }
     },
@@ -77,6 +77,16 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": ["nx run delivery:buildAppbundle", "nx run delivery:buildIpa", "nx run deivery:buildPwa"],
+        "parallel": false
+      }
+    },
+    "lint":{
+      "executor": "nx:run-commands",
+      "options": {
+        "commands":[
+          "nx run delivery:format",
+          "nx run delivery:analyze"
+        ],
         "parallel": false
       }
     }

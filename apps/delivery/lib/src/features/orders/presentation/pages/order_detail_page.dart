@@ -70,7 +70,7 @@ class OrderDetailPage extends RoutebornPage with UpdatablePageNameMixin {
   String getPagePathBase() => pagePathBase;
 }
 
-class _OrderDetailPageView extends HookWidget {
+class _OrderDetailPageView extends HookConsumerWidget {
   final String orderUniqueId;
   final SetPageNameCallback setPageNameCallback;
 
@@ -81,74 +81,74 @@ class _OrderDetailPageView extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final scrollCtrl = useScrollController();
 
-    return useProvider(orderStreamProvider(orderUniqueId)).when(
-      data: (order) {
-        if (order == null) {
-          return const _OrderErrorTab();
-        } else {
-          setPageNameCallback('${context.l10n.order} #${order.orderId}');
+    return ref.watch(orderStreamProvider(orderUniqueId)).when(
+          data: (order) {
+            if (order == null) {
+              return const _OrderErrorTab();
+            } else {
+              setPageNameCallback('${context.l10n.order} #${order.orderId}');
 
-          if (shouldUseMobileLayout(context)) {
-            return Scaffold(
-              key: scaffoldKey,
-              appBar: AppBar(
-                leading: BackButton(
-                    onPressed: () =>
-                        context.read(navigationProvider).popPage(context)),
-                title: Text('${context.l10n.order} #${order.orderId}'),
-                actions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
-              ),
-              body: _Body(
-                order: order,
-                scrollCtrl: scrollCtrl,
-              ),
-            );
-          } else {
-            return HomePageTemplate(
-              scaffoldKey: scaffoldKey,
-              appBarActions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
-              body: Scrollbar(
-                controller: scrollCtrl,
-                child: PageBodyTemplate(
-                  child: _Body(
+              if (shouldUseMobileLayout(context)) {
+                return Scaffold(
+                  key: scaffoldKey,
+                  appBar: AppBar(
+                    leading: BackButton(
+                        onPressed: () =>
+                            ref.read(navigationProvider).popPage(context)),
+                    title: Text('${context.l10n.order} #${order.orderId}'),
+                    actions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
+                  ),
+                  body: _Body(
                     order: order,
                     scrollCtrl: scrollCtrl,
                   ),
-                ),
-              ),
-            );
-          }
-        }
-      },
-      loading: () => const Loader(),
-      error: (err, stack) {
-        _logger.severe('Failed stream orders', err, stack);
+                );
+              } else {
+                return HomePageTemplate(
+                  scaffoldKey: scaffoldKey,
+                  appBarActions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
+                  body: Scrollbar(
+                    controller: scrollCtrl,
+                    child: PageBodyTemplate(
+                      child: _Body(
+                        order: order,
+                        scrollCtrl: scrollCtrl,
+                      ),
+                    ),
+                  ),
+                );
+              }
+            }
+          },
+          loading: () => const Loader(),
+          error: (err, stack) {
+            _logger.severe('Failed stream orders', err, stack);
 
-        return const _OrderErrorTab();
-      },
-    );
+            return const _OrderErrorTab();
+          },
+        );
   }
 }
 
-class _OrderErrorTab extends StatelessWidget {
+class _OrderErrorTab extends ConsumerWidget {
   const _OrderErrorTab({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return EmptyTab(
       icon: Icons.error_outline,
       message: context.l10n.upsSomethingWentWrong,
       buttonMessage: context.l10n.backToOrders,
-      onButtonPressed: () => context.read(navigationProvider).popPage(context),
+      onButtonPressed: () => ref.read(navigationProvider).popPage(context),
     );
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   final OrderModel order;
   final ScrollController scrollCtrl;
 
@@ -159,8 +159,8 @@ class _Body extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     const horizontalContentPadding = 20.0;
 

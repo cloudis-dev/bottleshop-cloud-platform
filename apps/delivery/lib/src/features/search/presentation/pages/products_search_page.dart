@@ -60,25 +60,25 @@ class ProductsSearchPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _ProductsSearchPageView extends HookWidget {
+class _ProductsSearchPageView extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // This is to preserve state
-    useProvider(debounceTimerProvider);
-    useProvider(lastQueriedSearchTimeProvider);
-    useProvider(previousQuery);
+    ref.watch(debounceTimerProvider);
+    ref.watch(lastQueriedSearchTimeProvider);
+    ref.watch(previousQuery);
 
     return const _PageScaffold();
   }
 }
 
-class _PageScaffold extends HookWidget {
+class _PageScaffold extends HookConsumerWidget {
   const _PageScaffold();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldStateKey = useMemoized(() => GlobalKey<ScaffoldState>());
-    final searchEditingController = useProvider(_searchEditingCtrlProvider);
+    final searchEditingController = ref.watch(_searchEditingCtrlProvider);
 
     final body = _Body(scaffoldStateKey: scaffoldStateKey);
 
@@ -87,7 +87,7 @@ class _PageScaffold extends HookWidget {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            context.read(navigationProvider).setNestingBranch(
+            ref.read(navigationProvider).setNestingBranch(
                   context,
                   RoutebornBranchParams.of(context).getBranchParam()
                           as NestingBranch? ??
@@ -102,6 +102,7 @@ class _PageScaffold extends HookWidget {
           showFilter: false,
           onChangedCallback: (query) => _onSearchChanged(
             scaffoldStateKey.currentState,
+            context,
             query,
           ),
           focusNode: _searchBarFocusNode,
@@ -114,15 +115,15 @@ class _PageScaffold extends HookWidget {
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   final GlobalKey<ScaffoldState> scaffoldStateKey;
 
   const _Body({Key? key, required this.scaffoldStateKey}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final searchState = useProvider(
-        searchResultsProvider.select((value) => value.state.value1));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchState =
+        ref.watch(searchResultsProvider.select((value) => value.value1));
 
     switch (searchState) {
       case SearchState.cleaned:
@@ -144,21 +145,24 @@ class _Body extends HookWidget {
           icon: Icons.error_outline,
           message: context.l10n.upsSomethingWentWrong,
           buttonMessage: context.l10n.tryAgain,
-          onButtonPressed: () => _onSearchChanged(scaffoldStateKey.currentState,
-              context.read(_searchEditingCtrlProvider).text),
+          onButtonPressed: () => _onSearchChanged(
+            scaffoldStateKey.currentState,
+            context,
+            ref.read(_searchEditingCtrlProvider).text,
+          ),
         );
     }
   }
 }
 
-class _ResultsWidget extends HookWidget {
+class _ResultsWidget extends HookConsumerWidget {
   const _ResultsWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final searchResults = useProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchResults = ref.watch(
       searchResultsProvider
-          .select((value) => Tuple2(value.state.value2, value.state.value3)),
+          .select((value) => Tuple2(value.value2, value.value3)),
     );
 
     if (searchResults.value1.isEmpty && searchResults.value2.isEmpty) {
@@ -168,14 +172,14 @@ class _ResultsWidget extends HookWidget {
         buttonMessage: context.l10n.searchAgain,
         onButtonPressed: () {
           // Scaffold.of(context).
-          context.read(_searchEditingCtrlProvider).clear();
-          context.read(searchResultsProvider).state =
+          ref.read(_searchEditingCtrlProvider).clear();
+          ref.read(searchResultsProvider.state).state =
               const Tuple3(SearchState.cleaned, [], []);
           FocusScope.of(context).requestFocus(_searchBarFocusNode);
         },
       );
     } else {
-      final categories = useProvider(
+      final categories = ref.watch(
           commonDataRepositoryProvider.select((value) => value.categories));
 
       final searchedCategoryItems = searchResults.value2.map(
@@ -219,44 +223,48 @@ class _ResultsWidget extends HookWidget {
   }
 }
 
-void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
+void _onSearchChanged(
+  ScaffoldState? pageScaffoldState,
+  BuildContext context,
+  String query,
+) async {
   /// This is to prevent continuing in search processing
   /// in case the widget is not in widget tree
-  BuildContext _getContext() {
-    if (pageScaffoldState == null) {
+  WidgetRef _getContext() {
+    if (pageScaffoldState == null || !pageScaffoldState.mounted) {
       throw _OutOfWidgetTreeException();
     }
-    return pageScaffoldState.context;
+    return context as WidgetRef;
   }
 
   query = query.trim();
 
-  if (_getContext().read(previousQuery).state == query) {
+  if (_getContext().read(previousQuery) == query) {
     return;
   } else {
-    _getContext().read(previousQuery).state = query;
+    _getContext().read(previousQuery.state).state = query;
   }
 
   try {
     final currentTime = DateTime.now();
-    _getContext().read(lastQueriedSearchTimeProvider).state = currentTime;
+    _getContext().read(lastQueriedSearchTimeProvider.state).state = currentTime;
 
-    _getContext().read(debounceTimerProvider).state?.cancel();
+    _getContext().read(debounceTimerProvider)?.cancel();
 
     if (query.isEmpty) {
-      _getContext().read(searchResultsProvider).state =
+      _getContext().read(searchResultsProvider.state).state =
           const Tuple3(SearchState.cleaned, [], []);
     } else {
-      _getContext().read(searchResultsProvider).state =
+      _getContext().read(searchResultsProvider.state).state =
           const Tuple3(SearchState.typing, [], []);
 
-      _getContext().read(debounceTimerProvider).state = Timer(
+      _getContext().read(debounceTimerProvider.state).state = Timer(
         const Duration(milliseconds: _debounceMs),
         () async {
           try {
             bool isLastQueryMade() {
               final lastQueriedTime =
-                  _getContext().read(lastQueriedSearchTimeProvider).state;
+                  _getContext().read(lastQueriedSearchTimeProvider.state).state;
               return lastQueriedTime == currentTime;
             }
 
@@ -264,7 +272,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
               return;
             }
 
-            _getContext().read(searchResultsProvider).state =
+            _getContext().read(searchResultsProvider.state).state =
                 const Tuple3(SearchState.waiting, [], []);
 
             final res = await ProductsSearchService.search(
@@ -278,7 +286,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
               return;
             }
 
-            _getContext().read(searchResultsProvider).state = Tuple3(
+            _getContext().read(searchResultsProvider.state).state = Tuple3(
               SearchState.completed,
               res.value1,
               res.value2,
@@ -286,7 +294,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
           } on _OutOfWidgetTreeException catch (_) {
             return;
           } catch (err, stack) {
-            _getContext().read(searchResultsProvider).state =
+            _getContext().read(searchResultsProvider.state).state =
                 const Tuple3(SearchState.error, [], []);
 
             _logger.severe('Search failed', err, stack);
@@ -297,7 +305,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query) async {
   } on _OutOfWidgetTreeException catch (_) {
     return;
   } catch (err, stack) {
-    _getContext().read(searchResultsProvider).state =
+    _getContext().read(searchResultsProvider.state).state =
         const Tuple3(SearchState.error, [], []);
 
     _logger.severe('search failed', err, stack);

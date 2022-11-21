@@ -48,9 +48,9 @@ class HelpPage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _HelpPageView extends HookWidget {
+class _HelpPageView extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
     final scrollCtrl = useScrollController();
 
@@ -59,7 +59,7 @@ class _HelpPageView extends HookWidget {
         appBar: AppBar(
           title: Text(context.l10n.help),
           leading: CloseButton(
-            onPressed: () => context.read(navigationProvider).setNestingBranch(
+            onPressed: () => ref.read(navigationProvider).setNestingBranch(
                   context,
                   RoutebornBranchParams.of(context).getBranchParam()
                           as NestingBranch? ??
@@ -94,40 +94,40 @@ class _HelpPageView extends HookWidget {
   }
 }
 
-class _Body extends HookWidget {
+class _Body extends HookConsumerWidget {
   final ScrollController scrollCtrl;
 
   const _Body({Key? key, required this.scrollCtrl}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       controller: scrollCtrl,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: useProvider(mdContentProvider).when(
-        data: (mds) {
-          return Column(
-            children: <Widget>[
-              HelpSection(
-                icon: Icons.help,
-                title: context.l10n.faq,
-                subTitle: context.l10n.someAnswers,
-                mdString: mds.item1,
-              ),
-              HelpSection(
-                icon: Icons.attractions,
-                title: context.l10n.contactDetails,
-                subTitle: context.l10n.contactInformation,
-                mdString: mds.item2,
-              ),
-            ],
-          );
-        },
-        loading: () => const Loader(),
-        error: (_, __) {
-          return const Text('');
-        },
-      ),
+      child: ref.watch(mdContentProvider).when(
+            data: (mds) {
+              return Column(
+                children: <Widget>[
+                  HelpSection(
+                    icon: Icons.help,
+                    title: context.l10n.faq,
+                    subTitle: context.l10n.someAnswers,
+                    mdString: mds.item1,
+                  ),
+                  HelpSection(
+                    icon: Icons.attractions,
+                    title: context.l10n.contactDetails,
+                    subTitle: context.l10n.contactInformation,
+                    mdString: mds.item2,
+                  ),
+                ],
+              );
+            },
+            loading: () => const Loader(),
+            error: (_, __) {
+              return const Text('');
+            },
+          ),
     );
   }
 }

@@ -9,6 +9,30 @@ Admin app for Bottleshop Tri Veze
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 ![GitHub](https://img.shields.io/github/license/cloudis-dev/bottleshop_admin?color=blue)
 
+## Getting started 🚀
+
+The project contains 2 flavors:
+- development
+- production
+
+```console
+# Development
+$ flutter run --flavor development --target lib/main_development.dart
+
+# Production
+$ flutter run --flavor production --target lib/main_production.dart
+```
+
+Configured with the following command + additional native setup (because of crashlytics)
+```console
+flutterfire config --ios-bundle-id=sk.bottleshop3veze.bottleshopAdmin.dev --android-package-name=sk.bottleshop3veze.bottleshopAdmin.dev
+```
+
+Flavors setup based on these blogs:
+- https://medium.com/@animeshjain/build-flavors-in-flutter-android-and-ios-with-different-firebase-projects-per-flavor-27c5c5dac10b
+- https://medium.com/flutter-community/flavoring-flutter-applications-android-ios-ea39d3155346
+- https://medium.com/@matt.goodson.business/separating-build-environment-configurations-in-flutter-with-firebase-doing-it-the-right-way-c72c3ad3621f
+
 ## Setup
 
 ### Android

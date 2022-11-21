@@ -24,10 +24,9 @@ import 'package:delivery/src/features/sticky_header/presentation/widgets/filter_
 import 'package:delivery/src/features/sticky_header/presentation/widgets/filter_chips/volume_filter_chip.dart';
 import 'package:delivery/src/features/sticky_header/presentation/widgets/filter_chips/year_filter_chip.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FiltersStickyHeader extends HookWidget {
+class FiltersStickyHeader extends HookConsumerWidget {
   const FiltersStickyHeader({
     Key? key,
     required this.filterType,
@@ -36,8 +35,8 @@ class FiltersStickyHeader extends HookWidget {
   final FilterType filterType;
 
   @override
-  Widget build(BuildContext context) {
-    final filter = useProvider(appliedFilterProvider(filterType)).state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filter = ref.watch(appliedFilterProvider(filterType));
 
     return SizedBox(
       height: 52,
@@ -58,7 +57,7 @@ class FiltersStickyHeader extends HookWidget {
               child: Ink(
                 child: IconButton(
                   onPressed: () {
-                    context.read(appliedFilterProvider(filterType)).state =
+                    ref.read(appliedFilterProvider(filterType).state).state =
                         FilterModel.empty();
                   },
                   icon: const Icon(
@@ -87,7 +86,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.alcoholRange,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedAlcoholFilter();
                       },
                     ),
@@ -97,7 +96,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.minQuantity,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedQuantityFilter();
                       },
                     ),
@@ -107,7 +106,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.volumeRange,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedVolumeFilter();
                       },
                     ),
@@ -117,7 +116,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.priceRange,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedPriceFilter();
                       },
                     ),
@@ -127,7 +126,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.isSpecialEdition,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedSpecialEditionFilter();
                       },
                     ),
@@ -137,7 +136,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.countries,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedCountriesFilter();
                       },
                     ),
@@ -147,7 +146,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.minAge,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedAgeFilter();
                       },
                     ),
@@ -157,7 +156,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.maxYear,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedYearFilter();
                       },
                     ),
@@ -167,7 +166,7 @@ class FiltersStickyHeader extends HookWidget {
                       value: filter.enabledExtraCategoriesIds,
                       onDeleteFilter: () {
                         final val =
-                            context.read(appliedFilterProvider(filterType));
+                            ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedExtraCategoriesFilter();
                       },
                     ),

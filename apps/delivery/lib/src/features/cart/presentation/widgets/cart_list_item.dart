@@ -25,7 +25,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
 
-class CartListItem extends HookWidget {
+class CartListItem extends HookConsumerWidget {
   final ProductModel product;
   final int quantity;
 
@@ -36,15 +36,15 @@ class CartListItem extends HookWidget {
   })  : assert(quantity > 0),
         super(key: key);
 
-  void onClick(BuildContext context) {
-    context
+  void onClick(BuildContext context, WidgetRef ref) {
+    ref
         .read(navigationProvider)
         .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
   }
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
     final qtyState = useState<int>(quantity);
     return Container(
       width: double.infinity,
@@ -73,7 +73,7 @@ class CartListItem extends HookWidget {
                       child: InkResponse(
                         containedInkWell: true,
                         child: InkWell(
-                          onTap: () => onClick(context),
+                          onTap: () => onClick(context, ref),
                         ),
                       ),
                     ),
@@ -157,7 +157,7 @@ class CartListItem extends HookWidget {
                   onPressed: product.count <= qtyState.value
                       ? null
                       : () async {
-                          return context
+                          return ref
                               .read(cartRepositoryProvider)!
                               .setItemQty(product.uniqueId, qtyState.value + 1);
                         },
@@ -175,12 +175,12 @@ class CartListItem extends HookWidget {
                   color: Theme.of(context).colorScheme.secondary,
                   onPressed: () async {
                     if (qtyState.value == 1) {
-                      await context
+                      await ref
                           .read(cartRepositoryProvider)!
                           .removeItem(product.uniqueId);
                     } else {
                       //qtyState.value = qtyState.value - 1;
-                      return context
+                      return ref
                           .read(cartRepositoryProvider)!
                           .setItemQty(product.uniqueId, qtyState.value - 1);
                     }

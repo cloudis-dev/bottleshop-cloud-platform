@@ -31,7 +31,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final filterTypeScopedProvider = ScopedProvider<FilterType>(null);
+final filterTypeScopedProvider =
+    Provider<FilterType>((_) => throw UnimplementedError());
 
 class FilterDrawer extends HookWidget {
   final GlobalKey<DrawerStateAcquirerState> drawerAcquirerKey;

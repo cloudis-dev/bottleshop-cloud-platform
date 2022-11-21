@@ -19,11 +19,10 @@ import 'package:delivery/src/features/orders/data/models/order_model.dart';
 import 'package:delivery/src/features/orders/presentation/pages/order_detail_page.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/order_state_chip.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
 
-class OrderListItem extends HookWidget {
+class OrderListItem extends HookConsumerWidget {
   final OrderModel order;
 
   const OrderListItem({
@@ -32,13 +31,13 @@ class OrderListItem extends HookWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(currentLocaleProvider);
     return Material(
       child: InkWell(
         splashColor: Theme.of(context).colorScheme.secondary,
         onTap: () {
-          context.read(navigationProvider).pushPage(
+          ref.read(navigationProvider).pushPage(
                 context,
                 AppPageNode(
                   page: OrderDetailPage(orderUniqueId: order.uniqueId),

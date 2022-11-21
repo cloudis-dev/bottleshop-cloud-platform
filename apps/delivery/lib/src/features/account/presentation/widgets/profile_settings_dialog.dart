@@ -29,16 +29,16 @@ import 'package:overlay_support/overlay_support.dart';
 
 final _logger = Logger((ProfileSettingsDialog).toString());
 
-class ProfileSettingsDialog extends HookWidget {
+class ProfileSettingsDialog extends HookConsumerWidget {
   final bool? showBirthday;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ProfileSettingsDialog({Key? key, this.showBirthday}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final user = useProvider(currentUserProvider);
-    final currentLocale = useProvider(currentLocaleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+    final currentLocale = ref.watch(currentLocaleProvider);
     final scrollController = useScrollController();
     var profileData = <String, dynamic>{};
 

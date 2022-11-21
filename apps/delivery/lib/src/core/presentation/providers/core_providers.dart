@@ -21,7 +21,7 @@ final pushNotificationsProvider =
 
 final pushNotificationsInitProvider = FutureProvider.autoDispose((ref) async {
   final pushNotifs = ref.watch(pushNotificationsProvider);
-  await pushNotifs.init(ref.read);
+  await pushNotifs.init(ref);
 });
 
 final stripeProvider = Provider<StripeService>((ref) {

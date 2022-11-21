@@ -48,30 +48,30 @@ class HomePage extends RoutebornPage {
   String getPagePathBase() => pagePathBase;
 }
 
-class _HomeView extends HookWidget {
+class _HomeView extends HookConsumerWidget {
   const _HomeView({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final currentUser = useProvider(currentUserProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserProvider);
 
     useEffect(() {
-      context.read(commonDataRepositoryProvider).fetch().then(
+      ref.read(commonDataRepositoryProvider).fetch().then(
             (value) => _logger.fine('products initialized'),
             onError: (dynamic err, dynamic stack) =>
                 _logger.severe('common data repo fetch failed', err, stack),
           );
 
-      PushNotificationService.handleMessageOpenedApp(context.read).then(
+      PushNotificationService.handleMessageOpenedApp(ref).then(
         (value) => _logger.fine('handleMessageOpenedApp register'),
         onError: (dynamic err, dynamic stack) =>
             _logger.severe('handleMessageOpenedApp', err, stack),
       );
 
       if (currentUser != null && !currentUser.isAnonymous) {
-        setUserId(context, currentUser.uid)
+        setUserId(ref, currentUser.uid)
             .then((value) => _logger.fine('userID set'));
       }
       return;
