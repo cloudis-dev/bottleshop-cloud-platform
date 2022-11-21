@@ -75,7 +75,7 @@
     "buildIpa": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build ipa --flavor production --target lib/main_production.dart",
+        "command": "flutter build ipa --flavor production --target lib/main_production.dart --export-method ad-hoc",
         "cwd": "apps/admin"
       }
     },
@@ -103,6 +103,16 @@
       "options": {
         "commands":[
           "nx run admin:format",
+          "nx run admin:analyze"
+        ],
+        "parallel": false
+      }
+
+    },
+    "deploy:web":{
+      "executor": "nx:run-commands",
+      "options": {
+        "commands":[
           "nx run admin:analyze"
         ],
         "parallel": false
