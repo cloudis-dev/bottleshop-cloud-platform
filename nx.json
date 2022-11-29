@@ -26,5 +26,8 @@
     "build": {
       "dependsOn": ["^build"]
     }
+  },
+  "cli": {
+    "packageManager": "yarn"
   }
 }

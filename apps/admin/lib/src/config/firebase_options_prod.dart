@@ -14,7 +14,7 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-class DefaultFirebaseOptions {
+class ProductionFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       return web;
@@ -47,33 +47,36 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyATDXyya2cT8D2V1ZFDE83ewlpUFwRZC0U',
-    appId: '1:525277285012:web:79a4cedc090bcaac0ec281',
-    messagingSenderId: '525277285012',
-    projectId: 'bottleshop-3-veze-dev-54908',
-    authDomain: 'bottleshop-3-veze-dev-54908.firebaseapp.com',
-    storageBucket: 'bottleshop-3-veze-dev-54908.appspot.com',
-    measurementId: 'G-RPFG37YRQF',
+    apiKey: 'AIzaSyCEIArskQbVY3HB8saRUZYMHfHeu78jXCM',
+    appId: '1:540936468411:web:5d23dc6a7d01fe16bff69e',
+    messagingSenderId: '540936468411',
+    projectId: 'bottleshop3veze-delivery',
+    authDomain: 'bottleshop3veze-delivery.firebaseapp.com',
+    databaseURL: 'https://bottleshop3veze-delivery.firebaseio.com',
+    storageBucket: 'bottleshop3veze-delivery.appspot.com',
+    measurementId: 'G-59N5H07K5S',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC6IPUoa-KnOsnnpEdAc45GTV6_4WzZJ0I',
-    appId: '1:525277285012:android:ea6182df001e656f0ec281',
-    messagingSenderId: '525277285012',
-    projectId: 'bottleshop-3-veze-dev-54908',
-    storageBucket: 'bottleshop-3-veze-dev-54908.appspot.com',
+    apiKey: 'AIzaSyBY0-koT0ru49lajwgG3egozdjbZ1_7Nfw',
+    appId: '1:540936468411:android:9271fca1d03a8d1bbff69e',
+    messagingSenderId: '540936468411',
+    projectId: 'bottleshop3veze-delivery',
+    databaseURL: 'https://bottleshop3veze-delivery.firebaseio.com',
+    storageBucket: 'bottleshop3veze-delivery.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC-pxRhFXXAVhDQcTTa-GV3TMw8Bp5b8A4',
-    appId: '1:525277285012:ios:6e46848dd770f9b20ec281',
-    messagingSenderId: '525277285012',
-    projectId: 'bottleshop-3-veze-dev-54908',
-    storageBucket: 'bottleshop-3-veze-dev-54908.appspot.com',
+    apiKey: 'AIzaSyBWdUFIdbwtIFlZ_fp7qOGIUOwKjeD6gtc',
+    appId: '1:540936468411:ios:cbfa420b2201e3c7bff69e',
+    messagingSenderId: '540936468411',
+    projectId: 'bottleshop3veze-delivery',
+    databaseURL: 'https://bottleshop3veze-delivery.firebaseio.com',
+    storageBucket: 'bottleshop3veze-delivery.appspot.com',
     androidClientId:
-        '525277285012-6qj6rf3lr3o7sdkovn4qoefhhd31686h.apps.googleusercontent.com',
+        '540936468411-2bef528sv3kf6pvnchcggc1aoqolbpsc.apps.googleusercontent.com',
     iosClientId:
-        '525277285012-70gfp9hmp4f8b0skego1aebj52pjllto.apps.googleusercontent.com',
-    iosBundleId: 'sk.bottleshop3veze.bottleshopdeliveryapp',
+        '540936468411-nip6g81qajr0repq7cbtjbh21ap7nv2s.apps.googleusercontent.com',
+    iosBundleId: 'sk.bottleshop3veze.bottleshopAdmin',
   );
 }

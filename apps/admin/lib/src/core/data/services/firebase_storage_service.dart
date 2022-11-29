@@ -65,57 +65,12 @@ class FirebaseStorageService {
     );
   }
 
-  // static Future<ImageUploadResult> uploadImgData(
-  //   File imageFile,
-  //   String? productUniqueId,
-  // ) async {
-  //   final resultData = await ImageUtil.createResizedJpgWithWatermark(
-  //     file: await imageFile.readAsBytes(),
-  //     maxWidth: maxImageWidth,
-  //   );
-
-  //   final cleanImgData = resultData[0];
-  //   final watermarkedImgData = resultData[1];
-
-  //   final cleanImgFilePath =
-  //       await FilesUtil.getPathToFileInCache('clean_upload_img.temp');
-  //   final cleanImgFile =
-  //       await File(cleanImgFilePath).writeAsBytes(cleanImgData);
-
-  //   final watermarkedImgFilePath =
-  //       await FilesUtil.getPathToFileInCache('watermarked_upload_img.temp');
-  //   final watermarkedImgFile =
-  //       await File(watermarkedImgFilePath).writeAsBytes(watermarkedImgData);
-
-  //   final cleanImagePath = getCleanImagePath(productUniqueId);
-  //   final watermarkedImagePath = getImagePath(productUniqueId);
-  //   final thumbnailPath = getThumbnailPath(productUniqueId);
-
-  //   await Future.wait(
-  //     [
-  //       FirebaseStorage.instance.ref().child(cleanImagePath).putFile(
-  //             cleanImgFile,
-  //             SettableMetadata(contentType: 'image/jpeg'),
-  //           ),
-  //       FirebaseStorage.instance.ref().child(watermarkedImagePath).putFile(
-  //             watermarkedImgFile,
-  //             SettableMetadata(contentType: 'image/jpeg'),
-  //           ),
-  //     ],
-  //   );
-
-  //   return ImageUploadResult(
-  //     imagePath: watermarkedImagePath,
-  //     thumbnailPath: thumbnailPath,
-  //   );
-  // }
-
   static Future<ImageUploadResult> uploadImgBytes(
     Uint8List imageFile,
     String? productUniqueId,
   ) async {
     final resultData = await ImageUtil.createResizedJpgWithWatermark(
-      imgBytes:  imageFile,
+      imgBytes: imageFile,
       maxWidth: maxImageWidth,
     );
 
@@ -123,17 +78,16 @@ class FirebaseStorageService {
     final watermarkedImgData = resultData[1];
     final cleanImagePath = getCleanImagePath(productUniqueId);
     final watermarkedImagePath = getImagePath(productUniqueId);
+    final thumbnailPath = getThumbnailPath(productUniqueId);
     await FirebaseStorage.instance.ref().child(cleanImagePath).putData(
           cleanImgData,
-          
         );
     await FirebaseStorage.instance.ref().child(watermarkedImagePath).putData(
-       watermarkedImgData,
-       
-    );
+          watermarkedImgData,
+        );
     return ImageUploadResult(
-      imagePath: cleanImagePath,
-      thumbnailPath: watermarkedImagePath,
+      imagePath: watermarkedImagePath,
+      thumbnailPath: thumbnailPath,
     );
   }
 }

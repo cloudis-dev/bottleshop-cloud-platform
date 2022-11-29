@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:bottleshop_admin/src/core/utils/snackbar_utils.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/dialogs/product_image_delete_dialog.dart';
 import 'package:bottleshop_admin/src/features/product_editing/presentation/pages/product_edit_page.dart';
@@ -22,10 +22,11 @@ class ProductImagesView extends HookWidget {
     final pickedFile = await ImagePicker().pickImage(source: source);
 
     if (pickedFile != null) {
-      if (!kIsWeb)
-        context.read(blop).state = File(pickedFile.path).path;
-      else
-        context.read(blop).state = pickedFile!.path;
+      if (!kIsWeb) {
+        context.read(blopProvider).state = File(pickedFile.path).path;
+      } else {
+        context.read(blopProvider).state = pickedFile.path;
+      }
 
       context.read(isImgChangedProvider).state = true;
     }
@@ -33,7 +34,11 @@ class ProductImagesView extends HookWidget {
 
   Future<void> _onCropImage(BuildContext context) async {
     final croppedImg = await ImageCropper().cropImage(
-      sourcePath: context.read(blop).state ?? '',
+      sourcePath: context.read(blopProvider).state ?? '',
+      aspectRatio: CropAspectRatio(
+        ratioX: ProductImageViewModel.ratioX,
+        ratioY: ProductImageViewModel.ratioY,
+      ),
       uiSettings: [
         AndroidUiSettings(
           hideBottomControls: true,
@@ -45,12 +50,11 @@ class ProductImagesView extends HookWidget {
         WebUiSettings(
           context: context,
           presentStyle: CropperPresentStyle.dialog,
-          boundary: const CroppieBoundary(
-            width: 520,
-            height: 500,
+          viewPort: CroppieViewPort(
+            width: (400 * ProductImageViewModel.targetImgAspect).round(),
+            height: 400,
+            type: 'rectangle',
           ),
-          viewPort:
-              const CroppieViewPort(width: 450, height: 450, type: 'rectangle'),
           enableExif: true,
           enableZoom: true,
           showZoomer: true,
@@ -59,7 +63,7 @@ class ProductImagesView extends HookWidget {
     );
 
     if (croppedImg != null) {
-      context.read(blop).state = croppedImg.path;
+      context.read(blopProvider).state = croppedImg.path;
       context.read(isImgChangedProvider).state = true;
     }
   }
@@ -115,12 +119,8 @@ class _ImageFrameContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final b = useProvider(blop);
-    final imgPath;
-    if (b.state != null)
-      imgPath = b.state!;
-    else 
-      imgPath = '';
+    final imgPath = useProvider(blopProvider).state ?? '';
+
     if (useProvider(isImgLoadedProvider)) {
       if (imgPath == '') {
         return Image.asset('assets/images/placeholder.png');

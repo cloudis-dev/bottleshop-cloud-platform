@@ -61,10 +61,10 @@ class QuantityFilter extends HookConsumerWidget {
             max: FilterConstants.maxQuantity.toDouble(),
             divisions: FilterConstants.alcoholDivisions,
             value: FilterConstants.maxQuantity - minQuantity.toDouble(),
-            onChanged: (value) => ref
-                    .read(filterModelProvider(filterType).state)
-                    .state =
-                ref.read(filterModelProvider(filterType)).copyWith(
+            onChanged: (value) =>
+                ref.read(filterModelProvider(filterType).state).state = ref
+                    .read(filterModelProvider(filterType))
+                    .copyWith(
                       minQuantity: FilterConstants.maxQuantity - value.round(),
                     ),
             label: minQuantity.toString(),
