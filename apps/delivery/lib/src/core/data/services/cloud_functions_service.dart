@@ -35,6 +35,15 @@ class CloudFunctionsService {
     return res.data['success'] as bool;
   }
 
+  Future<bool> postFeedback() async {
+    final res = await _firebaseFunctions
+        .httpsCallable(FirebaseCallableFunctions.postFeedback)
+        .call<dynamic>();
+
+    return true;
+  }
+
+
   HttpsCallable createPaymentIntent() {
     return _firebaseFunctions
         .httpsCallable(FirebaseCallableFunctions.createPaymentIntent);

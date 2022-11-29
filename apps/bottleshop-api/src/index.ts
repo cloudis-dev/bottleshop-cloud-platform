@@ -24,3 +24,4 @@ export { onCategoryWriteAlgoliaUpdate as onCategoryWrite } from './functions/on-
 export { onAdminUserCreate, onAdminUserDelete } from './functions/on-admin-user-create-delete';
 export { createCashOnDeliveryOrder } from './functions/create-cash-on-delivery-order';
 export { deleteAccount } from './functions/delete-account';
+export { postFeedback } from './functions/post-feedback';

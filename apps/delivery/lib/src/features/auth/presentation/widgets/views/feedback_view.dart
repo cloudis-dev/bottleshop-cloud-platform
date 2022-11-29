@@ -152,14 +152,8 @@ class _FeedbackView extends HookConsumerWidget {
                   width: 150,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
-                      FirebaseFirestore.instance.collection('mail').add({
-                        'to': 'sanekgalchyn@ukr.net',
-                        'message': {
-                          'subject': 'Hello from Firebase!',
-                          'html': 'This is an <code>HTML</code> email body.',
-                        },
-                      });
+                    onPressed: ()async {
+                      await ref.read(cloudFunctionsProvider).postFeedback();
                     },
                     child: Text('Send'),
                   ),
