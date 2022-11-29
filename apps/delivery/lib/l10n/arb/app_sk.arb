@@ -632,5 +632,6 @@
   "gin": "Gin",
   "vodka": "Vodka",
   "landing": "Landing",
-  "saleButton": "VÝPREDAJ"
+  "saleButton": "VÝPREDAJ",
+  "logIn": "Prihlásiť sa"
 }

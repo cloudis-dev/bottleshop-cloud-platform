@@ -169,14 +169,24 @@ const kLogoTransparent = 'assets/images/logo_transparent.png';
 const kLandingImage1 = 'assets/images/landing_page_image1.png';
 const kLandingImage2 = 'assets/images/landing_page_image2.png';
 const kLandingImage3 = 'assets/images/landing_page_image3.png';
+const kLandingImage1Mobile = 'assets/images/landing_page_image1_mobile.png';
+const kLandingImage2Mobile = 'assets/images/landing_page_image2_mobile.png';
+const kLandingImage3Mobile = 'assets/images/landing_page_image3_mobile.png';
+const kBlackGradient2Mobile = 'assets/images/black_gradient2_mobile.png';
+const kBlackGradient3Mobile = 'assets/images/black_gradient3_mobile.png';
+const kBlackGradient4Mobile = 'assets/images/black_gradient4_mobile.png';
 const kBtnArrow = 'assets/images/btn_arrow.png';
 const kMobilePhoneIcon = 'assets/images/mobile_phone_icon.png';
 const kExclusiveIcon = 'assets/images/exclusive_icon.png';
 const kGiftsIcon = 'assets/images/gifts_icon.png';
 const kCareIcon = 'assets/images/care_icon.png';
+const kXIcon = 'assets/images/x_icon.png';
 const kCouponIcon = 'assets/images/coupon_icon.png';
 const kHeartIcon = 'assets/images/heart_icon.png';
 const kShoppingCartIcon = 'assets/images/shopping_cart_icon.png';
+const kWhiteCouponIcon = 'assets/images/white_coupon_icon.png';
+const kWhiteHeartIcon = 'assets/images/white_heart_icon.png';
+const kWhiteShoppingCartIcon = 'assets/images/white_shopping_cart_icon.png';
 const kBelugaIcon = 'assets/images/beluga_icon.png';
 const kDiplomaticoIcon = 'assets/images/diplomatico_icon.png';
 const kMurrayMcDavidIcon = 'assets/images/murray_mcdavid_icon.png';
@@ -230,4 +240,9 @@ class UrlStrings {
       'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_sk.pdf?alt=media';
   static const String menuTermsEN =
       'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_en.pdf?alt=media';
+}
+
+class categoryUidStrings {
+  static const rum = 'Z1ytjymiF5bTYemzxXox';
+  static const whiskey = 'yvv9lwUbzEzrIGsZUZ2R';
 }

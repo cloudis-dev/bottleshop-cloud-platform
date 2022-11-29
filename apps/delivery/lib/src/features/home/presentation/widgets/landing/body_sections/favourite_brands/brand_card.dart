@@ -1,3 +1,4 @@
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,18 +38,16 @@ class BrandCard extends StatelessWidget {
               ),
             ],
           ),
-          Text(headline,
+          Text(headline.toUpperCase(),
               textAlign: TextAlign.center,
-              style: GoogleFonts.libreBodoni(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xffBF8A24))),
+              style: publicSansTextTheme.headline3),
+          SizedBox(
+            height: 10,
+          ),
           Text(txt,
               textAlign: TextAlign.center,
-              style: GoogleFonts.libreBodoni(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white)),
+              style: GoogleFonts.publicSans(
+                  fontSize: 12, fontWeight: FontWeight.w500)),
         ],
       ),
     );

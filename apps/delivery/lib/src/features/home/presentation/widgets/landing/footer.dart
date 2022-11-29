@@ -1,7 +1,9 @@
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../core/data/res/constants.dart';
@@ -30,8 +32,8 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(
-                  "Bottleshop 3 veze",
-                  style: TextStyle(
+                  "Bottleshop 3 veže",
+                  style: GoogleFonts.publicSans(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -44,11 +46,7 @@ class Footer extends HookConsumerWidget {
                   constraints: BoxConstraints(maxWidth: 250),
                   child: Text(
                     context.l10n.footerDescription,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: publicSansTextTheme.caption,
                   ),
                 ),
               ),
@@ -63,22 +61,22 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.contactColumn,
-                    style: Theme.of(context).textTheme.headline2),
+                    style: publicSansTextTheme.headline2),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text("Bottleroom s.r.o.",
-                    style: Theme.of(context).textTheme.headline5),
+                    style: publicSansTextTheme.caption),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text("Bajkalská 9/A,",
-                    style: Theme.of(context).textTheme.headline5),
+                child:
+                    Text("Bajkalská 9/A,", style: publicSansTextTheme.caption),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text("831 04 Bratislava",
-                    style: Theme.of(context).textTheme.headline5),
+                    style: publicSansTextTheme.caption),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 26, 0, 0),
@@ -94,11 +92,8 @@ class Footer extends HookConsumerWidget {
                       padding: const EdgeInsets.fromLTRB(2, 0, 0, 0),
                       child: TextButton(
                         child: Text("info@bottleshop3veze.sk",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5!
-                                .copyWith(
-                                    decoration: TextDecoration.underline)),
+                            style: publicSansTextTheme.caption?.copyWith(
+                                decoration: TextDecoration.underline)),
                         onPressed: () {
                           launchUrlString("mailto:info@bottleshop3veze.sk");
                         },
@@ -120,7 +115,7 @@ class Footer extends HookConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(9, 0, 0, 0),
                       child: Text("+421 904 797 094",
-                          style: Theme.of(context).textTheme.headline5),
+                          style: publicSansTextTheme.caption),
                     ),
                   ],
                 ),
@@ -136,27 +131,27 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.openingHours,
-                    style: Theme.of(context).textTheme.headline2),
+                    style: publicSansTextTheme.headline2),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.monTh + " 10:00 - 22:00",
-                    style: Theme.of(context).textTheme.headline5),
+                    style: publicSansTextTheme.caption),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.fri + " 10:00 - 24:00",
-                    style: Theme.of(context).textTheme.headline5),
+                    style: publicSansTextTheme.caption),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.sat + " 12:00 - 24:00",
-                    style: Theme.of(context).textTheme.headline5),
+                    style: publicSansTextTheme.caption),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.sun + context.l10n.closed,
-                    style: Theme.of(context).textTheme.headline5),
+                    style: publicSansTextTheme.caption),
               ),
             ],
           ),
@@ -169,7 +164,7 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
                 child: Text(context.l10n.informationColumn,
-                    style: Theme.of(context).textTheme.headline2),
+                    style: publicSansTextTheme.headline2),
               ),
               TextButton(
                 onPressed: () {
@@ -177,8 +172,7 @@ class Footer extends HookConsumerWidget {
                       .watch(navigationProvider)
                       .setNestingBranch(context, NestingBranch.help);
                 },
-                child: Text("F.A.Q.",
-                    style: Theme.of(context).textTheme.headline5),
+                child: Text("F.A.Q.", style: publicSansTextTheme.caption),
               ),
               BilingualLink(
                   txt: context.l10n.menuTerms,
@@ -199,7 +193,7 @@ class Footer extends HookConsumerWidget {
                       .setNestingBranch(context, NestingBranch.wholesale);
                 },
                 child: Text(context.l10n.wholesale,
-                    style: Theme.of(context).textTheme.headline5),
+                    style: publicSansTextTheme.caption),
               ),
             ],
           ),
@@ -212,7 +206,7 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.findUs,
-                    style: Theme.of(context).textTheme.headline2),
+                    style: publicSansTextTheme.headline2),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -247,7 +241,7 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 25, 0, 12),
                 child: Text(context.l10n.downloadApp,
-                    style: Theme.of(context).textTheme.headline2),
+                    style: publicSansTextTheme.headline2),
               ),
               TextButton(
                   style: TextButton.styleFrom(

@@ -1,7 +1,7 @@
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/body_sections/feature_section/feature_card.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:delivery/l10n/l10n.dart';
 
 class FeatureSection extends StatelessWidget {
@@ -19,20 +19,17 @@ class FeatureSection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(context.l10n.customerSatisfaction.toUpperCase(),
-                style: GoogleFonts.publicSans(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xffBF8A24))),
+                style: publicSansTextTheme.bodyText1),
           ),
           Text(
             context.l10n.bringTopQuality,
-            style: GoogleFonts.libreBodoni(
-                fontSize: 40, fontWeight: FontWeight.w700, color: Colors.white),
+            style: libreBodoniTextTheme.headline3,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 54, left: 302, right: 302),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FeatureCard(
                     imgPath: kExclusiveIcon,

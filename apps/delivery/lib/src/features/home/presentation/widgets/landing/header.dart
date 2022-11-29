@@ -1,5 +1,4 @@
-import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
-import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
@@ -7,16 +6,12 @@ import 'package:delivery/src/features/home/presentation/widgets/organisms/langua
 import 'package:flutter/material.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import '../../../../../core/data/res/constants.dart';
 
 class Header extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final navigation = ref.watch(navigationProvider);
     final currentUser = ref.watch(currentUserProvider);
-    final currentLanguage = ref.watch(
-      sharedPreferencesProvider.select((value) => value.getAppLanguage()),
-    );
     return Container(
       height: 118,
       color: Colors.black,
@@ -50,7 +45,6 @@ class Header extends HookConsumerWidget {
                         txt: context.l10n.saleButton,
                         nestingBranch: NestingBranch.sale,
                       ),
-                      //Btns(txt: context.l10n.aboutUsButton),
                       Btns(
                         txt: context.l10n.contactButton,
                         nestingBranch: NestingBranch.help,
@@ -71,7 +65,7 @@ class Header extends HookConsumerWidget {
                   onPressed: () {
                     navigation.setNestingBranch(context, NestingBranch.search);
                   },
-                  color: Color(0xFFBF8A24),
+                  color: kPrimaryColor,
                   icon: Icon(
                     Icons.search,
                   ),
@@ -83,7 +77,7 @@ class Header extends HookConsumerWidget {
                   onPressed: () {
                     navigation.setNestingBranch(context, NestingBranch.cart);
                   },
-                  color: Color(0xFFBF8A24),
+                  color: kPrimaryColor,
                   icon: Icon(
                     Icons.shopping_cart,
                   ),
@@ -95,19 +89,14 @@ class Header extends HookConsumerWidget {
                   onPressed: () {
                     navigation.setNestingBranch(context, NestingBranch.account);
                   },
-                  color: Color(0xFFBF8A24),
+                  color: kPrimaryColor,
                   icon: Icon(
                     Icons.person,
                   ),
                 ),
               ),
-              Text(
-                  currentUser == null
-                      ? currentLanguage == LanguageMode.en
-                          ? "Anonymous"
-                          : "Anonymný"
-                      : currentUser.name!,
-                  style: Theme.of(context).textTheme.headline4),
+              if (currentUser != null)
+                Text(currentUser.name!, style: publicSansTextTheme.overline),
             ]),
           ),
         ],

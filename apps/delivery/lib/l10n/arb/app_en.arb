@@ -611,7 +611,7 @@
   "bringTopQuality": "We bring you top quality",
   "premiumBrands": "Premium brands",
   "highestQualityBrands" : "Enjoy exclusive brands of the highest quality.",
-  "giftsForDemandingPeople": "Gifts for demanding people",
+  "giftsForDemandingPeople": "Gifts for the demanding",
   "surpriseLovedOnes": "Surprise your loved ones with an exceptional gift.",
   "extraordinaryAccess": "Extraordinary access",
   "tenYearAccess": "We value and know our customers for 10 years.",
@@ -632,6 +632,7 @@
   "gin": "Gin",
   "vodka": "Vodka",
   "landing": "Landing",
-  "saleButton": "SALE"
+  "saleButton": "SALE",
+  "logIn": "Log in"
 }
 

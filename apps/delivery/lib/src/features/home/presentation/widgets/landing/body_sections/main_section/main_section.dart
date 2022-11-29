@@ -1,8 +1,8 @@
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:delivery/l10n/l10n.dart';
 
 class MainSection extends StatelessWidget {
@@ -42,8 +42,7 @@ class MainSection extends StatelessWidget {
         width: 636,
         child: Text(
           context.l10n.luxuriousSpirits,
-          style: GoogleFonts.libreBodoni(
-              fontSize: 70, fontWeight: FontWeight.w400),
+          style: libreBodoniTextTheme.headline1,
         ),
       ),
       Positioned(

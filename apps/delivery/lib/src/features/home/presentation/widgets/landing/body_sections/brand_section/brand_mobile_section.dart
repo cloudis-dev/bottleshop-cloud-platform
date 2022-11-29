@@ -1,33 +1,33 @@
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:flutter/material.dart';
 
-class BrandSection extends StatelessWidget {
+class BrandMobileSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 200, vertical: 40),
+      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
             kBelugaIcon,
-            width: 142.22,
+            width: 86.89,
             fit: BoxFit.fitWidth,
           ),
           Image.asset(
             kDiplomaticoIcon,
-            width: 150.12,
+            width: 90.05,
             fit: BoxFit.fitWidth,
           ),
           Image.asset(
             kMurrayMcDavidIcon,
-            width: 176.64,
+            width: 100.66,
             fit: BoxFit.fitWidth,
           ),
           Image.asset(
             kRemyMartinIcon,
-            width: 190.44,
+            width: 121,
             fit: BoxFit.fitWidth,
           ),
         ],

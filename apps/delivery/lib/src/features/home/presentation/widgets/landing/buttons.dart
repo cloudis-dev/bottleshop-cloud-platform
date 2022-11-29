@@ -1,10 +1,8 @@
-import 'dart:html';
-
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
-import 'package:delivery/src/features/products/presentation/pages/category_products_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,7 +29,7 @@ class Btns extends HookConsumerWidget {
         },
         child: Text(
           txt,
-          style: Theme.of(context).textTheme.headline3,
+          style: publicSansTextTheme.headline3,
         ),
       ),
     );
@@ -61,7 +59,7 @@ class BilingualLink extends HookConsumerWidget {
             launchUrlString(skLink);
           }
         },
-        child: Text(txt, style: Theme.of(context).textTheme.headline5),
+        child: Text(txt, style: publicSansTextTheme.caption),
       ),
     );
   }
@@ -71,21 +69,22 @@ class LandingPageButton extends HookConsumerWidget {
   final String txt;
   final NestingBranch nestingBranch;
   RoutebornPage? routebornPage;
+  double btnFontSize;
 
   LandingPageButton(
       {super.key,
       required this.txt,
       required this.nestingBranch,
-      this.routebornPage});
+      this.routebornPage,
+      this.btnFontSize = 14});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
         decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(width: 1.0, color: Color.fromRGBO(191, 138, 36, 1)),
-            bottom:
-                BorderSide(width: 1.0, color: Color.fromRGBO(191, 138, 36, 1)),
+            top: BorderSide(width: 1.0, color: kPrimaryColor),
+            bottom: BorderSide(width: 1.0, color: kPrimaryColor),
           ),
         ),
         child: TextButton(
@@ -101,20 +100,23 @@ class LandingPageButton extends HookConsumerWidget {
             }
           },
           child: Padding(
-              padding:
-                  EdgeInsets.only(left: 16, top: 12, bottom: 12, right: 16),
-              child: Row(children: [
+              padding: EdgeInsets.only(
+                top: btnFontSize - 2,
+                bottom: btnFontSize - 2,
+              ),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 12),
+                  padding: EdgeInsets.only(right: btnFontSize - 2),
                   child: Text(
                     txt.toUpperCase(),
                     style: GoogleFonts.publicSans(
-                        fontSize: 14, fontWeight: FontWeight.w400),
+                        fontSize: btnFontSize, fontWeight: FontWeight.w400),
                   ),
                 ),
                 Image.asset(
                   kBtnArrow,
-                  width: 37,
+                  width: btnFontSize * 2.5,
                   fit: BoxFit.fitHeight,
                 ),
               ])),

@@ -1,14 +1,15 @@
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/features/home/presentation/widgets/landing/body_sections/mobile_app_section/app_feature_row.dart';
+import 'package:delivery/src/features/home/presentation/widgets/landing/body_sections/download_app_section/app_feature_row.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class MobileAppSection extends HookConsumerWidget {
+class DownloadAppSection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(
@@ -18,7 +19,7 @@ class MobileAppSection extends HookConsumerWidget {
       Container(
         height: 606,
         decoration: const BoxDecoration(
-          color: Color(0xffBF8A24),
+          color: kPrimaryColor,
         ),
       ),
       Container(

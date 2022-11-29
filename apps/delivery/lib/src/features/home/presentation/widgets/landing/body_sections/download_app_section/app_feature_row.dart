@@ -4,8 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 class AppFeatureRow extends StatelessWidget {
   final String imgPath;
   final String txt;
+  Color txtColor;
 
-  AppFeatureRow({super.key, required this.imgPath, required this.txt});
+  AppFeatureRow(
+      {super.key,
+      required this.imgPath,
+      required this.txt,
+      this.txtColor = Colors.black});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +27,7 @@ class AppFeatureRow extends StatelessWidget {
         Text(
           txt,
           style: GoogleFonts.publicSans(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: Color(0xff0C0C0C)),
+              fontSize: 16, fontWeight: FontWeight.w400, color: txtColor),
         ),
       ],
     );
