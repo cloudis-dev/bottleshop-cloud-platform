@@ -1,7 +1,7 @@
 import { Cart, CartRecord } from '../models/cart';
 import { tempCartId } from '../constants/other';
 import * as admin from 'firebase-admin';
-import { usersCollection, cartCollection, cartItemsSubCollection } from '../constants/collections';
+import { usersCollection, cartCollection, cartItemsSubCollection, productsCollection } from '../constants/collections';
 import { Product } from '../models/product';
 import { getEntityByRef } from './document-reference-utils';
 
@@ -42,4 +42,18 @@ export async function getCartItems(userId: string): Promise<CartItem[]> {
       }
     }),
   ).then((res) => res.filter((item): item is CartItem => item !== undefined));
+}
+
+export async function areProductsAvailableForPurchase(cartItems: CartItem[]): Promise<boolean> {
+  return Promise.all(
+    cartItems.map(async (e) => {
+      const currentProd = await getEntityByRef<Product>(
+        admin.firestore().collection(productsCollection).doc(e.product.cmat),
+      );
+      if (currentProd === undefined) {
+        return false;
+      }
+      return currentProd.amount >= e.quantity;
+    }),
+  ).then((e) => e.every((isAvailable) => isAvailable));
 }

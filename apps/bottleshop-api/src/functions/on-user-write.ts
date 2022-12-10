@@ -8,11 +8,7 @@ import { getEntityByRef } from '../utils/document-reference-utils';
 import { tier1Region } from '../constants/other';
 import { User } from '../models/user';
 import { usersCollection } from '../constants/collections';
-
-const stripe = new Stripe(functions.config().stripe.secret_key, {
-  typescript: true,
-  apiVersion: '2020-08-27',
-});
+import { createStripeClient } from '..';
 
 export const createStripeCustomer = functions
   .region(tier1Region)
@@ -20,6 +16,7 @@ export const createStripeCustomer = functions
   .https.onCall(async (data: Stripe.CustomerCreateParams, context: CallableContext) => {
     try {
       if (context.auth && context.auth.uid) {
+        const stripe = createStripeClient();
         const stripeCustomer = await stripe.customers.create(data);
         return { stripeCustomerId: stripeCustomer.id };
       } else {
@@ -56,6 +53,7 @@ const updateStripeCustomer = async (userSnapshot: functions.Change<functions.fir
     if (!user || !user.stripe_customer_id) {
       return;
     }
+    const stripe = createStripeClient();
     const params = createStripeCustomerParams(user);
     await stripe.customers.update(user.stripe_customer_id, params);
   } catch (e) {

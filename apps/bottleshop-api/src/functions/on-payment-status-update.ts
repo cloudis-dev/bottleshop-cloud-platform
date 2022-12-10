@@ -21,11 +21,8 @@ import { PromoCode } from '../models/promo-code';
 import { tier1Region, VAT } from '../constants/other';
 import { User } from '../models/user';
 import { getProduct, getProductRef } from '../utils/product-utils';
+import { createStripeClient } from '..';
 
-const stripe = new Stripe(functions.config().stripe.secret_key, {
-  typescript: true,
-  apiVersion: '2020-08-27',
-});
 const webhookSecret: string = functions.config().stripe.webhook_secret;
 
 async function getOrderItems(userId: string): Promise<OrderItem[]> {
@@ -142,6 +139,7 @@ const app = express();
 
 app.post('/', async (req: express.Request, res: express.Response) => {
   try {
+    const stripe = createStripeClient();
     const firebaseRequest = req as functions.https.Request;
     const signature = firebaseRequest.headers['stripe-signature'] as string | string[] | Buffer;
     const event = stripe.webhooks.constructEvent(firebaseRequest.rawBody, signature, webhookSecret);

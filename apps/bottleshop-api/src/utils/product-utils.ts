@@ -15,11 +15,13 @@ export function calculateProductFinalPrice(product: Product): number {
  * Get the product's image url.
  * When product has no image, return just the placeholder image.
  */
-export function getProductImageUrl(product: Product): string | undefined {
+export async function getProductImageUrl(product: Product): Promise<string | undefined> {
   if (product.image_path === undefined) {
     return undefined;
   } else {
-    return admin.storage().bucket().file(product.image_path).publicUrl();
+    const file = admin.storage().bucket().file(product.image_path);
+    await file.makePublic();
+    return file.publicUrl();
   }
 }
 
