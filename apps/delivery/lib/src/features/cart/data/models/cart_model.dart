@@ -127,7 +127,7 @@ class ChargeShipping {
 
   factory ChargeShipping.fromDeliveryOption(DeliveryOption? deliveryOption) {
     return ChargeShipping._(
-      shipping: OrderTypeModel.codeFromDeliveryOption(deliveryOption),
+      shipping: deliveryOption?.toString(),
     );
   }
 

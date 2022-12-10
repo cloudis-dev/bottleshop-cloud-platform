@@ -174,9 +174,3 @@ const kLanguageFlagsMap = {
   LanguageMode.en: 'assets/images/us.svg',
   LanguageMode.sk: 'assets/images/sk.svg',
 };
-
-const kOrderTypePickUp = 'pick-up';
-const kOrderTypeHomeDelivery = 'home-delivery';
-const kOrderTypeQuickBa = 'quick-delivery-BA';
-const kOrderTypeCloseAreaBa = 'close-areas-delivery-ba';
-const kOrderTypeCashOnDelivery = 'cash-on-delivery';
