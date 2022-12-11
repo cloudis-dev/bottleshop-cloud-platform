@@ -22,6 +22,7 @@ import { tier1Region, VAT } from '../constants/other';
 import { User } from '../models/user';
 import { getProduct, getProductRef } from '../utils/product-utils';
 import { createStripeClient } from '..';
+import { StripePaymentMetadata } from '../models/payment-data';
 
 const webhookSecret: string = functions.config().stripe.webhook_secret;
 
@@ -148,13 +149,14 @@ app.post('/', async (req: express.Request, res: express.Response) => {
       case 'checkout.session.completed':
         functions.logger.log('handler checkout.session.completed invoked');
         const session = event.data.object as any;
+        const metadata = session.metadata as StripePaymentMetadata;
         functions.logger.log(`session data: ${JSON.stringify(session)}`);
         const orderDocId = await admin.firestore().runTransaction<string | undefined>(async () => {
           const result = await createOrder(
-            session.metadata.userId,
-            session.metadata.deliveryType,
-            parseInt(session.metadata.orderId, 10),
-            session.metadata.orderNote,
+            metadata.userId,
+            metadata.deliveryType,
+            parseInt(metadata.orderId, 10),
+            metadata.orderNote,
           );
           if (!result) {
             return undefined;

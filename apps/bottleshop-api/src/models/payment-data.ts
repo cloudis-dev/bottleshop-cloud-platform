@@ -8,11 +8,14 @@ export interface PaymentData {
   orderNote: string;
   deliveryType: DeliveryType;
   platform: PlatformType;
+  promoCode: string | undefined;
   cancelUrl: string;
   successUrl: string;
 }
 
 export interface StripePaymentMetadata {
+  userId: string;
+  orderId: string;
   orderNote: string | undefined;
   deliveryType: DeliveryType;
   /**

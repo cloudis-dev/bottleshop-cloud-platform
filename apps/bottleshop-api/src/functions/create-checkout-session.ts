@@ -9,6 +9,8 @@ import { areProductsAvailableForPurchase, getCartItems } from '../utils/cart-uti
 import { calculateProductFinalPrice, getProductImageUrl } from '../utils/product-utils';
 import { PaymentData, StripePaymentMetadata } from '../models/payment-data';
 import { createStripeClient } from '..';
+import { calculateOrderTypeFinalPrice, generateNewOrderId, getOrderTypeByCode } from '../utils/order-utils';
+import { getPromoByCode, isPromoValid } from '../utils/promo-code-utils';
 
 export const createCheckoutSession = functions
   .region(tier1Region)
@@ -18,6 +20,8 @@ export const createCheckoutSession = functions
     if (userUid === undefined) {
       return new functions.https.HttpsError('unauthenticated', 'Request is unauthenticated');
     }
+
+    // Cart check
 
     const cartRef = admin
       .firestore()
@@ -32,7 +36,9 @@ export const createCheckoutSession = functions
       return new functions.https.HttpsError('failed-precondition', `No cart found for user ${userUid}`);
     }
 
-    const [productsPurchasable, line_items] = await Promise.all([
+    // Products check
+
+    const [areProductsPurchasable, productLineItems] = await Promise.all([
       areProductsAvailableForPurchase(cartItems),
       Promise.all(
         cartItems.map(async (item) => {
@@ -53,12 +59,73 @@ export const createCheckoutSession = functions
       ),
     ]);
 
-    if (!productsPurchasable) {
+    if (!areProductsPurchasable) {
       return new functions.https.HttpsError('failed-precondition', 'Not all products are purchasable.');
     }
 
+    // Promos check
+
+    const promoLineItems = await (async () => {
+      if (data.promoCode !== undefined) {
+        const promo = await getPromoByCode(data.promoCode);
+        if (promo === undefined) {
+          return undefined;
+        }
+
+        if (!isPromoValid(promo, cart)) {
+          return undefined;
+        }
+
+        return [
+          {
+            price_data: {
+              currency: 'eur',
+              product_data: {
+                name: `Promo: ${data.promoCode}`,
+                images: [],
+              },
+              unit_amount: Math.round(promo.discount_value * 100),
+            },
+            quantity: 1,
+          },
+        ];
+      }
+
+      return [];
+    })();
+
+    if (promoLineItems === undefined) {
+      return new functions.https.HttpsError(
+        'failed-precondition',
+        'Promo code either does not exist, or the cart have not met preconditions.',
+      );
+    }
+
+    const orderType = await getOrderTypeByCode(data.deliveryType);
+
+    if (orderType === undefined) {
+      return new functions.https.HttpsError('failed-precondition', 'No such order type exists.');
+    }
+
+    const orderTypeLineItem = [
+      {
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: 'Shipping',
+            images: [],
+          },
+          unit_amount: Math.round(calculateOrderTypeFinalPrice(orderType) * 100),
+        },
+        quantity: 1,
+      },
+    ];
+
     const stripe = createStripeClient();
+    const orderId = await generateNewOrderId();
     const metadata: StripePaymentMetadata = {
+      userId: userUid,
+      orderId,
       platform: data.platform,
       deliveryType: data.deliveryType,
       orderNote: data.orderNote.trim() === '' ? data.orderNote.trim() : undefined,
@@ -66,7 +133,7 @@ export const createCheckoutSession = functions
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: line_items,
+      line_items: productLineItems.concat(promoLineItems).concat(orderTypeLineItem),
       metadata: metadata as unknown as Stripe.MetadataParam,
       mode: 'payment',
       success_url: data.successUrl,

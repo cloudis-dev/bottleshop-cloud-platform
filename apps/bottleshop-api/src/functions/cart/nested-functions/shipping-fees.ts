@@ -3,20 +3,13 @@ import * as functions from 'firebase-functions';
 import { logger } from 'firebase-functions';
 
 import { Cart } from '../../../models/cart';
-import { cartCollection, orderTypesCollection, usersCollection } from '../../../constants/collections';
+import { cartCollection, usersCollection } from '../../../constants/collections';
 import { cartFields } from '../../../constants/model-constants';
 import { CartUpdateResult } from '..';
 import { DeliveryType, OrderType } from '../../../models/order-type';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
+import { getOrderTypeByCode } from '../../../utils/order-utils';
 import { tempCartId, tier1Region, VAT } from '../../../constants/other';
-
-async function getOrderTypeByCode(shippingCode: string): Promise<OrderType | undefined> {
-  const docs = await admin.firestore().collection(orderTypesCollection).where('code', '==', shippingCode).get();
-  if (docs.empty) {
-    return undefined;
-  }
-  return docs.docs[0].data() as OrderType;
-}
 
 async function addShippingToCart(orderType: OrderType, cart: Cart): Promise<Cart> {
   cart = await removeShippingFromCart(cart);

@@ -1,21 +1,15 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import { ordersCollection, usersCollection } from '../constants/collections';
-import { Order } from '../models/order';
+import { usersCollection } from '../constants/collections';
 import { User } from '../models/user';
-import { PaymentData } from '../models/payment-data';
+import { PaymentData, StripePaymentMetadata } from '../models/payment-data';
 import { tier1Region } from '../constants/other';
 import { getEntityByRef } from '../utils/document-reference-utils';
 import { getCart, getCartTotalPrice } from '../utils/cart-utils';
 import { createStripeClient } from '..';
-
-export async function generateNewOrderId(): Promise<string> {
-  const ordersCollectionRef = admin.firestore().collection(ordersCollection);
-  const orders = await ordersCollectionRef.orderBy('id', 'desc').limit(1).get();
-
-  return (orders.empty ? 1 : (orders.docs[orders.size - 1].data() as Order).id + 1).toString();
-}
+import Stripe from 'stripe';
+import { generateNewOrderId } from '../utils/order-utils';
 
 export const createPaymentIntent = functions
   .region(tier1Region)
@@ -37,19 +31,20 @@ export const createPaymentIntent = functions
 
       const stripe = createStripeClient();
       const orderId = await generateNewOrderId();
+      const metadata: StripePaymentMetadata = {
+        platform: 'mobile',
+        userId: userUid,
+        deliveryType: data.deliveryType,
+        orderNote: data.orderNote || '',
+        orderId,
+      };
       return await stripe.paymentIntents.create({
         amount: +(getCartTotalPrice(cart) * 100).toFixed(0),
         description: `Bottleshop 3 Veze #${orderId}`,
         customer: user.stripe_customer_id,
         currency: 'eur',
         payment_method_types: ['card'],
-        metadata: {
-          platform: 'mobile',
-          userId: userUid,
-          deliveryType: data.deliveryType,
-          orderNote: data.orderNote || '',
-          orderId,
-        },
+        metadata: metadata as unknown as Stripe.MetadataParam,
       });
     } catch (e) {
       functions.logger.error(`payment failed ${e}`);

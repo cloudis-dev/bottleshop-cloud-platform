@@ -1,9 +1,9 @@
 import { CallableContext } from 'firebase-functions/lib/providers/https';
 import * as functions from 'firebase-functions';
 
-import { isPromoCodeValid } from './nested-functions/promo-codes';
 import { tier1Region } from '../../constants/other';
 import { areProductsAvailableForPurchase, getCart, getCartItems } from '../../utils/cart-utils';
+import { isPromoCodeValid } from './nested-functions/promo-codes';
 
 export type CartUpdateResult = { updated: string } | { error: string };
 
