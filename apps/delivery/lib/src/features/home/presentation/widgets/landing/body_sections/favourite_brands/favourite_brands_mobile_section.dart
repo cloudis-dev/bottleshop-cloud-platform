@@ -25,33 +25,38 @@ class FavouriteBrandsMobileSection extends StatelessWidget {
               child: BrandCard(
                   imgPath: kWhiskeyBourbon,
                   headline: context.l10n.whiskeyBourbon,
-                  txt: "Balvenie, Kilchoman, Glenmorangie..."),
+                  txt: "Balvenie, Kilchoman, Glenmorangie...",
+                  category: categoryUidStrings.whiskey),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 50.0),
               child: BrandCard(
                   imgPath: kCognac,
                   headline: context.l10n.cognac,
-                  txt: "Mery Melrose, Hennessy, Lheraud..."),
+                  txt: "Mery Melrose, Hennessy, Lheraud...",
+                  category: categoryUidStrings.cognac),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 50.0),
               child: BrandCard(
                   imgPath: kRum,
                   headline: context.l10n.rum,
-                  txt: "Diplomatico, Centenario, A.H. Riise..."),
+                  txt: "Diplomatico, Centenario, A.H. Riise...",
+                  category: categoryUidStrings.rum),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 50.0),
               child: BrandCard(
                   imgPath: kVodka,
                   headline: context.l10n.vodka,
-                  txt: "Beluga, Russian Standard, Belvedere..."),
+                  txt: "Beluga, Russian Standard, Belvedere...",
+                  category: categoryUidStrings.vodka),
             ),
             BrandCard(
                 imgPath: kGin,
                 headline: context.l10n.gin,
-                txt: "Hendricks, Bulldog, Nikka..."),
+                txt: "Hendricks, Bulldog, Nikka...",
+                category: categoryUidStrings.gin),
           ],
         ));
   }

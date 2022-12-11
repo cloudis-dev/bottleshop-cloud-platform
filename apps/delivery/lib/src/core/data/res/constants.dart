@@ -245,4 +245,7 @@ class UrlStrings {
 class categoryUidStrings {
   static const rum = 'Z1ytjymiF5bTYemzxXox';
   static const whiskey = 'yvv9lwUbzEzrIGsZUZ2R';
+  static const cognac = 'P77ijvW0x9AYvNbtwPc5';
+  static const vodka = 'IKn86eYTxNcmba2huYEV';
+  static const gin = 'I52jUD7D9sj6l0YsHbrk';
 }

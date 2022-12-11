@@ -20,25 +20,31 @@ class FavouriteBrandsSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BrandCard(
-                  imgPath: kWhiskeyBourbon,
-                  headline: context.l10n.whiskeyBourbon,
-                  txt: "Balvenie, Kilchoman, Glenmorangie..."),
+                imgPath: kWhiskeyBourbon,
+                headline: context.l10n.whiskeyBourbon,
+                txt: "Balvenie, Kilchoman, Glenmorangie...",
+                category: categoryUidStrings.whiskey,
+              ),
               BrandCard(
                   imgPath: kCognac,
                   headline: context.l10n.cognac,
-                  txt: "Mery Melrose, Hennessy, Lheraud..."),
+                  txt: "Mery Melrose, Hennessy, Lheraud...",
+                  category: categoryUidStrings.cognac),
               BrandCard(
                   imgPath: kRum,
                   headline: context.l10n.rum,
-                  txt: "Diplomatico, Centenario, A.H. Riise..."),
+                  txt: "Diplomatico, Centenario, A.H. Riise...",
+                  category: categoryUidStrings.rum),
               BrandCard(
                   imgPath: kVodka,
                   headline: context.l10n.vodka,
-                  txt: "Beluga, Russian Standard, Belvedere..."),
+                  txt: "Beluga, Russian Standard, Belvedere...",
+                  category: categoryUidStrings.vodka),
               BrandCard(
                   imgPath: kGin,
                   headline: context.l10n.gin,
-                  txt: "Hendricks, Bulldog, Nikka..."),
+                  txt: "Hendricks, Bulldog, Nikka...",
+                  category: categoryUidStrings.gin),
             ],
           )
         ],

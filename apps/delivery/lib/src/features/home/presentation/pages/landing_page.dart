@@ -49,7 +49,7 @@ class _LandingPage extends StatelessWidget {
               ? <Widget>[
                   SliverPersistentHeader(
                       pinned: true, floating: true, delegate: MyMobileHeader()),
-                  SliverToBoxAdapter(child: MobileBody()),
+                  MobileBody(),
                   SliverToBoxAdapter(
                     child: MobileFooter(),
                   )
@@ -57,7 +57,7 @@ class _LandingPage extends StatelessWidget {
               : <Widget>[
                   SliverPersistentHeader(
                       pinned: true, floating: true, delegate: MyHeader()),
-                  SliverToBoxAdapter(child: Body()),
+                  Body(),
                   SliverToBoxAdapter(
                     child: Footer(),
                   )

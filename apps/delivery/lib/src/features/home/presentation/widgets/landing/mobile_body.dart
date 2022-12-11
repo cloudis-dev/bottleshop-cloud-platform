@@ -12,7 +12,8 @@ class MobileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return SliverList(
+        delegate: SliverChildListDelegate([
       MainMobileSection(),
       FeatureMobileSection(),
       RumMobileSection(),
@@ -20,6 +21,6 @@ class MobileBody extends StatelessWidget {
       WhiskeyMobileSection(),
       FavouriteBrandsMobileSection(),
       DownloadAppMobileSection(),
-    ]);
+    ]));
   }
 }

@@ -12,7 +12,8 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return SliverList(
+        delegate: SliverChildListDelegate([
       MainSection(),
       FeatureSection(),
       RumSection(),
@@ -20,6 +21,6 @@ class Body extends StatelessWidget {
       WhiskeySection(),
       FavouriteBrandsSection(),
       DownloadAppSection(),
-    ]);
+    ]));
   }
 }
