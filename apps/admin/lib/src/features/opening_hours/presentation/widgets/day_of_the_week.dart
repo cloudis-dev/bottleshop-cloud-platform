@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_entry_model.dart';
 
 class DayOfTheWeek extends StatelessWidget {
   const DayOfTheWeek({
@@ -11,7 +11,7 @@ class DayOfTheWeek extends StatelessWidget {
   }) : super(key: key);
 
   final String day;
-  final OpeningHoursModel? hours;
+  final OpeningHoursEntryModel? hours;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +20,7 @@ class DayOfTheWeek extends StatelessWidget {
 
     return Center(
       child: Text(
-        (hours!.opening == '0' || hours!.closing == '0')
-            ? '$day: Closed'
-            : '$day:  ${hours!.opening} - ${hours!.closing}',
+        OpeningHoursEntryModel.showClosingTime(day, hours!),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           height: 2,

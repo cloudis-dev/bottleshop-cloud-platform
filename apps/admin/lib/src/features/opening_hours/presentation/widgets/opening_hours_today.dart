@@ -21,6 +21,11 @@ class OpeningHoursToday extends HookWidget {
     return 0;
   }
 
+  bool compareTimes(double nowTimeToDouble, String opening, String closing) {
+    return nowTimeToDouble >= convertTimeToDouble(opening) &&
+        nowTimeToDouble < convertTimeToDouble(closing);
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentTime = TimeOfDay.now();
@@ -31,20 +36,17 @@ class OpeningHoursToday extends HookWidget {
 
     return useProvider(openingHoursProvider).when(
       data: (value) {
-        final snapDoc = value.docs;
-        final todayOpeningHours = snapDoc[0][weekday];
-        final opening = todayOpeningHours[0];
-        final closing = todayOpeningHours[1];
+        final todayOpeningHours = value.toMap()[weekday]!;
+        final opening = todayOpeningHours.opening;
+        final closing = todayOpeningHours.closing;
 
         return Text(
-          nowTimeToDouble >= convertTimeToDouble(opening) &&
-                  nowTimeToDouble < convertTimeToDouble(closing)
+          compareTimes(nowTimeToDouble, opening, closing)
               ? 'Otvorene do: $closing'
               : 'Zatvorene',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: nowTimeToDouble >= convertTimeToDouble(opening) &&
-                    nowTimeToDouble < convertTimeToDouble(closing)
+            color: compareTimes(nowTimeToDouble, opening, closing)
                 ? Colors.green
                 : Colors.red,
           ),

@@ -15,28 +15,15 @@ class EditOpeningHoursCheckbox extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final openingHoursMap = useProvider(editHoursProvider).state;
-    var weAreOpen = false;
-
-    if (openingHoursMap![sortedWeekDays[rowIndex]]!.opening != '0' ||
-        openingHoursMap[sortedWeekDays[rowIndex]]!.closing != '0') {
-      weAreOpen = true;
-    }
+    final openingHours = useProvider(editedHoursProvider).state;
+    final today = openingHours?.today(rowIndex);
 
     return Checkbox(
       key: ValueKey(rowIndex),
-      value: weAreOpen,
+      value: OpeningHoursModel.isOpened(today),
       onChanged: (value) {
-        final newMap = Map.fromEntries(openingHoursMap.entries);
-
-        if (value == false) {
-          newMap[sortedWeekDays[rowIndex]] =
-              OpeningHoursModel(opening: '0', closing: '0');
-        } else {
-          newMap[sortedWeekDays[rowIndex]] =
-              OpeningHoursModel(opening: '88:88', closing: '88:88');
-        }
-        context.read(editHoursProvider).state = newMap;
+        OpeningHoursModel.newOpeningHours(
+            openingHours, value, context, rowIndex);
       },
     );
   }

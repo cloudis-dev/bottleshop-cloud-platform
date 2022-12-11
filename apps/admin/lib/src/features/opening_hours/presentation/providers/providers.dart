@@ -1,12 +1,15 @@
-import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final openingHoursProvider = StreamProvider((ref) =>
-    FirebaseFirestore.instance.collection('opening_hours').snapshots());
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_entry_model.dart';
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
+import 'package:bottleshop_admin/src/features/opening_hours/data/services/services.dart';
 
-final editHoursProvider =
-    StateProvider<Map<String, OpeningHoursModel>?>((ref) => null);
+final openingHoursProvider = StreamProvider<OpeningHoursModel>((ref) =>
+    openingHoursSnapshot.map((event) =>
+        OpeningHoursModel.fromMap(OpeningHoursEntryModel.fromMap(event))));
+
+final editedHoursProvider =
+    StateProvider.autoDispose<OpeningHoursModel?>((ref) => null);
 
 final sortedWeekDays = [
   'Monday',

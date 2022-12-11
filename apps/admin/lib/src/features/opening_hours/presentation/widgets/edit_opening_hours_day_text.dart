@@ -1,5 +1,6 @@
-import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+
+import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 
 class EditOpeningHoursDayText extends StatelessWidget {
   const EditOpeningHoursDayText({Key? key, required this.rowIndex})
