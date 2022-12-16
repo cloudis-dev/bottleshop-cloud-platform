@@ -37,6 +37,7 @@ export const createPaymentIntent = functions
         deliveryType: data.deliveryType,
         orderNote: data.orderNote || '',
         orderId,
+        promoCode: undefined,
       };
       return await stripe.paymentIntents.create({
         amount: +(getCartTotalPrice(cart) * 100).toFixed(0),

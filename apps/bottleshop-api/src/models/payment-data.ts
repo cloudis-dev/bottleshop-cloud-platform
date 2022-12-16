@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 
 import { DeliveryType } from './order-type';
+import { PromoCode } from './promo-code';
 
 export type PlatformType = 'web' | 'mobile';
 
@@ -22,6 +23,7 @@ export interface StripePaymentMetadata {
    * Represents the platform the transaction was created at.
    */
   platform: PlatformType;
+  promoCode: PromoCode | undefined;
 }
 
 export interface WebPaymentData extends PaymentData {

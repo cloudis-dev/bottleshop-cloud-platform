@@ -3,8 +3,10 @@ import * as functions from 'firebase-functions';
 import Stripe from 'stripe';
 
 admin.initializeApp(functions.config().firebase);
-const settings = { timestampInSnapshots: true };
-admin.firestore().settings(settings);
+admin.firestore().settings({
+  timestampInSnapshots: true,
+  ignoreUndefinedProperties: true,
+});
 
 export function createStripeClient(): Stripe {
   return new Stripe(functions.config().stripe.secret_key, {

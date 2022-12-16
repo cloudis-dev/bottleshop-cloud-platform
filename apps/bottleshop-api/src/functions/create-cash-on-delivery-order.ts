@@ -29,7 +29,13 @@ export const createCashOnDeliveryOrder = functions
       if (orderId) {
         functions.logger.log(`createCashOnDeliveryOrder: ${userUid} ${deliveryType} ${orderNote} ${orderId}`);
         const oId = await admin.firestore().runTransaction<string | undefined>(async () => {
-          const result = await createOrder(userUid, deliveryType as DeliveryType, parseInt(orderId, 10), orderNote);
+          const result = await createOrder(
+            userUid,
+            deliveryType as DeliveryType,
+            parseInt(orderId, 10),
+            orderNote,
+            undefined,
+          );
           if (result === undefined) {
             return undefined;
           }

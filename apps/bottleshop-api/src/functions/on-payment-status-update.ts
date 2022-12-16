@@ -44,6 +44,7 @@ export async function createOrder(
   deliveryType: DeliveryType,
   orderId: number,
   orderNote = '',
+  promoCode: PromoCode | undefined,
 ): Promise<[string, Cart] | undefined> {
   if (!userId || !deliveryType) {
     return Promise.reject('createOrder failed: userId or deliveryType undefined - bad request');
@@ -68,9 +69,12 @@ export async function createOrder(
   const ordersCollectionRef = admin.firestore().collection(ordersCollection);
   const timeStamp = admin.firestore.Timestamp.now();
 
+  const [promo_code, promo_code_value] =
+    promoCode === undefined ? [cart.promo_code, cart.promo_code_value] : [promoCode.code, promoCode.discount_value];
+
   const newOrder: Order = {
-    promo_code: cart.promo_code,
-    promo_code_value: cart.promo_code_value,
+    promo_code: promo_code,
+    promo_code_value: promo_code_value,
     id: orderId,
     cart: orderItems,
     created_at: timeStamp,
@@ -157,6 +161,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
             metadata.deliveryType,
             parseInt(metadata.orderId, 10),
             metadata.orderNote,
+            metadata.promoCode,
           );
           if (!result) {
             return undefined;
@@ -188,7 +193,13 @@ app.post('/', async (req: express.Request, res: express.Response) => {
           const { userId, deliveryType, orderNote, orderId } = pi.metadata;
           functions.logger.log(`payment_intent.succeeded: ${userId} ${deliveryType} ${orderNote} ${orderId}`);
           const oId = await admin.firestore().runTransaction<string | undefined>(async () => {
-            const result = await createOrder(userId, deliveryType as DeliveryType, parseInt(orderId, 10), orderNote);
+            const result = await createOrder(
+              userId,
+              deliveryType as DeliveryType,
+              parseInt(orderId, 10),
+              orderNote,
+              undefined,
+            );
             if (result === undefined) {
               return undefined;
             }

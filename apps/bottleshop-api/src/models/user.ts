@@ -2,7 +2,7 @@ import { Language } from '../constants/other';
 import { userFields } from '../constants/model-constants';
 
 export interface User {
-  [userFields.email]: string;
+  [userFields.email]: string | undefined;
   [userFields.name]: string;
   [userFields.uid]: string;
   [userFields.billingAddress]: Address;

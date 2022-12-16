@@ -12,6 +12,7 @@ import { createStripeClient } from '..';
 import { calculateOrderTypeFinalPrice, generateNewOrderId, getOrderTypeByCode } from '../utils/order-utils';
 import { getPromoByCode, isPromoValid } from '../utils/promo-code-utils';
 import { User } from '../models/user';
+import { PromoCode } from '../models/promo-code';
 
 export const createCheckoutSession = functions
   .region(tier1Region)
@@ -103,14 +104,10 @@ export const createCheckoutSession = functions
 
     // Promos check
 
-    const promoCodes = await (async () => {
+    const promoRes: [{ coupon: string }[], PromoCode | undefined] | undefined = await (async () => {
       if (data.promoCode !== undefined) {
         const promo = await getPromoByCode(data.promoCode);
-        if (promo === undefined) {
-          return undefined;
-        }
-
-        if (!isPromoValid(promo, cart)) {
+        if (promo === undefined || !isPromoValid(promo, cart)) {
           return undefined;
         }
 
@@ -120,18 +117,20 @@ export const createCheckoutSession = functions
           currency: 'eur',
         });
 
-        return [{ coupon: coupon.id }];
+        return [[{ coupon: coupon.id }], promo];
       }
 
-      return [];
+      return [[], undefined];
     })();
 
-    if (promoCodes === undefined) {
+    if (promoRes === undefined) {
       return new functions.https.HttpsError(
         'failed-precondition',
         'Promo code either does not exist, or the cart has not met preconditions.',
       );
     }
+
+    const [discounts, promoCode] = promoRes;
 
     const orderId = await generateNewOrderId();
     const metadata: StripePaymentMetadata = {
@@ -140,17 +139,18 @@ export const createCheckoutSession = functions
       platform: data.platform,
       deliveryType: data.deliveryType,
       orderNote: data.orderNote.trim() === '' ? data.orderNote.trim() : undefined,
+      promoCode: promoCode,
     };
 
-    // stripe.coupons.;
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      customer_email: user.email,
       line_items: productLineItems.concat(orderTypeLineItem),
       metadata: metadata as unknown as Stripe.MetadataParam,
       mode: 'payment',
       success_url: data.successUrl,
       cancel_url: data.cancelUrl,
-      discounts: promoCodes,
+      discounts: discounts,
     });
 
     return session.id;
