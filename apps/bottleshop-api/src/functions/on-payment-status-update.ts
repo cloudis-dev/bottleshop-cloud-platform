@@ -171,7 +171,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
           // First update stock counts and promo counts and after that delete cart items
           await Promise.all([
             updateProductStockCounts(session.metadata.userId),
-            updatePromoCodeUses(cart.promo_code || undefined),
+            updatePromoCodeUses(metadata.promoCode?.code || cart.promo_code || undefined),
           ]);
           await deleteCartItems(session.metadata.userId);
 
