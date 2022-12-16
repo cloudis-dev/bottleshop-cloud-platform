@@ -10,50 +10,35 @@
 //
 //
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:equatable/equatable.dart';
 
 class PromoCodeModel extends Equatable {
   static const String codeField = 'code';
   static const String remainingUsesCountField = 'remaining_uses_count';
-  static const String discountField = 'discount';
-  static const String productRefField = 'product_ref';
+  static const String discountField = 'discount_value';
 
-  final String? uid;
-  final String? code;
-  final int? remainingUsesCount;
-  final double? discount;
-  final String productUniqueId;
+  final String uid;
+  final String code;
+  final int remainingUsesCount;
+  final double discount;
 
   const PromoCodeModel({
     required this.uid,
     required this.code,
     required this.remainingUsesCount,
     required this.discount,
-    required this.productUniqueId,
   });
-
-  const PromoCodeModel.empty(this.productUniqueId)
-      : uid = null,
-        code = null,
-        remainingUsesCount = null,
-        discount = null;
 
   PromoCodeModel.fromJson(Map<String, dynamic> json, this.uid)
       : code = json[codeField],
         remainingUsesCount = json[remainingUsesCountField],
-        discount = json[discountField],
-        productUniqueId = (json[productRefField] as DocumentReference).id;
+        discount = json[discountField];
 
   Map<String, dynamic> toFirebaseJson() {
     return {
       codeField: code,
       remainingUsesCountField: remainingUsesCount,
       discountField: discount,
-      productRefField: FirebaseFirestore.instance
-          .collection(FirestoreCollections.productsCollection)
-          .doc(productUniqueId),
     };
   }
 
@@ -63,7 +48,6 @@ class PromoCodeModel extends Equatable {
         code,
         remainingUsesCount,
         discount,
-        productUniqueId,
       ];
 
   @override

@@ -75,7 +75,7 @@ void initializeLogging() {
         : '\n \u001b[38;5;240m Error: ${event.error} \n StackTrace: ${event.stackTrace}\u001b[0m';
 
     if (event.level.name == Level.SEVERE.name) {
-      if (kIsWeb) {
+      if (!kIsWeb) {
         FirebaseCrashlytics.instance.recordError(event.error, event.stackTrace);
       }
 

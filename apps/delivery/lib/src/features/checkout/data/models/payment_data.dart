@@ -51,16 +51,26 @@ class PaymentData extends Equatable {
   /// The url to redirect to in case of payment success.
   final String successUrl;
 
+  final String? promoCode;
+
   const PaymentData({
     required this.orderNote,
     required this.deliveryType,
     required this.platformType,
     required this.successUrl,
     required this.cancelUrl,
+    required this.promoCode,
   });
 
   @override
-  List<Object?> get props => [orderNote, deliveryType, platformType];
+  List<Object?> get props => [
+        orderNote,
+        deliveryType,
+        platformType,
+        successUrl,
+        cancelUrl,
+        promoCode,
+      ];
 
   @override
   bool get stringify => true;
@@ -71,7 +81,8 @@ class PaymentData extends Equatable {
       'deliveryType': deliveryType,
       'cancelUrl': cancelUrl,
       'successUrl': successUrl,
-      'platform': platformType.toString()
+      'platform': platformType.toString(),
+      if (promoCode != null) 'promoCode': promoCode,
     };
   }
 }

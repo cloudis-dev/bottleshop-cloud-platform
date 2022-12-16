@@ -27,14 +27,6 @@ class CartRepository {
     return cartContentService.streamSingle(id).map((event) => event != null);
   }
 
-  Future<bool> promoApplied(String promo) {
-    return cloudFunctionsService.addPromoCode(promo);
-  }
-
-  Future<bool> promoRemoved() {
-    return cloudFunctionsService.removePromoCode();
-  }
-
   Future<bool> isCartContentsAvailableInStock() async {
     final cartItems = await cartContentService.getCartItems();
     return Future.wait(

@@ -42,7 +42,6 @@ class DatabaseService<T> {
   Future<T?> getSingle(String id) async {
     final snap = await _db.collection(collection).doc(id).get();
     if (!snap.exists) return null;
-
     return fromMapAsync(snap.id, snap.data()!);
   }
 

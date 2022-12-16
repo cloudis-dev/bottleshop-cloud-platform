@@ -12,9 +12,12 @@
 
 import 'package:delivery/src/core/data/services/stripe_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/features/cart/data/models/promo_code_model.dart';
 import 'package:delivery/src/features/cart/data/repositories/cart_repository.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
+import 'package:delivery/src/features/checkout/presentation/view_models/delivery_option_state.dart';
+import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -92,3 +95,20 @@ class CheckoutState extends ChangeNotifier {
     }
   }
 }
+
+final deliveryOptionsStateProvider =
+    StateNotifierProvider.autoDispose<DeliveryOptionState, DeliveryOption?>(
+  (ref) => DeliveryOptionState(),
+  name: 'deliveryOptionsStateProvider',
+);
+
+final remarksTextEditCtrlProvider = Provider.autoDispose<TextEditingController>(
+  (ref) {
+    final ctrl = TextEditingController();
+    ref.onDispose(() => ctrl.dispose());
+    return ctrl;
+  },
+);
+
+final currentAppliedPromoProvider =
+    StateProvider.autoDispose<PromoCodeModel?>((ref) => null);

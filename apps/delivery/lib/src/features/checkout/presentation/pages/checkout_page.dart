@@ -11,17 +11,16 @@
 //
 
 import 'package:dartz/dartz.dart';
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
-import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
 import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout_failure.dart';
 import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout_success.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
-import 'package:delivery/src/features/checkout/presentation/widgets/views/checkout_done_view.dart';
+import 'package:delivery/src/features/checkout/presentation/widgets/views/remaining_details_view.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/views/shipping_details_view.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
@@ -31,6 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
 import 'package:stripe_checkout/stripe_checkout.dart';
 
@@ -58,11 +58,10 @@ class _CheckoutPageView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentUser = ref.watch(currentUserProvider);
-    final currentLocale = ref.watch(currentLocaleProvider);
-    final paymentDataNotifier = useValueNotifier<PaymentData?>(null, const []);
-    final checkoutDoneMessageNotifier =
-        useValueNotifier<String?>(null, const []);
+    // This is to not dispose the state
+    ref.watch(deliveryOptionsStateProvider);
+    ref.watch(currentAppliedPromoProvider);
+    ref.watch(remarksTextEditCtrlProvider);
 
     final pageCtrl = usePageController(keys: const []);
 
@@ -70,118 +69,28 @@ class _CheckoutPageView extends HookConsumerWidget {
       controller: pageCtrl,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        Loader(
-          inAsyncCall: ref.watch(isRedirectingProvider),
-          child: ShippingDetailsView(
-            onNextPage: (paymentData) async {
-              ref.read(isRedirectingProvider.state).state = true;
-              await getCheckout(context, ref);
-              ref.read(isRedirectingProvider.state).state = false;
-            },
-            // _logger.info('payment data: ${paymentData.toString()}');
-            // paymentDataNotifier.value = paymentData;
-            // if (kIsWeb) {
-            //   ref.read(isRedirectingProvider.notifier).redirecting = true;
-            //   if (paymentData.deliveryType == kOrderTypeCashOnDelivery) {
-            //     final orderId = await ref
-            //         .read(cloudFunctionsProvider)
-            //         .createCashOnDeliveryOrder(paymentData);
-            //     _logger.info('orderID: $orderId');
-            //     ref.read(isRedirectingProvider.notifier).redirecting = false;
-            //     if (orderId != null) {
-            //       checkoutDoneMessageNotifier.value =
-            //           'Order #$orderId confirmed';
-            //
-            //       showSimpleNotification(
-            //         Text(context.l10n.thankYouForYourOrder),
-            //         position: NotificationPosition.bottom,
-            //         context: context,
-            //       );
-            //
-            //       await pageCtrl.animateToPage(
-            //         2,
-            //         duration: const Duration(milliseconds: 300),
-            //         curve: Curves.easeIn,
-            //       );
-            //     } else {
-            //       showSimpleNotification(
-            //         Text(context.l10n.error),
-            //         position: NotificationPosition.bottom,
-            //         context: context,
-            //       );
-            //     }
-            //   } else {
-            //     final sessionRequest = StripeSessionRequest(
-            //       userId: currentUser!.uid,
-            //       domain: Uri.base.origin,
-            //       locale: currentLocale.languageCode,
-            //       deliveryType: paymentData.deliveryType,
-            //       orderNote: paymentData.orderNote,
-            //     );
-            //     final sessionId = await ref
-            //         .read(cloudFunctionsProvider)
-            //         .createStripePriceIds(sessionRequest);
-            //     _logger.info('sessionID: $sessionId');
-            //     await redirectToCheckout(sessionId);
-            //   }
-            // } else {
-            // await pageCtrl.animateToPage(
-            //   1,
-            //   duration: const Duration(milliseconds: 300),
-            //   curve: Curves.easeIn,
-            // );
-            // }
-            onBackButton: () {
-              ref.read(navigationProvider).popPage(context);
-            },
+        ShippingDetailsView(
+          onNextPage: () => pageCtrl.animateToPage(
+            1,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeIn,
+          ),
+          onBackButton: () {
+            ref.read(navigationProvider).popPage(context);
+          },
+        ),
+        RemainingDetailsView(
+          onNextPage: () async {
+            ref.read(isRedirectingProvider.state).state = true;
+            await getCheckout(context, ref);
+            ref.read(isRedirectingProvider.state).state = false;
+          },
+          onBackButton: () => pageCtrl.animateToPage(
+            0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeIn,
           ),
         ),
-        ValueListenableBuilder<PaymentData?>(
-            valueListenable: paymentDataNotifier,
-            builder: (context, paymentData, _) => const SizedBox.shrink()
-            // paymentData == null
-            //     ? const SizedBox.shrink()
-            // const PaymentScreen(),
-            // PaymentMethodView(
-            //         paymentData,
-            //         onBackButton: () {
-            //           pageCtrl.animateToPage(
-            //             0,
-            //             duration: const Duration(milliseconds: 300),
-            //             curve: Curves.easeIn,
-            //           );
-            //         },
-            //         onCheckoutDone: (checkoutDoneMsg) {
-            //           checkoutDoneMessageNotifier.value = checkoutDoneMsg;
-            //
-            //           showSimpleNotification(
-            //             Text(context.l10n.thankYouForYourOrder),
-            //             position: NotificationPosition.bottom,
-            //             context: context,
-            //           );
-            //
-            //           pageCtrl.animateToPage(
-            //             2,
-            //             duration: const Duration(milliseconds: 300),
-            //             curve: Curves.easeIn,
-            //           );
-            //         },
-            //       ),
-            ),
-        ValueListenableBuilder<String?>(
-          valueListenable: checkoutDoneMessageNotifier,
-          builder: (context, checkoutDoneMessage, _) => checkoutDoneMessage ==
-                  null
-              ? const SizedBox.shrink()
-              : CheckoutDoneView(
-                  checkoutDoneMessage,
-                  onClose: () {
-                    ref
-                        .read(navigationProvider)
-                        .replaceRootStackWith([AppPageNode(page: HomePage())]);
-                  },
-                ),
-        )
       ],
     );
 
@@ -199,20 +108,53 @@ class _CheckoutPageView extends HookConsumerWidget {
       final cancelUrl =
           "${Uri.base.origin}/${HomePage.pagePathBase}/${StripeCheckoutFailurePage.pagePathBase}";
 
-      final sessionId =
-          await ref.read(cloudFunctionsProvider).createCheckoutSession(
+      final deliveryType =
+          ref.read(deliveryOptionsStateProvider.notifier).label;
+
+      if (deliveryType == null) {
+        showSimpleNotification(
+          Text(context.l10n.errorGeneric),
+          position: NotificationPosition.top,
+          duration: const Duration(seconds: 3),
+          slideDismissDirection: DismissDirection.horizontal,
+          context: context,
+        );
+      } else {
+        final orderNote = ref.read(remarksTextEditCtrlProvider).text;
+        final promo = ref.read(currentAppliedPromoProvider)?.code;
+        ref.read(currentLocaleProvider);
+
+        final sessionId = await ref
+            .read(cloudFunctionsProvider)
+            .createCheckoutSession(
+              PaymentData(
                 successUrl: successUrl,
                 cancelUrl: cancelUrl,
-              );
-      final result = await redirectToCheckout(
-        context: context,
-        sessionId: sessionId,
-        publishableKey: AppEnvironment.stripePublishableKey,
-        successUrl: successUrl,
-        canceledUrl: cancelUrl,
-      );
-      // TODO: handle result
-      print(result);
+                deliveryType: deliveryType,
+                orderNote: orderNote,
+                platformType: kIsWeb ? PlatformType.web : PlatformType.mobile,
+                promoCode: promo,
+              ),
+            );
+
+        if (sessionId == null) {
+          showSimpleNotification(
+            Text(context.l10n.errorGeneric),
+            position: NotificationPosition.top,
+            duration: const Duration(seconds: 3),
+            slideDismissDirection: DismissDirection.horizontal,
+            context: context,
+          );
+        } else {
+          await redirectToCheckout(
+            context: context,
+            sessionId: sessionId,
+            publishableKey: AppEnvironment.stripePublishableKey,
+            successUrl: successUrl,
+            canceledUrl: cancelUrl,
+          );
+        }
+      }
     } else {
       throw UnimplementedError(
           "Payments not yet implemented for mobile platform");

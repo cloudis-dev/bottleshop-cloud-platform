@@ -40,19 +40,16 @@ class CloudFunctionsService {
         .httpsCallable(FirebaseCallableFunctions.createPaymentIntent);
   }
 
-  Future<String> createCheckoutSession({
-    required String successUrl,
-    required String cancelUrl,
-  }) async {
-    final response = await _firebaseFunctions
-        .httpsCallable(FirebaseCallableFunctions.createCheckoutSession)
-        .call<dynamic>(
-      {
-        "cancel_url": cancelUrl,
-        "success_url": successUrl,
-      },
-    );
-    return response.data;
+  Future<String?> createCheckoutSession(PaymentData paymentData) async {
+    try {
+      final response = await _firebaseFunctions
+          .httpsCallable(FirebaseCallableFunctions.createCheckoutSession)
+          .call<dynamic>(paymentData.toMap());
+      return response.data;
+    } catch (err, stack) {
+      _logger.severe("Failed to create checkout session $err", stack);
+      return null;
+    }
   }
 
   Future<String> createStripePriceIds(StripeSessionRequest sessionReq) async {
@@ -120,19 +117,6 @@ class CloudFunctionsService {
     }
   }
 
-  Future<bool> addPromoCode(String promoCode) async {
-    try {
-      final response = await _firebaseFunctions
-          .httpsCallable(FirebaseCallableFunctions.addPromoCode)
-          .call<dynamic>(<String, dynamic>{'promo': promoCode});
-      _logger.fine('response: ${response.data['applied']}');
-      return response.data['applied'];
-    } catch (e, stack) {
-      _logger.severe('unable to add promo', e, stack);
-      return false;
-    }
-  }
-
   Future<CartStatus> validateCart() async {
     try {
       final response = await _firebaseFunctions
@@ -151,19 +135,6 @@ class CloudFunctionsService {
     } catch (e, stack) {
       _logger.severe('unable to validate cart', e, stack);
       return CartStatus.error;
-    }
-  }
-
-  Future<bool> removePromoCode() async {
-    try {
-      final response = await _firebaseFunctions
-          .httpsCallable(FirebaseCallableFunctions.removePromoCode)
-          .call<dynamic>((<String, dynamic>{'promo': false}));
-      _logger.fine('response: ${response.data['applied']}');
-      return response.data['applied'];
-    } catch (e, stack) {
-      _logger.severe('unable to remove promo', e, stack);
-      return false;
     }
   }
 }
