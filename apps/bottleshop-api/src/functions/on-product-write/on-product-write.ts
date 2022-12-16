@@ -1,10 +1,6 @@
 import * as functions from 'firebase-functions';
 
-import { DocumentChange } from '../../models/document-change';
-import {
-  getDocumentChange,
-  hasFieldChanged,
-} from '../../utils/document-snapshot-utils';
+import { DocumentChange, getDocumentChange, hasFieldChanged } from '../../utils/document-snapshot-utils';
 import { onProductDeleted } from './nested-functions/on-product-deleted';
 import { onQuantityUpdated } from './nested-functions/on-quantity-updated';
 import { onUpdateAlgolia } from './nested-functions/on-update-algolia';

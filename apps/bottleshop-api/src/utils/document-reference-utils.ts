@@ -4,13 +4,13 @@
  * @returns
  */
 export const getEntityByRef = async <T>(
-  userDocRef: FirebaseFirestore.DocumentReference | undefined,
+  ref: FirebaseFirestore.DocumentReference | undefined,
 ): Promise<T | undefined> => {
-  if (userDocRef === undefined) {
+  if (ref === undefined) {
     return undefined;
   }
 
-  const doc = await userDocRef.get();
+  const doc = await ref.get();
 
   if (doc.data() === undefined) {
     return undefined;

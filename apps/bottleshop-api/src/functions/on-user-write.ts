@@ -2,8 +2,7 @@ import { CallableContext } from 'firebase-functions/lib/providers/https';
 import * as functions from 'firebase-functions';
 import Stripe from 'stripe';
 
-import { DocumentChange } from '../models/document-change';
-import { getDocumentChange } from '../utils/document-snapshot-utils';
+import { DocumentChange, getDocumentChange } from '../utils/document-snapshot-utils';
 import { getEntityByRef } from '../utils/document-reference-utils';
 import { tier1Region } from '../constants/other';
 import { User } from '../models/user';

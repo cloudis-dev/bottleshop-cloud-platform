@@ -81,3 +81,8 @@ export const categoryFields = {
   uid: 'uid',
   subcategoriesRefs: 'subcategories_refs',
 } as const;
+
+export const promoCodeFields = {
+  stripeCouponId: 'stripe_coupon_id',
+  discountValue: 'discount_value',
+} as const;
