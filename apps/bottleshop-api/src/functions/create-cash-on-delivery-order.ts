@@ -35,6 +35,7 @@ export const createCashOnDeliveryOrder = functions
             parseInt(orderId, 10),
             orderNote,
             undefined,
+            undefined,
           );
           if (result === undefined) {
             return undefined;

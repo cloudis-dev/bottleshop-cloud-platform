@@ -91,7 +91,7 @@ export const createCheckoutSession = functions
                       case 'sk':
                         return orderType.localized_name.sk;
                       default:
-                        return orderType.code;
+                        return orderType.name;
                     }
                   })(),
                   images: [],
@@ -139,7 +139,8 @@ export const createCheckoutSession = functions
       platform: data.platform,
       deliveryType: data.deliveryType,
       orderNote: data.orderNote.trim() === '' ? data.orderNote.trim() : undefined,
-      promoCode: promoCode,
+      promoCode: promoCode?.code,
+      promoDiscountValue: promoCode?.discount_value,
     };
 
     const session = await stripe.checkout.sessions.create({

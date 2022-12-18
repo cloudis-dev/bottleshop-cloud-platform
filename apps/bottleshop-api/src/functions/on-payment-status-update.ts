@@ -44,7 +44,8 @@ export async function createOrder(
   deliveryType: DeliveryType,
   orderId: number,
   orderNote = '',
-  promoCode: PromoCode | undefined,
+  promoCode: { code: string; discountValue: number } | undefined,
+  total_paid: number | undefined,
 ): Promise<[string, Cart] | undefined> {
   if (!userId || !deliveryType) {
     return Promise.reject('createOrder failed: userId or deliveryType undefined - bad request');
@@ -70,7 +71,7 @@ export async function createOrder(
   const timeStamp = admin.firestore.Timestamp.now();
 
   const [promo_code, promo_code_value] =
-    promoCode === undefined ? [cart.promo_code, cart.promo_code_value] : [promoCode.code, promoCode.discount_value];
+    promoCode === undefined ? [cart.promo_code, cart.promo_code_value] : [promoCode.code, promoCode.discountValue];
 
   const newOrder: Order = {
     promo_code: promo_code,
@@ -83,7 +84,7 @@ export async function createOrder(
     order_type_ref: orderTypeRef,
     status_step_id: 0,
     status_timestamps: [timeStamp],
-    total_paid: getCartTotalPrice(cart),
+    total_paid: total_paid ?? getCartTotalPrice(cart),
     oasis_synced: false,
   };
   const created = await ordersCollectionRef.add(newOrder);
@@ -161,7 +162,13 @@ app.post('/', async (req: express.Request, res: express.Response) => {
             metadata.deliveryType,
             parseInt(metadata.orderId, 10),
             metadata.orderNote,
-            metadata.promoCode,
+            metadata.promoCode === undefined || metadata.promoDiscountValue === undefined
+              ? undefined
+              : {
+                  code: metadata.promoCode,
+                  discountValue: Number(metadata.promoDiscountValue),
+                },
+            session.amount_total / 100.0,
           );
           if (!result) {
             return undefined;
@@ -171,7 +178,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
           // First update stock counts and promo counts and after that delete cart items
           await Promise.all([
             updateProductStockCounts(session.metadata.userId),
-            updatePromoCodeUses(metadata.promoCode?.code || cart.promo_code || undefined),
+            updatePromoCodeUses(metadata.promoCode || cart.promo_code || undefined),
           ]);
           await deleteCartItems(session.metadata.userId);
 
@@ -198,6 +205,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
               deliveryType as DeliveryType,
               parseInt(orderId, 10),
               orderNote,
+              undefined,
               undefined,
             );
             if (result === undefined) {
