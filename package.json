@@ -23,7 +23,7 @@
     "global": "^4.4.0",
     "luxon": "^2.4.0",
     "remove-accents": "^0.4.2",
-    "stripe": "^9.2.0",
+    "stripe": "^11.4.0",
     "tslib": "~2.4.0"
   },
   "devDependencies": {
