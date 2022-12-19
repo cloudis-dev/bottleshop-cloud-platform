@@ -11,7 +11,7 @@ admin.firestore().settings({
 export function createStripeClient(): Stripe {
   return new Stripe(functions.config().stripe.secret_key, {
     typescript: true,
-    apiVersion: '2020-08-27',
+    apiVersion: '2022-11-15',
   });
 }
 
