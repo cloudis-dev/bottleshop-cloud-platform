@@ -6,7 +6,7 @@ import { Cart } from '../../../models/cart';
 import { cartCollection, usersCollection } from '../../../constants/collections';
 import { cartFields } from '../../../constants/model-constants';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
-import { getPromoByCode, isPromoValid } from '../../../utils/promo-code-utils';
+import { getPromoByCode, isPromoValidV1 } from '../../../utils/promo-code-utils';
 import { PromoCode } from '../../../models/promo-code';
 import { tempCartId, tier1Region } from '../../../constants/other';
 
@@ -22,7 +22,7 @@ export const isPromoCodeValid = async (cart: Cart): Promise<boolean> => {
   if (!promo) {
     return false;
   }
-  return isPromoValid(promo, cart);
+  return isPromoValidV1(promo, cart);
 };
 
 function addPromoToCart(promo: PromoCode, cart: Cart): Cart {
@@ -86,7 +86,7 @@ export const applyPromoCode = functions
               .doc(tempCartId);
             const cart = await getEntityByRef<Cart>(cartRef);
             if (cart) {
-              if (isPromoValid(promo, cart)) {
+              if (isPromoValidV1(promo, cart)) {
                 const newCart = addPromoToCart(promo, cart);
                 await cartRef.set(newCart);
                 return { applied: true };

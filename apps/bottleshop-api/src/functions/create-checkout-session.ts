@@ -1,16 +1,15 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import Stripe from 'stripe';
-import { tempCartId, tier1Region } from '../constants/other';
-import { cartCollection, usersCollection } from '../constants/collections';
-import { Cart } from '../models/cart';
+import { tier1Region } from '../constants/other';
+import { usersCollection } from '../constants/collections';
 import { getEntityByRef } from '../utils/document-reference-utils';
 import { areProductsAvailableForPurchase, getCartItems } from '../utils/cart-utils';
 import { calculateProductFinalPrice, getProductImageUrl } from '../utils/product-utils';
 import { PaymentData, StripePaymentMetadata } from '../models/payment-data';
 import { createStripeClient } from '..';
 import { calculateOrderTypeFinalPrice, generateNewOrderId, getOrderTypeByCode } from '../utils/order-utils';
-import { getPromoByCode, isPromoValid } from '../utils/promo-code-utils';
+import { getPromoByCode, isPromoValidV2 } from '../utils/promo-code-utils';
 import { User } from '../models/user';
 import { PromoCode } from '../models/promo-code';
 
@@ -30,18 +29,7 @@ export const createCheckoutSession = functions
 
     // Cart check
 
-    const cartRef = admin
-      .firestore()
-      .collection(usersCollection)
-      .doc(userUid)
-      .collection(cartCollection)
-      .doc(tempCartId);
-
-    const [cart, cartItems] = await Promise.all([getEntityByRef<Cart>(cartRef), getCartItems(userUid)]);
-
-    if (cart === undefined) {
-      return new functions.https.HttpsError('failed-precondition', `No cart found for user ${userUid}`);
-    }
+    const cartItems = await getCartItems(userUid);
 
     // Products check
 
@@ -107,7 +95,7 @@ export const createCheckoutSession = functions
     const promoRes: [{ coupon: string }[], PromoCode | undefined] | undefined = await (async () => {
       if (data.promoCode !== undefined) {
         const promo = await getPromoByCode(data.promoCode);
-        if (promo === undefined || !isPromoValid(promo, cart)) {
+        if (promo === undefined || !isPromoValidV2(promo, orderType, cartItems)) {
           return undefined;
         }
 
