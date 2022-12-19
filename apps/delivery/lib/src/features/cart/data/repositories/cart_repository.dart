@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
@@ -13,11 +14,9 @@ class CartRepository {
   final CloudFunctionsService cloudFunctionsService;
 
   final CartContentService cartContentService;
-  final DatabaseService<CartModel> cartService;
   final DatabaseService<ProductModel> productsService;
 
   CartRepository({
-    required this.cartService,
     required this.cartContentService,
     required this.productsService,
     required this.cloudFunctionsService,
@@ -42,7 +41,7 @@ class CartRepository {
 
   Future<void> add(String id, int quantity) async {
     _logger.fine('adding id $id QTY: $quantity');
-    final ref = cartService.db
+    final ref = FirebaseFirestore.instance
         .collection(FirestoreCollections.productsCollection)
         .doc(id);
     final cartItem = await cartContentService.getSingle(id);
@@ -83,14 +82,7 @@ class CartRepository {
     return cartContentService.updateData(id, record.toMap());
   }
 
-  Stream<List<CartItemModel>> get cartContent =>
-      cartContentService.getCartItemsStream();
-
-  Stream<CartModel> get cart => cartService
-      .streamSingle(FirestoreCollections.userCartId)
-      .map((event) => event ?? const CartModel.empty());
-
-  Future<CartModel?> getCartModel() {
-    return cartService.getSingle(FirestoreCollections.userCartId);
-  }
+  Stream<CartModel> get streamCart => cartContentService.streamCartItems().map(
+        (event) => CartModel(cartItems: event),
+      );
 }

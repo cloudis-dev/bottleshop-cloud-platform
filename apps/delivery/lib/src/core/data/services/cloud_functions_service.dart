@@ -13,10 +13,7 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
-import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
-import 'package:delivery/src/features/checkout/data/models/stripe_session_request.dart';
-import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger((CloudFunctionsService).toString());
@@ -35,11 +32,6 @@ class CloudFunctionsService {
     return res.data['success'] as bool;
   }
 
-  HttpsCallable createPaymentIntent() {
-    return _firebaseFunctions
-        .httpsCallable(FirebaseCallableFunctions.createPaymentIntent);
-  }
-
   Future<String?> createCheckoutSession(PaymentData paymentData) async {
     try {
       final response = await _firebaseFunctions
@@ -49,21 +41,6 @@ class CloudFunctionsService {
     } catch (err, stack) {
       _logger.severe("Failed to create checkout session $err", stack);
       return null;
-    }
-  }
-
-  Future<String> createStripePriceIds(StripeSessionRequest sessionReq) async {
-    try {
-      final response = await _firebaseFunctions
-          .httpsCallable(FirebaseCallableFunctions.createStripePriceIds)
-          .call<dynamic>(sessionReq.toMap());
-      _logger.info('response: ${response.data}');
-      var responseData = response.data;
-      String id = responseData['id'];
-      return id;
-    } catch (e, stack) {
-      _logger.severe('Failed to create stripe customer', e, stack);
-      return '';
     }
   }
 
@@ -77,64 +54,6 @@ class CloudFunctionsService {
     } catch (e, stack) {
       _logger.severe('Failed to create stripe customer', e, stack);
       return null;
-    }
-  }
-
-  Future<String?> createCashOnDeliveryOrder(PaymentData paymentData) async {
-    try {
-      final response = await _firebaseFunctions
-          .httpsCallable(FirebaseCallableFunctions.createCashOnDeliveryOrder)
-          .call<dynamic>(paymentData.toMap());
-      _logger.fine('createOrder: ${response.data}');
-      return response.data['orderId'];
-    } catch (e, stack) {
-      _logger.severe('Failed to create cash on delivery order', e, stack);
-      return null;
-    }
-  }
-
-  Future<void> setShippingFee(DeliveryOption? deliveryOption) async {
-    try {
-      final shippingFee = ChargeShipping.fromDeliveryOption(deliveryOption);
-      final response = await _firebaseFunctions
-          .httpsCallable(FirebaseCallableFunctions.setShippingFee)
-          .call<dynamic>(shippingFee.toMap());
-      _logger.fine('chargeShipping: ${response.data}');
-    } catch (e, stack) {
-      _logger.severe('unable to set shipping fee', e, stack);
-    }
-  }
-
-  Future<void> removeShippingFee() async {
-    _logger.fine('removeShippingFee invoked');
-    try {
-      final response = await _firebaseFunctions
-          .httpsCallable(FirebaseCallableFunctions.removeShippingFee)
-          .call<dynamic>({'shipping': false});
-      _logger.fine('removeShipping: ${response.data}');
-    } catch (e, stack) {
-      _logger.severe('unable to remove shipping fee', e, stack);
-    }
-  }
-
-  Future<CartStatus> validateCart() async {
-    try {
-      final response = await _firebaseFunctions
-          .httpsCallable(FirebaseCallableFunctions.validateCart)
-          .call<dynamic>();
-      switch (response.data['status']) {
-        case 'ok':
-          return CartStatus.ok;
-        case 'invalid-promo':
-          return CartStatus.invalidPromo;
-        case 'unavailable-products':
-          return CartStatus.unavailableProducts;
-        default:
-          return CartStatus.error;
-      }
-    } catch (e, stack) {
-      _logger.severe('unable to validate cart', e, stack);
-      return CartStatus.error;
     }
   }
 }

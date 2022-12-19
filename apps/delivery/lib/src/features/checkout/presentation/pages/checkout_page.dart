@@ -59,7 +59,7 @@ class _CheckoutPageView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // This is to not dispose the state
-    ref.watch(deliveryOptionsStateProvider);
+    ref.watch(orderTypeStateProvider);
     ref.watch(currentAppliedPromoProvider);
     ref.watch(remarksTextEditCtrlProvider);
 
@@ -109,7 +109,7 @@ class _CheckoutPageView extends HookConsumerWidget {
           "${Uri.base.origin}/${HomePage.pagePathBase}/${StripeCheckoutFailurePage.pagePathBase}";
 
       final deliveryType =
-          ref.read(deliveryOptionsStateProvider.notifier).label;
+          ref.read(orderTypeStateProvider)?.deliveryOption.toString();
 
       if (deliveryType == null) {
         showSimpleNotification(
@@ -122,7 +122,7 @@ class _CheckoutPageView extends HookConsumerWidget {
       } else {
         final orderNote = ref.read(remarksTextEditCtrlProvider).text;
         final promo = ref.read(currentAppliedPromoProvider)?.code;
-        ref.read(currentLocaleProvider);
+        final language = ref.read(sharedPreferencesProvider).getAppLanguage();
 
         final sessionId = await ref
             .read(cloudFunctionsProvider)
@@ -134,6 +134,7 @@ class _CheckoutPageView extends HookConsumerWidget {
                 orderNote: orderNote,
                 platformType: kIsWeb ? PlatformType.web : PlatformType.mobile,
                 promoCode: promo,
+                locale: language.name,
               ),
             );
 

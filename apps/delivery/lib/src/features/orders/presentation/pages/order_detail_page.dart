@@ -230,7 +230,7 @@ class _Body extends HookConsumerWidget {
                   const SizedBox(),
                   Text(
                     FormattingUtils.getPriceNumberString(
-                      order.orderType.shippingFeeWithVat,
+                      order.orderType.feeWithVat,
                       withCurrency: true,
                     ),
                     style: Theme.of(context).textTheme.subtitle2,
@@ -244,7 +244,7 @@ class _Body extends HookConsumerWidget {
         ExpansionTile(
           tilePadding: EdgeInsets.zero,
           childrenPadding: const EdgeInsets.only(bottom: 8),
-          initiallyExpanded: false,
+          initiallyExpanded: true,
           leading: const Icon(
             Icons.notes_outlined,
           ),

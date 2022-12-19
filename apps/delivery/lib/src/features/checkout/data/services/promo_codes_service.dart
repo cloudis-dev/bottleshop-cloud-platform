@@ -6,7 +6,6 @@ DatabaseService<PromoCodeModel> promoCodeDbService =
     DatabaseService<PromoCodeModel>(
   FirestoreCollections.promoCodesCollection,
   fromMapAsync: (id, data) async {
-    print(data);
     return PromoCodeModel.fromJson(data, id);
   },
 );

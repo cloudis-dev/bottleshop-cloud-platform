@@ -1,23 +1,14 @@
-import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/views/shipping_details_view.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DeliveryOptionState extends StateNotifier<DeliveryOption?>
+class OrderTypeState extends StateNotifier<OrderTypeModel?>
     with DeliveryAvailableForUserCheck {
-  DeliveryOptionState() : super(null);
+  OrderTypeState() : super(null);
 
-  void selectDeliveryOption(DeliveryOption newOption) {
-    if (newOption != state) {
-      state = newOption;
+  void selectOrderType(OrderTypeModel newOrderType) {
+    if (newOrderType != state) {
+      state = newOrderType;
     }
-  }
-
-  String? get label {
-    return ChargeShipping.fromDeliveryOption(state).shipping;
-  }
-
-  bool get paymentRequired {
-    return state != DeliveryOption.cashOnDelivery;
   }
 }

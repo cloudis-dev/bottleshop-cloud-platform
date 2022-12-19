@@ -1,16 +1,13 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/additional_remarks_tile.dart';
-import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/promo_code_tile.dart';
+import 'package:delivery/src/features/checkout/presentation/widgets/templates/cart_view_template.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
-
-final _logger = Logger((RemainingDetailsView).toString());
 
 class RemainingDetailsView extends HookConsumerWidget {
   final Future<void> Function() onNextPage;
@@ -26,21 +23,11 @@ class RemainingDetailsView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollCtrl = useScrollController();
 
-    return Loader(
-      inAsyncCall: ref.watch(isRedirectingProvider),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.l10n.furtherDetails),
-          leading: BackButton(onPressed: onBackButton),
-        ),
-        body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom + 120),
-              padding: const EdgeInsets.only(bottom: 30),
-              child: CupertinoScrollbar(
+    return ref.watch(cartProvider).when(
+          data: (cart) => Loader(
+            inAsyncCall: ref.watch(isRedirectingProvider),
+            child: CheckoutViewTemplate(
+              contentBuilder: (_) => CupertinoScrollbar(
                 controller: scrollCtrl,
                 thumbVisibility: true,
                 child: SingleChildScrollView(
@@ -52,22 +39,25 @@ class RemainingDetailsView extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
-                    children: const <Widget>[
-                      AdditionalRemarksTile(),
-                      PromoCodeTile(),
+                    children: <Widget>[
+                      const AdditionalRemarksTile(),
+                      PromoCodeTile(cart: cart),
                     ],
                   ),
                 ),
               ),
+              actionCallback: (_) => onNextPage,
+              pageTitle: context.l10n.furtherDetails,
+              actionButtonText: context.l10n.proceedToCheckout,
+              onBackButton: onBackButton,
             ),
-            CheckoutTile(
-              showShipping: true,
-              actionLabel: context.l10n.proceedToCheckout,
-              actionCallback: onNextPage,
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+          loading: () => const Loader(),
+          error: (err, stack) {
+            return Center(
+              child: Text(context.l10n.error),
+            );
+          },
+        );
   }
 }

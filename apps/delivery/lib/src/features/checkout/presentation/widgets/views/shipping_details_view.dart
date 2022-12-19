@@ -11,16 +11,13 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/account/presentation/widgets/account_card.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
-import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
-import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/delivery_option_tile.dart';
+import 'package:delivery/src/features/checkout/presentation/widgets/templates/cart_view_template.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
@@ -188,7 +185,8 @@ class ShippingDetailsView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedDeliveryOption = ref.watch(deliveryOptionsStateProvider);
+    final selectedDeliveryOption = ref
+        .watch(orderTypeStateProvider.select((value) => value?.deliveryOption));
     final scrollController = useScrollController();
 
     useEffect(() {
@@ -198,83 +196,55 @@ class ShippingDetailsView extends HookConsumerWidget {
       return () => {};
     }, const []);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          context.l10n.delivery,
-        ),
-        leading: BackButton(onPressed: onBackButton),
-      ),
-      body: ref.watch(currentUserAsStream).when(
-            data: (user) {
-              return Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom + 120),
-                    padding: const EdgeInsets.only(bottom: 30),
-                    child: CupertinoScrollbar(
-                      controller: scrollController,
-                      thumbVisibility: true,
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        controller: scrollController,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 30),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            ListView.separated(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              primary: false,
-                              itemCount: 2,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(height: 5),
-                              itemBuilder: (context, index) {
-                                switch (index) {
-                                  case 0:
-                                    return DeliveryOptionTile(user: user);
-                                  default:
-                                    return const AccountCard(
-                                      showBirthday: false,
-                                    );
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  CheckoutTile(
-                    showShipping: true,
-                    actionLabel: ref
-                            .read(deliveryOptionsStateProvider.notifier)
-                            .paymentRequired
-                        ? context.l10n.proceedToCheckout
-                        : context.l10n.confirmOrder,
-                    actionCallback: selectedDeliveryOption != null &&
-                            ref
-                                .read(deliveryOptionsStateProvider.notifier)
-                                .canProceed(user, selectedDeliveryOption)
-                        ? onNextPage
-                        : null,
-                  ),
-                ],
-              );
-            },
-            loading: () => const Loader(),
-            error: (err, stack) {
-              _logger.severe('Failed to stream current user', err, stack);
-              return Center(
-                child: Text(context.l10n.error),
-              );
-            },
+    return CheckoutViewTemplate(
+      contentBuilder: (user) => CupertinoScrollbar(
+        controller: scrollController,
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          controller: scrollController,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 30,
           ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              ListView.separated(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                primary: false,
+                itemCount: 2,
+                separatorBuilder: (context, index) => const SizedBox(height: 5),
+                itemBuilder: (context, index) {
+                  switch (index) {
+                    case 0:
+                      return DeliveryOptionTile(user: user);
+                    default:
+                      return const AccountCard(
+                        showBirthday: false,
+                      );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      actionCallback: (user) => selectedDeliveryOption != null &&
+              ref
+                  .read(orderTypeStateProvider.notifier)
+                  .canProceed(user, selectedDeliveryOption)
+          ? onNextPage
+          : null,
+      onBackButton: onBackButton,
+      actionButtonText:
+          (ref.read(orderTypeStateProvider)?.isPaymentRequired ?? false)
+              ? context.l10n.proceedToCheckout
+              : context.l10n.confirmOrder,
+      pageTitle: context.l10n.delivery,
     );
   }
 }

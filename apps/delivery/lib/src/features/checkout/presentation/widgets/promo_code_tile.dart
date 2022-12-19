@@ -1,4 +1,5 @@
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/checkout/data/services/promo_codes_service.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,18 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class PromoCodeTile extends HookConsumerWidget {
-  const PromoCodeTile({Key? key}) : super(key: key);
+  final CartModel cart;
+
+  const PromoCodeTile({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final promoCode = ref.watch(currentAppliedPromoProvider);
     final textCtrl = useTextEditingController(text: promoCode?.code);
+    final orderType = ref.watch(orderTypeStateProvider);
 
     return Card(
       color: Theme.of(context).primaryColor,
@@ -52,15 +59,24 @@ class PromoCodeTile extends HookConsumerWidget {
                           context: context,
                         );
                       } else {
-                        ref.read(currentAppliedPromoProvider.state).state =
-                            promo;
+                        if (promo.isPromoValid(cart, orderType)) {
+                          ref.read(currentAppliedPromoProvider.state).state =
+                              promo;
 
-                        showSimpleNotification(
-                          Text(context.l10n.promoCodeApplied),
-                          duration: const Duration(seconds: 5),
-                          slideDismissDirection: DismissDirection.horizontal,
-                          context: context,
-                        );
+                          showSimpleNotification(
+                            Text(context.l10n.promoCodeApplied),
+                            duration: const Duration(seconds: 5),
+                            slideDismissDirection: DismissDirection.horizontal,
+                            context: context,
+                          );
+                        } else {
+                          showSimpleNotification(
+                            Text(context.l10n.promoCodeInvalid),
+                            duration: const Duration(seconds: 5),
+                            slideDismissDirection: DismissDirection.horizontal,
+                            context: context,
+                          );
+                        }
                       }
                     },
                     child: Text(context.l10n.applyPromoCode),

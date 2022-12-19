@@ -12,6 +12,7 @@
 
 import 'package:delivery/src/core/data/models/localized_model.dart';
 import 'package:delivery/src/core/utils/language_utils.dart';
+import 'package:delivery/src/core/utils/math_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -80,9 +81,12 @@ class OrderTypeModel extends Equatable {
     return null;
   }
 
-  double get shippingFeeWithVat => shippingFeeNoVat * 1.2;
+  double get feeWithVat => shippingFeeNoVat * 1.2;
+  double get feeVat => feeWithVat - shippingFeeNoVat;
 
   List<int?> get orderStepsIds => _orderStepsIds;
+
+  bool get isPaymentRequired => !MathUtils.approximately(0, shippingFeeNoVat);
 
   String? getName(Locale locale) {
     switch (LanguageUtils.parseLocale(locale)) {

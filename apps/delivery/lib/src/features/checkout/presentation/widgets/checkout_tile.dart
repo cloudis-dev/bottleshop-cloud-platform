@@ -13,227 +13,166 @@
 import 'dart:async';
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/adaptive_alert_dialog.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
-import 'package:delivery/src/core/presentation/widgets/styled_form_field.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
+import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:tuple/tuple.dart';
-
-final _proceedButtonStateProvider = StateProvider.autoDispose
-    .family<ButtonState, String>((ref, _) => ButtonState.idle);
-
-final _promoButtonStateProvider =
-    StateProvider.autoDispose<ButtonState>((ref) => ButtonState.idle);
 
 class CheckoutTile extends HookConsumerWidget {
   final String actionLabel;
   final Future<void> Function()? actionCallback;
   final bool isLastStep;
-  final bool showShipping;
 
-  final bool showPromoButton;
   const CheckoutTile({
     Key? key,
-    this.showShipping = false,
     this.isLastStep = false,
-    this.showPromoButton = false,
     required this.actionLabel,
     required this.actionCallback,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final promoCodeTextController = useTextEditingController();
+    final promoCode = ref.watch(currentAppliedPromoProvider);
+    final orderType = ref.watch(orderTypeStateProvider);
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     return ref.watch(cartProvider).when(
           data: (cart) {
-            return Positioned(
-              bottom: MediaQuery.of(context).padding.bottom,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 170,
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(20),
-                        topLeft: Radius.circular(20)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Theme.of(context).hintColor.withOpacity(0.2),
-                          offset: const Offset(0, -2),
-                          blurRadius: 5.0)
-                    ]),
-                child: SizedBox(
-                  width: AppConfig(context).appWidth(90),
+            final subtotal = cart.totalProductsPriceNoVat +
+                (orderType?.shippingFeeNoVat ?? 0);
+            final totalVat = cart.totalProductsVat + (orderType?.feeVat ?? 0);
+            final totalValue = cart.totalProductsPrice +
+                (orderType?.feeWithVat ?? 0) -
+                (promoCode?.discount ?? 0);
+
+            return Container(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(20),
+                  topLeft: Radius.circular(20),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                      color: Theme.of(context).hintColor.withOpacity(0.2),
+                      offset: const Offset(0, -2),
+                      blurRadius: 5.0)
+                ],
+              ),
+              child: SizedBox(
+                width: AppConfig(context).appWidth(90),
+                child: IntrinsicHeight(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.max,
+                    // crossAxisAlignment: CrossAxisAlignment.stretch,
+                    // mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Text(context.l10n.subtotal,
-                              style: Theme.of(context).textTheme.bodyText1),
-                        ),
-                        Text(
-                            FormattingUtils.getPriceNumberString(
-                              cart.subTotal,
-                              withCurrency: true,
-                            ),
-                            style: Theme.of(context).textTheme.subtitle1),
-                      ]),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Text(context.l10n.vat20,
-                              style: Theme.of(context).textTheme.bodyText1),
-                        ),
-                        Text(
-                            FormattingUtils.getPriceNumberString(
-                              cart.totalCartVat,
-                              withCurrency: true,
-                            ),
-                            style: Theme.of(context).textTheme.subtitle1)
-                      ]),
-                      if (cart.promoCode != null)
-                        Row(children: <Widget>[
+                      Row(
+                        children: <Widget>[
                           Expanded(
-                            child: Text(context.l10n.promoCodeLabel,
+                            child: Text(context.l10n.cart,
                                 style: Theme.of(context).textTheme.bodyText1),
                           ),
                           Text(
+                            FormattingUtils.getPriceNumberString(
+                              cart.totalProductsPrice,
+                              withCurrency: true,
+                            ),
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                        ],
+                      ),
+                      if (orderType != null && orderType.isPaymentRequired)
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                  "${context.l10n.shippingFee}: ${orderType.getName(currentLocale)}",
+                                  style: Theme.of(context).textTheme.bodyText1),
+                            ),
+                            Text(
+                              FormattingUtils.getPriceNumberString(
+                                orderType.feeWithVat,
+                                withCurrency: true,
+                              ),
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ],
+                        ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(context.l10n.subtotal,
+                                style: Theme.of(context).textTheme.bodyText1),
+                          ),
+                          Text(
+                              FormattingUtils.getPriceNumberString(
+                                subtotal,
+                                withCurrency: true,
+                              ),
+                              style: Theme.of(context).textTheme.subtitle1),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(context.l10n.vat20,
+                                style: Theme.of(context).textTheme.bodyText1),
+                          ),
+                          Text(
+                            FormattingUtils.getPriceNumberString(
+                              totalVat,
+                              withCurrency: true,
+                            ),
+                            style: Theme.of(context).textTheme.subtitle1,
+                          )
+                        ],
+                      ),
+                      if (promoCode != null)
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                  "${context.l10n.promoCodeLabel}: ${promoCode.code}",
+                                  style: Theme.of(context).textTheme.bodyText1),
+                            ),
+                            Text(
                               '- ${FormattingUtils.getPriceNumberString(
-                                cart.promoCodeValue,
+                                promoCode.discount,
                                 withCurrency: true,
                               )}',
-                              style: Theme.of(context).textTheme.subtitle1)
-                        ]),
-                      const Spacer(flex: 1),
-                      Row(children: <Widget>[
-                        Expanded(
-                            child: Text(context.l10n.checkout,
-                                style: Theme.of(context).textTheme.headline6)),
-                        Text(
-                          FormattingUtils.getPriceNumberString(
-                            cart.totalCartValue,
-                            withCurrency: true,
-                          ),
-                          style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.subtitle1,
+                            )
+                          ],
                         ),
-                      ]),
+                      const Spacer(flex: 1),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: Text(context.l10n.checkout,
+                                  style:
+                                      Theme.of(context).textTheme.headline6)),
+                          Text(
+                            FormattingUtils.getPriceNumberString(
+                              totalValue,
+                              withCurrency: true,
+                            ),
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                        ],
+                      ),
                       const Spacer(flex: 1),
                       Row(
                         children: [
-                          if (showPromoButton)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 14.0) +
-                                      const EdgeInsets.only(right: 12),
-                              child: ProgressButton(
-                                onPressed: () async {
-                                  try {
-                                    if (cart.promoCode != null) {
-                                      ref.read(_promoButtonStateProvider);
-                                      var res = await ref
-                                          .read(cloudFunctionsProvider)
-                                          .removePromoCode();
-                                      if (res) {
-                                        showSimpleNotification(
-                                          Text(context.l10n.promoCodeRemoved),
-                                          duration: const Duration(seconds: 5),
-                                          slideDismissDirection:
-                                              DismissDirection.horizontal,
-                                          context: context,
-                                        );
-                                      }
-                                    } else {
-                                      var promo = await showAddPromoDialog(
-                                          context, promoCodeTextController);
-                                      ref
-                                          .read(_promoButtonStateProvider.state)
-                                          .state = ButtonState.loading;
-                                      if (promo != null || promo!.isNotEmpty) {
-                                        final res = await ref
-                                            .read(cartRepositoryProvider)!
-                                            .promoApplied(promo);
-                                        if (res) {
-                                          showSimpleNotification(
-                                            Text(context.l10n.promoCodeApplied),
-                                            duration:
-                                                const Duration(seconds: 5),
-                                            slideDismissDirection:
-                                                DismissDirection.horizontal,
-                                            context: context,
-                                          );
-                                        } else {
-                                          showSimpleNotification(
-                                            Text(context.l10n.promoCodeInvalid),
-                                            duration:
-                                                const Duration(seconds: 5),
-                                            slideDismissDirection:
-                                                DismissDirection.horizontal,
-                                            context: context,
-                                          );
-                                        }
-                                      }
-                                    }
-                                  } finally {
-                                    ref
-                                        .read(_promoButtonStateProvider.state)
-                                        .state = ButtonState.idle;
-                                  }
-                                },
-                                minWidth: AppConfig(context).appWidth(20),
-                                maxWidth: AppConfig(context).appWidth(20),
-                                state: ref.watch(_promoButtonStateProvider),
-                                stateWidgets: {
-                                  ButtonState.idle: InkResponse(
-                                    splashColor:
-                                        Colors.deepOrangeAccent, // splash color
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        cart.promoCode == null
-                                            ? Text(context.l10n.promoCodeLabel)
-                                            : Icon(
-                                                Icons.receipt_long_outlined,
-                                                color: cart.promoCode != null
-                                                    ? Colors.white
-                                                    : Theme.of(context)
-                                                        .colorScheme
-                                                        .secondary,
-                                              ), // icon
-                                        // text
-                                      ],
-                                    ),
-                                  ),
-                                  ButtonState.loading: Loader(
-                                      valueColor:
-                                          Theme.of(context).primaryColor),
-                                  ButtonState.success: const SizedBox.shrink(),
-                                  ButtonState.fail: const SizedBox.shrink(),
-                                },
-                                stateColors: {
-                                  for (var e in ButtonState.values.map((e) =>
-                                      Tuple2(
-                                          e, Theme.of(context).primaryColor)))
-                                    e.item1: e.item2
-                                },
-                              ),
-                            ),
                           Expanded(
                             child: Stack(
                               fit: StackFit.loose,
@@ -245,13 +184,8 @@ class CheckoutTile extends HookConsumerWidget {
                                   child: ProgressButton(
                                     maxWidth: double.infinity,
                                     minWidth: double.infinity,
-                                    onPressed: actionCallback == null
-                                        ? null
-                                        : () =>
-                                            onPrimaryButtonClick(context, ref),
-                                    state: ref.watch(
-                                      _proceedButtonStateProvider(actionLabel),
-                                    ),
+                                    onPressed: actionCallback,
+                                    state: ButtonState.idle,
                                     stateWidgets: {
                                       ButtonState.idle: Text(
                                         actionLabel,
@@ -298,103 +232,6 @@ class CheckoutTile extends HookConsumerWidget {
         );
   }
 
-  void onPrimaryButtonClick(BuildContext context, WidgetRef ref) async {
-    try {
-      ref.read(_proceedButtonStateProvider(actionLabel).state).state =
-          ButtonState.loading;
-
-      final res = await ref.read(cloudFunctionsProvider).validateCart();
-      switch (res) {
-        case CartStatus.ok:
-          await actionCallback!();
-          break;
-        case CartStatus.unavailableProducts:
-          showSimpleNotification(
-            Text(context.l10n.theCartContainsItemCountsThatAreNotAvailableIn),
-            duration: const Duration(seconds: 5),
-            slideDismissDirection: DismissDirection.horizontal,
-            context: context,
-          );
-          break;
-        case CartStatus.invalidPromo:
-          showSimpleNotification(
-            Text(context.l10n.promoCodeInvalid),
-            duration: const Duration(seconds: 5),
-            slideDismissDirection: DismissDirection.horizontal,
-            context: context,
-          );
-          break;
-        case CartStatus.error:
-          showSimpleNotification(
-            Text(context.l10n.errorGeneric),
-            duration: const Duration(seconds: 5),
-            slideDismissDirection: DismissDirection.horizontal,
-            context: context,
-          );
-          break;
-      }
-    } finally {
-      ref.read(_proceedButtonStateProvider(actionLabel).state).state =
-          ButtonState.idle;
-    }
-  }
-
-  Future<String?> showAddPromoDialog(
-      BuildContext context, TextEditingController controller) {
-    controller.clear();
-    return showDialog<String>(
-        context: context,
-        builder: (context) {
-          return AdaptiveAlertDialog(
-            content: defaultTargetPlatform == TargetPlatform.iOS
-                ? CupertinoTextFormFieldRow(
-                    padding: const EdgeInsets.all(8.0),
-                    placeholder: context.l10n.promoCodeLabel,
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.text,
-                    autofocus: true,
-                    style: Theme.of(context).textTheme.bodyText2,
-                    controller: controller,
-                    cursorColor: Theme.of(context).colorScheme.secondary,
-                    maxLines: 1,
-                  )
-                : StyledFormField(
-                    controller: controller,
-                    validator: null,
-                    labelText: context.l10n.promoCodeLabel,
-                    onSaved: null,
-                    keyboardType: TextInputType.text,
-                    autoFocus: true,
-                    style: Theme.of(context).textTheme.bodyText2,
-                    maxLines: 1,
-                  ),
-            title: Text(context.l10n.promoCodeLabel),
-            actions: defaultTargetPlatform == TargetPlatform.iOS
-                ? [
-                    CupertinoDialogAction(
-                      child: Text(context.l10n.cancelButton),
-                      onPressed: () => Navigator.pop(context, null),
-                    ),
-                    CupertinoDialogAction(
-                      onPressed: () => Navigator.pop(context, controller.text),
-                      isDefaultAction: true,
-                      child: Text(context.l10n.saveButton),
-                    ),
-                  ]
-                : [
-                    SimpleDialogOption(
-                      onPressed: () => Navigator.pop(context, null),
-                      child: Text(context.l10n.cancelButton),
-                    ),
-                    SimpleDialogOption(
-                      onPressed: () => Navigator.pop(context, controller.text),
-                      child: Text(
-                        context.l10n.saveButton,
-                        style: Theme.of(context).textTheme.subtitle2,
-                      ),
-                    ),
-                  ],
-          );
-        });
-  }
+  void onPrimaryButtonClick(BuildContext context, WidgetRef ref) =>
+      actionCallback!;
 }

@@ -53,6 +53,8 @@ class PaymentData extends Equatable {
 
   final String? promoCode;
 
+  final String locale;
+
   const PaymentData({
     required this.orderNote,
     required this.deliveryType,
@@ -60,6 +62,7 @@ class PaymentData extends Equatable {
     required this.successUrl,
     required this.cancelUrl,
     required this.promoCode,
+    required this.locale,
   });
 
   @override
@@ -70,6 +73,7 @@ class PaymentData extends Equatable {
         successUrl,
         cancelUrl,
         promoCode,
+        locale,
       ];
 
   @override
@@ -83,6 +87,7 @@ class PaymentData extends Equatable {
       'successUrl': successUrl,
       'platform': platformType.toString(),
       if (promoCode != null) 'promoCode': promoCode,
+      'locale': locale,
     };
   }
 }

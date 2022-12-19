@@ -571,5 +571,8 @@
   "deleteAccount": "Odstrániť",
   "deleteAccountDialogTitle": "Ste si istý, že chcete zmazať svoj účet?",
   "deleteAccountDialogLabel": "Všetky Vaše dáta spojené s účtom budú odstránené a nebude ich možné obnoviť",
-  "deleteAccountNegativeOption": "Zavrieť"
+  "deleteAccountNegativeOption": "Zavrieť",
+  "applyPromoCode": "Použi promo kód",
+  "removePromoCode": "Odstráň promo kód",
+  "promoCodeInstructions": "Vložte promo kód ak máte k dispozícii a získate zľavu"
 }

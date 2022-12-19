@@ -28,15 +28,7 @@ class AppPreferencesKeys {
 class FirebaseCallableFunctions {
   FirebaseCallableFunctions._();
 
-  static const createPaymentIntent = 'createPaymentIntent';
   static const createStripeCustomer = 'createStripeCustomer';
-  static const setShippingFee = 'setShippingFee';
-  static const removeShippingFee = 'removeShippingFee';
-  static const addPromoCode = 'applyPromoCode';
-  static const validateCart = 'validateCart';
-  static const removePromoCode = 'removePromoCode';
-  static const createStripePriceIds = 'createStripePriceIds';
-  static const createCashOnDeliveryOrder = 'createCashOnDeliveryOrder';
   static const deleteAccount = 'deleteAccount';
   static const createCheckoutSession = 'createCheckoutSession';
 }

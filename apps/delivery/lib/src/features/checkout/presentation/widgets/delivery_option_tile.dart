@@ -18,8 +18,9 @@ class DeliveryOptionTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orderTypes = ref.watch(
-        commonDataRepositoryProvider.select((value) => value.orderTypes));
-    final selectedDeliveryOption = ref.watch(deliveryOptionsStateProvider);
+      commonDataRepositoryProvider.select((value) => value.orderTypes),
+    );
+    final selectedOrderType = ref.watch(orderTypeStateProvider);
     final currentLocale = ref.watch(currentLocaleProvider);
     final items = <Widget>[
       Container(
@@ -45,7 +46,7 @@ class DeliveryOptionTile extends HookConsumerWidget {
       ),
       ...orderTypes
           .map<Widget>(
-            (orderType) => RadioListTile<DeliveryOption>(
+            (orderType) => RadioListTile<OrderTypeModel>(
               title: Text(orderType.getName(currentLocale)!,
                   style: Theme.of(context).textTheme.bodyText1),
               subtitle: Text(orderType.getDescription(currentLocale)!,
@@ -54,16 +55,15 @@ class DeliveryOptionTile extends HookConsumerWidget {
               activeColor: Theme.of(context).colorScheme.secondary,
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              value: orderType.deliveryOption!,
-              groupValue: selectedDeliveryOption,
+              value: orderType,
+              groupValue: selectedOrderType,
               onChanged: (value) {
                 ref
-                    .read(deliveryOptionsStateProvider.notifier)
-                    .selectDeliveryOption(value!);
-                ref.read(cloudFunctionsProvider).setShippingFee(value);
+                    .read(orderTypeStateProvider.notifier)
+                    .selectOrderType(value!);
                 final deniedReasons = ref
-                    .read(deliveryOptionsStateProvider.notifier)
-                    .validate(user, value);
+                    .read(orderTypeStateProvider.notifier)
+                    .validate(user, value.deliveryOption);
                 onUserDenied(context, deniedReasons);
               },
             ),
