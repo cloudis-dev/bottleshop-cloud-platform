@@ -11,6 +11,7 @@ export interface PaymentData {
   promoCode: string | undefined;
   cancelUrl: string;
   successUrl: string;
+  locale: string;
 }
 
 export interface StripePaymentMetadata {

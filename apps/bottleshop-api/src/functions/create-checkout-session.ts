@@ -140,6 +140,7 @@ export const createCheckoutSession = functions
       success_url: data.successUrl,
       cancel_url: data.cancelUrl,
       discounts: discounts,
+      locale: data.locale === 'sk' ? 'sk' : 'en',
     });
 
     return session.id;
