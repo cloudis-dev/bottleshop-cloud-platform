@@ -44,3 +44,4 @@ vscode
 fixtures
 **/*seed
 .vscode/settings.json
+apps/admin/.firebase/

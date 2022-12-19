@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>540936468411-nip6g81qajr0repq7cbtjbh21ap7nv2s.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.540936468411-nip6g81qajr0repq7cbtjbh21ap7nv2s</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>540936468411-2bef528sv3kf6pvnchcggc1aoqolbpsc.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBWdUFIdbwtIFlZ_fp7qOGIUOwKjeD6gtc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>540936468411</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>sk.bottleshop3veze.bottleshopAdmin</string>
+	<key>PROJECT_ID</key>
+	<string>bottleshop3veze-delivery</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bottleshop3veze-delivery.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:540936468411:ios:cbfa420b2201e3c7bff69e</string>
+	<key>DATABASE_URL</key>
+	<string>https://bottleshop3veze-delivery.firebaseio.com</string>
+</dict>
+</plist>

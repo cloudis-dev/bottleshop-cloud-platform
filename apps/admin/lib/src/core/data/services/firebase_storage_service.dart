@@ -70,7 +70,7 @@ class FirebaseStorageService {
     String? productUniqueId,
   ) async {
     final resultData = await ImageUtil.createResizedJpgWithWatermark(
-      imgBytes:  imageFile,
+      imgBytes: imageFile,
       maxWidth: maxImageWidth,
     );
 
@@ -81,12 +81,10 @@ class FirebaseStorageService {
     final thumbnailPath = getThumbnailPath(productUniqueId);
     await FirebaseStorage.instance.ref().child(cleanImagePath).putData(
           cleanImgData,
-          
         );
     await FirebaseStorage.instance.ref().child(watermarkedImagePath).putData(
-       watermarkedImgData,
-       
-    );
+          watermarkedImgData,
+        );
     return ImageUploadResult(
       imagePath: watermarkedImagePath,
       thumbnailPath: thumbnailPath,

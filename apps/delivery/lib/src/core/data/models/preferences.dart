@@ -11,5 +11,7 @@
 //
 
 enum SupportedLayoutMode { list, grid }
+
 enum SortingDirection { ascending, descending }
+
 enum SortBy { name, price }

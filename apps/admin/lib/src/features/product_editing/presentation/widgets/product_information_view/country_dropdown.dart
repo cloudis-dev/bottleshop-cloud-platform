@@ -19,7 +19,8 @@ class CountryDropdown extends HookWidget {
       padding: EdgeInsets.only(top: 16, bottom: 16),
       child: Theme(
         data: ThemeData(
-          textTheme: TextTheme(subtitle1: TextStyle(color: Colors.black, fontSize: 12)),
+          textTheme: TextTheme(
+              subtitle1: TextStyle(color: Colors.black, fontSize: 12)),
         ),
         child: DropdownSearch<String>(
           filterFn: ((item, filter) {
@@ -67,8 +68,7 @@ class CountryDropdown extends HookWidget {
                 hintText: '* Krajina',
                 filled: true,
                 fillColor: AppTheme.lightGreySolid,
-              )
-            ),
+              )),
           onChanged: (value) {
             context.read(editedProductProvider).state = context
                 .read(editedProductProvider)
@@ -82,7 +82,6 @@ class CountryDropdown extends HookWidget {
                             (element) => element.localizedName.local == value));
           },
         ),
-     
       ),
     );
   }
