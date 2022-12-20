@@ -20,34 +20,13 @@
     "format": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter format apps/admin/lib/*"
+        "command": "flutter format apps/admin/lib/* -o show --set-exit-if-changed"
       }
     },
     "test": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "flutter test",
-        "cwd": "apps/admin"
-      }
-    },
-    "assemble": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "flutter assemble",
-        "cwd": "apps/admin"
-      }
-    },
-    "attach": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "flutter attach",
-        "cwd": "apps/admin"
-      }
-    },
-    "drive": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "flutter drive",
         "cwd": "apps/admin"
       }
     },
@@ -61,7 +40,7 @@
     "install": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter install",
+        "command": "flutter pub get",
         "cwd": "apps/admin"
       }
     },
@@ -72,54 +51,73 @@
         "cwd": "apps/admin"
       }
     },
-    "buildAar": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "flutter build aar",
-        "cwd": "apps/admin"
-      }
-    },
     "buildApk": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build apk",
+        "command": "flutter build apk --flavor production --target lib/main_production.dart --split-per-abi",
         "cwd": "apps/admin"
       }
     },
     "buildAppbundle": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build appbundle",
-        "cwd": "apps/admin"
-      }
-    },
-    "buildBundle": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "flutter build bundle",
+        "command": "flutter build appbundle --flavor production --target lib/main_production.dart",
         "cwd": "apps/admin"
       }
     },
     "buildIos": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build ios",
-        "cwd": "apps/admin"
-      }
-    },
-    "buildIosFramework": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "flutter build ios-framework",
+        "command": "flutter build ios --flavor production --target lib/main_production.dart",
         "cwd": "apps/admin"
       }
     },
     "buildIpa": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "flutter build ipa",
+        "command": "flutter build ipa --flavor production --target lib/main_production.dart --export-method ad-hoc",
         "cwd": "apps/admin"
       }
+    },
+    "buildWeb":{
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "flutter build web --target lib/main_production.dart --release",
+        "cwd": "apps/admin"
+      }
+    },
+    "build":{
+      "executor": "nx:run-commands",
+      "options": {
+        "commands":[
+          "nx run admin:buildIpa",
+          "nx run admin:buildApk",
+          "nx run admin:buildWeb"
+        ],
+        "parallel": false
+      }
+
+    },
+    "lint":{
+      "executor": "nx:run-commands",
+      "options": {
+        "commands":[
+          "nx run admin:format",
+          "nx run admin:analyze"
+        ],
+        "parallel": false
+      }
+
+    },
+    "deploy:web":{
+      "executor": "nx:run-commands",
+      "options": {
+        "commands":[
+          "nx run admin:analyze"
+        ],
+        "parallel": false
+      }
+
     }
   },
   "tags": ["scope:flutter", "type:app"]
