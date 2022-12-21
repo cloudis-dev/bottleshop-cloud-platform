@@ -23,6 +23,7 @@ import 'package:delivery/src/features/favorites/presentation/pages/favorites_pag
 import 'package:delivery/src/features/help/presentation/pages/help_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/cart_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
+import 'package:delivery/src/features/home/presentation/pages/landing_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/products_page.dart';
 import 'package:delivery/src/features/orders/presentation/pages/order_detail_page.dart';
 import 'package:delivery/src/features/orders/presentation/pages/orders_page.dart';
@@ -51,8 +52,14 @@ final routes = <String, RouteNode<NestingBranch>>{
   HomePage.pagePathBase: RouteNode(
     NonParametrizedPage(() => HomePage()),
     nestedBranches: NestedBranches(
-      defaultBranch: NestingBranch.shop,
+      defaultBranch: NestingBranch.landing,
       branches: {
+        NestingBranch.landing: BranchInitNode(
+          LandingPage.pagePathBase,
+          RouteNode(
+            NonParametrizedPage(() => LandingPage()),
+          ),
+        ),
         NestingBranch.shop: BranchInitNode(
           ProductsPage.pagePathBase,
           RouteNode(

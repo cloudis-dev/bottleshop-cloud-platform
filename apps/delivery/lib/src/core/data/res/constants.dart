@@ -139,6 +139,10 @@ const kDefaultProductPic = 'assets/images/default_product.webp';
 const kDefaultProductPicDark = 'assets/images/default_product_dark.webp';
 const kSpecialEdition = 'assets/images/special.png';
 const kAppIcon = 'assets/images/app-icon.png';
+const kAppStoreDownload = 'assets/images/app-store-download.png';
+const kGooglePlayDownload = 'assets/images/google-play-download.png';
+const kFacebookIcon = 'assets/images/facebook_icon.png';
+const kInsagramIcon = 'assets/images/instagram_icon.png';
 const kSplash = 'assets/images/splash.webp';
 const kSplashLandscape = 'assets/images/splash-landscape.webp';
 const kAlgoliaLogo = 'assets/images/search-by-algolia-light-background.webp';
@@ -162,6 +166,43 @@ const kMaestroBtnDark = 'assets/images/maestro_dark.png';
 const kDinersBtn = 'assets/images/diners_white.png';
 const kAmex = 'assets/images/amex.png';
 const kLogoTransparent = 'assets/images/logo_transparent.png';
+const kLandingImage1 = 'assets/images/landing_page_image1.png';
+const kLandingImage2 = 'assets/images/landing_page_image2.png';
+const kLandingImage3 = 'assets/images/landing_page_image3.png';
+const kLandingImage1Mobile = 'assets/images/landing_page_image1_mobile.png';
+const kLandingImage2Mobile = 'assets/images/landing_page_image2_mobile.png';
+const kLandingImage3Mobile = 'assets/images/landing_page_image3_mobile.png';
+const kBlackGradient2Mobile = 'assets/images/black_gradient2_mobile.png';
+const kBlackGradient3Mobile = 'assets/images/black_gradient3_mobile.png';
+const kBlackGradient4Mobile = 'assets/images/black_gradient4_mobile.png';
+const kBtnArrow = 'assets/images/btn_arrow.png';
+const kMobilePhoneIcon = 'assets/images/mobile_phone_icon.png';
+const kExclusiveIcon = 'assets/images/exclusive_icon.png';
+const kGiftsIcon = 'assets/images/gifts_icon.png';
+const kCareIcon = 'assets/images/care_icon.png';
+const kXIcon = 'assets/images/x_icon.png';
+const kCouponIcon = 'assets/images/coupon_icon.png';
+const kHeartIcon = 'assets/images/heart_icon.png';
+const kShoppingCartIcon = 'assets/images/shopping_cart_icon.png';
+const kWhiteCouponIcon = 'assets/images/white_coupon_icon.png';
+const kWhiteHeartIcon = 'assets/images/white_heart_icon.png';
+const kWhiteShoppingCartIcon = 'assets/images/white_shopping_cart_icon.png';
+const kBelugaIcon = 'assets/images/beluga_icon.png';
+const kDiplomaticoIcon = 'assets/images/diplomatico_icon.png';
+const kMurrayMcDavidIcon = 'assets/images/murray_mcdavid_icon.png';
+const kRemyMartinIcon = 'assets/images/remy_martin_icon.png';
+const kBrandBackground = 'assets/images/brand_background.png';
+const kWhiskeyBourbon = 'assets/images/whiskey_bourbon.png';
+const kCognac = 'assets/images/cognac.png';
+const kGin = 'assets/images/gin.png';
+const kRum = 'assets/images/rum.png';
+const kVodka = 'assets/images/vodka.png';
+const kApp = 'assets/images/app.png';
+const kAppBackground = 'assets/images/white_background_app.png';
+const kAppStoreBadgeEn = 'assets/images/app_store_badge_en.png';
+const kAppStoreBadgeSk = 'assets/images/app_store_badge_sk.png';
+const kGooglePlayBadgeSk = 'assets/images/google_play_badge_sk.png';
+const kGooglePlayBadgeEn = 'assets/images/google_play_badge_en.png';
 
 const double productImageAspectRatio = 12 / 16;
 const double kTabBarHeight = 50.0;
@@ -179,3 +220,32 @@ const kOrderTypeHomeDelivery = 'home-delivery';
 const kOrderTypeQuickBa = 'quick-delivery-BA';
 const kOrderTypeCloseAreaBa = 'close-areas-delivery-ba';
 const kOrderTypeCashOnDelivery = 'cash-on-delivery';
+
+class UrlStrings {
+  static const String googlePlay =
+      "https://play.google.com/store/apps/details?id=sk.bottleshop3veze.bottleshopdeliveryapp";
+  static const String appStore = "https://apps.apple.com/app/id1509090326";
+  static const String facebook = "https://www.facebook.com/bottleshop3veze";
+  static const String instagram =
+      "https://www.instagram.com/bottleshop3veze/?igshid=YmMyMTA2M2Y%3D";
+  static const String shippingPaymentSK =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2FDoprava%20a%20platba.jpg?alt=media&token=8cc04823-19a8-4965-b1dc-8c28fe6a61ed';
+  static const String shippingPaymentEN =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2FShipping%20and%20payment.jpg?alt=media&token=6b6e82b6-5a3e-4943-a76f-1d9071f38b7b';
+  static const String privacyPolicySK =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_sk.pdf?alt=media#page=9';
+  static const String privacyPolicyEN =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_en.pdf?alt=media#page=9';
+  static const String menuTermsSK =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_sk.pdf?alt=media';
+  static const String menuTermsEN =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_en.pdf?alt=media';
+}
+
+class categoryUidStrings {
+  static const rum = 'Z1ytjymiF5bTYemzxXox';
+  static const whiskey = 'yvv9lwUbzEzrIGsZUZ2R';
+  static const cognac = 'P77ijvW0x9AYvNbtwPc5';
+  static const vodka = 'IKn86eYTxNcmba2huYEV';
+  static const gin = 'I52jUD7D9sj6l0YsHbrk';
+}

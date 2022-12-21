@@ -3,12 +3,14 @@ import 'package:delivery/src/features/categories/presentation/pages/categories_p
 import 'package:delivery/src/features/favorites/presentation/pages/favorites_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/cart_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
+import 'package:delivery/src/features/home/presentation/pages/landing_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
 
 enum NestingBranch {
+  landing,
   shop,
   categories,
   sale,
@@ -28,8 +30,10 @@ NavigationStack<NestingBranch> initialPages() => NavigationStack(
         AppPageNode(
           page: HomePage(),
           crossroad: NavigationCrossroad(
-            activeBranch: NestingBranch.shop,
+            activeBranch: NestingBranch.landing,
             availableBranches: {
+              NestingBranch.landing:
+                  NavigationStack([AppPageNode(page: LandingPage())]),
               NestingBranch.shop:
                   NavigationStack([AppPageNode(page: ProductsPage())]),
               NestingBranch.categories:
