@@ -36,6 +36,38 @@ const _kBottleshopOnSecondaryDark = Colors.black;
 const _kBottleshopOnSurfaceDark = Colors.white;
 const _kBottleshopOnBackgroundDark = Colors.white;
 
+const kBackgroundColor = Color(0xff0C0C0C);
+const kPrimaryColor = Color(0xFFBF8A24);
+
+TextTheme publicSansTextTheme = TextTheme(
+  headline2: GoogleFonts.publicSans(
+      fontSize: 18, fontWeight: FontWeight.w700, color: kPrimaryColor),
+  headline3: GoogleFonts.publicSans(
+      fontSize: 14, fontWeight: FontWeight.w700, color: kPrimaryColor),
+  bodyText1: GoogleFonts.publicSans(
+      fontSize: 16, fontWeight: FontWeight.w700, color: kPrimaryColor),
+  caption: GoogleFonts.publicSans(
+      fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+  overline: GoogleFonts.publicSans(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 1.5,
+      color: kPrimaryColor),
+);
+
+TextTheme libreBodoniTextTheme = TextTheme(
+    headline1: GoogleFonts.libreBodoni(
+        fontSize: 70,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -1,
+        color: Colors.white),
+    headline2: GoogleFonts.libreBodoni(
+        fontSize: 45, fontWeight: FontWeight.w400, color: Colors.white),
+    headline3: GoogleFonts.libreBodoni(
+        fontSize: 40, fontWeight: FontWeight.w700, color: Colors.white),
+    overline: GoogleFonts.libreBodoni(
+        fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white));
+
 TextTheme workSansTextTheme = TextTheme(
   headline1: GoogleFonts.workSans(
       fontSize: 96, fontWeight: FontWeight.w300, letterSpacing: -1.5),
@@ -183,7 +215,28 @@ ThemeData buildDarkAppTheme() {
       onError: Colors.black,
       brightness: Brightness.dark,
     ),
-    textTheme: workSansTextTheme,
+    textTheme: TextTheme(
+        headline2: GoogleFonts.publicSans(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFFBF8A24),
+            decoration: TextDecoration.none),
+        headline3: GoogleFonts.publicSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFFBF8A24),
+            decoration: TextDecoration.none),
+        headline4: GoogleFonts.publicSans(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          decoration: TextDecoration.none,
+          color: Color(0xFFBF8A24),
+        ),
+        headline5: GoogleFonts.publicSans(
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+          color: Colors.white,
+        )),
   );
   return base.copyWith(
     visualDensity: VisualDensity.adaptivePlatformDensity,
