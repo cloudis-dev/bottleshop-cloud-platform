@@ -16,7 +16,7 @@
 		<string>sk_SK</string>
 	</array>
 	<key>CFBundleName</key>
-	<string>Bottleshop 3 Veže</string>
+	<string>$(DISPLAY_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
