@@ -17,6 +17,8 @@ export const createCheckoutSession = functions
   .region(tier1Region)
   .runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: PaymentData, context: functions.https.CallableContext) => {
+    functions.logger.info(`PaymentData:  ${JSON.stringify(data)}`);
+
     const userUid = context.auth?.uid;
     const user = await getEntityByRef<User>(
       userUid === undefined ? undefined : admin.firestore().collection(`${usersCollection}`).doc(userUid),
