@@ -30,18 +30,26 @@ class EditOpeningHoursButton extends HookWidget {
           builder: (context) => TimePickerDialog(initialTime: currentTime),
         );
 
-    Future<void> pickNewTime(int index) async {
+    Future<void>? pickNewTime(int index) {
       timePicker;
-      final newTime =
-          await showTimePicker(context: context, initialTime: currentTime);
-      OpeningHoursEntryModel.amendMidnight(newTime, tempList, index);
-      OpeningHoursEntryModel.replaceOldTime(tempMap, tempList, rowIndex);
-
-      if (newTime == null) {
-        newMap = null;
-      } else {
-        newMap = OpeningHoursEntryModel.toMap(tempMap);
-      }
+      showTimePicker(context: context, initialTime: currentTime).then(
+        (newTime) {
+          OpeningHoursEntryModel.amendMidnight(newTime, tempList, index);
+          OpeningHoursEntryModel.replaceOldTime(tempMap, tempList, rowIndex);
+          newTime == null
+              ? newMap = null
+              : newMap = OpeningHoursEntryModel.toMap(tempMap);
+          newMap == null
+              ? null
+              : {
+                  context.read(editedHoursProvider).state =
+                      OpeningHoursModel.fromMap(newMap!),
+                  context.read(hoursProvider).state =
+                      OpeningHoursModel.fromMap(newMap!)
+                };
+        },
+      );
+      return null;
     }
 
     return SizedBox(
@@ -52,22 +60,7 @@ class EditOpeningHoursButton extends HookWidget {
         itemCount: tempList.length,
         itemBuilder: (context, index) {
           return TextButton(
-            onPressed: !weAreOpen
-                ? null
-                : () {
-                    pickNewTime(index).then(
-                      (_) {
-                        if (newMap == null) {
-                          return null;
-                        } else {
-                          context.read(editedHoursProvider).state =
-                              OpeningHoursModel.fromMap(newMap!);
-                          return context.read(hoursProvider).state =
-                              OpeningHoursModel.fromMap(newMap!);
-                        }
-                      },
-                    );
-                  },
+            onPressed: !weAreOpen ? null : () => pickNewTime(index),
             child: Text(tempList[index]),
           );
         },
