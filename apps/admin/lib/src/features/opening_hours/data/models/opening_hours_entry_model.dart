@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 
 class OpeningHoursEntryModel {
@@ -13,6 +11,14 @@ class OpeningHoursEntryModel {
     required this.opening,
     required this.closing,
   });
+
+  OpeningHoursEntryModel.closed()
+      : opening = '0',
+        closing = '0';
+
+  OpeningHoursEntryModel.opened()
+      : opening = '88:88',
+        closing = '88:88';
 
   static Map<String, OpeningHoursEntryModel> fromMap(
       QuerySnapshot<Map<String, dynamic>> map) {
@@ -36,21 +42,6 @@ class OpeningHoursEntryModel {
     return newMap;
   }
 
-  bool isOpened() {
-    var isOpened = true;
-    if (opening == '0' || closing == '0') {
-      isOpened = false;
-    }
-    return isOpened;
-  }
-
-  static Future<void> timePicker(BuildContext context) => showDialog(
-        context: context,
-        builder: (context) => TimePickerDialog(
-          initialTime: TimeOfDay.now(),
-        ),
-      );
-
   static void amendMidnight(
       TimeOfDay? newTime, List<String> tempList, int index) {
     if (newTime != null) {
@@ -65,34 +56,17 @@ class OpeningHoursEntryModel {
     return '${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}';
   }
 
-  static Future<void> pickNewTime(
-    BuildContext context,
-    List<String> tempList,
-    int index,
-    int rowIndex,
-  ) async {
-    final openingHoursMap = useProvider(editedHoursProvider).state;
-    final editHoursMap = context.read(editedHoursProvider).state?.toMap();
-    final currentTime = TimeOfDay.now();
-    final todayOpening = openingHoursMap!.today(rowIndex);
-    final tempList = [todayOpening.opening, todayOpening.closing];
-    timePicker;
-    final newTime =
-        await showTimePicker(context: context, initialTime: currentTime);
-    final tempMap = Map.fromEntries(editHoursMap!.entries);
-
-    amendMidnight(newTime, tempList, index);
-    tempMap[sortedWeekDays[rowIndex]] = OpeningHoursEntryModel(
-      opening: tempList[0],
-      closing: tempList[1],
-    );
-    context.read(editedHoursProvider).state =
-        OpeningHoursModel.fromMap(tempMap);
-  }
-
   static String showClosingTime(String day, OpeningHoursEntryModel hours) {
     return (hours.opening == '0' || hours.closing == '0')
         ? '$day: Closed'
         : '$day:  ${hours.opening} - ${hours.closing}';
+  }
+
+  static void replaceOldTime(Map<String, OpeningHoursEntryModel> tempMap,
+      List<String> tempList, int rowIndex) {
+    tempMap[sortedWeekDays[rowIndex]] = OpeningHoursEntryModel(
+      opening: tempList[0],
+      closing: tempList[1],
+    );
   }
 }

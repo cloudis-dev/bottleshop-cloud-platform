@@ -16,20 +16,19 @@ class EditOpeningHoursDialog extends HookWidget {
     required this.newHours,
   }) : super(key: key);
 
-  final Map<String, OpeningHoursEntryModel> newHours;
+  final OpeningHoursModel newHours;
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        final openingHours =
-            OpeningHoursModel.fromMap(Map.fromEntries(newHours.entries));
-        context.read(editedHoursProvider).state = openingHours;
+        context.read(hoursProvider).state = newHours;
       });
       return () => {};
     }, const []);
 
-    final openingHours = useProvider(editedHoursProvider).state;
+    final openingHours = useProvider(hoursProvider).state;
+    final newOpeningHours = context.read(editedHoursProvider).state;
     final openingHoursMap = openingHours?.toMap();
 
     return SimpleDialog(
@@ -65,12 +64,14 @@ class EditOpeningHoursDialog extends HookWidget {
               child: Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: openingHours == null
+              onPressed: newOpeningHours == null
                   ? null
                   : () async {
                       Navigator.of(context).pop();
-                      return openingHoursDoc.update(
-                          OpeningHoursEntryModel.toMap(openingHoursMap!));
+                      return openingHoursService.updateData(
+                        entryModelDocId,
+                        OpeningHoursEntryModel.toMap(openingHoursMap!),
+                      );
                     },
               child: Text('Edit'),
             ),

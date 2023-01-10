@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bottleshop_admin/src/config/constants.dart';
+import 'package:bottleshop_admin/src/core/data/services/database_service.dart';
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
 
-const collection = 'opening_hours';
-const doc = 'USFRRzUNHuYt4mwmjsAM';
+const entryModelDocId = 'USFRRzUNHuYt4mwmjsAM';
 
-final openingHoursDoc =
-    FirebaseFirestore.instance.collection(collection).doc(doc);
-
-final openingHoursSnapshot =
-    FirebaseFirestore.instance.collection(collection).snapshots();
+final openingHoursService = DatabaseService<OpeningHoursModel>(
+  Constants.openingHoursCollection,
+  fromMapAsync: (_, map) async => OpeningHoursModel.fromMap(map),
+);

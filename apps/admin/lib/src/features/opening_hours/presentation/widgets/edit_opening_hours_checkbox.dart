@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_entry_model.dart';
 import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_model.dart';
 import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 
@@ -15,15 +16,24 @@ class EditOpeningHoursCheckbox extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final openingHours = useProvider(editedHoursProvider).state;
+    final openingHours = useProvider(hoursProvider).state;
     final today = openingHours?.today(rowIndex);
+
+    void newOpeningHours(
+        OpeningHoursModel? openingHours, bool? value, int rowIndex) {
+      context.read(hoursProvider).state = openingHours?.setDay(
+        rowIndex,
+        value == false
+            ? OpeningHoursEntryModel.closed()
+            : OpeningHoursEntryModel.opened(),
+      );
+    }
 
     return Checkbox(
       key: ValueKey(rowIndex),
       value: OpeningHoursModel.isOpened(today),
       onChanged: (value) {
-        OpeningHoursModel.newOpeningHours(
-            openingHours, value, context, rowIndex);
+        newOpeningHours(openingHours, value, rowIndex);
       },
     );
   }

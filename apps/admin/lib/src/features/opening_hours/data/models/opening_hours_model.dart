@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_entry_model.dart';
-import 'package:bottleshop_admin/src/features/opening_hours/presentation/providers/providers.dart';
 
 class OpeningHoursModel {
   final OpeningHoursEntryModel monday;
@@ -23,16 +19,24 @@ class OpeningHoursModel {
     required this.sunday,
   });
 
-  static OpeningHoursModel fromMap(Map<String, OpeningHoursEntryModel> map) =>
-      OpeningHoursModel(
-        monday: map['Monday']!,
-        tuesday: map['Tuesday']!,
-        wednesday: map['Wednesday']!,
-        thursday: map['Thursday']!,
-        friday: map['Friday']!,
-        saturday: map['Saturday']!,
-        sunday: map['Sunday']!,
-      );
+  static OpeningHoursModel fromMap(Map<String, dynamic> map) {
+    return OpeningHoursModel(
+      monday: OpeningHoursEntryModel(
+          closing: map['Monday']![1], opening: map['Monday']![0]),
+      tuesday: OpeningHoursEntryModel(
+          closing: map['Tuesday']![1], opening: map['Tuesday']![0]),
+      wednesday: OpeningHoursEntryModel(
+          closing: map['Wednesday']![1], opening: map['Wednesday']![0]),
+      thursday: OpeningHoursEntryModel(
+          closing: map['Thursday']![1], opening: map['Thursday']![0]),
+      friday: OpeningHoursEntryModel(
+          closing: map['Friday']![1], opening: map['Friday']![0]),
+      saturday: OpeningHoursEntryModel(
+          closing: map['Saturday']![1], opening: map['Saturday']![0]),
+      sunday: OpeningHoursEntryModel(
+          closing: map['Sunday']![1], opening: map['Sunday']![0]),
+    );
+  }
 
   Map<String, OpeningHoursEntryModel> toMap() => {
         'Monday': monday,
@@ -61,7 +65,7 @@ class OpeningHoursModel {
       case 6:
         return sunday;
     }
-    return sunday;
+    return throw Exception();
   }
 
   static bool isOpened(OpeningHoursEntryModel? today) {
@@ -72,17 +76,43 @@ class OpeningHoursModel {
     return weAreOpen;
   }
 
-  static void newOpeningHours(OpeningHoursModel? openingHours, bool? value,
-      BuildContext context, int rowIndex) {
-    final newMap = Map.fromEntries(openingHours!.toMap().entries);
-
-    if (value == false) {
-      newMap[sortedWeekDays[rowIndex]] =
-          OpeningHoursEntryModel(opening: '0', closing: '0');
-    } else {
-      newMap[sortedWeekDays[rowIndex]] =
-          OpeningHoursEntryModel(opening: '88:88', closing: '88:88');
+  OpeningHoursModel setDay(int rowIndex, OpeningHoursEntryModel value) {
+    switch (rowIndex) {
+      case 0:
+        return copyWith(monday: value);
+      case 1:
+        return copyWith(tuesday: value);
+      case 2:
+        return copyWith(wednesday: value);
+      case 3:
+        return copyWith(thursday: value);
+      case 4:
+        return copyWith(friday: value);
+      case 5:
+        return copyWith(saturday: value);
+      case 6:
+        return copyWith(sunday: value);
     }
-    context.read(editedHoursProvider).state = OpeningHoursModel.fromMap(newMap);
+    throw Exception('No such day for index');
+  }
+
+  OpeningHoursModel copyWith({
+    OpeningHoursEntryModel? monday,
+    OpeningHoursEntryModel? tuesday,
+    OpeningHoursEntryModel? wednesday,
+    OpeningHoursEntryModel? thursday,
+    OpeningHoursEntryModel? friday,
+    OpeningHoursEntryModel? saturday,
+    OpeningHoursEntryModel? sunday,
+  }) {
+    return OpeningHoursModel(
+      monday: monday ?? this.monday,
+      tuesday: tuesday ?? this.tuesday,
+      wednesday: wednesday ?? this.wednesday,
+      thursday: thursday ?? this.thursday,
+      friday: friday ?? this.friday,
+      saturday: saturday ?? this.saturday,
+      sunday: sunday ?? this.sunday,
+    );
   }
 }

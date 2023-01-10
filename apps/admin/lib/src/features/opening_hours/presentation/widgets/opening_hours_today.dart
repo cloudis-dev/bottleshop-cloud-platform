@@ -28,8 +28,8 @@ class OpeningHoursToday extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentTime = TimeOfDay.now();
     final date = DateTime.now();
+    final currentTime = TimeOfDay.now();
     final nowTimeToDouble =
         currentTime.hour.toDouble() + (currentTime.minute.toDouble() / 60);
     final weekday = DateFormat('EEEE').format(date);
@@ -42,8 +42,8 @@ class OpeningHoursToday extends HookWidget {
 
         return Text(
           compareTimes(nowTimeToDouble, opening, closing)
-              ? 'Otvorene do: $closing'
-              : 'Zatvorene',
+              ? 'Open until: $closing'
+              : 'Closed',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: compareTimes(nowTimeToDouble, opening, closing)
