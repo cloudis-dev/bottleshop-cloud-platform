@@ -16,9 +16,9 @@ class EditOpeningHoursButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    useProvider(editedHoursProvider).state;
+    useProvider(hasChangedProvider).state;
     final currentTime = TimeOfDay.now();
-    final openingHoursMap = useProvider(hoursProvider).state;
+    final openingHoursMap = useProvider(editedHoursProvider).state;
     final todayOpening = openingHoursMap!.today(rowIndex);
     final tempMap = Map.fromEntries(openingHoursMap.toMap().entries);
     final tempList = [todayOpening.opening, todayOpening.closing];
@@ -42,9 +42,8 @@ class EditOpeningHoursButton extends HookWidget {
           newMap == null
               ? null
               : {
+                  context.read(hasChangedProvider).state = true,
                   context.read(editedHoursProvider).state =
-                      OpeningHoursModel.fromMap(newMap!),
-                  context.read(hoursProvider).state =
                       OpeningHoursModel.fromMap(newMap!)
                 };
         },

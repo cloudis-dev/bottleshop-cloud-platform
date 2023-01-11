@@ -6,11 +6,10 @@ import 'package:bottleshop_admin/src/features/opening_hours/data/services/servic
 final openingHoursProvider = StreamProvider<OpeningHoursModel>(
     (ref) => openingHoursService.streamSingle(entryModelDocId));
 
-final hoursProvider =
-    StateProvider.autoDispose<OpeningHoursModel?>((ref) => null);
-
 final editedHoursProvider =
     StateProvider.autoDispose<OpeningHoursModel?>((ref) => null);
+
+final hasChangedProvider = StateProvider.autoDispose((ref) => false);
 
 final sortedWeekDays = [
   'Monday',

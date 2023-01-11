@@ -16,13 +16,13 @@ class EditOpeningHoursCheckbox extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    useProvider(editedHoursProvider).state;
-    final openingHours = useProvider(hoursProvider).state;
+    useProvider(hasChangedProvider).state;
+    final openingHours = useProvider(editedHoursProvider).state;
     final today = openingHours?.today(rowIndex);
 
     void newOpeningHours(
         OpeningHoursModel? openingHours, bool? value, int rowIndex) {
-      context.read(hoursProvider).state = openingHours?.setDay(
+      context.read(editedHoursProvider).state = openingHours?.setDay(
         rowIndex,
         value == false
             ? OpeningHoursEntryModel.closed()
@@ -34,7 +34,7 @@ class EditOpeningHoursCheckbox extends HookWidget {
       key: ValueKey(rowIndex),
       value: OpeningHoursModel.isOpened(today),
       onChanged: (value) {
-        context.read(editedHoursProvider).state = openingHours;
+        context.read(hasChangedProvider).state = true;
         newOpeningHours(openingHours, value, rowIndex);
       },
     );

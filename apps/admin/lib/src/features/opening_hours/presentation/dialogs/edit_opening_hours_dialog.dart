@@ -22,13 +22,13 @@ class EditOpeningHoursDialog extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        context.read(hoursProvider).state = newHours;
+        context.read(editedHoursProvider).state = newHours;
       });
       return () => {};
     }, const []);
 
-    final openingHours = useProvider(hoursProvider).state;
-    final newOpeningHours = context.read(editedHoursProvider).state;
+    final openingHours = useProvider(editedHoursProvider).state;
+    final newOpeningHours = context.read(hasChangedProvider).state;
     final openingHoursMap = openingHours?.toMap();
 
     return SimpleDialog(
@@ -64,7 +64,7 @@ class EditOpeningHoursDialog extends HookWidget {
               child: Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: newOpeningHours == null
+              onPressed: newOpeningHours == false
                   ? null
                   : () async {
                       Navigator.of(context).pop();
