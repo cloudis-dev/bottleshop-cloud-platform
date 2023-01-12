@@ -1,19 +1,11 @@
 import { config } from 'firebase-functions';
 import * as functions from 'firebase-functions';
 
-import {
-  acquireCategoriesIndex,
-  createClient,
-  objectIdAlgoliaFieldName,
-} from '../utils/algolia-utils';
+import { acquireCategoriesIndex, createClient, objectIdAlgoliaFieldName } from '../utils/algolia-utils';
 import { categoriesCollection } from '../constants/collections';
 import { categoryFields } from '../constants/model-constants';
-import { DocumentChange } from '../models/document-change';
-import { getDocumentChange } from '../utils/document-snapshot-utils';
-import {
-  isEmulator,
-  isTestEnv,
-} from '../utils/functions-utils';
+import { DocumentChange, getDocumentChange } from '../utils/document-snapshot-utils';
+import { isEmulator, isTestEnv } from '../utils/functions-utils';
 import { tier1Region } from '../constants/other';
 
 /**

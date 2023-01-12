@@ -6,15 +6,9 @@ import {
   adminProductOutOfStockNotificationTag,
 } from '../../../constants/notification-constants';
 import { AdminOutOfStockNotification } from '../../../models/notification-models';
-import {
-  createMail,
-  getManagementEmails,
-} from '../../../utils/mail-utils';
+import { createMail, getManagementEmails } from '../../../utils/mail-utils';
 import { createNotification } from '../../../utils/notification-utils';
-import {
-  isEmulator,
-  isTestEnv,
-} from '../../../utils/functions-utils';
+import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
 import { mailCollection } from '../../../constants/collections';
 import { Product } from '../../../models/product';
 

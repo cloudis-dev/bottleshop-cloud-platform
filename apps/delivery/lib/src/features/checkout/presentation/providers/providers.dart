@@ -10,83 +10,27 @@
 //
 //
 
-import 'package:delivery/src/core/data/services/stripe_service.dart';
-import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/features/cart/data/repositories/cart_repository.dart';
-import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
-import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
+import 'package:delivery/src/features/cart/data/models/promo_code_model.dart';
+import 'package:delivery/src/features/checkout/presentation/view_models/delivery_option_state.dart';
+import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
 
-final _logger = Logger((CheckoutState).toString());
+final isRedirectingProvider = StateProvider.autoDispose<bool>((ref) => false);
 
-final nativePayProvider = FutureProvider<bool>((ref) async {
-  final stripe = ref.watch(stripeProvider);
-  final isNativePayAvailable = await stripe.checkIfNativePayReady();
-  return isNativePayAvailable;
-});
+final orderTypeStateProvider =
+    StateNotifierProvider.autoDispose<OrderTypeState, OrderTypeModel?>(
+  (ref) => OrderTypeState(),
+  name: 'orderTypeStateProvider',
+);
 
-final checkoutStateProvider = ChangeNotifierProvider.autoDispose((ref) {
-  final cartService = ref.watch(cartRepositoryProvider)!;
-  final stripeService = ref.watch(stripeProvider);
-  return CheckoutState(stripeService: stripeService, cartService: cartService);
-});
+final remarksTextEditCtrlProvider = Provider.autoDispose<TextEditingController>(
+  (ref) {
+    final ctrl = TextEditingController();
+    ref.onDispose(() => ctrl.dispose());
+    return ctrl;
+  },
+);
 
-class CheckoutState extends ChangeNotifier {
-  final StripeService stripeService;
-  final CartRepository cartService;
-  bool _isLoading = false;
-
-  CheckoutState({required this.stripeService, required this.cartService});
-
-  bool get isLoading => _isLoading;
-
-  Future<void> payByNativePay(PaymentData paymentData) async {
-    _logger.fine('payByNativePay invoked');
-    _isLoading = true;
-    notifyListeners();
-    try {
-      final canPayNatively = await stripeService.checkIfNativePayReady();
-      if (canPayNatively) {
-        _logger.fine('native pay supported');
-        final cart = (await cartService.getCartModel())!;
-        _logger.fine('cart retrieved: ${cart.toString()}');
-        final items = await cartService.cartContent.first;
-        _logger.fine('items retrieved: ${items.length}');
-        await stripeService.payByNative(
-          cart: cart,
-          items: items,
-          paymentData: paymentData,
-        );
-      } else {
-        throw Exception('native pay not supported');
-      }
-    } on PlatformException catch (err, stack) {
-      _logger.severe('Failed to pay by native PlatformException', err, stack);
-      rethrow;
-    } catch (err, stack) {
-      _logger.severe('Failed to pay by native', err, stack);
-      rethrow;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> payByCreditCard(PaymentData paymentData) async {
-    _isLoading = true;
-    notifyListeners();
-    _logger.fine('payByCreditCard invoked');
-    try {
-      await stripeService.payByCard(paymentData);
-    } catch (err, stack) {
-      _logger.severe('Failed to pay by credit card', err, stack);
-      rethrow;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-}
+final currentAppliedPromoProvider =
+    StateProvider.autoDispose<PromoCodeModel?>((ref) => null);

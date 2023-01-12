@@ -33,7 +33,8 @@ dependencies:
   animations: ^2.0.2
   tuple: ^2.0.0
   http: ^0.13.4
-  flutter_stripe: ^2.0.2
+  flutter_stripe: ^5.1.0
+  stripe_checkout: ^1.0.0
   flutter_hooks: ^0.18.5+1
   hooks_riverpod: ^1.0.3
   state_notifier: ^0.7.1
@@ -74,6 +75,8 @@ dependencies:
     git:
       url: https://github.com/KristianBalaj/flutter_scroll_to_top.git
       ref: 21d47cab93a52e83eed910d3564278623c830e88
+  flutter_dotenv: ^5.0.2
+  collection: ^1.16.0
   responsive_framework: ^0.2.0
   flutter_dotenv: ^5.0.2
 

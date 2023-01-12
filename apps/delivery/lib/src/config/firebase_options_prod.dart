@@ -46,7 +46,7 @@ class ProductionFirebaseOptions {
     }
   }
 
-  /// Taken from https://console.cloud.google.com/apis/credentials?project=bottleshop-3-veze-dev-54908
+  /// Taken from https://console.cloud.google.com/apis/credentials?project=bottleshop3veze-delivery
   /// Under "OAuth 2.0 Client IDs"
   static String get currentClientId {
     if (kIsWeb) {

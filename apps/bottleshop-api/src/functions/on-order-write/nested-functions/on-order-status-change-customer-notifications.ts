@@ -1,10 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import {
-  createNotification,
-  getCustomerDeviceTokens,
-} from '../../../utils/notification-utils';
+import { createNotification, getCustomerDeviceTokens } from '../../../utils/notification-utils';
 import { CustomerOrderNotification } from '../../../models/notification-models';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
 import { getStatusStepNotificationTitle } from '../../../utils/order-utils';
@@ -26,7 +23,7 @@ export const onOrderStatusChangeCustomerNotification = async (orderSnapshot: fun
     getEntityByRef<OrderType>(order.order_type_ref),
   ]);
 
-  if (orderType == null) {
+  if (orderType === undefined) {
     functions.logger.error(`Could not get OrderType entity by reference: ${order.order_type_ref}`);
     return;
   }
@@ -38,7 +35,7 @@ export const onOrderStatusChangeCustomerNotification = async (orderSnapshot: fun
     order.customer.preferred_language ?? 'sk',
   );
 
-  if (title != null) {
+  if (title !== undefined) {
     const notification = createNotification<CustomerOrderNotification>({
       title,
       body: '',

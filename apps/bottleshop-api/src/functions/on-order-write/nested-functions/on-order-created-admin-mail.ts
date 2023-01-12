@@ -1,16 +1,9 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import {
-  createMail,
-  getManagementEmails,
-  getOrderDetailsForMail,
-} from '../../../utils/mail-utils';
+import { createMail, getManagementEmails, getOrderDetailsForMail } from '../../../utils/mail-utils';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
-import {
-  isEmulator,
-  isTestEnv,
-} from '../../../utils/functions-utils';
+import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
 import { mailCollection } from '../../../constants/collections';
 import { Order } from '../../../models/order';
 import { OrderType } from '../../../models/order-type';
@@ -27,7 +20,7 @@ export const onOrderCreatedAdminMail = async (orderSnapshot: functions.firestore
     getManagementEmails(),
   ]);
 
-  if (orderType == null) {
+  if (orderType === undefined) {
     functions.logger.error(`Could not get OrderType entity by reference: ${order.order_type_ref}`);
     return;
   }

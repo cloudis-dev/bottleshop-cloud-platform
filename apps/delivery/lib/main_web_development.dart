@@ -8,6 +8,7 @@ import 'package:delivery/src/core/data/services/authentication_service.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/utils/logging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -18,8 +19,6 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'src/core/utils/logging.dart';
 
 Future<void> main() async {
   await dotenv.load();

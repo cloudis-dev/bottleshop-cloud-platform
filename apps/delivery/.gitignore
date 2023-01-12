@@ -13,8 +13,10 @@
 # IntelliJ related
 *.iml
 *.ipr
+*./apps/djebobo
+*./.env*
 *.iws
-.idea/
+.idea/*
 
 # Visual Studio Code related
 .classpath

@@ -10,13 +10,13 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/models/category_model.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/data/models/unit_model.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:delivery/src/features/products/data/models/flash_sale_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 @immutable
@@ -95,6 +95,8 @@ class ProductModel {
   double get priceNoVat => double.parse(_priceNoVat.toStringAsFixed(2));
 
   double get priceWithVat => priceNoVat * vatMultiplier;
+
+  double get productVat => priceWithVat - priceNoVat;
 
   double get finalPrice =>
       priceNoVat * vatMultiplier * (discount == null ? 1 : 1 - discount!);

@@ -28,16 +28,9 @@ class AppPreferencesKeys {
 class FirebaseCallableFunctions {
   FirebaseCallableFunctions._();
 
-  static const createPaymentIntent = 'createPaymentIntent';
   static const createStripeCustomer = 'createStripeCustomer';
-  static const setShippingFee = 'setShippingFee';
-  static const removeShippingFee = 'removeShippingFee';
-  static const addPromoCode = 'applyPromoCode';
-  static const validateCart = 'validateCart';
-  static const removePromoCode = 'removePromoCode';
-  static const createStripePriceIds = 'createStripePriceIds';
-  static const createCashOnDeliveryOrder = 'createCashOnDeliveryOrder';
   static const deleteAccount = 'deleteAccount';
+  static const createCheckoutSession = 'createCheckoutSession';
 }
 
 class FirestoreCollections {
@@ -60,6 +53,7 @@ class FirestoreCollections {
   static const String orderTypesCollection = 'order_types';
   static const String ordersCollection = 'orders';
   static const String versionConstraintsCollection = 'version_constraints';
+  static const String promoCodesCollection = 'promo_codes';
 
   static const String slidersSubCollection = 'configuration/sliders/data';
   static const String aggregationsCollection = 'aggregations';
@@ -214,12 +208,6 @@ const kLanguageFlagsMap = {
   LanguageMode.en: 'assets/images/us.svg',
   LanguageMode.sk: 'assets/images/sk.svg',
 };
-
-const kOrderTypePickUp = 'pick-up';
-const kOrderTypeHomeDelivery = 'home-delivery';
-const kOrderTypeQuickBa = 'quick-delivery-BA';
-const kOrderTypeCloseAreaBa = 'close-areas-delivery-ba';
-const kOrderTypeCashOnDelivery = 'cash-on-delivery';
 
 class UrlStrings {
   static const String googlePlay =
