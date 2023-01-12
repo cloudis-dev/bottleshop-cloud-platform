@@ -14,6 +14,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,7 +39,16 @@ void main() {
       ProviderScope(
         overrides: [
           authProvider.overrideWithValue(
-              AuthenticationService(firebaseAuth: FirebaseAuth.instance)),
+            AuthenticationService(
+              firebaseAuth: FirebaseAuth.instance,
+              googleSignIn: GoogleSignIn(
+                scopes: AppEnvironment.googleSignInScopes,
+                clientId: defaultTargetPlatform == TargetPlatform.iOS
+                    ? DefaultFirebaseOptions.ios.iosClientId
+                    : DefaultFirebaseOptions.ios.androidClientId,
+              ),
+            ),
+          ),
           sharedPreferencesProvider.overrideWithValue(
             SharedPreferencesService(sharedPreferences),
           ),
@@ -78,6 +88,7 @@ void initializeLogging() {
       if (kIsWeb) {
         FirebaseCrashlytics.instance.recordError(event.error, event.stackTrace);
       }
+      print(event);
 
       if (kDebugMode) {
         debugPrint('\x1B[31;1m $logBody \x1B[0m $rest');
