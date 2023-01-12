@@ -13,8 +13,10 @@
 # IntelliJ related
 *.iml
 *.ipr
+*./apps/djebobo
+*./.env*
 *.iws
-.idea/
+.idea/*
 
 # Visual Studio Code related
 .classpath
@@ -132,3 +134,4 @@ android/android_keys.zip
 android/app/cloudis.jks
 local.properties
 .fvm
+.env

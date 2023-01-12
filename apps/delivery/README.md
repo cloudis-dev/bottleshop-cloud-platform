@@ -13,11 +13,11 @@ Bottleshop3veze Delivery app
 
 ## Setup
 
-1. Add `.env` file (Ask the other devs for the contents of the file)
+1. Add `.env` file (Copy the contents from `.env.template`)
 
 ### Run project
 
-- flutter run --flavor [development|production] --target [lib/development_main.dart|lib/...]
+- flutter run --flavor [development|production] --target [lib/main_web_development.dart|lib/main_web_production.dart]
 
 ### Appcheck for local setup
 

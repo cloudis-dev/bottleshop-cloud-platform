@@ -54,7 +54,7 @@ class SharedPreferencesService {
         AppPreferencesKeys.preferencesLanguage, locale.index);
   }
 
-  LanguageMode? getAppLanguage() {
+  LanguageMode getAppLanguage() {
     final languageId =
         sharedPreferences.getInt(AppPreferencesKeys.preferencesLanguage);
 

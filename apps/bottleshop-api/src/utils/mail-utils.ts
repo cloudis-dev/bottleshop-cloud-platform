@@ -1,10 +1,7 @@
 import * as admin from 'firebase-admin';
 
 import { getPriceNumberString } from './formatting-utils';
-import {
-  Language,
-  VAT,
-} from '../constants/other';
+import { Language, VAT } from '../constants/other';
 import { Mail } from '../models/mail';
 import { managementMailsCollection } from '../constants/collections';
 import { Order } from '../models/order';
@@ -57,7 +54,7 @@ export function getOrderDetailsForMail(order: Order, orderType: OrderType, lang:
     `;
 
   tmp +=
-    order.promo_code != null
+    order.promo_code !== undefined
       ? `${lang === 'sk' ? 'Promo' : 'Promo'}: ${order.promo_code}
     ${lang === 'sk' ? 'Promo zľava' : 'Promo discount'}: -€${getPriceNumberString(order.promo_code_value ?? 0)}
     `

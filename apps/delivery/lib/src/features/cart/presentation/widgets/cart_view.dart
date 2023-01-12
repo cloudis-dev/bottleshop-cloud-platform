@@ -18,7 +18,6 @@ import 'package:delivery/src/features/cart/presentation/widgets/cart_list_item.d
 import 'package:delivery/src/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -37,17 +36,13 @@ class CartView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
 
-    return Stack(
-      fit: StackFit.expand,
+    return Column(
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom + 120),
-          padding: const EdgeInsets.only(bottom: 30),
+        Expanded(
           child: CupertinoScrollbar(
             controller: scrollController,
             thumbVisibility: false,
-            child: ref.watch(cartContentProvider).when(
+            child: ref.watch(cartProvider).when(
                   data: (cart) {
                     return ListView.builder(
                       physics: const BouncingScrollPhysics(
@@ -56,7 +51,7 @@ class CartView extends HookConsumerWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       controller: scrollController,
                       scrollDirection: Axis.vertical,
-                      itemCount: cart.length,
+                      itemCount: cart.products.length,
                       itemBuilder: (context, index) => Dismissible(
                         key: UniqueKey(),
                         background: Container(
@@ -74,7 +69,7 @@ class CartView extends HookConsumerWidget {
                         ),
                         onDismissed: (direction) async {
                           await ref.read(cartRepositoryProvider)!.removeItem(
-                              cart.elementAt(index).product.uniqueId);
+                              cart.products.elementAt(index).product.uniqueId);
                           showSimpleNotification(
                             Text(context.l10n.itemRemovedFromCart),
                             position: NotificationPosition.bottom,
@@ -84,8 +79,8 @@ class CartView extends HookConsumerWidget {
                           );
                         },
                         child: CartListItem(
-                          product: cart.elementAt(index).product,
-                          quantity: cart.elementAt(index).count,
+                          product: cart.products.elementAt(index).product,
+                          quantity: cart.products.elementAt(index).count,
                         ),
                       ),
                     );
@@ -103,9 +98,8 @@ class CartView extends HookConsumerWidget {
         ref.watch(cartProvider).when(
               data: (cart) {
                 return CheckoutTile(
-                  showPromoButton: !kIsWeb,
                   actionLabel: context.l10n.proceedToShipment,
-                  actionCallback: () {
+                  actionCallback: () async {
                     ref.read(navigationProvider).pushPage(
                           context,
                           AppPageNode(page: CheckoutPage()),

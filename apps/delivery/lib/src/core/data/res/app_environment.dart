@@ -10,6 +10,8 @@
 //
 //
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class AppEnvironment {
   AppEnvironment._();
 
@@ -34,24 +36,20 @@ class AppEnvironment {
   static const termsPdfEndpoint =
       'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2F';
 
-  static const appleSignInRedirectUri = String.fromEnvironment(
-    'DEFINE_APPLE_SIGN_IN_REDIRECT',
-    defaultValue:
-        'https://bottleshop3veze-delivery.firebaseapp.com/__/auth/handler',
-  );
-  static const stripePublishableKey = String.fromEnvironment(
-    'DEFINE_STRIPE_KEY',
-    defaultValue: 'pk_live_fRyyZgnqIu9Ry0YtvIpdv6pJ008KDasBdf',
-  );
-  static const stripeAndroidPayMode = String.fromEnvironment(
-    'DEFINE_ANDROID_PAY_MODE',
-    defaultValue: 'development',
-  );
-  static const vapidKey = String.fromEnvironment(
-    'DEFINE_VAPID_KEY',
-    defaultValue:
-        'BKJD6AGTNjU2aHqCWSP-njCoaIMW-ONn6e8397J14m8BQ2Tq-sch2PPZFIsPxYM6847Q9ldtW90BXrLIDMyi3-E',
-  );
+  static String get appleSignInRedirectUri =>
+      dotenv.env['DEFINE_APPLE_SIGN_IN_REDIRECT'] ??
+      'https://bottleshop3veze-delivery.firebaseapp.com/__/auth/handler';
+
+  static String get stripePublishableKey =>
+      dotenv.env['DEFINE_STRIPE_KEY'] ??
+      'pk_live_fRyyZgnqIu9Ry0YtvIpdv6pJ008KDasBdf';
+
+  static String get stripeAndroidPayMode =>
+      dotenv.env['DEFINE_ANDROID_PAY_MODE'] ?? 'development';
+
+  static String get vapidKey =>
+      dotenv.env['DEFINE_VAPID_KEY'] ??
+      'BKJD6AGTNjU2aHqCWSP-njCoaIMW-ONn6e8397J14m8BQ2Tq-sch2PPZFIsPxYM6847Q9ldtW90BXrLIDMyi3-E';
 
   static const devFirebaseAuthPort = 9000;
   static const devFirestorePort = 8000;

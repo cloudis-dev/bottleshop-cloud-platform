@@ -47,3 +47,4 @@ linter:
     depend_on_referenced_packages: false
     library_private_types_in_public_api: false
     implementation_imports: false
+    unawaited_futures: true

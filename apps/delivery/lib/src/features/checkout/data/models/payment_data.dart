@@ -11,50 +11,83 @@
 //
 import 'package:equatable/equatable.dart';
 
+enum PlatformType {
+  web,
+  mobile;
+
+  static const kWeb = 'web';
+  static const kMobile = 'mobile';
+
+  @override
+  String toString() {
+    switch (this) {
+      case PlatformType.web:
+        return kWeb;
+      case PlatformType.mobile:
+        return kMobile;
+    }
+  }
+
+  static PlatformType? fromCode(String code) {
+    switch (code) {
+      case kWeb:
+        return web;
+      case kMobile:
+        return mobile;
+      default:
+        return null;
+    }
+  }
+}
+
 class PaymentData extends Equatable {
-  final String? userId;
-  final String? customerId;
-  final String? email;
-  final String? orderNote;
-  final String? deliveryType;
+  final String orderNote;
+  final String deliveryType;
+  final PlatformType platformType;
+
+  /// The url to redirect to in case of payment failure.
+  final String cancelUrl;
+
+  /// The url to redirect to in case of payment success.
+  final String successUrl;
+
+  final String? promoCode;
+
+  final String locale;
 
   const PaymentData({
-    required this.userId,
-    required this.customerId,
-    required this.email,
     required this.orderNote,
     required this.deliveryType,
+    required this.platformType,
+    required this.successUrl,
+    required this.cancelUrl,
+    required this.promoCode,
+    required this.locale,
   });
 
   @override
   List<Object?> get props => [
-        userId,
-        customerId,
-        email,
         orderNote,
         deliveryType,
+        platformType,
+        successUrl,
+        cancelUrl,
+        promoCode,
+        locale,
       ];
 
   @override
   bool get stringify => true;
 
-  factory PaymentData.fromMap(Map<String, dynamic> map) {
-    return PaymentData(
-      userId: map['userId'] as String?,
-      customerId: map['customerId'] as String?,
-      email: map['email'] as String?,
-      orderNote: map['orderNote'] as String?,
-      deliveryType: map['deliveryType'] as String?,
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'userId': userId,
-      'customerId': customerId,
-      'email': email,
       'orderNote': orderNote,
       'deliveryType': deliveryType,
+      'cancelUrl': cancelUrl,
+      'successUrl': successUrl,
+      'platform': platformType.toString(),
+      if (promoCode != null) 'promoCode': promoCode,
+      'locale': locale,
     };
   }
 }

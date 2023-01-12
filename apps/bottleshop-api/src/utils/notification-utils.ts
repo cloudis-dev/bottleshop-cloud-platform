@@ -32,5 +32,5 @@ export function createNotification<T>(args: {
 
 export async function getCustomerDeviceTokens(customerRef: FirebaseFirestore.DocumentReference): Promise<string[]> {
   const snap = await customerRef.collection(devicesSubCollection).get();
-  return snap.docs.map((e) => e.get('token')).filter((e) => e != null);
+  return snap.docs.map((e) => e.get('token')).filter((e) => !e);
 }

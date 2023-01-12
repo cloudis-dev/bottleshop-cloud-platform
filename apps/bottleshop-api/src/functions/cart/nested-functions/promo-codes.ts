@@ -3,31 +3,27 @@ import * as functions from 'firebase-functions';
 import { logger } from 'firebase-functions';
 
 import { Cart } from '../../../models/cart';
-import {
-  cartCollection,
-  promoCodesCollection,
-  usersCollection,
-} from '../../../constants/collections';
+import { cartCollection, usersCollection } from '../../../constants/collections';
 import { cartFields } from '../../../constants/model-constants';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
+import { getPromoByCode, isPromoValidV1 } from '../../../utils/promo-code-utils';
 import { PromoCode } from '../../../models/promo-code';
-import {
-  tempCartId,
-  tier1Region,
-} from '../../../constants/other';
+import { tempCartId, tier1Region } from '../../../constants/other';
 
 interface PromoUpdateResult {
   applied: boolean;
 }
 
-async function getPromoByCode(code: string): Promise<PromoCode | undefined> {
-  const promoRef = admin.firestore().collection(promoCodesCollection).doc(code);
-  return getEntityByRef<PromoCode>(promoRef);
-}
-
-function isPromoValid(promo: PromoCode, cart: Cart): boolean {
-  return promo.remaining_uses_count > 0 && promo.min_cart_value <= cart.products_total_price;
-}
+export const isPromoCodeValid = async (cart: Cart): Promise<boolean> => {
+  if (!cart.promo_code) {
+    return true;
+  }
+  const promo = await getPromoByCode(cart.promo_code);
+  if (!promo) {
+    return false;
+  }
+  return isPromoValidV1(promo, cart);
+};
 
 function addPromoToCart(promo: PromoCode, cart: Cart): Cart {
   if (cart.promo_code && cart.promo_code_value) {
@@ -52,17 +48,6 @@ function removePromoFromCart(cart: Cart): Cart {
 
   return cart;
 }
-
-export const isPromoCodeValid = async (cart: Cart): Promise<boolean> => {
-  if (!cart.promo_code) {
-    return true;
-  }
-  const promo = await getPromoByCode(cart.promo_code);
-  if (!promo) {
-    return false;
-  }
-  return isPromoValid(promo, cart);
-};
 
 export const removePromoCode = functions
   .region(tier1Region)
@@ -101,7 +86,7 @@ export const applyPromoCode = functions
               .doc(tempCartId);
             const cart = await getEntityByRef<Cart>(cartRef);
             if (cart) {
-              if (isPromoValid(promo, cart)) {
+              if (isPromoValidV1(promo, cart)) {
                 const newCart = addPromoToCart(promo, cart);
                 await cartRef.set(newCart);
                 return { applied: true };

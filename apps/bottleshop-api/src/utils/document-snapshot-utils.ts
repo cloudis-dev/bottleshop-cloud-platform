@@ -2,7 +2,12 @@ import deepEqual from 'deep-equal';
 import * as functions from 'firebase-functions';
 
 import { approximately } from './math-utils';
-import { DocumentChange } from '../models/document-change';
+
+export enum DocumentChange {
+  created,
+  deleted,
+  updated,
+}
 
 /**
  * Get document change - created, updated, deleted.

@@ -30,7 +30,7 @@
     "global": "^4.4.0",
     "luxon": "^2.4.0",
     "remove-accents": "^0.4.2",
-    "stripe": "^9.2.0",
+    "stripe": "^11.4.0",
     "tslib": "~2.4.0"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "@nrwl/jest": "14.4.3",
     "@nrwl/linter": "14.4.3",
     "@nrwl/node": "14.4.3",
-    "@nrwl/nx-cloud": "14.2.0",
+    "@nrwl/nx-cloud": "14.4.1",
     "@nrwl/nx-plugin": "14.4.3",
     "@nrwl/workspace": "14.4.3",
     "@nxrocks/nx-flutter": "^3.0.2",
