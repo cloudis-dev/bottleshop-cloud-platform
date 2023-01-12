@@ -1,7 +1,7 @@
+import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_entry_model.dart';
+import 'package:bottleshop_admin/src/features/opening_hours/utils/opening_hours_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'package:bottleshop_admin/src/features/opening_hours/data/models/opening_hours_entry_model.dart';
 
 class DayOfTheWeek extends StatelessWidget {
   const DayOfTheWeek({
@@ -20,7 +20,7 @@ class DayOfTheWeek extends StatelessWidget {
 
     return Center(
       child: Text(
-        OpeningHoursEntryModel.showClosingTime(day, hours!),
+        OpeningHoursUtils.showClosingTime(day, hours!),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           height: 2,

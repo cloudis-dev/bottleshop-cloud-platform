@@ -21,20 +21,13 @@ class OpeningHoursModel {
 
   static OpeningHoursModel fromMap(Map<String, dynamic> map) {
     return OpeningHoursModel(
-      monday: OpeningHoursEntryModel(
-          closing: map['Monday']![1], opening: map['Monday']![0]),
-      tuesday: OpeningHoursEntryModel(
-          closing: map['Tuesday']![1], opening: map['Tuesday']![0]),
-      wednesday: OpeningHoursEntryModel(
-          closing: map['Wednesday']![1], opening: map['Wednesday']![0]),
-      thursday: OpeningHoursEntryModel(
-          closing: map['Thursday']![1], opening: map['Thursday']![0]),
-      friday: OpeningHoursEntryModel(
-          closing: map['Friday']![1], opening: map['Friday']![0]),
-      saturday: OpeningHoursEntryModel(
-          closing: map['Saturday']![1], opening: map['Saturday']![0]),
-      sunday: OpeningHoursEntryModel(
-          closing: map['Sunday']![1], opening: map['Sunday']![0]),
+      monday: OpeningHoursEntryModel.fromMap(map['Monday']),
+      tuesday: OpeningHoursEntryModel.fromMap(map['Tuesday']),
+      wednesday: OpeningHoursEntryModel.fromMap(map['Wednesday']),
+      thursday: OpeningHoursEntryModel.fromMap(map['Thursday']),
+      friday: OpeningHoursEntryModel.fromMap(map['Friday']),
+      saturday: OpeningHoursEntryModel.fromMap(map['Saturday']),
+      sunday: OpeningHoursEntryModel.fromMap(map['Sunday']),
     );
   }
 
@@ -66,14 +59,6 @@ class OpeningHoursModel {
         return sunday;
     }
     return throw Exception();
-  }
-
-  static bool isOpened(OpeningHoursEntryModel? today) {
-    var weAreOpen = false;
-    if (today?.opening != '0' || today?.closing != '0') {
-      weAreOpen = true;
-    }
-    return weAreOpen;
   }
 
   OpeningHoursModel setDay(int rowIndex, OpeningHoursEntryModel value) {
