@@ -11,8 +11,8 @@
 //
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/filter/data/models/filter_aggregations_model.dart';
 import 'package:delivery/src/features/filter/presentation/viewmodels/filter_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

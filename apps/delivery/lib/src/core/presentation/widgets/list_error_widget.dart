@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 /// This is used in scrollable lists where the content is loaded.
 /// When any error in the items loading happens, this widget should be displayed.
 class ListErrorWidget extends StatelessWidget {
-  const ListErrorWidget({super.key, required this.onButtonPressed});
+  const ListErrorWidget(this.onButtonPressed, {Key? key}) : super(key: key);
 
   final void Function() onButtonPressed;
 

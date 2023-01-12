@@ -10,25 +10,26 @@
 //
 //
 
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'package:badges/badges.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
 import 'package:delivery/src/core/presentation/widgets/side_menu_header.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/views/terms_conditions_view.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:routeborn/routeborn.dart';
 
-final _versionProvider = FutureProvider<PackageInfo>((ref) async {
-  final info = await PackageInfo.fromPlatform();
-  return info;
+final _versionProvider = FutureProvider.autoDispose<PackageInfo>((ref) {
+  return PackageInfo.fromPlatform();
 });
 
 class MenuDrawer extends HookConsumerWidget {
@@ -38,12 +39,18 @@ class MenuDrawer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final orderBadge = ref.watch(activeOrdersCountProvider).whenData((value) => value).value ?? 0;
+    final orderBadge =
+        ref.watch(activeOrdersCountProvider).whenData((value) => value).value ??
+            0;
 
-    final hasUser = ref.watch(currentUserProvider.select<bool>((value) => value != null));
+    final hasUser =
+        ref.watch(currentUserProvider.select((value) => value != null));
+    final currentBranch = ref.watch(
+        navigationProvider.select((value) => value.getNestingBranch(context)));
 
     return Drawer(
       child: CupertinoScrollbar(
+        thumbVisibility: true,
         controller: scrollController,
         child: Theme(
           data: Theme.of(context).copyWith(
@@ -55,69 +62,169 @@ class MenuDrawer extends HookConsumerWidget {
             controller: scrollController,
             children: <Widget>[
               if (hasUser) const SideMenuHeader(),
-              SideMenuItem(
-                isSelected: false,
+              _SideMenuItem(
+                isSelected:
+                    kIsWeb ? currentBranch == NestingBranch.shop : false,
                 leading: Icons.home,
                 title: context.l10n.homeTabLabel,
-                handler: () {},
+                handler: () {
+                  final nav = ref.read(navigationProvider);
+
+                  if (nav.getNestingBranch(context) == NestingBranch.shop) {
+                    nav.replaceAllWith(context, []);
+                  } else {
+                    nav.setNestingBranch(context, NestingBranch.shop);
+                  }
+                },
               ),
-              SideMenuItem(
-                isSelected: false,
+              _SideMenuItem(
+                isSelected:
+                    kIsWeb ? currentBranch == NestingBranch.categories : false,
                 leading: Icons.liquor,
                 title: context.l10n.categories,
-                handler: () {},
+                handler: () {
+                  final nav = ref.read(navigationProvider);
+
+                  if (nav.getNestingBranch(context) ==
+                      NestingBranch.categories) {
+                    nav.replaceAllWith(context, []);
+                  } else {
+                    nav.setNestingBranch(
+                      context,
+                      NestingBranch.categories,
+                    );
+                  }
+                },
               ),
-              SideMenuItem(
-                isSelected: false,
+              _SideMenuItem(
+                isSelected:
+                    kIsWeb ? currentBranch == NestingBranch.favorites : false,
                 leading: Icons.favorite,
                 title: context.l10n.favoriteTabLabel,
-                handler: () {},
+                handler: () {
+                  final nav = ref.read(navigationProvider);
+
+                  if (nav.getNestingBranch(context) ==
+                      NestingBranch.favorites) {
+                    nav.replaceAllWith(context, []);
+                  } else {
+                    nav.setNestingBranch(
+                      context,
+                      NestingBranch.favorites,
+                    );
+                  }
+                },
               ),
               if (hasUser)
-                SideMenuItem(
-                  isSelected: false,
+                _SideMenuItem(
+                  isSelected:
+                      kIsWeb ? currentBranch == NestingBranch.cart : false,
                   leading: Icons.shopping_cart,
                   title: context.l10n.shopping_cart,
-                  handler: () {},
+                  handler: () {
+                    ref.read(navigationProvider).setNestingBranch(
+                          context,
+                          NestingBranch.cart,
+                        );
+                  },
                 ),
-              SideMenuItem(
-                isSelected: false,
+              _SideMenuItem(
+                isSelected:
+                    kIsWeb ? currentBranch == NestingBranch.orders : false,
                 leading: Icons.fact_check_outlined,
-                handler: () {},
+                handler: () {
+                  final nav = ref.read(navigationProvider);
+
+                  if (nav.getNestingBranch(context) == NestingBranch.orders) {
+                    nav.replaceAllWith(context, []);
+                  } else {
+                    nav.setNestingBranch(
+                      context,
+                      NestingBranch.orders,
+                      branchParam: nav.getNestingBranch(context),
+                    );
+                  }
+                },
                 title: context.l10n.orderTabLabel,
                 badgeValue: orderBadge,
               ),
-              SideMenuItem(
-                isSelected: false,
+              _SideMenuItem(
+                isSelected:
+                    kIsWeb ? currentBranch == NestingBranch.wholesale : false,
                 leading: Icons.store,
                 title: context.l10n.wholesale,
-                handler: () {},
+                handler: () {
+                  final nav = ref.read(navigationProvider);
+
+                  if (nav.getNestingBranch(context) ==
+                      NestingBranch.wholesale) {
+                    nav.replaceAllWith(context, []);
+                  } else {
+                    nav.setNestingBranch(
+                      context,
+                      NestingBranch.wholesale,
+                      branchParam: nav.getNestingBranch(context),
+                    );
+                  }
+                },
               ),
-              SideMenuItem(
+              _SideMenuItem(
                 dense: true,
                 title: context.l10n.applicationPreferences,
                 titleStyle: Theme.of(context).textTheme.overline,
               ),
-              SideMenuItem(
-                isSelected: false,
+              _SideMenuItem(
+                isSelected:
+                    kIsWeb ? currentBranch == NestingBranch.account : false,
                 leading: Icons.settings,
                 title: context.l10n.settings,
-                handler: () {},
+                handler: () {
+                  final nav = ref.read(navigationProvider);
+
+                  if (nav.getNestingBranch(context) == NestingBranch.account) {
+                    nav.replaceAllWith(context, []);
+                  } else {
+                    nav.setNestingBranch(
+                      context,
+                      NestingBranch.account,
+                      branchParam: nav.getNestingBranch(context),
+                    );
+                  }
+                },
               ),
-              SideMenuItem(
-                isSelected: false,
+              _SideMenuItem(
+                isSelected:
+                    kIsWeb ? currentBranch == NestingBranch.help : false,
                 leading: Icons.help_outlined,
                 title: context.l10n.helpSupport,
-                handler: () {},
+                handler: () {
+                  final nav = ref.read(navigationProvider);
+
+                  if (nav.getNestingBranch(context) == NestingBranch.help) {
+                    nav.replaceAllWith(context, []);
+                  } else {
+                    nav.setNestingBranch(
+                      context,
+                      NestingBranch.help,
+                      branchParam: nav.getNestingBranch(context),
+                    );
+                  }
+                },
               ),
               const BottleshopAboutTile(),
-              SideMenuItem(
+              _SideMenuItem(
                 leading: Icons.gavel,
-                handler: () {},
+                handler: () {
+                  ref.read(navigationProvider).pushPage(
+                        context,
+                        AppPageNode(page: TermsConditionsPage()),
+                        toParent: true,
+                      );
+                },
                 title: context.l10n.menuTerms,
               ),
               if (hasUser)
-                SideMenuItem(
+                _SideMenuItem(
                   handler: () async {
                     await ref.read(userRepositoryProvider).signOut();
                   },
@@ -132,7 +239,7 @@ class MenuDrawer extends HookConsumerWidget {
   }
 }
 
-class SideMenuItem extends StatelessWidget {
+class _SideMenuItem extends StatelessWidget {
   final IconData? leading;
   final String? title;
   final TextStyle? titleStyle;
@@ -142,8 +249,8 @@ class SideMenuItem extends StatelessWidget {
   final int badgeValue;
   final bool isSelected;
 
-  const SideMenuItem({
-    super.key,
+  const _SideMenuItem({
+    Key? key,
     this.leading,
     this.title,
     this.titleStyle,
@@ -152,7 +259,7 @@ class SideMenuItem extends StatelessWidget {
     this.dense = false,
     this.badgeValue = 0,
     this.isSelected = false,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +303,7 @@ class BottleshopAboutTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _version = ref.watch(_versionProvider);
+    final version = ref.watch(_versionProvider);
 
     return ListTile(
       dense: false,
@@ -219,7 +326,7 @@ class BottleshopAboutTile extends HookConsumerWidget {
             ),
           ),
           applicationName: context.l10n.app_title,
-          applicationVersion: _version.maybeWhen(
+          applicationVersion: version.maybeWhen(
             data: (version) => '${version.version}.${version.buildNumber}',
             orElse: () => null,
           ),

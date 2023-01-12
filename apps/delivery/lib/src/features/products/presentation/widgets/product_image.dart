@@ -16,7 +16,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:octo_image/octo_image.dart';
 
-final _widthScopedProvider = Provider<double>((ref) => 200.0);
+final _widthScopedProvider =
+    Provider<double?>((_) => throw UnimplementedError());
 
 class ProductImage extends HookConsumerWidget {
   static final borderRadius = BorderRadius.circular(6);
@@ -39,11 +40,10 @@ class ProductImage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final path = ref.watch(defaultProductImage);
-    if (imagePath == null || imagePath == path) {
+    if (imagePath == null || imagePath == ref.watch(defaultProductImage)) {
       return ProviderScope(
         overrides: [
-          _widthScopedProvider.overrideWithValue(width ?? 200),
+          _widthScopedProvider.overrideWithValue(width),
         ],
         child: const _PlaceHolderProductImage(),
       );
@@ -52,7 +52,7 @@ class ProductImage extends HookConsumerWidget {
 
       return ProviderScope(
         overrides: [
-          _widthScopedProvider.overrideWithValue(width ?? 200),
+          _widthScopedProvider.overrideWithValue(width),
         ],
         child: downloadUrl.maybeWhen(
           data: (imageUrl) => imageUrl == null

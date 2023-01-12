@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'dart:math';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service.dart';
 import 'package:bottleshop_admin/src/core/utils/image_util.dart';
 import 'package:bottleshop_admin/src/core/utils/math_util.dart';
@@ -9,6 +13,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 enum ProductAction { creating, editing }
 
@@ -47,21 +53,20 @@ final productToEditStreamProvider =
 );
 
 /// This is providing file from the server of the product.
-final _productImgFileFutureProvider = FutureProvider.autoDispose<File?>(
-  (ref) {
+final _productImgFileFutureProvider = FutureProvider.autoDispose<String?>(
+  (ref) async {
     final imagePath = ref.watch(initialProductProvider).state.imagePath;
-
     if (imagePath == null) {
       return Future.value(null);
     } else {
-      return FirebaseStorageService.getDownloadUrlFromPath(imagePath).then(
-        (value) {
-          return ImageUtil.createImgFileInCacheFromNetwork(
-            value,
-            'product_img_temp.png',
-          );
-        },
-      );
+      if (!kIsWeb) {
+      var rng = Random();
+      var response = await http.get(Uri.parse(await FirebaseStorageService.getDownloadUrlFromPath(imagePath)));
+      final tempDir = await getTemporaryDirectory();
+       var f =await File('${tempDir.path}/${rng.nextInt(100)}.jpg').writeAsBytes(response.bodyBytes);
+       return f.path;
+    }
+      return FirebaseStorageService.getDownloadUrlFromPath(imagePath);
     }
   },
 );
@@ -80,14 +85,40 @@ final isImgLoadedProvider = Provider.autoDispose<bool>(
       ),
 );
 
-final productImgProvider = Provider.autoDispose<File?>(
+final productImgProvider = Provider.autoDispose<String?>(
   (ref) {
-    return ref.watch(_currentProductImgFileProvider).state;
+    return ref.watch(blopProvider).state;
   },
 );
 
-/// This is used to provide current img in the image frame.
-final _currentProductImgFileProvider = StateProvider.autoDispose<File?>(
+const double imgRatioX = 12;
+const double imgRatioY = 16;
+const double targetImgAspect = imgRatioX / imgRatioY;
+
+final isProductImageValid = FutureProvider.autoDispose<bool>(
+  (ref) {
+    final currentImg = ref.watch(blopProvider).state;
+    if (currentImg == null) {
+      return Future.value(true);
+    } else {
+      return ImageUtil.getImageSize(XFile(currentImg))
+          .then(
+        (value){ 
+           return MathUtil.approximately(
+          targetImgAspect,
+          ImageUtil.getImgSizeRatio(value),
+          epsilon: 0.01,
+        );}
+      )
+          .then((value) async {
+        await Future<void>.delayed(Duration(seconds: 1));
+        return value;
+      });
+    }
+  },
+);
+
+final blopProvider = StateProvider.autoDispose<String?>(
   (ref) => ref.watch(_productImgFileFutureProvider).when(
         data: (file) => file,
         loading: () => null,
@@ -98,39 +129,10 @@ final _currentProductImgFileProvider = StateProvider.autoDispose<File?>(
       ),
 );
 
-const double imgRatioX = 12;
-const double imgRatioY = 16;
-const double targetImgAspect = imgRatioX / imgRatioY;
+void deleteImage(BuildContext context) {
+  context.read(blopProvider).state = null;
+}
 
-/// This is the size of current product image.
-final isProductImageValid = FutureProvider.autoDispose<bool>(
-  (ref) {
-    final currentImg = ref.watch(_currentProductImgFileProvider).state;
-    if (currentImg == null) {
-      return Future.value(true);
-    } else {
-      return ImageUtil.getImageSize(currentImg)
-          .then(
-        (value) => MathUtil.approximately(
-          targetImgAspect,
-          ImageUtil.getImgSizeRatio(value),
-          epsilon: 0.01,
-        ),
-      )
-          .then((value) async {
-        await Future<void>.delayed(Duration(seconds: 1));
-        return value;
-      });
-    }
-  },
-);
-
-Future<void> setProductImgFile(BuildContext context, File? imgFile) async {
-  final currentImgFile = context.read(_currentProductImgFileProvider).state;
-  if (currentImgFile != null) {
-    await currentImgFile.delete();
-  }
-
-  context.read(isImgChangedProvider).state = true;
-  context.read(_currentProductImgFileProvider).state = imgFile;
+void setImage(BuildContext context, String url) {
+  context.read(blopProvider).state = url;
 }

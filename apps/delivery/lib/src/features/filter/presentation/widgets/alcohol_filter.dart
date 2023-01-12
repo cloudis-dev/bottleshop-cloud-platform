@@ -27,10 +27,10 @@ class AlcoholFilter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final alcoholRange = ref.watch(filterModelProvider(filterType)
-        .select<RangeValues>((value) => value.alcoholRange));
+    final alcoholRange = ref.watch(
+        filterModelProvider(filterType).select((value) => value.alcoholRange));
     final isAlcoholActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isAlcoholActive));
+        .select((value) => value.isAlcoholActive));
 
     return Column(
       children: [
@@ -61,7 +61,7 @@ class AlcoholFilter extends HookConsumerWidget {
           values: alcoholRange,
           onChanged: (value) {
             ref.read(filterModelProvider(filterType).state).state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+                ref.read(filterModelProvider(filterType)).copyWith(
                       alcoholRange: value,
                     );
           },

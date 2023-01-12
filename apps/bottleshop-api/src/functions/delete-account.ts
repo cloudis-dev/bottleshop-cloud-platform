@@ -8,43 +8,37 @@ export const deleteAccount = functions
   .region(tier1Region)
   .runWith({ memory: '512MB' })
   .https.onCall(async (_, context) => {
-    if (context.app == undefined) {
+    if (context.app === undefined) {
       throw new functions.https.HttpsError(
         'failed-precondition',
         'The function must be called from an App Check verified app.',
       );
     }
-    if (context.auth == null) {
+    const userUid = context.auth?.uid;
+    if (userUid === undefined) {
       return { success: false, error: 'Authentication Required!' };
     }
 
-    const userUid = context.auth.uid;
-
-    let isError = false;
-
-    await admin
+    const isError = await admin
       .auth()
       .deleteUser(userUid)
-      .then(() => {
+      .then(async () => {
         functions.logger.log(`Successfully deleted user with uid: ${userUid}.`);
 
         const userDoc = admin.firestore().collection(`${usersCollection}`).doc(userUid);
-
-        admin
-          .firestore()
-          .recursiveDelete(userDoc)
-          .then(() => {
-            functions.logger.log(`Successfully deleted user's (uid: ${userUid}) db record.`);
-          })
-          .catch((error: Error) => {
-            functions.logger.error(`Failed to delete user's (uid: ${userUid}) db record. Error: ${error}`);
-            isError = true;
-          });
+        try {
+          await admin.firestore().recursiveDelete(userDoc);
+          functions.logger.log(`Successfully deleted user's (uid: ${userUid}) db record.`);
+          return false;
+        } catch (error) {
+          functions.logger.error(`Failed to delete user's (uid: ${userUid}) db record. Error: ${error}`);
+          return true;
+        }
       })
       .catch((error) => {
         functions.logger.error(`Failed to delete user with uid: ${userUid}. Error: ${error}.`);
 
-        isError = true;
+        return true;
       });
 
     return { success: isError ? false : true };

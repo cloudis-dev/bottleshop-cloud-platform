@@ -1,4 +1,5 @@
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
@@ -29,9 +30,8 @@ class AddToCartButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final addToCartButtonState = ref.watch(
-        _addToCartButtonStateProvider(product)
-            .select<ButtonState>((value) => value));
+    final addToCartButtonState =
+        ref.watch(_addToCartButtonStateProvider(product));
 
     return ProgressButton(
       state: addToCartButtonState,
@@ -43,7 +43,13 @@ class AddToCartButton extends HookConsumerWidget {
                       ButtonState.loading;
                   try {
                     ref.read(cartRepositoryProvider)!.add(product.uniqueId, 1);
-
+                    logAddToCart(
+                      context,
+                      product.uniqueId,
+                      product.name,
+                      product.allCategories.first.categoryDetails.toString(),
+                      1,
+                    );
                     showSimpleNotification(
                       Text('${product.name} ${context.l10n.addedToCart}'),
                       duration: const Duration(seconds: 1),

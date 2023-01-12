@@ -3,10 +3,7 @@ import * as functions from 'firebase-functions';
 
 import { createMail } from '../../../utils/mail-utils';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
-import {
-  getMailBodyHtml,
-  getMailSubject,
-} from '../../../utils/order-utils';
+import { getMailBodyHtml, getMailSubject } from '../../../utils/order-utils';
 import { isEmulator } from '../../../utils/functions-utils';
 import { mailCollection } from '../../../constants/collections';
 import { Order } from '../../../models/order';
@@ -22,7 +19,7 @@ export const onOrderStatusChangeCustomerMails = async (orderSnapshot: functions.
 
   const orderType = await getEntityByRef<OrderType>(order.order_type_ref);
 
-  if (orderType == null) {
+  if (orderType === undefined) {
     functions.logger.error(
       `Failed to send order status update emails. Reason: Order status for the order ${order.id} does not exist!`,
     );
@@ -38,7 +35,7 @@ export const onOrderStatusChangeCustomerMails = async (orderSnapshot: functions.
     order.customer.preferred_language ?? 'sk',
   );
 
-  if (subject != null && html != null) {
+  if (subject !== undefined && html !== undefined && order.customer.email !== undefined) {
     const mail = createMail(order.customer.email, subject, '', html);
 
     await admin.firestore().collection(mailCollection).add(mail);

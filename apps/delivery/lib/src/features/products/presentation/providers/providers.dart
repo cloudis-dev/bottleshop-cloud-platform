@@ -13,14 +13,11 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/models/preferences.dart';
-import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/change_status.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/paged_streams_items_state_notifier.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/firestore_json_parsing_util.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
@@ -29,11 +26,13 @@ import 'package:delivery/src/features/products/data/services/product_search_serv
 import 'package:delivery/src/features/products/presentation/view_models/products_state_notifier.dart';
 import 'package:delivery/src/features/sorting/presentation/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
+import 'package:tuple/tuple.dart';
 
 final productsLayoutModeProvider =
     StateProvider<SupportedLayoutMode>((_) => SupportedLayoutMode.grid);
 
-final productsService = Provider.autoDispose<DatabaseService<ProductModel>>(
+final productsService = Provider.autoDispose(
   (_) => DatabaseService<ProductModel>(
     FirestoreCollections.productsCollection,
     fromMapAsync: (id, data) => FirestoreJsonParsingUtil.parseProductJson(data),
@@ -41,7 +40,7 @@ final productsService = Provider.autoDispose<DatabaseService<ProductModel>>(
   ),
 );
 
-final productsRepositoryProvider = Provider.autoDispose<ProductsRepository>(
+final productsRepositoryProvider = Provider.autoDispose(
   (ref) => ProductsRepository(ref.watch(productsService)),
 );
 
@@ -53,25 +52,23 @@ final productProvider = StreamProvider.autoDispose
 final filteredProductsProvider = ChangeNotifierProvider.autoDispose
     .family<PagedProductsStateNotifier<int>, CategoryPlainModel?>(
   (ref, category) {
-    final sortModel = ref.watch(sortModelProvider.state).state;
+    final sortModel = ref.watch(sortModelProvider);
 
     return PagedProductsStateNotifier(
       (lastPageFetched) {
         final newPageId = lastPageFetched == null ? 0 : (lastPageFetched + 1);
-        final currentAppliedFilter = ref
-            .watch(
-              appliedFilterProvider(
-                category == null
-                    ? FilterType.allProducts
-                    : FilterType.categoryProducts,
-              ).state,
-            )
-            .state;
+        final currentAppliedFilter = ref.watch(
+          appliedFilterProvider(
+            category == null
+                ? FilterType.allProducts
+                : FilterType.categoryProducts,
+          ),
+        );
 
         if (currentAppliedFilter.isAnyFilterActive) {
           final literUnit = ref
-              .watch(commonDataRepositoryProvider
-                  .select((value) => value.data.units))
+              .watch(commonDataRepositoryProvider)
+              .units
               .where((element) =>
                   element.id == '977qijBvm7cxuqPNgvb1') // liter unit id
               .first;
@@ -90,7 +87,7 @@ final filteredProductsProvider = ChangeNotifierProvider.autoDispose
             (event) => PagedItemsStateStreamBatch(
               Iterable<int>.generate(event.length)
                   .map(
-                    (itemIndex) => Tuple3<ChangeStatus, int, ProductModel>(
+                    (itemIndex) => Tuple3(
                       ChangeStatus.added,
                       newPageId,
                       event[itemIndex],
@@ -111,7 +108,7 @@ final filteredProductsProvider = ChangeNotifierProvider.autoDispose
 final allProductsProvider = ChangeNotifierProvider.autoDispose<
     PagedProductsStateNotifier<DocumentSnapshot>>(
   (ref) {
-    final sortModel = ref.watch(sortModelProvider.state).state;
+    final sortModel = ref.watch(sortModelProvider);
 
     return PagedProductsStateNotifier(
       (lastDoc) => ref
@@ -125,7 +122,7 @@ final allProductsProvider = ChangeNotifierProvider.autoDispose<
 final productsByCategoryProvider = ChangeNotifierProvider.autoDispose
     .family<PagedProductsStateNotifier<DocumentSnapshot>, CategoryPlainModel>(
   (ref, category) {
-    final sortModel = ref.watch(sortModelProvider.state).state;
+    final sortModel = ref.watch(sortModelProvider);
 
     return PagedProductsStateNotifier(
       (lastDocument) => ref
@@ -139,9 +136,8 @@ final productsByCategoryProvider = ChangeNotifierProvider.autoDispose
 final categoryHasProductsProvider =
     StateProvider.autoDispose.family<bool, List<CategoryPlainModel>>(
   (ref, categories) {
-    final appliedFilter = ref
-        .watch(appliedFilterProvider(FilterType.categoryProducts).state)
-        .state;
+    final appliedFilter =
+        ref.watch(appliedFilterProvider(FilterType.categoryProducts));
 
     final providers = categories
         .map((e) => appliedFilter.isAnyFilterActive

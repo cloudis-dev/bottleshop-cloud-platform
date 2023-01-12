@@ -11,13 +11,16 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
+import 'package:delivery/src/features/orders/presentation/pages/order_detail_page.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/order_state_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
 class OrderListItem extends HookConsumerWidget {
   final OrderModel order;
@@ -33,7 +36,14 @@ class OrderListItem extends HookConsumerWidget {
     return Material(
       child: InkWell(
         splashColor: Theme.of(context).colorScheme.secondary,
-        onTap: () {},
+        onTap: () {
+          ref.read(navigationProvider).pushPage(
+                context,
+                AppPageNode(
+                  page: OrderDetailPage(orderUniqueId: order.uniqueId),
+                ),
+              );
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: ListItemContainerDecoration(context),

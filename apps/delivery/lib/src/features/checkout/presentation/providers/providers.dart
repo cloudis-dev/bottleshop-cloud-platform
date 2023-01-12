@@ -10,47 +10,27 @@
 //
 //
 
-import 'package:delivery/src/core/data/services/stripe_service.dart';
-import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/features/cart/data/repositories/cart_repository.dart';
-import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
-import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
-import 'package:flutter/services.dart';
+import 'package:delivery/src/features/cart/data/models/promo_code_model.dart';
+import 'package:delivery/src/features/checkout/presentation/view_models/delivery_option_state.dart';
+import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
 
-final checkoutStateProvider =
-    ChangeNotifierProvider.autoDispose<CheckoutState>((ref) {
-  final cartService = ref.watch(cartRepositoryProvider)!;
-  final stripeService = ref.watch(stripeProvider);
-  return CheckoutState(stripeService: stripeService, cartService: cartService);
-});
+final isRedirectingProvider = StateProvider.autoDispose<bool>((ref) => false);
 
-class CheckoutState extends StateNotifier<AsyncValue<void>> with NetworkLoggy {
-  final StripeService stripeService;
-  final CartRepository cartService;
+final orderTypeStateProvider =
+    StateNotifierProvider.autoDispose<OrderTypeState, OrderTypeModel?>(
+  (ref) => OrderTypeState(),
+  name: 'orderTypeStateProvider',
+);
 
-  CheckoutState({required this.stripeService, required this.cartService})
-      : super(const AsyncValue.data(null));
+final remarksTextEditCtrlProvider = Provider.autoDispose<TextEditingController>(
+  (ref) {
+    final ctrl = TextEditingController();
+    ref.onDispose(() => ctrl.dispose());
+    return ctrl;
+  },
+);
 
-  Future<void> payByNativePay(PaymentData paymentData) async {
-    logInfo('payByNativePay invoked');
-    try {
-      state = const AsyncValue.loading();
-      final cart = (await cartService.getCartModel())!;
-      logInfo('cart retrieved: ${cart.toString()}');
-      final items = await cartService.cartContent.first;
-      logInfo('items retrieved: ${items.length}');
-    } on PlatformException catch (err, stack) {
-      loggy.error('Failed to pay by native PlatformException', err, stack);
-      rethrow;
-    } catch (err, stack) {
-      loggy.error('Failed to pay by native', err, stack);
-      rethrow;
-    } finally {}
-  }
-
-  payByCreditCard(PaymentData paymentData) {
-    //
-  }
-}
+final currentAppliedPromoProvider =
+    StateProvider.autoDispose<PromoCodeModel?>((ref) => null);

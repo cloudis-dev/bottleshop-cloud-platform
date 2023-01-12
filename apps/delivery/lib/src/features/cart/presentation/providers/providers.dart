@@ -1,9 +1,6 @@
-import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
-import 'package:delivery/src/core/data/services/database_service.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/cart/data/repositories/cart_repository.dart';
 import 'package:delivery/src/features/cart/data/services/cart_content_service.dart';
@@ -28,14 +25,6 @@ final isInCartStreamProvider =
       Stream.value(null),
 );
 
-final _cartServiceProvider =
-    Provider.autoDispose.family<DatabaseService<CartModel>, UserModel>(
-  (_, user) => DatabaseService<CartModel>(
-    FirestorePaths.userCart(user.uid),
-    fromMapAsync: (id, map) async => CartModel.fromMap(map),
-    toMap: (cartModel) => cartModel.toMap(),
-  ),
-);
 
 final _cartContentServiceProvider =
     Provider.autoDispose.family<CartContentService, UserModel>(
@@ -51,7 +40,6 @@ final cartRepositoryProvider = Provider.autoDispose<CartRepository?>(
         cloudFunctionsService: ref.watch(cloudFunctionsProvider),
         productsService: ref.watch(productsService),
         cartContentService: ref.watch(_cartContentServiceProvider(currentUser)),
-        cartService: ref.watch(_cartServiceProvider(currentUser)),
       );
     }
 
@@ -59,10 +47,18 @@ final cartRepositoryProvider = Provider.autoDispose<CartRepository?>(
   },
 );
 
-final cartContentProvider = StreamProvider.autoDispose<List<CartItemModel>>(
-  (ref) => ref.watch(cartRepositoryProvider)!.cartContent,
+final cartProvider = StreamProvider.autoDispose<CartModel>(
+  (ref) =>
+      ref.watch(cartRepositoryProvider)?.streamCart ??
+      Stream.value(CartModel.empty()),
 );
 
-final cartProvider = StreamProvider.autoDispose<CartModel?>(
-  (ref) => ref.watch(cartRepositoryProvider)!.cart,
-);
+final isCartEmptyProvider = FutureProvider.autoDispose<bool>((ref) {
+  return ref.watch(cartProvider).maybeWhen(
+        data: (cart) {
+          final itemsCount = cart.products.length;
+          return itemsCount < 1;
+        },
+        orElse: () => Future.value(false),
+      );
+});

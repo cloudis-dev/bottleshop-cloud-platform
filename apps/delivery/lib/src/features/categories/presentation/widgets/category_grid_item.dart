@@ -21,8 +21,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class CategoryGridItem extends HookConsumerWidget {
   final CategoriesTreeModel category;
   final void Function(
-    WidgetRef ref,
     BuildContext context,
+    WidgetRef ref,
     CategoriesTreeModel category,
   ) onNavigateToCategory;
   final AsyncValue<int?>? productsCount;
@@ -44,7 +44,7 @@ class CategoryGridItem extends HookConsumerWidget {
 
     return Material(
       child: InkWell(
-        onTap: () => onNavigateToCategory(ref, context, category),
+        onTap: () => onNavigateToCategory(context, ref, category),
         borderRadius: BorderRadius.circular(10),
         child: Stack(
           children: [

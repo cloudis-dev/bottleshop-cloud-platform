@@ -10,14 +10,18 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/pages/page_404.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
-import 'package:delivery/src/features/home/presentation/widgets/language_dropdown.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
+import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/molecules/share_buttons.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/organisms/product_actions_widget.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/views/product_description_tab.dart';
@@ -30,17 +34,72 @@ import 'package:delivery/src/features/products/presentation/widgets/product_imag
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:logging/logging.dart';
+import 'package:routeborn/routeborn.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-class ProductDetailPage extends HookConsumerWidget with UiLoggy {
+class ProductDetailPage extends RoutebornPage with UpdatablePageNameMixin {
+  static const String pagePathBase = 'product-detail';
+
+  static Tuple2<RoutebornPage, List<String>> fromPathParams(
+    List<String> remainingPathArguments,
+  ) {
+    if (remainingPathArguments.isNotEmpty) {
+      return Tuple2(
+        ProductDetailPage.uid(remainingPathArguments.first),
+        remainingPathArguments.skip(1).toList(),
+      );
+    }
+
+    return Tuple2(Page404(), remainingPathArguments);
+  }
+
+  final String uid;
+
+  ProductDetailPage(ProductModel product)
+      : uid = product.uniqueId,
+        super(
+          pagePathBase,
+          pageArgs: product,
+        ) {
+    builder = (context) => _ProductDetailPageView(
+          product: product,
+          setPageName: (pageName) => setPageName(context, pageName),
+        );
+  }
+
+  ProductDetailPage.uid(String productUid)
+      : uid = productUid,
+        super(
+          pagePathBase,
+          pageArgs: productUid,
+        ) {
+    builder = (context) => _ProductDetailPageView(
+          productUid: productUid,
+          setPageName: (pageName) => setPageName(context, pageName),
+        );
+  }
+
+  @override
+  String getPagePath() => '$pagePathBase/$uid';
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+final _logger = Logger((ProductDetailPage).toString());
+
+class _ProductDetailPageView extends HookConsumerWidget {
   final ProductModel? product;
   final String? productUid;
 
-  const ProductDetailPage({
+  final SetPageNameCallback setPageName;
+
+  const _ProductDetailPageView({
     Key? key,
     this.product,
     this.productUid,
+    required this.setPageName,
   }) : super(key: key);
 
   @override
@@ -52,46 +111,59 @@ class ProductDetailPage extends HookConsumerWidget with UiLoggy {
                     icon: Icons.info,
                     message: context.l10n.noSuchProduct,
                     buttonMessage: context.l10n.startExploring,
-                    onButtonPressed: null,
+                    onButtonPressed: () {
+                      ref.read(navigationProvider).replaceAllWith(context, []);
+                    },
                   )
                 : _Body(
                     product: product,
+                    setPageName: setPageName,
                   ),
             loading: () => const Loader(),
             error: (err, stack) {
-              loggy.error('Product CMAT: $productUid failed to load!', err, stack);
+              _logger.severe(
+                  'Product CMAT: $productUid failed to load!', err, stack);
 
               return EmptyTab(
                 icon: Icons.error_outline,
                 message: context.l10n.upsSomethingWentWrong,
                 buttonMessage: context.l10n.tryAgain,
-                onButtonPressed: () => ref.refresh(productProvider(productUid!)),
+                onButtonPressed: () =>
+                    ref.refresh(productProvider(productUid!)),
               );
             },
           );
     } else {
       return _Body(
         product: product!,
+        setPageName: setPageName,
       );
     }
   }
 }
 
-class _Body extends HookConsumerWidget {
+class _Body extends HookWidget {
   final ProductModel product;
+
+  final SetPageNameCallback setPageName;
 
   const _Body({
     Key? key,
     required this.product,
+    required this.setPageName,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return shouldUseMobileLayout(context) ? _BodyMobile(product: product) : _BodyWeb(product: product);
+  Widget build(BuildContext context) {
+    setPageName(product.name);
+
+    return shouldUseMobileLayout(context)
+        ? _BodyMobile(product: product)
+        : _BodyWeb(product: product);
   }
 }
 
-class _BodyWeb extends HookConsumerWidget {
+class _BodyWeb extends HookWidget {
   final ProductModel product;
 
   const _BodyWeb({
@@ -100,7 +172,7 @@ class _BodyWeb extends HookConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final scrollCtrl = useScrollController();
     final authButtonKey = useMemoized(() => GlobalKey<AuthPopupButtonState>());
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
@@ -117,7 +189,8 @@ class _BodyWeb extends HookConsumerWidget {
         ),
       ],
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20) + const EdgeInsets.only(top: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20) +
+            const EdgeInsets.only(top: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -144,8 +217,7 @@ class _BodyWeb extends HookConsumerWidget {
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
-                                    // ignore: deprecated_member_use
-                                    launch(imgUrl);
+                                    launchUrlString(imgUrl);
                                   },
                                 ),
                               ),
@@ -163,6 +235,7 @@ class _BodyWeb extends HookConsumerWidget {
                       children: [
                         Expanded(
                           child: Scrollbar(
+                            thumbVisibility: true,
                             controller: scrollCtrl,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 12),
@@ -174,12 +247,17 @@ class _BodyWeb extends HookConsumerWidget {
                                     Text(
                                       product.name,
                                       overflow: TextOverflow.fade,
-                                      style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline3!
+                                          .copyWith(color: Colors.white),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           const SizedBox(height: 10),
                                           ProductHomeTab(product: product),
@@ -236,8 +314,8 @@ class _BodyMobile extends HookConsumerWidget {
         physics: const BouncingScrollPhysics(),
         slivers: <Widget>[
           SliverAppBar(
-            leading: const BackButton(
-              onPressed: null,
+            leading: BackButton(
+              onPressed: () => ref.read(navigationProvider).popPage(context),
             ),
             actions: [
               AuthPopupButton(key: authButtonKey, scaffoldKey: scaffoldKey),
@@ -256,7 +334,7 @@ class _BodyMobile extends HookConsumerWidget {
               ],
               collapseMode: CollapseMode.parallax,
               background: Hero(
-                tag: ValueKey(product.uniqueId),
+                tag: HeroTags.productBaseTag + product.uniqueId,
                 child: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[

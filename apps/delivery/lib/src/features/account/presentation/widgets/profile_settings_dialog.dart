@@ -24,9 +24,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:overlay_support/overlay_support.dart';
 
-class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((ProfileSettingsDialog).toString());
+
+class ProfileSettingsDialog extends HookConsumerWidget {
   final bool? showBirthday;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -51,7 +54,8 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
                 formatter: FormattingUtils.getDateFormatter(currentLocale),
               );
             },
-      style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
+      style: TextButton.styleFrom(
+          primary: Theme.of(context).colorScheme.secondary),
       child: Text(
         context.l10n.edit,
       ),
@@ -71,6 +75,7 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
         return AlertDialog(
           title: buildDialogTitle(context, context.l10n.profileSettings),
           content: CupertinoScrollbar(
+            thumbVisibility: true,
             controller: controller,
             child: SingleChildScrollView(
               controller: controller,
@@ -90,20 +95,21 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.secondary),
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.secondary),
               onPressed: () {
                 var isValid = _formKey.currentState!.validate();
                 if (isValid) {
                   _formKey.currentState!.save();
                   userDb.updateData(user.uid, profileData!);
-                  // showSimpleNotification(
-                  //   Text(context.l10n.profileUpdated),
-                  //   position: NotificationPosition.top,
-                  //   duration: const Duration(seconds: 2),
-                  //   slideDismissDirection: DismissDirection.horizontal,
-                  //   context: context,
-                  // );
-                  // Navigator.of(context).pop();
+                  showSimpleNotification(
+                    Text(context.l10n.profileUpdated),
+                    position: NotificationPosition.top,
+                    duration: const Duration(seconds: 2),
+                    slideDismissDirection: DismissDirection.horizontal,
+                    context: context,
+                  );
+                  Navigator.of(context).pop();
                 }
               },
               child: Text(context.l10n.save),
@@ -133,7 +139,8 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData![UserFields.email] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData![UserFields.email]}');
+              _logger.fine(
+                  'field saved $input, profile: ${profileData![UserFields.email]}');
             },
             validator: MultiValidator(
               <FieldValidator<dynamic>>[
@@ -149,21 +156,26 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
             validator: MultiValidator(
               <FieldValidator<dynamic>>[
                 RequiredValidator(errorText: context.l10n.fullNameIsRequired),
-                MinLengthValidator(3, errorText: context.l10n.fullNameMustBeLonger),
+                MinLengthValidator(3,
+                    errorText: context.l10n.fullNameMustBeLonger),
               ],
             ),
             onSaved: (input) {
               if (input != null) {
                 profileData![UserFields.name] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData![UserFields.name]}');
+              _logger.fine(
+                  'field saved $input, profile: ${profileData![UserFields.name]}');
             },
           ),
           StyledFormField(
             keyboardType: TextInputType.phone,
             validator: MultiValidator([
               RequiredValidator(errorText: context.l10n.phoneNumberIsRequired),
-              LengthRangeValidator(min: 10, max: 13, errorText: context.l10n.enterValidPhoneNumber),
+              LengthRangeValidator(
+                  min: 10,
+                  max: 13,
+                  errorText: context.l10n.enterValidPhoneNumber),
             ]),
             hintText: '+421 9xx xxx xxx',
             labelText: '${context.l10n.phoneNumber}*',
@@ -172,7 +184,8 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
               if (input != null) {
                 profileData![UserFields.phoneNumber] = input;
               }
-              loggy.info('field saved $input, profile: ${profileData![UserFields.phoneNumber]}');
+              _logger.fine(
+                  'field saved $input, profile: ${profileData![UserFields.phoneNumber]}');
             },
           ),
           if (showBirthday!)
@@ -189,8 +202,10 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
                 final date = await showDatePicker(
                   context: context,
                   firstDate: DateTime(1900),
-                  initialDate: initialDate ?? (DateTime.now().subtract(const Duration(days: 365 * 18))),
-                  lastDate: (DateTime.now().subtract(const Duration(days: 365 * 18))),
+                  initialDate: initialDate ??
+                      (DateTime.now().subtract(const Duration(days: 365 * 18))),
+                  lastDate:
+                      (DateTime.now().subtract(const Duration(days: 365 * 18))),
                   initialDatePickerMode: DatePickerMode.year,
                   helpText: context.l10n.selectYourDayOfBirth,
                 );
@@ -200,7 +215,7 @@ class ProfileSettingsDialog extends HookConsumerWidget with UiLoggy {
                 if (input != null) {
                   profileData![UserFields.dayOfBirth] = input;
                 }
-                loggy.info('field saved ${input.toString()}');
+                _logger.fine('field saved ${input.toString()}');
               },
             ),
         ],

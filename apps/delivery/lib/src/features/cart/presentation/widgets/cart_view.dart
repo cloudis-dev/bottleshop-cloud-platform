@@ -11,19 +11,23 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/cart/presentation/widgets/cart_list_item.dart';
+import 'package:delivery/src/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:routeborn/routeborn.dart';
 
-class CartView extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((CartView).toString());
+
+class CartView extends HookConsumerWidget {
   const CartView({
     Key? key,
   }) : super(key: key);
@@ -32,16 +36,13 @@ class CartView extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
 
-    return Stack(
-      fit: StackFit.expand,
+    return Column(
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom + 120),
-          padding: const EdgeInsets.only(bottom: 30),
+        Expanded(
           child: CupertinoScrollbar(
             controller: scrollController,
-            child: ref.watch(cartContentProvider).when(
+            thumbVisibility: false,
+            child: ref.watch(cartProvider).when(
                   data: (cart) {
                     return ListView.builder(
                       physics: const BouncingScrollPhysics(
@@ -50,7 +51,7 @@ class CartView extends HookConsumerWidget with UiLoggy {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       controller: scrollController,
                       scrollDirection: Axis.vertical,
-                      itemCount: cart.length,
+                      itemCount: cart.products.length,
                       itemBuilder: (context, index) => Dismissible(
                         key: UniqueKey(),
                         background: Container(
@@ -68,7 +69,7 @@ class CartView extends HookConsumerWidget with UiLoggy {
                         ),
                         onDismissed: (direction) async {
                           await ref.read(cartRepositoryProvider)!.removeItem(
-                              cart.elementAt(index).product.uniqueId);
+                              cart.products.elementAt(index).product.uniqueId);
                           showSimpleNotification(
                             Text(context.l10n.itemRemovedFromCart),
                             position: NotificationPosition.bottom,
@@ -78,15 +79,15 @@ class CartView extends HookConsumerWidget with UiLoggy {
                           );
                         },
                         child: CartListItem(
-                          product: cart.elementAt(index).product,
-                          quantity: cart.elementAt(index).count,
+                          product: cart.products.elementAt(index).product,
+                          quantity: cart.products.elementAt(index).count,
                         ),
                       ),
                     );
                   },
                   loading: () => const Loader(),
                   error: (err, stack) {
-                    loggy.error('Failed to fetch cart content', err, stack);
+                    _logger.severe('Failed to fetch cart content', err, stack);
                     return Center(
                       child: Text(context.l10n.failedToFetchCart),
                     );
@@ -97,16 +98,19 @@ class CartView extends HookConsumerWidget with UiLoggy {
         ref.watch(cartProvider).when(
               data: (cart) {
                 return CheckoutTile(
-                  showPromoButton: !kIsWeb,
                   actionLabel: context.l10n.proceedToShipment,
-                  actionCallback: () {
-                    //
+                  actionCallback: () async {
+                    ref.read(navigationProvider).pushPage(
+                          context,
+                          AppPageNode(page: CheckoutPage()),
+                          toParent: true,
+                        );
                   },
                 );
               },
               loading: () => const Loader(),
               error: (err, stack) {
-                loggy.error('Failed to fetch cart', err, stack);
+                _logger.severe('Failed to fetch cart', err, stack);
                 return Center(
                   child: Text(context.l10n.error),
                 );

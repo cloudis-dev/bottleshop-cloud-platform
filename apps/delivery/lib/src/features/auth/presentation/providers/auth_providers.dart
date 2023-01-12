@@ -12,30 +12,12 @@
 
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/src/config/constants.dart';
-import 'package:delivery/src/core/data/services/authentication_service.dart';
-import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/data/repositories/user_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:delivery/src/features/auth/presentation/widgets/organisms/sign_up_form.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:version/version.dart';
-
-final authProvider =
-    Provider<AuthenticationService>(((ref) => throw UnimplementedError()));
-
-final authStateChangesProvider = StreamProvider.autoDispose<User?>(
-    (ref) => ref.watch(authProvider.select((value) => value.authStateChanges)));
-
-final currentUserProvider = Provider<UserModel?>((ref) {
-  final user = ref.watch(userRepositoryProvider.select((value) => value.user));
-  return user;
-});
 
 final currentUserAsStream = StreamProvider.autoDispose<UserModel?>(
   (ref) {
@@ -52,9 +34,18 @@ final currentUserAsStream = StreamProvider.autoDispose<UserModel?>(
   name: 'currentUserAsStream',
 );
 
-final authStatusProvider = Provider<AuthStatus>((ref) {
-  final authState =
-      ref.watch(userRepositoryProvider.select((value) => value.status));
+final currentUserProvider = Provider<UserModel?>((ref) {
+  var user = ref.watch(userRepositoryProvider).user;
+  return user;
+});
+
+final appleSignInAvailableProvider = FutureProvider<bool>((ref) async {
+  final auth = await ref.watch(authProvider).supportsAppleSignIn;
+  return auth;
+});
+
+final authStatusProvider = Provider((ref) {
+  final authState = ref.watch(userRepositoryProvider).status;
   return authState;
 });
 
@@ -66,69 +57,46 @@ final userRepositoryProvider = ChangeNotifierProvider<UserRepository>((ref) {
 });
 
 class TermsAcceptedState extends StateNotifier<bool> {
-  final Ref ref;
+  final SharedPreferencesService service;
 
-  TermsAcceptedState(this.ref, {required bool initialState})
-      : super(initialState);
-
-  void _storeState() {
-    final preferences = ref.read(sharedPreferencesServiceProvider);
-    preferences.setTermsAgreed(termsAgreed: state);
-  }
+  TermsAcceptedState({required this.service}) : super(true);
 
   void acceptTerms() {
     state = true;
-    _storeState();
+    service.setTermsAgreed(termsAgreed: true);
   }
 
   void rejectTerms() {
     state = false;
-    _storeState();
+    service.setTermsAgreed(termsAgreed: false);
   }
+
+  bool termsAccepted() => state;
 }
 
 final termsAcceptanceProvider =
-    StateNotifierProvider<TermsAcceptedState, bool>((ref) {
-  final preferences = ref.watch(sharedPreferencesServiceProvider);
-  final initialState = preferences.getTermsAgreed();
-  return TermsAcceptedState(ref, initialState: initialState);
+    StateNotifierProvider.autoDispose<TermsAcceptedState, bool>((ref) {
+  final sharedPreferences = ref.watch(sharedPreferencesProvider);
+  return TermsAcceptedState(service: sharedPreferences);
 });
 
+class SignWidgetState extends StateNotifier<bool> {
+  SignWidgetState({bool showSignIn = true}) : super(showSignIn);
+
+  bool isSignIn() => state;
+
+  bool isSignUp() => !state;
+
+  void toggle() {
+    state = !state;
+  }
+}
+
 final widgetToggleProvider =
-    StateProvider<bool>((ref) => true, name: 'widgetToggleProvider');
+    StateNotifierProvider.autoDispose<SignWidgetState, bool>(
+        (ref) => SignWidgetState(),
+        name: 'widgetToggleProvider');
 
 final formValidProvider =
-    StateProvider<bool>((ref) => true, name: 'formValidProvider');
-
-final isAppVersionCompatible = StreamProvider.autoDispose<bool>(
-  (ref) {
-    if (kIsWeb) {
-      return Stream.value(true);
-    }
-
-    return FirebaseFirestore.instance
-        .collection(FirestoreCollections.versionConstraintsCollection)
-        .doc('main_app')
-        .snapshots()
-        .map((event) => event.get('min_version'))
-        .asyncMap((minBuildNum) async {
-      final packageInfo = await PackageInfo.fromPlatform();
-      return Version.parse(packageInfo.version) >= Version.parse(minBuildNum);
-    });
-  },
-);
-
-final appDownloadRedirectUrlProvider = FutureProvider.autoDispose<String>(
-  (_) async {
-    return FirebaseFirestore.instance
-        .collection(FirestoreCollections.versionConstraintsCollection)
-        .doc('main_app')
-        .get()
-        .then(
-          (value) => value.data()![
-              defaultTargetPlatform == TargetPlatform.android
-                  ? 'download_url_android'
-                  : 'download_url_ios'],
-        );
-  },
-);
+    StateNotifierProvider.autoDispose<SignUpFormState, bool>(
+        (ref) => SignUpFormState());

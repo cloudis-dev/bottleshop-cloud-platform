@@ -10,15 +10,8 @@
 //
 //
 
-import 'package:delivery/src/core/utils/language_utils.dart';
-
 enum SupportedLayoutMode { list, grid }
 
 enum SortingDirection { ascending, descending }
 
 enum SortBy { name, price }
-
-const kLanguageFlagsMap = {
-  LanguageMode.en: 'assets/images/us.svg',
-  LanguageMode.sk: 'assets/images/sk.svg',
-};

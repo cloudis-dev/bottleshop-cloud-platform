@@ -8,13 +8,13 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options_dev.dart';
+/// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-class DefaultFirebaseOptions {
+class DevelopmentFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       return web;
@@ -46,14 +46,33 @@ class DefaultFirebaseOptions {
     }
   }
 
+  /// Taken from https://console.cloud.google.com/apis/credentials?project=bottleshop-3-veze-dev-54908
+  /// Under "OAuth 2.0 Client IDs"
+  static String get currentClientId {
+    if (kIsWeb) {
+      return "525277285012-3la0j4mhdkab7eble46iu6o86k2e9r63.apps.googleusercontent.com";
+    }
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return '525277285012-6qj6rf3lr3o7sdkovn4qoefhhd31686h.apps.googleusercontent.com';
+      case TargetPlatform.iOS:
+        return '525277285012-70gfp9hmp4f8b0skego1aebj52pjllto.apps.googleusercontent.com';
+      default:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions are not supported for this platform.',
+        );
+    }
+  }
+
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBKDk9aqNBON-PcDuahYV89cDXu3jepWj4',
-    appId: '1:525277285012:web:bad81f5d913e78c20ec281',
+    apiKey: 'AIzaSyATDXyya2cT8D2V1ZFDE83ewlpUFwRZC0U',
+    appId: '1:525277285012:web:79a4cedc090bcaac0ec281',
     messagingSenderId: '525277285012',
     projectId: 'bottleshop-3-veze-dev-54908',
     authDomain: 'bottleshop-3-veze-dev-54908.firebaseapp.com',
     storageBucket: 'bottleshop-3-veze-dev-54908.appspot.com',
-    measurementId: 'G-02K3SVS600',
+    measurementId: 'G-RPFG37YRQF',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -70,10 +89,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '525277285012',
     projectId: 'bottleshop-3-veze-dev-54908',
     storageBucket: 'bottleshop-3-veze-dev-54908.appspot.com',
-    androidClientId:
-        '525277285012-6qj6rf3lr3o7sdkovn4qoefhhd31686h.apps.googleusercontent.com',
-    iosClientId:
-        '525277285012-ls21r8r70es1jbav55094lohidfrtrqr.apps.googleusercontent.com',
-    iosBundleId: 'sk.bottleshop3veze.delivery.dev',
+    iosBundleId: 'sk.bottleshop3veze.bottleshopdeliveryapp.dev',
   );
 }

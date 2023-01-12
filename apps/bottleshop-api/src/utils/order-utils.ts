@@ -1,18 +1,32 @@
 import ejs from 'ejs';
-
+import * as admin from 'firebase-admin';
 import { approximately } from './math-utils';
-import {
-  DeliveryType,
-  OrderType,
-} from '../models/order-type';
+import { DeliveryType, OrderType } from '../models/order-type';
 import { formatDate } from './time-utils';
 import { getPriceNumberString } from './formatting-utils';
-import {
-  Language,
-  VAT,
-} from '../constants/other';
+import { Language, VAT } from '../constants/other';
 import { Order } from '../models/order';
 import { User } from '../models/user';
+import { ordersCollection, orderTypesCollection } from '../constants/collections';
+
+export async function generateNewOrderId(): Promise<string> {
+  const ordersCollectionRef = admin.firestore().collection(ordersCollection);
+  const orders = await ordersCollectionRef.orderBy('id', 'desc').limit(1).get();
+
+  return (orders.empty ? 1 : (orders.docs[orders.size - 1].data() as Order).id + 1).toString();
+}
+
+export async function getOrderTypeByCode(shippingCode: DeliveryType): Promise<OrderType | undefined> {
+  const docs = await admin.firestore().collection(orderTypesCollection).where('code', '==', shippingCode).get();
+  if (docs.empty) {
+    return undefined;
+  }
+  return docs.docs[0].data() as OrderType;
+}
+
+export function calculateOrderTypeFinalPrice(orderType: OrderType): number {
+  return +(orderType.shipping_fee_eur_no_vat * (1 + VAT)).toFixed(2);
+}
 
 export function getStatusStepNotificationTitle(
   stepId: number,
@@ -189,7 +203,7 @@ export function getMailBodyHtml(
       shippingFee: `€${getPriceNumberString(orderType.shipping_fee_eur_no_vat * (1 + VAT))}`,
       hasNote: (order.note?.length ?? 0) > 0,
       note: order.note,
-      hasPromo: order.promo_code != null,
+      hasPromo: order.promo_code !== undefined,
       promoCode: order.promo_code,
       promoValue: `-€${getPriceNumberString(order.promo_code_value ?? 0)}`,
       cartItems: order.cart.map((e) => {

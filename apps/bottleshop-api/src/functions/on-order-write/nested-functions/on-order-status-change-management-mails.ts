@@ -1,11 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import {
-  createMail,
-  getManagementEmails,
-  getOrderDetailsForMail,
-} from '../../../utils/mail-utils';
+import { createMail, getManagementEmails, getOrderDetailsForMail } from '../../../utils/mail-utils';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
 import { isEmulator } from '../../../utils/functions-utils';
 import { mailCollection } from '../../../constants/collections';
@@ -16,7 +12,7 @@ export const onOrderStatusChangeManagementMails = async (orderSnapshot: function
   const order = orderSnapshot.data() as Order;
   const orderType = await getEntityByRef<OrderType>(order.order_type_ref);
 
-  if (order.status_step_id !== 3 || orderType == null) {
+  if (order.status_step_id !== 3 || orderType === undefined) {
     return;
   }
 

@@ -11,9 +11,11 @@
 //
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-class StorageService with NetworkLoggy {
+final _logger = Logger((StorageService).toString());
+
+class StorageService {
   final FirebaseStorage _firebaseStorage;
 
   StorageService({FirebaseStorage? firebaseStorage})
@@ -25,7 +27,8 @@ class StorageService with NetworkLoggy {
       downloadURL = await _firebaseStorage.ref(filePath).getDownloadURL();
       return downloadURL;
     } catch (e) {
-      loggy.warning('filepath $filePath does not exist - reverting to default');
+      _logger
+          .warning('filepath $filePath does not exist - reverting to default');
       return null;
     }
   }

@@ -28,10 +28,10 @@ class VolumeFilter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final volumeRange = ref.watch(filterModelProvider(filterType)
-        .select<RangeValues>((value) => value.volumeRange));
+    final volumeRange = ref.watch(
+        filterModelProvider(filterType).select((value) => value.volumeRange));
     final isVolumeActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isVolumeActive));
+        .select((value) => value.isVolumeActive));
 
     return Column(
       children: [
@@ -63,7 +63,7 @@ class VolumeFilter extends HookConsumerWidget {
           values: volumeRange,
           onChanged: (value) {
             ref.read(filterModelProvider(filterType).state).state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+                ref.read(filterModelProvider(filterType)).copyWith(
                       volumeRange: value,
                     );
           },

@@ -28,10 +28,10 @@ class PriceFilter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final priceRange = ref.watch(filterModelProvider(filterType)
-        .select<RangeValues>((value) => value.priceRange));
-    final isPriceActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isPriceActive));
+    final priceRange = ref.watch(
+        filterModelProvider(filterType).select((value) => value.priceRange));
+    final isPriceActive = ref.watch(
+        filterModelProvider(filterType).select((value) => value.isPriceActive));
 
     return Column(
       children: [
@@ -62,7 +62,7 @@ class PriceFilter extends HookConsumerWidget {
           values: priceRange,
           onChanged: (value) {
             ref.read(filterModelProvider(filterType).state).state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+                ref.read(filterModelProvider(filterType)).copyWith(
                       priceRange: value,
                     );
           },

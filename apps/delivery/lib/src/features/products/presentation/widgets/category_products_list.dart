@@ -12,13 +12,11 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/slivers/sliver_obstruction_injector.dart';
+import 'package:delivery/src/core/presentation/slivers/sliver_resizable_pinned_header_padding.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
-import 'package:delivery/src/core/presentation/widgets/sliver_obstruction_injector.dart';
-import 'package:delivery/src/core/presentation/widgets/sliver_resizable_pinned_header_padding.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
-import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
 import 'package:delivery/src/features/products/presentation/slivers/sliver_category_tab_heading.dart';
 import 'package:delivery/src/features/products/presentation/slivers/sliver_products_list.dart';
@@ -49,21 +47,18 @@ class CategoryProductsList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appliedFilter = ref
-        .watch(appliedFilterProvider(FilterType.categoryProducts).state)
-        .state;
-    final hasProducts = ref
-        .watch(
-          categoryHasProductsProvider(
-            _shouldDisplayListWithSubcategories(
-              isAllCategory,
-              category.subCategories,
-            )
-                ? category.subCategories.map((e) => e.categoryDetails).toList()
-                : [category.categoryDetails],
-          ).state,
+    final appliedFilter =
+        ref.watch(appliedFilterProvider(FilterType.categoryProducts));
+    final hasProducts = ref.watch(
+      categoryHasProductsProvider(
+        _shouldDisplayListWithSubcategories(
+          isAllCategory,
+          category.subCategories,
         )
-        .state;
+            ? category.subCategories.map((e) => e.categoryDetails).toList()
+            : [category.categoryDetails],
+      ),
+    );
 
     return SafeArea(
       top: false,
@@ -203,9 +198,8 @@ class _NoProductsBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appliedFilter = ref
-        .watch(appliedFilterProvider(FilterType.categoryProducts).state)
-        .state;
+    final appliedFilter =
+        ref.watch(appliedFilterProvider(FilterType.categoryProducts));
 
     if (appliedFilter.isAnyFilterActive) {
       return MultiSliver(
@@ -292,7 +286,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isAnyFilterActive = ref.watch(
         appliedFilterProvider(FilterType.categoryProducts)
-            .select<bool>((value) => value.isAnyFilterActive));
+            .select((value) => value.isAnyFilterActive));
 
     final currentLocale = ref.watch(currentLocaleProvider);
 
@@ -308,8 +302,8 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
 
       final productsStates = providers
           .map(
-            (provider) => ref.watch(provider
-                .select<ItemsState<ProductModel>>((value) => value.itemsState)),
+            (provider) =>
+                ref.watch(provider.select((value) => value.itemsState)),
           )
           .toList();
 
@@ -342,7 +336,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
           : productsByCategoryProvider(category.categoryDetails);
 
       final productsState = ref.watch(
-        provider.select<ItemsState<ProductModel>>((value) => value.itemsState),
+        provider.select((value) => value.itemsState),
       );
 
       return SliverProductsList(

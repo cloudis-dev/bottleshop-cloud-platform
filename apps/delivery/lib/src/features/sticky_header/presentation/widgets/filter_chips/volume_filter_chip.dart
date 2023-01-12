@@ -26,7 +26,7 @@ class VolumeFilterChip extends HookConsumerWidget {
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
       label: Text('${context.l10n.volumeLiters}: '
-          '${FilterFormattingUtils.getFilterVolumeRangeString(volumeFilterValue!.value, context)}'),
+          '${FilterFormattingUtils.getFilterVolumeRangeString(volumeFilterValue.value, context)}'),
       onDeleted: volumeFilterValue.onDeleteFilter,
     );
   }

@@ -25,7 +25,7 @@ class ExtraCategoriesFilterChip extends HookConsumerWidget {
     return Chip(
       backgroundColor: Theme.of(context).backgroundColor,
       label: Text(context.l10n.extraCategories),
-      onDeleted: categoriesFilterValue!.onDeleteFilter,
+      onDeleted: categoriesFilterValue.onDeleteFilter,
     );
   }
 }

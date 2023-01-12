@@ -27,10 +27,10 @@ class QuantityFilter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final minQuantity = ref.watch(filterModelProvider(filterType)
-        .select<int>((value) => value.minQuantity));
+    final minQuantity = ref.watch(
+        filterModelProvider(filterType).select((value) => value.minQuantity));
     final isQuantityActive = ref.watch(filterModelProvider(filterType)
-        .select<bool>((value) => value.isQuantityActive));
+        .select((value) => value.isQuantityActive));
 
     return Column(
       children: [
@@ -61,10 +61,10 @@ class QuantityFilter extends HookConsumerWidget {
             max: FilterConstants.maxQuantity.toDouble(),
             divisions: FilterConstants.alcoholDivisions,
             value: FilterConstants.maxQuantity - minQuantity.toDouble(),
-            onChanged: (value) => ref
-                    .read(filterModelProvider(filterType).state)
-                    .state =
-                ref.read(filterModelProvider(filterType).state).state.copyWith(
+            onChanged: (value) =>
+                ref.read(filterModelProvider(filterType).state).state = ref
+                    .read(filterModelProvider(filterType))
+                    .copyWith(
                       minQuantity: FilterConstants.maxQuantity - value.round(),
                     ),
             label: minQuantity.toString(),

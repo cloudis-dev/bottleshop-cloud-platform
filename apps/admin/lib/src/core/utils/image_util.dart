@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img_util;
+import 'package:image_picker/image_picker.dart';
 import 'package:tuple/tuple.dart';
 
 class ImageUtil {
@@ -16,7 +17,7 @@ class ImageUtil {
   static double getImgSizeRatio(Tuple2<int, int> imgSize) =>
       imgSize.item1 / imgSize.item2;
 
-  static Future<Tuple2<int, int>> getImageSize(File file) async {
+  static Future<Tuple2<int, int>> getImageSize(XFile file) async {
     final bytes = await file.readAsBytes();
     final img = await decodeImageFromList(bytes);
     return Tuple2(img.width, img.height);
@@ -66,13 +67,11 @@ class ImageUtil {
   }
 
   static Future<List<Uint8List>> createResizedJpgWithWatermark({
-    required File file,
+    required Uint8List imgBytes,
     required int maxWidth,
     double watermarkSizeMultiplier = .9,
     String watermarkRelativePath = 'assets/images/watermark.png',
   }) async {
-    final imgBytes = await file.readAsBytes();
-
     final watermarkBytes =
         (await rootBundle.load(watermarkRelativePath)).buffer.asUint8List();
 

@@ -10,9 +10,9 @@
 //
 //
 
-import 'package:delivery/src/config/constants.dart';
 import 'package:delivery/src/core/data/models/localized_model.dart';
 import 'package:delivery/src/core/utils/language_utils.dart';
+import 'package:delivery/src/core/utils/math_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +21,29 @@ enum DeliveryOption {
   pickUp,
   quickDeliveryBa,
   closeAreasDeliveryBa,
-  none,
-  cashOnDelivery,
+  cashOnDelivery;
+
+  static const kOrderTypePickUp = 'pick-up';
+  static const kOrderTypeHomeDelivery = 'home-delivery';
+  static const kOrderTypeQuickBa = 'quick-delivery-BA';
+  static const kOrderTypeCloseAreaBa = 'close-areas-delivery-ba';
+  static const kOrderTypeCashOnDelivery = 'cash-on-delivery';
+
+  @override
+  String toString() {
+    switch (this) {
+      case DeliveryOption.homeDelivery:
+        return kOrderTypeHomeDelivery;
+      case DeliveryOption.pickUp:
+        return kOrderTypePickUp;
+      case DeliveryOption.quickDeliveryBa:
+        return kOrderTypeQuickBa;
+      case DeliveryOption.closeAreasDeliveryBa:
+        return kOrderTypeCloseAreaBa;
+      case DeliveryOption.cashOnDelivery:
+        return kOrderTypeCashOnDelivery;
+    }
+  }
 }
 
 @immutable
@@ -44,45 +65,28 @@ class OrderTypeModel extends Equatable {
   final List<int> _orderStepsIds;
   final double shippingFeeNoVat;
 
-  DeliveryOption get deliveryOption {
+  DeliveryOption? get deliveryOption {
     switch (_code) {
-      case kOrderTypePickUp:
+      case DeliveryOption.kOrderTypePickUp:
         return DeliveryOption.pickUp;
-      case kOrderTypeHomeDelivery:
+      case DeliveryOption.kOrderTypeHomeDelivery:
         return DeliveryOption.homeDelivery;
-      case kOrderTypeQuickBa:
+      case DeliveryOption.kOrderTypeQuickBa:
         return DeliveryOption.quickDeliveryBa;
-      case kOrderTypeCloseAreaBa:
+      case DeliveryOption.kOrderTypeCloseAreaBa:
         return DeliveryOption.closeAreasDeliveryBa;
-      case kOrderTypeCashOnDelivery:
+      case DeliveryOption.kOrderTypeCashOnDelivery:
         return DeliveryOption.cashOnDelivery;
     }
-    return DeliveryOption.none;
+    return null;
   }
 
-  static String codeFromDeliveryOption(DeliveryOption? deliveryOption) {
-    switch (deliveryOption) {
-      case DeliveryOption.homeDelivery:
-        return kOrderTypeHomeDelivery;
-      case DeliveryOption.pickUp:
-        return kOrderTypePickUp;
-      case DeliveryOption.quickDeliveryBa:
-        return kOrderTypeQuickBa;
-      case DeliveryOption.closeAreasDeliveryBa:
-        return kOrderTypeCloseAreaBa;
-      case DeliveryOption.cashOnDelivery:
-        return kOrderTypeCashOnDelivery;
-      case DeliveryOption.none:
-      default:
-        break;
-    }
-
-    throw Exception('No such delivery option available');
-  }
-
-  double get shippingFeeWithVat => shippingFeeNoVat * 1.2;
+  double get feeWithVat => shippingFeeNoVat * 1.2;
+  double get feeVat => feeWithVat - shippingFeeNoVat;
 
   List<int?> get orderStepsIds => _orderStepsIds;
+
+  bool get isPaymentRequired => !MathUtils.approximately(0, shippingFeeNoVat);
 
   String? getName(Locale locale) {
     switch (LanguageUtils.parseLocale(locale)) {

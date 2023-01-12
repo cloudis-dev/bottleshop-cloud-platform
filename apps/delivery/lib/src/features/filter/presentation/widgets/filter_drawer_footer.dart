@@ -36,10 +36,10 @@ class FilterDrawerFooter extends HookConsumerWidget {
         ),
         onPressed: () async {
           final currentFilterProviderCtrl =
-              ref.read(filterModelProvider(filterType).state);
-          if (currentFilterProviderCtrl.state.isAnyFilterActive) {
+              ref.read(filterModelProvider(filterType));
+          if (currentFilterProviderCtrl.isAnyFilterActive) {
             ref.read(appliedFilterProvider(filterType).state).state =
-                currentFilterProviderCtrl.state;
+                currentFilterProviderCtrl;
           } else {
             ref.read(appliedFilterProvider(filterType).state).state =
                 FilterModel.empty();

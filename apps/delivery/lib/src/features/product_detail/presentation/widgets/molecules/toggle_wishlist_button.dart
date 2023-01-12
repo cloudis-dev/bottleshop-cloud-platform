@@ -1,4 +1,5 @@
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/progress_button.dart';
 import 'package:delivery/src/features/favorites/presentation/providers/providers.dart';
@@ -29,8 +30,7 @@ class ToggleWishlistButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final buttonState =
-        ref.watch(_addToWishlistButtonStateProvider(product).state).state;
+    final buttonState = ref.watch(_addToWishlistButtonStateProvider(product));
     final loaderColor = Theme.of(context).primaryColor;
 
     return ProgressButton(
@@ -64,6 +64,12 @@ class ToggleWishlistButton extends HookConsumerWidget {
                         ),
                       );
                 } else {
+                  logAddToWishlist(
+                      context,
+                      product.uniqueId,
+                      product.name,
+                      product.allCategories.first.categoryDetails.toString(),
+                      1);
                   return ref
                       .read(wishListProvider)!
                       .add(product.uniqueId)

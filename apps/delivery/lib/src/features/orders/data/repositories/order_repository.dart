@@ -10,14 +10,14 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/presentation/view_models/implementations/paged_streams_items_state_notifier.dart';
 import 'package:delivery/src/core/utils/change_status_util.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
-import 'package:delivery/src/features/orders/data/services/db_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
+import 'package:delivery/src/features/orders/data/services/orders_service.dart';
+import 'package:streamed_items_state_management/streamed_items_state_management.dart';
+import 'package:tuple/tuple.dart';
 
 class OrderRepository {
   Stream<int> activeOrdersCount(UserModel? user) {
@@ -58,9 +58,9 @@ class OrderRepository {
         event
             .map(
               (e) => Tuple3(
-                ChangeStatusUtil.convertFromFirestoreChange(e.value1),
-                e.value2,
-                e.value3,
+                ChangeStatusUtil.convertFromFirestoreChange(e.item1),
+                e.item2,
+                e.item3,
               ),
             )
             .toList(),

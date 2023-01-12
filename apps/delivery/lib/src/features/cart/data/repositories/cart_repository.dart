@@ -1,21 +1,22 @@
-import 'package:delivery/src/config/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
 import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/cart/data/services/cart_content_service.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-class CartRepository with NetworkLoggy {
+final _logger = Logger((CartRepository).toString());
+
+class CartRepository {
   final CloudFunctionsService cloudFunctionsService;
 
   final CartContentService cartContentService;
-  final DatabaseService<CartModel> cartService;
   final DatabaseService<ProductModel> productsService;
 
   CartRepository({
-    required this.cartService,
     required this.cartContentService,
     required this.productsService,
     required this.cloudFunctionsService,
@@ -23,14 +24,6 @@ class CartRepository with NetworkLoggy {
 
   Stream<bool> isInCartStream(String id) {
     return cartContentService.streamSingle(id).map((event) => event != null);
-  }
-
-  Future<bool> promoApplied(String promo) {
-    return cloudFunctionsService.addPromoCode(promo);
-  }
-
-  Future<bool> promoRemoved() {
-    return cloudFunctionsService.removePromoCode();
   }
 
   Future<bool> isCartContentsAvailableInStock() async {
@@ -47,8 +40,8 @@ class CartRepository with NetworkLoggy {
   }
 
   Future<void> add(String id, int quantity) async {
-    loggy.info('adding id $id QTY: $quantity');
-    final ref = cartService.db
+    _logger.fine('adding id $id QTY: $quantity');
+    final ref = FirebaseFirestore.instance
         .collection(FirestoreCollections.productsCollection)
         .doc(id);
     final cartItem = await cartContentService.getSingle(id);
@@ -64,7 +57,7 @@ class CartRepository with NetworkLoggy {
   }
 
   Future<void> removeItem(String id) async {
-    loggy.info('removing $id');
+    _logger.fine('removing $id');
     return cartContentService.removeItem(id);
   }
 
@@ -89,13 +82,7 @@ class CartRepository with NetworkLoggy {
     return cartContentService.updateData(id, record.toMap());
   }
 
-  Stream<List<CartItemModel>> get cartContent =>
-      cartContentService.getCartItemsStream();
-
-  Stream<CartModel?> get cart =>
-      cartService.streamSingle(FirestoreCollections.userCartId);
-
-  Future<CartModel?> getCartModel() {
-    return cartService.getSingle(FirestoreCollections.userCartId);
-  }
+  Stream<CartModel> get streamCart => cartContentService.streamCartItems().map(
+        (event) => CartModel(cartItems: event),
+      );
 }

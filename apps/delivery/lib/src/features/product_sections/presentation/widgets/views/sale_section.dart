@@ -1,9 +1,7 @@
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/services/streamed_items_state_management/data/items_state.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_section_heading.dart';
 import 'package:delivery/src/features/product_sections/presentation/providers/providers.dart';
 import 'package:delivery/src/features/product_sections/presentation/widgets/organisms/products_section_carousel.dart';
-import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,8 +10,8 @@ class SaleSection extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productsState = ref.watch(saleProductsProvider
-        .select<ItemsState<ProductModel>>((value) => value.itemsState));
+    final productsState =
+        ref.watch(saleProductsProvider.select((value) => value.itemsState));
 
     return ProductsSectionCarousel(
       data: productsState.items,

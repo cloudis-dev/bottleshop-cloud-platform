@@ -9,6 +9,30 @@ Admin app for Bottleshop Tri Veze
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 ![GitHub](https://img.shields.io/github/license/cloudis-dev/bottleshop_admin?color=blue)
 
+## Getting started 🚀
+
+The project contains 2 flavors:
+- development
+- production
+
+```console
+# Development
+$ flutter run --flavor development --target lib/main_development.dart
+
+# Production
+$ flutter run --flavor production --target lib/main_production.dart
+```
+
+Configured with the following command + additional native setup (because of crashlytics)
+```console
+flutterfire config --ios-bundle-id=sk.bottleshop3veze.bottleshopAdmin.dev --android-package-name=sk.bottleshop3veze.bottleshopAdmin.dev
+```
+
+Flavors setup based on these blogs:
+- https://medium.com/@animeshjain/build-flavors-in-flutter-android-and-ios-with-different-firebase-projects-per-flavor-27c5c5dac10b
+- https://medium.com/flutter-community/flavoring-flutter-applications-android-ios-ea39d3155346
+- https://medium.com/@matt.goodson.business/separating-build-environment-configurations-in-flutter-with-firebase-doing-it-the-right-way-c72c3ad3621f
+
 ## Setup
 
 ### Android
@@ -36,3 +60,14 @@ Don't forget to change the version in the `pubspec.yaml`.
 Just run the scripts and the releases are done. 
 In the ios and android directories are the `fastlane` directories 
 containing all the needed instructions for the release.
+
+## Troubleshooting
+
+### iOS build
+
+Run `pod repo update`.
+
+When iOS build fails try to check whether you are using the right version of iOS FirebaseSDK in the [repo of FlutterFire](https://github.com/firebase/flutterfire/blob/master/packages/firebase_core/firebase_core/ios/firebase_sdk_version.rb).
+Watch out that the version of the repo matches your used package version in the pubspec.
+
+After you bump that `$FirebaseSDKVersion` dependency in the (ios podfile)[ios/Podfile], then run `pod install --repo-update` from the ios folder.

@@ -36,7 +36,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filter = ref.watch(appliedFilterProvider(filterType).state).state;
+    final filter = ref.watch(appliedFilterProvider(filterType));
 
     return SizedBox(
       height: 52,
@@ -85,7 +85,7 @@ class FiltersStickyHeader extends HookConsumerWidget {
                     FilterValue(
                       value: filter.alcoholRange,
                       onDeleteFilter: () {
-                        var val =
+                        final val =
                             ref.read(appliedFilterProvider(filterType).state);
                         val.state = val.state.clearedAlcoholFilter();
                       },

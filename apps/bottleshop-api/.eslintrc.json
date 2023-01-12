@@ -1,39 +1,20 @@
 {
-  "extends": [
-    "../../.eslintrc.json",
-    "plugin:promise/recommended",
-    "prettier"
-  ],
-  "plugins": [
-    "@nrwl/nx",
-    "promise"
-  ],
-  "ignorePatterns": [
-    "!**/*"
-  ],
+  "extends": ["../../.eslintrc.json", "plugin:promise/recommended", "prettier"],
+  "plugins": ["@nrwl/nx", "promise", "@typescript-eslint"],
+  "ignorePatterns": ["!**/*"],
   "parserOptions": {
     "ecmaVersion": "2017"
   },
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {}
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
+      "files": ["*.ts", "*.tsx"],
+      "parserOptions": { "project": ["./tsconfig.*?.json"] },
       "rules": {
-        "quotes": [
-          "error",
-          "single"
-        ],
+        "quotes": ["error", "single"],
         "import/no-unresolved": 0,
         "promise/always-return": 2,
         "promise/catch-or-return": 2,
@@ -44,14 +25,13 @@
         "no-eq-null": 2,
         "no-await-in-loop": 2,
         "callback-return": 2,
-        "handle-callback-err": 2
+        "handle-callback-err": 2,
+        "@typescript-eslint/no-misused-promises": "error",
+        "@typescript-eslint/no-floating-promises": "error"
       }
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.js", "*.jsx"],
       "rules": {}
     }
   ]

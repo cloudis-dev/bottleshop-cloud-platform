@@ -29,24 +29,27 @@ class FilterValue<T> extends Equatable {
 }
 
 final alcoholRangeScopedProvider =
-    Provider<FilterValue<RangeValues>?>((ref) => null);
+    Provider<FilterValue<RangeValues>>((_) => throw UnimplementedError());
 
-final quantityScopedProvider = Provider<FilterValue<int>?>((ref) => null);
+final quantityScopedProvider =
+    Provider<FilterValue<int>>((_) => throw UnimplementedError());
 
 final volumeRangeScopedProvider =
-    Provider<FilterValue<RangeValues>?>((ref) => null);
+    Provider<FilterValue<RangeValues>>((_) => throw UnimplementedError());
 
 final priceRangeScopedProvider =
-    Provider<FilterValue<RangeValues>?>((ref) => null);
+    Provider<FilterValue<RangeValues>>((_) => throw UnimplementedError());
 
 final isSpecialEditionScopedProvider =
-    Provider<FilterValue<bool>?>((ref) => null);
+    Provider<FilterValue<bool>>((_) => throw UnimplementedError());
 
-final countriesScopedProvider =
-    Provider<FilterValue<List<CountryModel>>?>((ref) => null);
+final countriesScopedProvider = Provider<FilterValue<List<CountryModel>>>(
+    (_) => throw UnimplementedError());
 
-final minAgeScopedProvider = Provider<FilterValue<int>?>((ref) => null);
-final maxYearScopedProvider = Provider<FilterValue<int>?>((ref) => null);
+final minAgeScopedProvider =
+    Provider<FilterValue<int>>((_) => throw UnimplementedError());
+final maxYearScopedProvider =
+    Provider<FilterValue<int>>((_) => throw UnimplementedError());
 
 final extraCategoriesScopedProvider =
-    Provider<FilterValue<List<String>>?>((ref) => null);
+    Provider<FilterValue<List<String>>>((_) => throw UnimplementedError());

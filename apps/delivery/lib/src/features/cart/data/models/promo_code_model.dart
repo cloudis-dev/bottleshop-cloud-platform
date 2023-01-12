@@ -10,50 +10,47 @@
 //
 //
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/features/cart/data/models/cart_model.dart';
+import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:equatable/equatable.dart';
 
 class PromoCodeModel extends Equatable {
   static const String codeField = 'code';
   static const String remainingUsesCountField = 'remaining_uses_count';
-  static const String discountField = 'discount';
-  static const String productRefField = 'product_ref';
+  static const String discountField = 'discount_value';
+  static const String minCartValueField = 'min_cart_value';
 
-  final String? uid;
-  final String? code;
-  final int? remainingUsesCount;
-  final double? discount;
-  final String productUniqueId;
+  final String uid;
+  final String code;
+  final int remainingUsesCount;
+  final double discount;
+  final double minCartValue;
 
   const PromoCodeModel({
     required this.uid,
     required this.code,
     required this.remainingUsesCount,
     required this.discount,
-    required this.productUniqueId,
+    required this.minCartValue,
   });
 
-  const PromoCodeModel.empty(this.productUniqueId)
-      : uid = null,
-        code = null,
-        remainingUsesCount = null,
-        discount = null;
+  bool isPromoValid(CartModel cart, OrderTypeModel? orderType) {
+    return remainingUsesCount > 0 &&
+        minCartValue <= (orderType?.feeWithVat ?? 0) + cart.totalProductsPrice;
+  }
 
   PromoCodeModel.fromJson(Map<String, dynamic> json, this.uid)
       : code = json[codeField],
         remainingUsesCount = json[remainingUsesCountField],
         discount = json[discountField],
-        productUniqueId = (json[productRefField] as DocumentReference).id;
+        minCartValue = json[minCartValueField];
 
   Map<String, dynamic> toFirebaseJson() {
     return {
       codeField: code,
       remainingUsesCountField: remainingUsesCount,
       discountField: discount,
-      productRefField: FirebaseFirestore.instance
-          .collection(FirestoreCollections.productsCollection)
-          .doc(productUniqueId),
+      minCartValueField: minCartValue
     };
   }
 
@@ -63,7 +60,7 @@ class PromoCodeModel extends Equatable {
         code,
         remainingUsesCount,
         discount,
-        productUniqueId,
+        minCartValue,
       ];
 
   @override

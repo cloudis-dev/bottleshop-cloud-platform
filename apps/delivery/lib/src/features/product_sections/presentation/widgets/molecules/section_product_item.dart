@@ -11,16 +11,21 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
+import 'package:delivery/src/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:delivery/src/features/product_sections/presentation/providers/providers.dart';
 import 'package:delivery/src/features/product_sections/presentation/widgets/atoms/available_progress_bar.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:routeborn/routeborn.dart';
+
+final _logger = Logger((SectionProductItem).toString());
 
 class SectionProductItem extends HookConsumerWidget {
   static const double imageWidth = 160;
@@ -34,7 +39,11 @@ class SectionProductItem extends HookConsumerWidget {
     required this.product,
   }) : super(key: key);
 
-  void onClick(WidgetRef ref, BuildContext context) {}
+  void onClick(BuildContext context, WidgetRef ref) {
+    ref
+        .read(navigationProvider)
+        .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,14 +61,14 @@ class SectionProductItem extends HookConsumerWidget {
               child: Stack(
                 children: [
                   Hero(
-                    tag: ValueKey(product.uniqueId),
+                    tag: HeroTags.productBaseTag + product.uniqueId,
                     child: ProductImage(imagePath: product.thumbnailPath),
                   ),
                   Positioned.fill(
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () => onClick(ref, context),
+                        onTap: () => onClick(context, ref),
                         borderRadius: ProductImage.borderRadius,
                       ),
                     ),
@@ -222,7 +231,7 @@ class SectionProductItem extends HookConsumerWidget {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () => onClick(ref, context),
+                      onTap: () => onClick(context, ref),
                       borderRadius: ProductImage.borderRadius,
                     ),
                   ),
@@ -236,7 +245,7 @@ class SectionProductItem extends HookConsumerWidget {
   }
 }
 
-class _FlashSaleItem extends HookConsumerWidget with UiLoggy {
+class _FlashSaleItem extends HookConsumerWidget {
   final ProductModel product;
 
   const _FlashSaleItem(this.product);
@@ -276,7 +285,7 @@ class _FlashSaleItem extends HookConsumerWidget with UiLoggy {
           return const SizedBox.shrink();
         },
         error: (err, stack) {
-          loggy.error('Failed to fetch flash sale end', err, stack);
+          _logger.severe('Failed to fetch flash sale end', err, stack);
           return const SizedBox.shrink();
         },
         orElse: () => const SizedBox.shrink());

@@ -10,7 +10,9 @@
 //
 //
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
@@ -18,21 +20,42 @@ import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/favorites/presentation/providers/providers.dart';
 import 'package:delivery/src/features/favorites/presentation/widgets/favorite_list_item.dart';
-import 'package:delivery/src/features/home/presentation/widgets/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/menu_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:routeborn/routeborn.dart';
 
-class FavoritesPage extends HookConsumerWidget with UiLoggy {
-  const FavoritesPage({Key? key}) : super(key: key);
+final _logger = Logger((FavoritesPage).toString());
+
+class FavoritesPage extends RoutebornPage {
+  static const String pagePathBase = 'favorites';
+
+  FavoritesPage()
+      : super.builder(pagePathBase, (_) => const _FavoritesPageView());
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(context.l10n.favoriteTabLabel);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _FavoritesPageView extends HookWidget {
+  const _FavoritesPageView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final authButtonKey = useMemoized(() => GlobalKey<AuthPopupButtonState>());
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
 
@@ -77,13 +100,19 @@ class _SearchIconButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
-        tooltip: MaterialLocalizations.of(context).searchFieldLabel,
-        icon: const Icon(Icons.search),
-        onPressed: () {});
+      tooltip: MaterialLocalizations.of(context).searchFieldLabel,
+      icon: const Icon(Icons.search),
+      onPressed: () => ref.read(navigationProvider).setNestingBranch(
+            context,
+            NestingBranch.search,
+            resetBranchStack: true,
+            branchParam: ref.read(navigationProvider).getNestingBranch(context),
+          ),
+    );
   }
 }
 
-class _Body extends HookConsumerWidget with UiLoggy {
+class _Body extends HookConsumerWidget {
   final GlobalKey<AuthPopupButtonState>? authButtonKey;
 
   const _Body(this.authButtonKey, {Key? key}) : super(key: key);
@@ -106,28 +135,33 @@ class _Body extends HookConsumerWidget with UiLoggy {
               );
             } else {
               return EmptyTab(
-                  icon: Icons.favorite_border,
-                  message: context.l10n.emptyWishList,
-                  buttonMessage: context.l10n.startExploring,
-                  onButtonPressed: null);
+                icon: Icons.favorite_border,
+                message: context.l10n.emptyWishList,
+                buttonMessage: context.l10n.startExploring,
+                onButtonPressed: () => ref
+                    .read(navigationProvider)
+                    .setNestingBranch(context, NestingBranch.shop),
+              );
             }
           },
           loading: () => const Loader(),
           error: (error, stack) {
-            loggy.error('Failed to fetch favorites', error, stack);
+            _logger.severe('Failed to fetch favorites', error, stack);
 
             return EmptyTab(
               icon: Icons.favorite_border,
               message: context.l10n.emptyWishList,
               buttonMessage: context.l10n.startExploring,
-              onButtonPressed: null,
+              onButtonPressed: () => ref
+                  .read(navigationProvider)
+                  .setNestingBranch(context, NestingBranch.shop),
             );
           },
         );
   }
 }
 
-class _FavoritesListLayout extends HookConsumerWidget with UiLoggy {
+class _FavoritesListLayout extends HookConsumerWidget {
   final List<ProductModel> favorites;
 
   const _FavoritesListLayout({
@@ -151,7 +185,7 @@ class _FavoritesListLayout extends HookConsumerWidget with UiLoggy {
           heroTag: 'favorites_list',
           product: favorites.elementAt(index),
           onDismissed: (direction) {
-            loggy.info('dismissing direction: ${direction.toString()}');
+            _logger.fine('dismissing direction: ${direction.toString()}');
             ref
                 .read(wishListProvider)!
                 .remove(favorites.elementAt(index).uniqueId)

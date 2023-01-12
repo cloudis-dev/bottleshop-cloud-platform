@@ -54,7 +54,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "sk.bottleshop3veze.bottleshop_admin"
+        applicationId "sk.bottleshop3veze.bottleshopAdmin"
         minSdkVersion _minSdkVersion
         targetSdkVersion _targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -80,6 +80,22 @@ android {
             storePassword keystoreProperties['storePassword']
             keyPassword keystoreProperties['keyPassword']
         }
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+      production {
+        dimension "default"
+        applicationIdSuffix ""
+//        versionNameSuffix ""
+        manifestPlaceholders = [appName: "Bottleshop Admin"]
+      }
+      development {
+        dimension "default"
+        applicationIdSuffix ".dev"
+//        versionNameSuffix ".dev"
+        manifestPlaceholders = [appName: "[DEV] Bottleshop Admin"]
+      }
     }
 
     buildTypes {

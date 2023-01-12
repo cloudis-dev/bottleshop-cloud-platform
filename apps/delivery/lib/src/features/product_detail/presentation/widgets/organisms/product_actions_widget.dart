@@ -9,14 +9,16 @@ import 'package:delivery/src/features/product_detail/presentation/widgets/molecu
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
 
-enum ProductAction {
+enum _ProductAction {
   purchase,
   favorite,
 }
 
-class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
+final _logger = Logger((ProductActionsWidget).toString());
+
+class ProductActionsWidget extends HookConsumerWidget {
   final ProductModel product;
   final GlobalKey<AuthPopupButtonState> authButtonKey;
 
@@ -26,16 +28,16 @@ class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
     required this.authButtonKey,
   }) : super(key: key);
 
-  void needsLoginAlert(BuildContext context, ProductAction action) {
+  void needsLoginAlert(BuildContext context, _ProductAction action) {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
           () {
             switch (action) {
-              case ProductAction.purchase:
+              case _ProductAction.purchase:
                 return context.l10n.loginNeededForPurchase;
-              case ProductAction.favorite:
+              case _ProductAction.favorite:
                 return context.l10n.loginNeededForFavorite;
             }
           }(),
@@ -62,7 +64,7 @@ class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hasUser =
-        ref.watch(currentUserProvider.select<bool>((value) => value != null));
+        ref.watch(currentUserProvider.select((value) => value != null));
 
     return SizedBox(
       height: 42,
@@ -76,7 +78,7 @@ class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
                     actionOverride: hasUser
                         ? null
                         : () =>
-                            needsLoginAlert(context, ProductAction.favorite),
+                            needsLoginAlert(context, _ProductAction.favorite),
                   ),
                   const SizedBox(width: 10),
                   (isInCart ?? false)
@@ -86,7 +88,7 @@ class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
                             actionOverride: hasUser
                                 ? null
                                 : () => needsLoginAlert(
-                                    context, ProductAction.purchase),
+                                    context, _ProductAction.purchase),
                           ),
                         )
                       : Expanded(
@@ -95,7 +97,7 @@ class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
                             actionOverride: hasUser
                                 ? null
                                 : () => needsLoginAlert(
-                                    context, ProductAction.purchase),
+                                    context, _ProductAction.purchase),
                           ),
                         ),
                 ],
@@ -103,7 +105,7 @@ class ProductActionsWidget extends HookConsumerWidget with UiLoggy {
             },
             orElse: () => const Loader(),
             error: (err, stack) {
-              loggy.error('Failed to fetch is item in cart', err, stack);
+              _logger.severe('Failed to fetch is item in cart', err, stack);
               return Text(context.l10n.error);
             },
           ),

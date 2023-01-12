@@ -15,6 +15,8 @@ import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
+/// This is a model created from data in [CartRecord]
+/// by querying other data sources.
 @immutable
 class CartItemModel extends Equatable {
   static const String countField = 'count';

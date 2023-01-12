@@ -28,7 +28,7 @@ class SortMenuButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sortModel = ref.watch(sortModelProvider.notifier).state;
+    final sortModel = ref.watch(sortModelProvider);
 
     return PopupMenuButton<_ButtonOptions>(
       icon: const Icon(

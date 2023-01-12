@@ -10,6 +10,7 @@
 //
 //
 
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottom_navigation_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/cupertino_bottom_navigation_scaffold.dart';
 import 'package:delivery/src/core/presentation/widgets/material_bottom_navigation_scaffold.dart';
@@ -26,18 +27,51 @@ class AdaptiveBottomNavigationScaffold extends HookConsumerWidget {
   }) : super(key: key);
 
   void onTabSelected(
-    WidgetRef ref,
     BuildContext context,
+    WidgetRef ref,
+    NestingBranch currentlySelectedBranch,
+    NestingBranch newBranch,
   ) {
-    // TODO:
+    if (currentlySelectedBranch == newBranch) {
+      ref.read(navigationProvider).replaceAllWith(
+            context,
+            [],
+            inChildNavigator: true,
+          );
+    } else {
+      ref
+          .read(navigationProvider)
+          .setNestingBranch(context, newBranch, inChildNavigator: true);
+    }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentlySelectedBranch = ref.watch(
+      navigationProvider.select(
+          (value) => value.getNestingBranch(context, inChildNavigator: true)),
+    );
+
     return defaultTargetPlatform != TargetPlatform.iOS
         ? MaterialBottomNavigationScaffold(
-            navigationBarItems: navigationBarItems)
+            navigationBarItems: navigationBarItems,
+            onItemSelected: (nestingBranch) => onTabSelected(
+              context,
+              ref,
+              currentlySelectedBranch,
+              nestingBranch,
+            ),
+            selectedBranch: currentlySelectedBranch,
+          )
         : CupertinoBottomNavigationScaffold(
-            navigationBarItems: navigationBarItems);
+            navigationBarItems: navigationBarItems,
+            onItemSelected: (newIndex) => onTabSelected(
+              context,
+              ref,
+              currentlySelectedBranch,
+              newIndex,
+            ),
+            selectedBranch: currentlySelectedBranch,
+          );
   }
 }

@@ -4,10 +4,7 @@ import * as functions from 'firebase-functions';
 import { createMail } from '../../../utils/mail-utils';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
 import { getMailBodyHtml } from '../../../utils/order-utils';
-import {
-  isEmulator,
-  isTestEnv,
-} from '../../../utils/functions-utils';
+import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
 import { Language } from '../../../constants/other';
 import { mailCollection } from '../../../constants/collections';
 import { Order } from '../../../models/order';
@@ -24,6 +21,11 @@ export const onOrderCreatedCustomerMail = async (orderSnapshot: functions.firest
 
   if (!orderType) {
     functions.logger.error(`Could not get OrderType entity by reference: ${order.order_type_ref}`);
+    return;
+  }
+
+  if (!order.customer.email) {
+    functions.logger.error(`User doesn't have email: ${order.customer}`);
     return;
   }
 

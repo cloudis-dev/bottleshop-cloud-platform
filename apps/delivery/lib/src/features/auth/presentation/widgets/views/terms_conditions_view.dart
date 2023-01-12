@@ -9,18 +9,22 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/config/environment.dart';
+import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:native_pdf_view/native_pdf_view.dart';
+import 'package:pdfx/pdfx.dart';
+import 'package:routeborn/routeborn.dart';
 
-final _pdfUrlProvider = Provider<String>((ref) {
+final _pdfUrlProvider = Provider((ref) {
   var lang = ref.watch(currentLocaleProvider).languageCode;
-  final url = '${Environment.tcsPdfUrl}tcs_$lang.pdf?alt=media';
+  final url = '${AppEnvironment.termsPdfEndpoint}tcs_$lang.pdf?alt=media';
   return url;
 });
 
@@ -39,16 +43,21 @@ final _pdfCtrl = Provider.autoDispose.family<PdfController, PdfDocument>(
   },
 );
 
-class TermsConditionsPage extends HookConsumerWidget {
+class TermsConditionsPage extends RoutebornPage {
   static const String pagePathBase = 'terms-and-conditions';
 
-  const TermsConditionsPage({Key? key}) : super(key: key);
+  TermsConditionsPage()
+      : super.builder(pagePathBase, (_) => const _TermsConditionsView());
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(context.l10n.cart);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
 }
 
 class _TermsConditionsView extends HookConsumerWidget {
@@ -59,7 +68,7 @@ class _TermsConditionsView extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(
-          onPressed: () {},
+          onPressed: () => ref.read(navigationProvider).popPage(context),
         ),
         title: Text(
           context.l10n.generalCommercialTermsTitle,
@@ -76,7 +85,6 @@ class _TermsConditionsView extends HookConsumerWidget {
                   width: 1080,
                   format: PdfPageImageFormat.png,
                 ),
-                pageLoader: const Loader(),
               );
             },
             loading: () => const Loader(),

@@ -12,25 +12,25 @@
 
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
-import 'package:delivery/src/core/data/models/category_plain_model.dart';
-import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/search_bar.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
-import 'package:delivery/src/features/home/presentation/widgets/page_body_template.dart';
-import 'package:delivery/src/features/products/data/models/product_model.dart';
+import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/products/data/services/product_search_service.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_list_item.dart';
 import 'package:delivery/src/features/search/presentation/providers/providers.dart';
 import 'package:delivery/src/features/search/presentation/widgets/searched_category_list_item.dart';
-import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:loggy/loggy.dart';
+import 'package:logging/logging.dart';
+import 'package:routeborn/routeborn.dart';
 
 const _debounceMs = 750;
 const _maxProductsResults = 10;
@@ -38,17 +38,35 @@ const _maxCategoriesResults = 3;
 
 final _searchBarFocusNode = FocusNode();
 
-final _searchEditingCtrlProvider = Provider.autoDispose<TextEditingController>((_) => TextEditingController());
+final _searchEditingCtrlProvider =
+    Provider.autoDispose((_) => TextEditingController());
 
-class ProductsSearchPage extends HookConsumerWidget {
-  const ProductsSearchPage({Key? key}) : super(key: key);
+final _logger = Logger((ProductsSearchPage).toString());
 
+class ProductsSearchPage extends RoutebornPage {
+  static const String pagePathBase = 'search';
+
+  ProductsSearchPage()
+      : super.builder(pagePathBase, (_) => _ProductsSearchPageView());
+
+  @override
+  Either<ValueListenable<String?>, String> getPageName(BuildContext context) =>
+      Right(context.l10n.search);
+
+  @override
+  String getPagePath() => pagePathBase;
+
+  @override
+  String getPagePathBase() => pagePathBase;
+}
+
+class _ProductsSearchPageView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // This is to preserve state
-    ref.watch(debounceTimerProvider.state);
-    ref.watch(lastQueriedSearchTimeProvider.state);
-    ref.watch(previousQuery.state);
+    ref.watch(debounceTimerProvider);
+    ref.watch(lastQueriedSearchTimeProvider);
+    ref.watch(previousQuery);
 
     return const _PageScaffold();
   }
@@ -67,7 +85,16 @@ class _PageScaffold extends HookConsumerWidget {
     return Scaffold(
       key: scaffoldStateKey,
       appBar: AppBar(
-        leading: const BackButton(onPressed: null),
+        leading: BackButton(
+          onPressed: () {
+            ref.read(navigationProvider).setNestingBranch(
+                  context,
+                  RoutebornBranchParams.of(context).getBranchParam()
+                          as NestingBranch? ??
+                      NestingBranch.shop,
+                );
+          },
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: SearchBar(
@@ -75,14 +102,15 @@ class _PageScaffold extends HookConsumerWidget {
           showFilter: false,
           onChangedCallback: (query) => _onSearchChanged(
             scaffoldStateKey.currentState,
+            context,
             query,
-            ref,
           ),
           focusNode: _searchBarFocusNode,
           editingController: searchEditingController,
         ),
       ),
-      body: shouldUseMobileLayout(context) ? body : PageBodyTemplate(child: body),
+      body:
+          shouldUseMobileLayout(context) ? body : PageBodyTemplate(child: body),
     );
   }
 }
@@ -94,7 +122,8 @@ class _Body extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchState = ref.watch(searchResultsProvider.select<SearchState>((value) => value.value1));
+    final searchState =
+        ref.watch(searchResultsProvider.select((value) => value.value1));
 
     switch (searchState) {
       case SearchState.cleaned:
@@ -102,7 +131,8 @@ class _Body extends HookConsumerWidget {
           icon: Icons.search,
           message: context.l10n.hitTheSearch,
           buttonMessage: context.l10n.startSearching,
-          onButtonPressed: () => FocusScope.of(context).requestFocus(_searchBarFocusNode),
+          onButtonPressed: () =>
+              FocusScope.of(context).requestFocus(_searchBarFocusNode),
         );
       case SearchState.typing:
         return Container();
@@ -115,8 +145,11 @@ class _Body extends HookConsumerWidget {
           icon: Icons.error_outline,
           message: context.l10n.upsSomethingWentWrong,
           buttonMessage: context.l10n.tryAgain,
-          onButtonPressed: () =>
-              _onSearchChanged(scaffoldStateKey.currentState, ref.read(_searchEditingCtrlProvider).text, ref),
+          onButtonPressed: () => _onSearchChanged(
+            scaffoldStateKey.currentState,
+            context,
+            ref.read(_searchEditingCtrlProvider).text,
+          ),
         );
     }
   }
@@ -129,8 +162,7 @@ class _ResultsWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchResults = ref.watch(
       searchResultsProvider
-          .select<Tuple2<List<Tuple2<Map<SearchMatchField, String>, ProductModel>>, List<CategoryPlainModel>>>(
-              (value) => Tuple2(value.value2, value.value3)),
+          .select((value) => Tuple2(value.value2, value.value3)),
     );
 
     if (searchResults.value1.isEmpty && searchResults.value2.isEmpty) {
@@ -141,19 +173,22 @@ class _ResultsWidget extends HookConsumerWidget {
         onButtonPressed: () {
           // Scaffold.of(context).
           ref.read(_searchEditingCtrlProvider).clear();
-          ref.read(searchResultsProvider.state).state = const Tuple3(SearchState.cleaned, [], []);
+          ref.read(searchResultsProvider.state).state =
+              const Tuple3(SearchState.cleaned, [], []);
           FocusScope.of(context).requestFocus(_searchBarFocusNode);
         },
       );
     } else {
-      final categories =
-          ref.watch(commonDataRepositoryProvider.select<List<CategoriesTreeModel>>((value) => value.data.categories));
+      final categories = ref.watch(
+          commonDataRepositoryProvider.select((value) => value.categories));
 
       final searchedCategoryItems = searchResults.value2.map(
         (searchedCategory) => Tuple2(
           categories.firstWhere(
-            (element) =>
-                CategoriesTreeModel.getAllCategoryPlainModels(element).map((e) => e.id).contains(searchedCategory.id),
+            (element) => CategoriesTreeModel.getAllCategoryPlainModels(element)
+                .map((e) => e.id)
+                .contains(searchedCategory.id),
+            orElse: null,
           ),
           searchedCategory,
         ),
@@ -188,19 +223,23 @@ class _ResultsWidget extends HookConsumerWidget {
   }
 }
 
-void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef ref) async {
+void _onSearchChanged(
+  ScaffoldState? pageScaffoldState,
+  BuildContext context,
+  String query,
+) async {
   /// This is to prevent continuing in search processing
   /// in case the widget is not in widget tree
   WidgetRef _getContext() {
-    if (pageScaffoldState == null) {
+    if (pageScaffoldState == null || !pageScaffoldState.mounted) {
       throw _OutOfWidgetTreeException();
     }
-    return ref;
+    return context as WidgetRef;
   }
 
   query = query.trim();
 
-  if (_getContext().read(previousQuery.state).state == query) {
+  if (_getContext().read(previousQuery) == query) {
     return;
   } else {
     _getContext().read(previousQuery.state).state = query;
@@ -210,27 +249,31 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
     final currentTime = DateTime.now();
     _getContext().read(lastQueriedSearchTimeProvider.state).state = currentTime;
 
-    _getContext().read(debounceTimerProvider.state).state?.cancel();
+    _getContext().read(debounceTimerProvider)?.cancel();
 
     if (query.isEmpty) {
-      _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.cleaned, [], []);
+      _getContext().read(searchResultsProvider.state).state =
+          const Tuple3(SearchState.cleaned, [], []);
     } else {
-      _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.typing, [], []);
+      _getContext().read(searchResultsProvider.state).state =
+          const Tuple3(SearchState.typing, [], []);
 
       _getContext().read(debounceTimerProvider.state).state = Timer(
         const Duration(milliseconds: _debounceMs),
         () async {
           try {
-            bool isLastQueryMade(WidgetRef ref) {
-              final lastQueriedTime = ref.read(lastQueriedSearchTimeProvider.state).state;
+            bool isLastQueryMade() {
+              final lastQueriedTime =
+                  _getContext().read(lastQueriedSearchTimeProvider.state).state;
               return lastQueriedTime == currentTime;
             }
 
-            if (!isLastQueryMade(ref)) {
+            if (!isLastQueryMade()) {
               return;
             }
 
-            _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.waiting, [], []);
+            _getContext().read(searchResultsProvider.state).state =
+                const Tuple3(SearchState.waiting, [], []);
 
             final res = await ProductsSearchService.search(
               query,
@@ -239,7 +282,7 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
             );
 
             // Only shows the results when this was the last search query made
-            if (!isLastQueryMade(ref)) {
+            if (!isLastQueryMade()) {
               return;
             }
 
@@ -251,9 +294,10 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
           } on _OutOfWidgetTreeException catch (_) {
             return;
           } catch (err, stack) {
-            _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.error, [], []);
+            _getContext().read(searchResultsProvider.state).state =
+                const Tuple3(SearchState.error, [], []);
 
-            logError('Search failed', err, stack);
+            _logger.severe('Search failed', err, stack);
           }
         },
       );
@@ -261,9 +305,10 @@ void _onSearchChanged(ScaffoldState? pageScaffoldState, String query, WidgetRef 
   } on _OutOfWidgetTreeException catch (_) {
     return;
   } catch (err, stack) {
-    _getContext().read(searchResultsProvider.state).state = const Tuple3(SearchState.error, [], []);
+    _getContext().read(searchResultsProvider.state).state =
+        const Tuple3(SearchState.error, [], []);
 
-    logError('search failed', err, stack);
+    _logger.severe('search failed', err, stack);
   }
 }
 

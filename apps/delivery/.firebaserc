@@ -1,0 +1,11 @@
+{
+  "projects": {
+    "default": "bottleshop-3-veze-dev-54908",
+    "prod": "bottleshop3veze-delivery"
+  },
+  "targets": {},
+  "hosting": {
+    "site": "bottleshop-delivery-dev",
+    "public": "build/web"
+  }
+}

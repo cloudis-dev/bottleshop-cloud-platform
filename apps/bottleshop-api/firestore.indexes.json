@@ -153,6 +153,20 @@
           "order": "ASCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "warehouse",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "is_sale",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_name_sort",
+          "order": "ASCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": []

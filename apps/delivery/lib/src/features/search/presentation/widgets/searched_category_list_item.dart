@@ -10,34 +10,35 @@
 //
 //
 
-// ignore_for_file: unused_local_variable
-
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
-import 'package:delivery/src/config/constants.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/list_item_container_decoration.dart';
+import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/categories/presentation/other/category_container_decoration.dart';
+import 'package:delivery/src/features/products/presentation/pages/category_products_detail_page.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:routeborn/routeborn.dart';
 
 class SearchedCategoryListItem extends HookConsumerWidget {
   const SearchedCategoryListItem({
-    super.key,
+    Key? key,
     required this.categoryPlainModel,
     required this.navigationCategory,
     required this.heroTag,
     this.bottomSideLineWidth,
-  });
+  }) : super(key: key);
 
   final CategoryPlainModel categoryPlainModel;
   final CategoriesTreeModel navigationCategory;
   final double? bottomSideLineWidth;
   final String heroTag;
 
-  void onClick(WidgetRef ref, BuildContext context) {
+  void onClick(BuildContext context, WidgetRef ref) {
     final subcategoryId = navigationCategory.categoryDetails.id !=
             categoryPlainModel.id
         ? navigationCategory.subCategories
@@ -46,6 +47,17 @@ class SearchedCategoryListItem extends HookConsumerWidget {
             .toList()
             .indexWhere((element) => element.contains(categoryPlainModel.id))
         : null;
+
+    ref.read(navigationProvider).pushPage(
+          context,
+          AppPageNode(
+            page: CategoryProductsPage(
+              navigationCategory,
+              subcategoryId: subcategoryId,
+              categoryImgHeroTag: heroTag,
+            ),
+          ),
+        );
   }
 
   @override
@@ -120,7 +132,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
           Positioned.fill(
             child: Material(
               color: Colors.transparent,
-              child: InkWell(onTap: () => onClick(ref, context)),
+              child: InkWell(onTap: () => onClick(context, ref)),
             ),
           ),
         ],

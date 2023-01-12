@@ -1,17 +1,9 @@
 import { config } from 'firebase-functions';
 import * as functions from 'firebase-functions';
 
-import {
-  acquireProductsIndex,
-  createClient,
-  firebase2AlgoliaObjMappingFn,
-} from '../../../utils/algolia-utils';
-import { DocumentChange } from '../../../models/document-change';
-import { getDocumentChange } from '../../../utils/document-snapshot-utils';
-import {
-  isEmulator,
-  isTestEnv,
-} from '../../../utils/functions-utils';
+import { acquireProductsIndex, createClient, firebase2AlgoliaObjMappingFn } from '../../../utils/algolia-utils';
+import { DocumentChange, getDocumentChange } from '../../../utils/document-snapshot-utils';
+import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
 import { Product } from '../../../models/product';
 import { productFields } from '../../../constants/model-constants';
 

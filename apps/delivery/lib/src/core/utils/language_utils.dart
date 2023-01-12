@@ -14,8 +14,6 @@ import 'dart:ui';
 
 enum LocaleLanguage { slovak, english }
 
-enum LanguageMode { en, sk }
-
 class LanguageUtils {
   LanguageUtils._();
 
