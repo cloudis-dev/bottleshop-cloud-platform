@@ -60,23 +60,18 @@ final currentThemeModeProvider = Provider<ThemeMode>((ref) {
   return themeMode;
 });
 
-final currentLocaleProvider = Provider<Locale>((ref) {
-  final mode = ref.watch(sharedPreferencesProvider).getAppLanguage();
-  final systemLanguage =
-      WidgetsBinding.instance.platformDispatcher.locale.languageCode;
-  debugPrint(
-      'current locale: ${Intl.getCurrentLocale().substring(0, 2)} - current system locale: $systemLanguage');
-  if (mode == null) {
+final currentLocaleProvider = Provider<Locale>(
+  (ref) {
+    final systemLanguage =
+        WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+    debugPrint(
+        'current locale: ${Intl.getCurrentLocale().substring(0, 2)} - current system locale: $systemLanguage');
     return AppLocalizations.supportedLocales.firstWhere(
       (element) => element.languageCode == systemLanguage,
       orElse: () => AppLocalizations.supportedLocales.first,
     );
-  }
-  return AppLocalizations.supportedLocales.firstWhere(
-    (element) => mode.toString().contains(element.languageCode),
-    orElse: () => AppLocalizations.supportedLocales.first,
-  );
-});
+  },
+);
 
 final platformInitializedProvider = FutureProvider.autoDispose((ref) async {
   await Future.wait(
