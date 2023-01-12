@@ -2,7 +2,7 @@
 
 Configuration from Firebase modules. Contains code for Firebase Function, too.
 
-## Setup
+# Setup
 
 1. Install Firebase CLI: https://firebase.google.com/docs/cli
 2. Install Stripe CLI: https://stripe.com/docs/stripe-cli
@@ -13,26 +13,33 @@ Configuration from Firebase modules. Contains code for Firebase Function, too.
 7. Add seed to `apps/bottleshop-api/firebase-seed` (ask for this directory the other devs)
 
 
-## Switching environments<a id='firebase-projects'></a>
+# Switching environments<a id='firebase-projects'></a>
 
 You can see all available projects using `firebase projects:list` CLI command or in the `.firebaserc` file.
 
 To switch use the `firebase use [alias]` CLI command where alias is the key in the `.firebaserc` file. To see actively selected project run `firebase use` CLI command.
 
-## Other
+# Other
 
-### Debugging
+## Indexes
+
+The file `firestore.indexes.json` is taken into account.
+To update it with data stored in the firebase run `firebase firestore:indexes > firestore.indexes.json`.
+
+This file is uploaded on the deploy.
+
+## Debugging
 To check if running in an emulator use `process.env.FUNCTIONS_EMULATOR === 'true'`
 
-### Deploying
+## Deploying
 
-#### Firestore rules
+### Firestore rules
 
 `npm run deploy:firestore:rules`
 
 The rules are stored in the file `./firestore.rules`
 
-#### Firebase Storage
+### Firebase Storage
 
 **CORS configuration:**
 
