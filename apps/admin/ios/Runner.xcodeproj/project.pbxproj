@@ -86,13 +86,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		48F6F5BF2968220C00A7C73C /* Smth */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Smth;
-			sourceTree = "<group>";
-		};
 		59EEA76EAB0C20EDAF568DD7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,7 +128,6 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				48F6F5BF2968220C00A7C73C /* Smth */,
 				F46CA8E024DB565D009FAB31 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
