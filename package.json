@@ -28,7 +28,7 @@
     "@firebase/app-compat": "^0.1.25",
     "@firebase/app-types": "^0.7.0",
     "global": "^4.4.0",
-    "luxon": "^2.4.0",
+    "luxon": "^2.5.2",
     "remove-accents": "^0.4.2",
     "stripe": "^11.4.0",
     "tslib": "~2.4.0"
