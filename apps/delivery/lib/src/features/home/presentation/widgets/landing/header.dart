@@ -1,11 +1,12 @@
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
 import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:delivery/l10n/l10n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import '../../../../../core/data/res/constants.dart';
 
 class Header extends HookConsumerWidget {
@@ -96,7 +97,10 @@ class Header extends HookConsumerWidget {
                 ),
               ),
               if (currentUser != null)
-                Text(currentUser.name!, style: publicSansTextTheme.overline),
+                Text(
+                  currentUser.name.toString(),
+                  style: publicSansTextTheme.overline,
+                ),
             ]),
           ),
         ],

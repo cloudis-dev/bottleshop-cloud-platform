@@ -98,16 +98,15 @@ android {
     flavorDimensions "app"
 
     productFlavors {
-        dev {
-            dimension "app"
-            resValue "string", "app_name", "Bottleshop 3 Veže DEV"
-            applicationId "sk.bottleshop3veze.bottleshopdeliveryapp.dev"
-            versionNameSuffix "-dev"
-        }
-        prod {
-            dimension "app"
-            resValue "string", "app_name", "Bottleshop 3 Veže"
-        }
+      production {
+        dimension "app"
+        resValue "string", "app_name", "Bottleshop 3 Veže"
+      }
+      development {
+        dimension "app"
+        resValue "string", "app_name", "[DEV] Bottleshop 3 Veže"
+        applicationIdSuffix ".dev"
+      }
     }
     lint {
       checkReleaseBuilds false
