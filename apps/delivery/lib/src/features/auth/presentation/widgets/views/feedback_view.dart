@@ -9,24 +9,19 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-import 'dart:html';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/res/app_environment.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
-import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'package:pdfx/pdfx.dart';
 import 'package:routeborn/routeborn.dart';
+import '../molecules/image_preview.dart';
+
 
 class FeedbackPage extends RoutebornPage {
   static const String pagePathBase = 'feedback';
@@ -54,6 +49,7 @@ class _FeedbackView extends HookConsumerWidget {
     final name = useState<String>("");
     final email = useState<String>("");
     final message = useState<String>("");
+    final images = useState<List<XFile>>([]);
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -75,8 +71,7 @@ class _FeedbackView extends HookConsumerWidget {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       }
-                       if(value.length >= 50)
-                        return 'The name is too long';
+                      if (value.length >= 50) return 'The name is too long';
                       return null;
                     },
                     onChanged: (value) {
@@ -98,7 +93,9 @@ class _FeedbackView extends HookConsumerWidget {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       }
-                      if (!RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(value!)) {
+                      if (!RegExp(
+                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                          .hasMatch(value)) {
                         return 'Invalid email';
                       }
                       return null;
@@ -113,7 +110,7 @@ class _FeedbackView extends HookConsumerWidget {
                   padding: const EdgeInsets.fromLTRB(500, 50, 500, 25),
                   child: TextFormField(
                     maxLines: 5,
-                      validator: (value) {
+                    validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       }
@@ -144,9 +141,40 @@ class _FeedbackView extends HookConsumerWidget {
                         height: 65,
                         child: ElevatedButton(
                           child: Icon(Icons.add),
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (images.value.length < 3) {
+                              final ImagePicker _picker = ImagePicker();
+                              final img = await _picker.pickImage(
+                                  source: ImageSource.gallery);
+                              final bytes = await img!.readAsBytes();
+                              final oldItems = images.value;
+                              final newItem = base64Encode(bytes);
+                              images.value = [...oldItems, img];
+                            }
+                          },
                         ),
                       ),
+                      if (images.value.length > 0)
+                        Expanded(
+                          child: Container(
+                            height: 50,
+                            width: 200,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: images.value.length,
+                                itemBuilder: (context, index) {
+                                  return ImgPreview(
+                                      images.value.elementAt(index), (int i) {
+                                    images.value.removeWhere((image) =>
+                                        image.path ==
+                                        images.value.elementAt(i).path);
+                                    var tmp = List<XFile>.from(images.value);
+                                    images.value = tmp;
+                                  }, index);
+                                }),
+                          ),
+                        )
                     ],
                   ),
                 ),
@@ -178,23 +206,39 @@ class _FeedbackView extends HookConsumerWidget {
                       ],
                     )),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(500, 50, 500, 0),
+                  padding: const EdgeInsets.fromLTRB(500, 30, 500, 0),
                   child: SizedBox(
                     width: 150,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () async {
-                        // await ref.read(cloudFunctionsProvider).postFeedback("testOS");
                         if (_formKey.currentState!.validate()) {
+                          List<Map<String, String>> paths = [];
+                          for (int i = 0; i < images.value.length; i++) {
+                            var bytes =
+                                await images.value.elementAt(i).readAsBytes();
+                            var bs64 = base64Encode(bytes);
+                            Map<String, String> imgObj = {};
+                            imgObj["path"] = 'data:text/plain;base64,$bs64';
+                            paths.add(imgObj);
+                          }
                           final mail = {
-                           'to':'bottleshop3veze@mail.com',
-                           'html': ' ',
-                           'subject' : '${typE.value == 'problem' ? 'problem' : 'suggestion'} from ${name.value}',
-                           'text':'Name: ${name.value}\nEmail: ${email.value}\n\n\n${message.value}'
+                            'to': typE.value == 'problem'
+                                ? 'info@ave-z.com'
+                                : 'info@bottleshop3veze.sk',
+                            'html': '.',
+                            'subject':
+                                '${typE.value == 'problem' ? 'problem' : 'suggestion'} from ${name.value}',
+                            'text':
+                                'Name: ${name.value}\nEmail: ${email.value}\n\n\n${message.value}',
+                            'path': paths
                           };
-                          await ref.read(cloudFunctionsProvider).postFeedback(mail);
-                        } else
-                          print("neok");
+
+                          await ref
+                              .read(cloudFunctionsProvider)
+                              .postFeedback(mail);
+                          ref.read(navigationProvider).popPage(context);
+                        }
                       },
                       child: Text('Send'),
                     ),

@@ -32,6 +32,7 @@ dependencies:
   datetime_picker_formfield: ^2.0.0
   animations: ^2.0.2
   tuple: ^2.0.0
+  image_picker: ^0.8.6
   http: ^0.13.4
   flutter_stripe: ^5.1.0
   stripe_checkout: ^1.0.0

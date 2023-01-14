@@ -35,7 +35,7 @@ class CloudFunctionsService {
     return res.data['success'] as bool;
   }
 
-  Future<bool> postFeedback(Map<String, String> data) async {
+  Future<bool> postFeedback(Map<String, Object> data) async {
     final res = await _firebaseFunctions
         .httpsCallable(FirebaseCallableFunctions.postFeedback)
         .call<dynamic>(data);
