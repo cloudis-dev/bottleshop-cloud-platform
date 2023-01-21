@@ -47,7 +47,7 @@ class SectionProductItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Container(
       margin: margin,
@@ -170,7 +170,7 @@ class SectionProductItem extends HookConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)}',
+                                  '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLang)}',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                                 if (product.alcohol != null)

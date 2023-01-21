@@ -10,10 +10,8 @@
 //
 //
 
-import 'dart:ui';
-
 import 'package:delivery/src/core/data/models/localized_model.dart';
-import 'package:delivery/src/core/utils/language_utils.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
@@ -30,21 +28,21 @@ class UnitModel extends Equatable {
   final LocalizedModel _localizedAbbreviation;
   final LocalizedModel _localizedUnit;
 
-  String? getUnitName(Locale locale) {
-    switch (LanguageUtils.parseLocale(locale)) {
-      case LocaleLanguage.slovak:
-        return _localizedUnit.slovak;
-      case LocaleLanguage.english:
+  String? getUnitName(LanguageMode lang) {
+    switch (lang) {
+      case LanguageMode.en:
         return _unit;
+      case LanguageMode.sk:
+        return _localizedUnit.slovak;
     }
   }
 
-  String? getUnitAbbreviation(Locale locale) {
-    switch (LanguageUtils.parseLocale(locale)) {
-      case LocaleLanguage.slovak:
-        return _localizedAbbreviation.slovak;
-      case LocaleLanguage.english:
+  String? getUnitAbbreviation(LanguageMode lang) {
+    switch (lang) {
+      case LanguageMode.en:
         return _abbreviation;
+      case LanguageMode.sk:
+        return _localizedAbbreviation.slovak;
     }
   }
 

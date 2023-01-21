@@ -11,7 +11,7 @@ class ProductDescriptionTab extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,8 +27,7 @@ class ProductDescriptionTab extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            product.getDescription(currentLocale) ??
-                context.l10n.wereWorkingOnIt,
+            product.getDescription(currentLang) ?? context.l10n.wereWorkingOnIt,
             style: Theme.of(context).textTheme.subtitle2,
           ),
         ),

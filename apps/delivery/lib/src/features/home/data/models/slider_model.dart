@@ -11,7 +11,7 @@
 //
 
 import 'package:delivery/src/core/data/models/localized_model.dart';
-import 'package:delivery/src/core/utils/language_utils.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:flutter/material.dart';
 
 @immutable
@@ -23,27 +23,27 @@ class SliderModel {
 
   final LocalizedModel? _imageUrlLocalized;
 
-  String getImageUrl(Locale locale) {
+  String getImageUrl(LanguageMode lang) {
     if (_imageUrlLocalized == null) {
       return _imageUrl;
     }
-    switch (LanguageUtils.parseLocale(locale)) {
-      case LocaleLanguage.slovak:
-        return _imageUrlLocalized!.slovak;
-      case LocaleLanguage.english:
+    switch (lang) {
+      case LanguageMode.en:
         return _imageUrl;
+      case LanguageMode.sk:
+        return _imageUrlLocalized!.slovak;
     }
   }
 
-  String getDescription(Locale locale) {
+  String getDescription(LanguageMode lang) {
     if (_descriptionLocalized == null) {
       return _description;
     }
-    switch (LanguageUtils.parseLocale(locale)) {
-      case LocaleLanguage.slovak:
-        return _descriptionLocalized!;
-      case LocaleLanguage.english:
+    switch (lang) {
+      case LanguageMode.en:
         return _description;
+      case LanguageMode.sk:
+        return _descriptionLocalized!;
     }
   }
 

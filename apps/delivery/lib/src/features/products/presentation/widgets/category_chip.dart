@@ -29,7 +29,7 @@ class CategoryChip extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return ActionChip(
       visualDensity: const VisualDensity(
@@ -44,7 +44,7 @@ class CategoryChip extends HookConsumerWidget {
           // size: 32,
         ),
       ),
-      label: Text(category.categoryDetails.getName(currentLocale)),
+      label: Text(category.categoryDetails.getName(currentLang)),
       onPressed: () => onNavigateToCategory(context),
     );
   }

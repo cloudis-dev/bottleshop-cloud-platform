@@ -160,7 +160,7 @@ class _Body extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     const horizontalContentPadding = 20.0;
 
@@ -213,7 +213,7 @@ class _Body extends HookConsumerWidget {
                 ),
                 const SizedBox(),
                 Text(
-                  order.orderType.getName(currentLocale)!,
+                  order.orderType.getName(currentLang)!,
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
               ],

@@ -10,8 +10,11 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/orders/data/models/order_model.dart';
+import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:delivery/src/features/orders/data/repositories/order_repository.dart';
 import 'package:delivery/src/features/orders/data/services/orders_service.dart';
 import 'package:delivery/src/features/orders/presentation/view_models/orders_state_notifier.dart';
@@ -38,4 +41,18 @@ final activeOrdersCountProvider = StreamProvider.autoDispose<int>((ref) {
 final orderStreamProvider =
     StreamProvider.autoDispose.family<OrderModel?, String>(
   (ref, orderUniqueId) => ordersDbService.streamSingle(orderUniqueId),
+);
+
+final orderTypesProvider = FutureProvider(
+  (ref) async {
+    final docs = await FirebaseFirestore.instance
+        .collection(FirestoreCollections.orderTypesCollection)
+        .orderBy('listing_order_id')
+        .get();
+    final docsMap =
+        Map.fromEntries(docs.docs.map((e) => MapEntry(e.id, e.data())));
+    return docsMap.entries
+        .map((e) => OrderTypeModel.fromMap(e.key, e.value))
+        .toList();
+  },
 );

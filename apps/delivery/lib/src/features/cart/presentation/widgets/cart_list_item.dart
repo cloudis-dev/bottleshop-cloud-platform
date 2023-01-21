@@ -44,8 +44,9 @@ class CartListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
     final qtyState = useState<int>(quantity);
+
     return Container(
       width: double.infinity,
       height: 150,
@@ -95,7 +96,7 @@ class CartListItem extends HookConsumerWidget {
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 Text(
-                  '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)} ${FormattingUtils.getAlcoholNumberString(product.alcohol ?? 0)}',
+                  '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLang)} ${FormattingUtils.getAlcoholNumberString(product.alcohol ?? 0)}',
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Text(

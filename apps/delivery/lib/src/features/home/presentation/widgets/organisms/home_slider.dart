@@ -140,12 +140,12 @@ class _SliderItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: NetworkImage(sliderModel.getImageUrl(currentLocale)),
+            image: NetworkImage(sliderModel.getImageUrl(currentLang)),
             fit: BoxFit.cover),
         borderRadius: BorderRadius.circular(6),
         boxShadow: [
@@ -168,7 +168,7 @@ class _SliderItem extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Text(
-                sliderModel.getDescription(currentLocale),
+                sliderModel.getDescription(currentLang),
                 style: Theme.of(context)
                     .textTheme
                     .subtitle1!
