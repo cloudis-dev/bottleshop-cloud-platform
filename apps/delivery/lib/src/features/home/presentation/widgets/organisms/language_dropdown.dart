@@ -32,9 +32,8 @@ class LanguageDropdown extends HookConsumerWidget {
         ),
       ],
       initialValue: ref.watch(
-            sharedPreferencesProvider.select((value) => value.getAppLanguage()),
-          ) ??
-          LanguageMode.en,
+        sharedPreferencesProvider.select((value) => value.getAppLanguage()),
+      ),
       onChanged: (value) async {
         await ref.read(sharedPreferencesProvider).setAppLocale(value!);
         await ref

@@ -14,6 +14,7 @@ import 'dart:ui';
 
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:diacritic/diacritic.dart';
 
 class SortingUtil {
@@ -22,21 +23,21 @@ class SortingUtil {
   static int categoryCompare(
     CategoryPlainModel a,
     CategoryPlainModel b,
-    Locale currentLocale,
+    LanguageMode lang,
   ) =>
       stringSortCompare(
-        a.getName(currentLocale),
-        b.getName(currentLocale),
+        a.getName(lang),
+        b.getName(lang),
       );
 
   static int countryCompare(
     CountryModel a,
     CountryModel b,
-    Locale currentLocale,
+    LanguageMode lang,
   ) =>
       stringSortCompare(
-        a.getName(currentLocale),
-        b.getName(currentLocale),
+        a.getName(lang),
+        b.getName(lang),
       );
 
   static int stringSortCompare(String? a, String? b, {bool ascending = true}) {

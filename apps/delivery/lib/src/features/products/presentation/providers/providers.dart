@@ -66,23 +66,23 @@ final filteredProductsProvider = ChangeNotifierProvider.autoDispose
         );
 
         if (currentAppliedFilter.isAnyFilterActive) {
-          final literUnit = ref
-              .watch(commonDataRepositoryProvider)
-              .units
-              .where((element) =>
-                  element.id == '977qijBvm7cxuqPNgvb1') // liter unit id
-              .first;
-
           return Stream.fromFuture(
-            ProductsSearchService.filterProducts(
-              currentAppliedFilter.getQuery(
-                literUnit,
-                onlyCategory: category,
-              ),
-              10,
-              newPageId,
-              sortModel,
-            ),
+            ref
+                .watch(unitsProvider.future)
+                .then((value) => value
+                    .where((element) => element.id == '977qijBvm7cxuqPNgvb1')
+                    .first)
+                .then(
+                  (literUnit) => ProductsSearchService.filterProducts(
+                    currentAppliedFilter.getQuery(
+                      literUnit,
+                      onlyCategory: category,
+                    ),
+                    10,
+                    newPageId,
+                    sortModel,
+                  ),
+                ),
           ).map(
             (event) => PagedItemsStateStreamBatch(
               Iterable<int>.generate(event.length)

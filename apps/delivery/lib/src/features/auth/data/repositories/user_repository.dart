@@ -111,7 +111,7 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<void> onUserChangedPreferredLanguage(LanguageMode mode) async {
-    return setPreferredLanguage(language2Locale(mode).languageCode);
+    return setPreferredLanguage(mode.language2Locale().languageCode);
   }
 
   Future<void> sendVerificationMail() async {

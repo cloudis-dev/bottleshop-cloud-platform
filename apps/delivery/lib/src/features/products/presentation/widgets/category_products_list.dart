@@ -288,7 +288,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
         appliedFilterProvider(FilterType.categoryProducts)
             .select((value) => value.isAnyFilterActive));
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     if (_shouldDisplayListWithSubcategories(
       isAllCategory,
@@ -318,7 +318,7 @@ class _ProductsListWithSubcategoriesStickyHeaders extends HookConsumerWidget {
                   child: ListTile(
                     title: Text(
                       category.subCategories[id].categoryDetails
-                          .getName(currentLocale),
+                          .getName(currentLang),
                     ),
                   ),
                 ),

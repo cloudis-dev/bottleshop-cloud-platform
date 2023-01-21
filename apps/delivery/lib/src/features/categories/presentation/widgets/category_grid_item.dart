@@ -40,7 +40,7 @@ class CategoryGridItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Material(
       child: InkWell(
@@ -107,7 +107,7 @@ class CategoryGridItem extends HookConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        category.categoryDetails.getName(currentLocale),
+                        category.categoryDetails.getName(currentLang),
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
                         maxLines: titleMaxLines,

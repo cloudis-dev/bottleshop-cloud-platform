@@ -163,9 +163,9 @@ class _Body extends HookConsumerWidget {
                 category.subCategories.length + 1, // Adding the 'all' tab
             initialIndex: subcategoryId ?? 0,
           );
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
-    setPageName(category.categoryDetails.getName(currentLocale));
+    setPageName(category.categoryDetails.getName(currentLang));
 
     if (shouldUseMobileLayout(context)) {
       return Scaffold(
@@ -227,8 +227,7 @@ class _Body extends HookConsumerWidget {
                 category,
                 Tab(child: Text(context.l10n.all.toUpperCase())),
                 (e) => Tab(
-                    text:
-                        e.categoryDetails.getName(currentLocale).toUpperCase()),
+                    text: e.categoryDetails.getName(currentLang).toUpperCase()),
                 controller: tabController,
               ),
         body: Scaffold(
