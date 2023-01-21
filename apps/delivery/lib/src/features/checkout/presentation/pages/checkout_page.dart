@@ -122,7 +122,7 @@ class _CheckoutPageView extends HookConsumerWidget {
       } else {
         final orderNote = ref.read(remarksTextEditCtrlProvider).text;
         final promo = ref.read(currentAppliedPromoProvider)?.code;
-        final language = ref.read(sharedPreferencesProvider).getAppLanguage();
+        final language = ref.watch(currentLanguageProvider);
 
         final sessionId = await ref
             .read(cloudFunctionsProvider)
