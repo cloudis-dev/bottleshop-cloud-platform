@@ -147,12 +147,16 @@ class _CheckoutPageView extends HookConsumerWidget {
             context: context,
           );
         } else {
-          await redirectToCheckout(
+          (await redirectToCheckout(
             context: context,
             sessionId: sessionId,
             publishableKey: AppEnvironment.stripePublishableKey,
             successUrl: successUrl,
             canceledUrl: cancelUrl,
+          ))
+              .maybeWhen(
+            error: (err) => _logger.severe(err),
+            orElse: () {},
           );
         }
       }
