@@ -14,7 +14,9 @@
 *.iml
 *.ipr
 *.iws
-.idea/
+.idea/*
+
+!.idea/runConfigurations
 
 # Visual Studio Code related
 .classpath
