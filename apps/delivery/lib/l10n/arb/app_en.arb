@@ -500,7 +500,7 @@
   "@unpaid": {},
   "upsSomethingWentWrong": "Ups, something went wrong",
   "@upsSomethingWentWrong": {},
-  "useAsShippingAddress": "Use as shipping address",
+  "useAsShippingAddress": "Use as billing address",
   "@useAsShippingAddress": {},
   "userAlreadySignedUpWithDifferentProvider": "User already signed up with different provider",
   "@userAlreadySignedUpWithDifferentProvider": {},

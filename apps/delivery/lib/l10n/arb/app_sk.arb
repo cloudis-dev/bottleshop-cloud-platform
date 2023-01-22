@@ -500,7 +500,7 @@
   "@unpaid": {},
   "upsSomethingWentWrong": "Hups, niečo sa pokazilo",
   "@upsSomethingWentWrong": {},
-  "useAsShippingAddress": "Použiť ako adresu doručenia",
+  "useAsShippingAddress": "Použiť ako fakturačnú adresu",
   "@useAsShippingAddress": {},
   "userAlreadySignedUpWithDifferentProvider": "Používateľ sa už zaregistroval u iného poskytovateľa",
   "@userAlreadySignedUpWithDifferentProvider": {},
