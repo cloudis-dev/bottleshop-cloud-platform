@@ -58,7 +58,7 @@ class _FeedbackView extends HookConsumerWidget {
               onPressed: () => ref.read(navigationProvider).popPage(context),
             ),
             title: Text(
-              "Feedback",
+              context.l10n.feedback,
             ),
           ),
           body: Center(
@@ -69,17 +69,17 @@ class _FeedbackView extends HookConsumerWidget {
                   child: TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return context.l10n.enterSomeText;
                       }
-                      if (value.length >= 50) return 'The name is too long';
+                      if (value.length >= 50) return context.l10n.tooLong;
                       return null;
                     },
                     onChanged: (value) {
                       name.value = value;
                     },
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'Enter your name',
+                      labelText: context.l10n.enterName.toString(),
                     ),
                   ),
                 ),
@@ -91,18 +91,18 @@ class _FeedbackView extends HookConsumerWidget {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return context.l10n.enterSomeText;
                       }
                       if (!RegExp(
                               r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
                           .hasMatch(value)) {
-                        return 'Invalid email';
+                        return context.l10n.invalidEmail;
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'Enter your email',
+                      labelText: context.l10n.enterEmail,
                     ),
                   ),
                 ),
@@ -112,19 +112,19 @@ class _FeedbackView extends HookConsumerWidget {
                     maxLines: 5,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return context.l10n.enterSomeText;
                       }
                       if (value.length >= 250) {
-                        return 'Too long (250 characters max.)';
+                        return context.l10n.tooLong;
                       }
                       return null;
                     },
                     onChanged: (value) {
                       message.value = value;
                     },
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         border: UnderlineInputBorder(),
-                        hintText: 'Type your message',
+                        hintText: context.l10n.enterMsg,
                         hintStyle: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -186,7 +186,7 @@ class _FeedbackView extends HookConsumerWidget {
                         SizedBox(
                           width: 200,
                           child: RadioListTile(
-                              title: Text("Problem"),
+                              title: Text(context.l10n.problem),
                               value: "problem",
                               groupValue: typE.value,
                               onChanged: (value) {
@@ -196,7 +196,7 @@ class _FeedbackView extends HookConsumerWidget {
                         SizedBox(
                           width: 200,
                           child: RadioListTile(
-                              title: Text("Suggestion"),
+                              title: Text(context.l10n.suggestion),
                               value: "suggestion",
                               groupValue: typE.value,
                               onChanged: (value) {
@@ -240,7 +240,7 @@ class _FeedbackView extends HookConsumerWidget {
                           ref.read(navigationProvider).popPage(context);
                         }
                       },
-                      child: Text('Send'),
+                      child: Text(context.l10n.send),
                     ),
                   ),
                 )

@@ -571,5 +571,15 @@
   "deleteAccount": "Odstrániť",
   "deleteAccountDialogTitle": "Ste si istý, že chcete zmazať svoj účet?",
   "deleteAccountDialogLabel": "Všetky Vaše dáta spojené s účtom budú odstránené a nebude ich možné obnoviť",
-  "deleteAccountNegativeOption": "Zavrieť"
+  "deleteAccountNegativeOption": "Zavrieť",
+  "send": "Poslať",
+"problem": "Problém",
+"suggestion": "Návrh",
+"feedback": "Spätná väzba",
+"enterSomeText": "Zadajte prosím nejaký text",
+"invalidEmail":"Neplatný e-mail",
+"enterName":"Zadajte svoje meno",
+"enterEmail":"Zadajte svoj e-mail",
+"enterMsg":"Napíšte svoju správu",
+"tooLong":"Príliš dlhá správa"
 }

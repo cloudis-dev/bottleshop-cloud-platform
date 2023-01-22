@@ -203,7 +203,7 @@ class _MenuItemsTab extends HookConsumerWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.feedback),
-                  title: Text("Feedback"),
+                  title: Text(context.l10n.feedback),
                   onTap: () {
                     ref.read(navigationProvider).pushPage(
                           context,
