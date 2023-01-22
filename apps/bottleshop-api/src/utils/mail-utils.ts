@@ -35,10 +35,14 @@ export function createMail(to: string, subject: string, text = '', html = ''): M
  */
 export async function getManagementEmails(): Promise<string[]> {
   return admin
-    .firestore()
-    .collection(managementMailsCollection)
-    .get()
-    .then((snap) => snap.docs.map((doc) => doc.id));
+  .firestore()
+  .collection(managementMailsCollection)
+  .get()
+  .then((snap) => snap.docs
+      .filter(doc => doc.id.includes('@'))
+      .map(doc => doc.id)
+  );
+
 }
 
 /**
