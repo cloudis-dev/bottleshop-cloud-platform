@@ -581,5 +581,6 @@
   "enterName":"Enter your name",
   "enterEmail":"Enter your Email",
   "enterMsg":"Type your message",
-  "tooLong":"Too long message"
+  "tooLong":"Too long message",
+  "wasSent": "Your message was sent"
 }

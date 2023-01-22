@@ -19,10 +19,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:routeborn/routeborn.dart';
 import '../molecules/image_preview.dart';
-
 
 class FeedbackPage extends RoutebornPage {
   static const String pagePathBase = 'feedback';
@@ -51,8 +51,9 @@ class _FeedbackView extends HookConsumerWidget {
     final email = useState<String>("");
     final message = useState<String>("");
     final images = useState<List<XFile>>([]);
+    final disableButton = useState<bool>(false);
     return ResponsiveWrapper.builder(
-       Form(
+      Form(
         key: _formKey,
         child: Scaffold(
             appBar: AppBar(
@@ -67,7 +68,7 @@ class _FeedbackView extends HookConsumerWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(500,15, 500, 0),
+                    padding: const EdgeInsets.fromLTRB(500, 15, 500, 0),
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -79,7 +80,7 @@ class _FeedbackView extends HookConsumerWidget {
                       onChanged: (value) {
                         name.value = value;
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         border: UnderlineInputBorder(),
                         labelText: context.l10n.enterName.toString(),
                       ),
@@ -102,7 +103,7 @@ class _FeedbackView extends HookConsumerWidget {
                         }
                         return null;
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         border: UnderlineInputBorder(),
                         labelText: context.l10n.enterEmail,
                       ),
@@ -124,7 +125,7 @@ class _FeedbackView extends HookConsumerWidget {
                       onChanged: (value) {
                         message.value = value;
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                           border: UnderlineInputBorder(),
                           hintText: context.l10n.enterMsg,
                           hintStyle: TextStyle(
@@ -148,7 +149,7 @@ class _FeedbackView extends HookConsumerWidget {
                                 final ImagePicker _picker = ImagePicker();
                                 final img = await _picker.pickImage(
                                     source: ImageSource.gallery);
-                                if(await img!.length()>=3000000) {
+                                if (await img!.length() >= 3000000) {
                                   return;
                                 }
                                 final bytes = await img.readAsBytes();
@@ -216,8 +217,9 @@ class _FeedbackView extends HookConsumerWidget {
                       width: 150,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () async {
+                        onPressed: !disableButton.value?() async {
                           if (_formKey.currentState!.validate()) {
+                            disableButton.value = true;
                             List<Map<String, String>> paths = [];
                             for (int i = 0; i < images.value.length; i++) {
                               var bytes =
@@ -238,13 +240,19 @@ class _FeedbackView extends HookConsumerWidget {
                                   'Name: ${name.value}\nEmail: ${email.value}\n\n\n${message.value}',
                               'path': paths
                             };
-    
+
                             await ref
                                 .read(cloudFunctionsProvider)
                                 .postFeedback(mail);
                             ref.read(navigationProvider).popPage(context);
+                            showSimpleNotification(
+                                Text(
+                                context.l10n.wasSent),
+                                background: Colors.black,
+                                foreground: Colors.white 
+                                );
                           }
-                        },
+                        } : null,
                         child: Text(context.l10n.send),
                       ),
                     ),
@@ -253,17 +261,12 @@ class _FeedbackView extends HookConsumerWidget {
               ),
             )),
       ),
-       maxWidth: 1920,
+      maxWidth: 1920,
       minWidth: 200,
       defaultScale: false,
       breakpoints: [
-        ResponsiveBreakpoint.resize(
-          200,
-          name: MOBILE,
-          scaleFactor: 0.2
-        ),
-        ResponsiveBreakpoint.resize(600,
-            name: MOBILE, scaleFactor: 0.6),
+        ResponsiveBreakpoint.resize(200, name: MOBILE, scaleFactor: 0.2),
+        ResponsiveBreakpoint.resize(600, name: MOBILE, scaleFactor: 0.6),
         ResponsiveBreakpoint.autoScaleDown(900,
             name: TABLET, scaleFactor: 0.63),
         ResponsiveBreakpoint.autoScale(1440, name: DESKTOP),

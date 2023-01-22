@@ -581,5 +581,6 @@
 "enterName":"Zadajte svoje meno",
 "enterEmail":"Zadajte svoj e-mail",
 "enterMsg":"Napíšte svoju správu",
-"tooLong":"Príliš dlhá správa"
+"tooLong":"Príliš dlhá správa",
+"wasSent": "Vaša správa bola odoslaná."
 }
