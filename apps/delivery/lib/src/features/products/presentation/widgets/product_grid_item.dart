@@ -49,7 +49,7 @@ class ProductGridItem extends HookConsumerWidget {
           color: product.count > 0 ? Colors.green : Colors.red,
         );
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     const fit = BoxFit.fitHeight;
 
@@ -155,7 +155,7 @@ class ProductGridItem extends HookConsumerWidget {
                           FittedBox(
                             fit: fit,
                             child: Text(
-                              '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)}',
+                              '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLang)}',
                               style: body1Theme,
                             ),
                           ),
@@ -239,11 +239,12 @@ class ProductGridItem extends HookConsumerWidget {
                   child: InkWell(
                     onTap: () async {
                       await logViewItem(
-                          context,
-                          product.uniqueId,
-                          product.name,
-                          product.allCategories.first.categoryDetails
-                              .getName(currentLocale));
+                        context,
+                        product.uniqueId,
+                        product.name,
+                        product.allCategories.first.categoryDetails
+                            .getName(currentLang),
+                      );
                       onClick(context, ref);
                     },
                     borderRadius: ProductImage.borderRadius,

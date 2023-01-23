@@ -122,7 +122,7 @@ class _CheckoutPageView extends HookConsumerWidget {
       } else {
         final orderNote = ref.read(remarksTextEditCtrlProvider).text;
         final promo = ref.read(currentAppliedPromoProvider)?.code;
-        final language = ref.read(sharedPreferencesProvider).getAppLanguage();
+        final language = ref.watch(currentLanguageProvider);
 
         final sessionId = await ref
             .read(cloudFunctionsProvider)
@@ -147,12 +147,16 @@ class _CheckoutPageView extends HookConsumerWidget {
             context: context,
           );
         } else {
-          await redirectToCheckout(
+          (await redirectToCheckout(
             context: context,
             sessionId: sessionId,
             publishableKey: AppEnvironment.stripePublishableKey,
             successUrl: successUrl,
             canceledUrl: cancelUrl,
+          ))
+              .maybeWhen(
+            error: (err) => _logger.severe(err),
+            orElse: () {},
           );
         }
       }

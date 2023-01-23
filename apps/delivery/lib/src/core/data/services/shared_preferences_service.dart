@@ -19,7 +19,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum LanguageMode {
   en,
-  sk,
+  sk;
+
+
+  Locale language2Locale() {
+    return AppLocalizations.supportedLocales.firstWhere(
+      (element) => toString().contains(element.languageCode),
+      orElse: () => AppLocalizations.supportedLocales.first,
+    );
+  }
 }
 
 LanguageMode locale2Language(Locale locale) {
@@ -31,13 +39,6 @@ LanguageMode locale2Language(Locale locale) {
     default:
       return LanguageMode.en;
   }
-}
-
-Locale language2Locale(LanguageMode mode) {
-  return AppLocalizations.supportedLocales.firstWhere(
-    (element) => mode.toString().contains(element.languageCode),
-    orElse: () => AppLocalizations.supportedLocales.first,
-  );
 }
 
 class SharedPreferencesService {

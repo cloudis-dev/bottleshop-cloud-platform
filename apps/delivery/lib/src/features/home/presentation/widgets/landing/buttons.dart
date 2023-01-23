@@ -46,9 +46,8 @@ class BilingualLink extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(
-      sharedPreferencesProvider.select((value) => value.getAppLanguage()),
-    );
+    final language = ref.watch(currentLanguageProvider);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: TextButton(

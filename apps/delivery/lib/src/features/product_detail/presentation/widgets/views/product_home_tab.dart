@@ -12,6 +12,7 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/category_model.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/utils/formatting_utils.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
@@ -28,7 +29,7 @@ class ProductHomeTab extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,14 +78,14 @@ class ProductHomeTab extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            _buildCategoryString(product.allCategories, currentLocale),
+            _buildCategoryString(product.allCategories, currentLang),
             maxLines: 2,
             overflow: TextOverflow.fade,
             softWrap: false,
             style: Theme.of(context).textTheme.subtitle2,
           ),
         ),
-        if (_buildExtraCategoryString(product.extraCategories, currentLocale)
+        if (_buildExtraCategoryString(product.extraCategories, currentLang)
             .isNotEmpty) ...[
           const SizedBox(height: 20),
           ListTile(
@@ -98,7 +99,7 @@ class ProductHomeTab extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              _buildExtraCategoryString(product.extraCategories, currentLocale),
+              _buildExtraCategoryString(product.extraCategories, currentLang),
               maxLines: 2,
               style: Theme.of(context).textTheme.subtitle2,
             ),
@@ -110,27 +111,27 @@ class ProductHomeTab extends HookConsumerWidget {
 
   String _buildCategoryString(
     List<CategoryModel> categories,
-    Locale currentLocale,
+    LanguageMode currentLang,
   ) {
     var result = '';
     categories
         .where((category) => !category.categoryDetails.isExtraCategory)
         .forEach((category) {
       result += CategoryModel.allCategoryDetails(category)
-          .map((e) => e.getName(currentLocale))
+          .map((e) => e.getName(currentLang))
           .join(' - ');
     });
     return result;
   }
 
   String _buildExtraCategoryString(
-      List<CategoryModel>? extraCategories, Locale currentLocale) {
+      List<CategoryModel>? extraCategories, LanguageMode currentLang) {
     var result = '';
     if (extraCategories != null) {
       extraCategories.forEach(
         (category) {
           result += CategoryModel.allCategoryDetails(category)
-              .map((e) => e.getName(currentLocale))
+              .map((e) => e.getName(currentLang))
               .join(' - ');
         },
       );

@@ -58,12 +58,6 @@ class _HomeView extends HookConsumerWidget {
     final currentUser = ref.watch(currentUserProvider);
 
     useEffect(() {
-      ref.read(commonDataRepositoryProvider).fetch().then(
-            (value) => _logger.fine('products initialized'),
-            onError: (dynamic err, dynamic stack) =>
-                _logger.severe('common data repo fetch failed', err, stack),
-          );
-
       PushNotificationService.handleMessageOpenedApp(ref).then(
         (value) => _logger.fine('handleMessageOpenedApp register'),
         onError: (dynamic err, dynamic stack) =>

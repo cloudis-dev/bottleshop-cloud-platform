@@ -15,7 +15,7 @@ import 'package:delivery/src/core/data/models/category_model.dart';
 import 'package:delivery/src/core/data/models/country_model.dart';
 import 'package:delivery/src/core/data/models/unit_model.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
-import 'package:delivery/src/core/utils/language_utils.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/features/products/data/models/flash_sale_model.dart';
 import 'package:flutter/material.dart';
 
@@ -94,12 +94,13 @@ class ProductModel {
 
   double get priceNoVat => double.parse(_priceNoVat.toStringAsFixed(2));
 
-  double get priceWithVat => priceNoVat * vatMultiplier;
+  double get priceWithVat =>
+      double.parse((priceNoVat * vatMultiplier).toStringAsFixed(2));
 
   double get productVat => priceWithVat - priceNoVat;
 
   double get finalPrice =>
-      priceNoVat * vatMultiplier * (discount == null ? 1 : 1 - discount!);
+      priceWithVat * (discount == null ? 1 : 1 - discount!);
 
   bool get isFlashSale => _isFlashSale ?? false;
   bool get isNewEntry => _isNewEntry ?? false;
@@ -107,12 +108,12 @@ class ProductModel {
 
   bool get isSpecialEdition => edition != null;
 
-  String? getDescription(Locale locale) {
-    switch (LanguageUtils.parseLocale(locale)) {
-      case LocaleLanguage.slovak:
-        return _descriptionSk;
-      case LocaleLanguage.english:
+  String? getDescription(LanguageMode lang) {
+    switch (lang) {
+      case LanguageMode.en:
         return _descriptionEn;
+      case LanguageMode.sk:
+        return _descriptionSk;
     }
   }
 

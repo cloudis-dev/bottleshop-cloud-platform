@@ -4,6 +4,7 @@ import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/views/shipping_details_view.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
+import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,11 +18,8 @@ class DeliveryOptionTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orderTypes = ref.watch(
-      commonDataRepositoryProvider.select((value) => value.orderTypes),
-    );
     final selectedOrderType = ref.watch(orderTypeStateProvider);
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
     final items = <Widget>[
       Container(
         padding: const EdgeInsets.only(left: 68),
@@ -44,31 +42,32 @@ class DeliveryOptionTile extends HookConsumerWidget {
         endIndent: 980,
         color: Theme.of(context).colorScheme.secondary,
       ),
-      ...orderTypes
-          .map<Widget>(
-            (orderType) => RadioListTile<OrderTypeModel>(
-              title: Text(orderType.getName(currentLocale)!,
-                  style: Theme.of(context).textTheme.bodyText1),
-              subtitle: Text(orderType.getDescription(currentLocale)!,
-                  style: Theme.of(context).textTheme.caption),
-              dense: true,
-              activeColor: Theme.of(context).colorScheme.secondary,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              value: orderType,
-              groupValue: selectedOrderType,
-              onChanged: (value) {
-                ref
-                    .read(orderTypeStateProvider.notifier)
-                    .selectOrderType(value!);
-                final deniedReasons = ref
-                    .read(orderTypeStateProvider.notifier)
-                    .validate(user, value.deliveryOption);
-                onUserDenied(context, deniedReasons);
-              },
+      ...ref.watch(orderTypesProvider).maybeWhen(
+            data: (orderTypes) => orderTypes.map<Widget>(
+              (orderType) => RadioListTile<OrderTypeModel>(
+                title: Text(orderType.getName(currentLang)!,
+                    style: Theme.of(context).textTheme.bodyText1),
+                subtitle: Text(orderType.getDescription(currentLang)!,
+                    style: Theme.of(context).textTheme.caption),
+                dense: true,
+                activeColor: Theme.of(context).colorScheme.secondary,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                value: orderType,
+                groupValue: selectedOrderType,
+                onChanged: (value) {
+                  ref
+                      .read(orderTypeStateProvider.notifier)
+                      .selectOrderType(value!);
+                  final deniedReasons = ref
+                      .read(orderTypeStateProvider.notifier)
+                      .validate(user, value.deliveryOption);
+                  onUserDenied(context, deniedReasons);
+                },
+              ),
             ),
-          )
-          .toList(),
+            orElse: () => [],
+          ),
     ];
     items.insertAll(items.length - 1, <Widget>[
       Container(

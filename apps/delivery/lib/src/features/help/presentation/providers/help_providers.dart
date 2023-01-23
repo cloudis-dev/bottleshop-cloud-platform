@@ -10,22 +10,25 @@
 //
 //
 import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/utils/language_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tuple/tuple.dart';
 
-final mdContentProvider = FutureProvider<Tuple2<String, String>>((ref) async {
-  final currentLocaleLang =
-      LanguageUtils.parseLocale(ref.watch(currentLocaleProvider));
-  String faq, contacts;
-  if (currentLocaleLang == LocaleLanguage.english) {
-    faq = await rootBundle.loadString(kFaqMd);
-    contacts = await rootBundle.loadString(kContactsMd);
-  } else {
-    faq = await rootBundle.loadString(kFaqMdLocalized);
-    contacts = await rootBundle.loadString(kContactsMdLocalized);
-  }
-  return Tuple2(faq, contacts);
-});
+final mdContentProvider = FutureProvider<Tuple2<String, String>>(
+  (ref) async {
+    switch (ref.watch(currentLanguageProvider)) {
+      case LanguageMode.en:
+        return Tuple2(
+          await rootBundle.loadString(kFaqMd),
+          await rootBundle.loadString(kContactsMd),
+        );
+      case LanguageMode.sk:
+        return Tuple2(
+          await rootBundle.loadString(kFaqMdLocalized),
+          await rootBundle.loadString(kContactsMdLocalized),
+        );
+    }
+  },
+);

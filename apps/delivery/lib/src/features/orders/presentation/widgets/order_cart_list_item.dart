@@ -26,7 +26,7 @@ class OrderCartListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -57,7 +57,7 @@ class OrderCartListItem extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '${FormattingUtils.getVolumeNumberString(cartItem.product.unitsCount)} ${cartItem.product.unitsType.getUnitAbbreviation(currentLocale)}',
+                      '${FormattingUtils.getVolumeNumberString(cartItem.product.unitsCount)} ${cartItem.product.unitsType.getUnitAbbreviation(currentLang)}',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     const SizedBox(width: 10),
