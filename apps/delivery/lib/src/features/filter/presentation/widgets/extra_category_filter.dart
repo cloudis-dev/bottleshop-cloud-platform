@@ -13,6 +13,8 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
 import 'package:delivery/src/features/filter/presentation/filter_drawer.dart';
 import 'package:delivery/src/features/filter/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +27,6 @@ class ExtraCategoriesGroupFilter extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(
-        commonDataRepositoryProvider.select((value) => value.categories));
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -35,12 +34,13 @@ class ExtraCategoriesGroupFilter extends HookConsumerWidget {
         children: [
           Text(context.l10n.onlyFollowingExtraCategories),
           const SizedBox(height: 8),
-          ...categories
-              .where((element) => element.categoryDetails.isExtraCategory)
-              .map(
-                (e) => _ExtraCategoryFilter(
-                  category: e,
-                ),
+          ...ref.watch(categoriesProvider).maybeWhen(
+                data: (categories) => categories
+                    .where((element) => element.categoryDetails.isExtraCategory)
+                    .map(
+                      (e) => _ExtraCategoryFilter(category: e),
+                    ),
+                orElse: () => [const Loader()],
               )
         ],
       ),
@@ -60,7 +60,7 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterType = ref.watch(filterTypeScopedProvider);
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     final enabledCategoriesIds = ref.watch(
       filterModelProvider(filterType)
@@ -118,7 +118,7 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(
-                  category!.categoryDetails.getName(currentLocale),
+                  category!.categoryDetails.getName(currentLang),
                 ),
               ),
             ),
@@ -163,7 +163,7 @@ class _ExtraCategoryFilter extends HookConsumerWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
-                      e.categoryDetails.getName(currentLocale),
+                      e.categoryDetails.getName(currentLang),
                     ),
                   ),
                 )

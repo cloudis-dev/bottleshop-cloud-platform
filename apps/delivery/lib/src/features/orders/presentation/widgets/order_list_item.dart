@@ -32,7 +32,8 @@ class OrderListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
+
     return Material(
       child: InkWell(
         splashColor: Theme.of(context).colorScheme.secondary,
@@ -84,7 +85,7 @@ class OrderListItem extends HookConsumerWidget {
                                 Text('${context.l10n.orderType}:'),
                                 const SizedBox(),
                                 Text(
-                                  order.orderType.getName(currentLocale)!,
+                                  order.orderType.getName(currentLang)!,
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                               ]),
@@ -105,7 +106,7 @@ class OrderListItem extends HookConsumerWidget {
                                   const SizedBox(),
                                   Text(
                                     FormattingUtils.getDateFormatter(
-                                            currentLocale)
+                                            currentLang)
                                         .format(order.createdAt),
                                     style: Theme.of(context).textTheme.caption,
                                   ),
@@ -117,7 +118,7 @@ class OrderListItem extends HookConsumerWidget {
                                   const SizedBox(),
                                   Text(
                                     FormattingUtils.getTimeFormatter(
-                                            currentLocale)
+                                            currentLang)
                                         .format(order.createdAt),
                                     style: Theme.of(context).textTheme.caption,
                                   )

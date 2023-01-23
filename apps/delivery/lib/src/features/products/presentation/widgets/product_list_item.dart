@@ -44,7 +44,7 @@ class ProductListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Container(
       decoration: ListItemContainerDecoration(context),
@@ -98,7 +98,7 @@ class ProductListItem extends HookConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)}',
+                                  '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLang)}',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                                 const SizedBox(width: 10),

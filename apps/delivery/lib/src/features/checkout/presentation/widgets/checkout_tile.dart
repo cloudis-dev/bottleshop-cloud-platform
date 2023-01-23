@@ -42,7 +42,7 @@ class CheckoutTile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final promoCode = ref.watch(currentAppliedPromoProvider);
     final orderType = ref.watch(orderTypeStateProvider);
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return ref.watch(cartProvider).when(
           data: (cart) {
@@ -96,7 +96,7 @@ class CheckoutTile extends HookConsumerWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                  "${context.l10n.shippingFee}: ${orderType.getName(currentLocale)}",
+                                  "${context.l10n.shippingFee}: ${orderType.getName(currentLang)}",
                                   style: Theme.of(context).textTheme.bodyText1),
                             ),
                             Text(

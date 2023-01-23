@@ -29,13 +29,13 @@ class SliverCategoryTabHeading extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return SliverToBoxAdapter(
       child: BottleshopSectionHeading(
         leading: const Icon(Icons.liquor),
         label:
-            '${subCategory!.categoryDetails.getName(currentLocale)} ${context.l10n.category}',
+            '${subCategory!.categoryDetails.getName(currentLang)} ${context.l10n.category}',
         trailingWidgets: const <Widget>[
           ProductsLayoutModeToggle(),
           SortMenuButton()

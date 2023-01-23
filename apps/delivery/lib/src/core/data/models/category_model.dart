@@ -11,6 +11,7 @@
 //
 
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -53,10 +54,10 @@ class CategoryModel extends Equatable {
 
   static Iterable<String> allLocalizedNames(
     CategoryModel model,
-    Locale currentLocale,
+    LanguageMode lang,
   ) sync* {
-    yield model.categoryDetails.getName(currentLocale);
-    yield* allLocalizedNames(model.subCategory!, currentLocale);
+    yield model.categoryDetails.getName(lang);
+    yield* allLocalizedNames(model.subCategory!, lang);
   }
 
   static Iterable<String> allIds(CategoryModel model) sync* {

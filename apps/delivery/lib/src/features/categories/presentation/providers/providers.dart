@@ -10,43 +10,62 @@
 //
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/utils/sorting_util.dart';
 import 'package:delivery/src/features/categories/data/services/db_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final categoriesProvider = FutureProvider<List<CategoriesTreeModel>>(
+  (ref) async {
+    final lang = ref.watch(currentLanguageProvider);
+    return fetchCategories(lang).then(
+      (value) => value
+        ..sort(
+          (a, b) => SortingUtil.categoryCompare(
+            a.categoryDetails,
+            b.categoryDetails,
+            lang,
+          ),
+        ),
+    );
+  },
+);
 
 final categoryProvider =
     FutureProvider.autoDispose.family<CategoriesTreeModel, String>(
   (ref, uid) {
-    return fetchCategories(ref.watch(currentLocaleProvider)).then(
-      (value) => value.firstWhere(
-        (e) => e.categoryDetails.id == uid,
-      ),
-    );
+    return ref.watch(categoriesProvider.future).then(
+          (value) => value.firstWhere(
+            (e) => e.categoryDetails.id == uid,
+          ),
+        );
   },
 );
 
 final mainCategoriesWithoutExtraProvider =
     StateProvider.autoDispose<List<CategoriesTreeModel>>(
-  (ref) => ref
-      .watch(commonDataRepositoryProvider)
-      .categories
-      .where((element) => !element.categoryDetails.isExtraCategory)
-      .toList(),
-  name: 'mainCategoriesWithoutExtraProvider',
+  (ref) => ref.watch(categoriesProvider).maybeWhen(
+        data: (categories) => categories
+            .where((element) => !element.categoryDetails.isExtraCategory)
+            .toList(),
+        orElse: () => [],
+      ),
 );
 
 final categoryProductCountsProvider =
-    StreamProvider.autoDispose<CategoryProductCountsModel>((ref) {
-  return FirebaseFirestore.instance
-      .collection(FirestoreCollections.aggregationsCollection)
-      .doc(FirestoreCollections.categoryProductCountsAggregationsDocument)
-      .snapshots()
-      .map((event) => CategoryProductCountsModel.fromMap(event.data()!));
-});
+    StreamProvider.autoDispose<CategoryProductCountsModel>(
+  (ref) {
+    return FirebaseFirestore.instance
+        .collection(FirestoreCollections.aggregationsCollection)
+        .doc(FirestoreCollections.categoryProductCountsAggregationsDocument)
+        .snapshots()
+        .map((event) => CategoryProductCountsModel.fromMap(event.data()!));
+  },
+);
 
 @immutable
 class CategoryProductCountsModel {

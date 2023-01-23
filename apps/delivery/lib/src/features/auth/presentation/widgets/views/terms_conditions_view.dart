@@ -23,7 +23,8 @@ import 'package:pdfx/pdfx.dart';
 import 'package:routeborn/routeborn.dart';
 
 final _pdfUrlProvider = Provider((ref) {
-  var lang = ref.watch(currentLocaleProvider).languageCode;
+  final lang =
+      ref.watch(currentLanguageProvider).language2Locale().languageCode;
   final url = '${AppEnvironment.termsPdfEndpoint}tcs_$lang.pdf?alt=media';
   return url;
 });
