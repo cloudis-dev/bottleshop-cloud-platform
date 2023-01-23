@@ -41,7 +41,7 @@ class MainSection extends StatelessWidget {
         left: 256,
         width: 636,
         child: Text(
-          context.l10n.luxuriousSpirits,
+          context.l10n.luxuryDrinks,
           style: libreBodoniTextTheme.headline1,
         ),
       ),

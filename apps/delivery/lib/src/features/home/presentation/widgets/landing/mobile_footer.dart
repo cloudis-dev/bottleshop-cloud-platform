@@ -191,15 +191,10 @@ class MobileFooter extends HookConsumerWidget {
           Transform.translate(
             // e.g: vertical negative margin
             offset: const Offset(-8, 0),
-            child: TextButton(
-              onPressed: () {
-                ref
-                    .watch(navigationProvider)
-                    .setNestingBranch(context, NestingBranch.wholesale);
-              },
-              child: Text(context.l10n.wholesale,
-                  style: publicSansTextTheme.caption),
-            ),
+            child: BilingualLink(
+                txt: context.l10n.wholesale,
+                enLink: UrlStrings.wholesaleEN,
+                skLink: UrlStrings.wholesaleSK),
           ),
           SizedBox(
             height: 40,

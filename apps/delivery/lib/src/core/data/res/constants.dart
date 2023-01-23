@@ -228,6 +228,10 @@ class UrlStrings {
       'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_sk.pdf?alt=media';
   static const String menuTermsEN =
       'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2Ftcs_en.pdf?alt=media';
+  static const String wholesaleSK =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2FVeľkoobchod.pdf?alt=media&token=9996f182-8547-4ee6-82ff-4a690d2c54ed';
+  static const String wholesaleEN =
+      'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2FWholesale.pdf?alt=media&token=0a1f02c1-f9d5-4c86-bd23-caf68e4fc6fb';
 }
 
 class categoryUidStrings {

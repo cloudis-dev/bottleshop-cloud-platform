@@ -71,7 +71,6 @@ class HomePageTemplate extends ConsumerWidget {
               const SizedBox(width: 20),
               const HomeAppBarButton(),
               const CategoriesAppBarButton(),
-              const WholeSaleAppBarButton(),
               const OrdersAppBarButton(),
               const SaleAppBarButton(),
             ],
@@ -127,25 +126,6 @@ class CategoriesAppBarButton extends ConsumerWidget {
             context,
             NestingBranch.categories,
           );
-        }
-      },
-    );
-  }
-}
-
-class WholeSaleAppBarButton extends ConsumerWidget {
-  const WholeSaleAppBarButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return TextButton(
-      child: Text(context.l10n.wholesale),
-      onPressed: () {
-        final nav = ref.read(navigationProvider);
-        if (nav.getNestingBranch(context) == NestingBranch.wholesale) {
-          nav.replaceAllWith(context, []);
-        } else {
-          nav.setNestingBranch(context, NestingBranch.wholesale);
         }
       },
     );

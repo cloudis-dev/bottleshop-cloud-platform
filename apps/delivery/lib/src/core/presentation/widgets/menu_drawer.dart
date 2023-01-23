@@ -150,31 +150,6 @@ class MenuDrawer extends HookConsumerWidget {
               ),
               _SideMenuItem(
                 isSelected:
-                    kIsWeb ? currentBranch == NestingBranch.wholesale : false,
-                leading: Icons.store,
-                title: context.l10n.wholesale,
-                handler: () {
-                  final nav = ref.read(navigationProvider);
-
-                  if (nav.getNestingBranch(context) ==
-                      NestingBranch.wholesale) {
-                    nav.replaceAllWith(context, []);
-                  } else {
-                    nav.setNestingBranch(
-                      context,
-                      NestingBranch.wholesale,
-                      branchParam: nav.getNestingBranch(context),
-                    );
-                  }
-                },
-              ),
-              _SideMenuItem(
-                dense: true,
-                title: context.l10n.applicationPreferences,
-                titleStyle: Theme.of(context).textTheme.overline,
-              ),
-              _SideMenuItem(
-                isSelected:
                     kIsWeb ? currentBranch == NestingBranch.account : false,
                 leading: Icons.settings,
                 title: context.l10n.settings,

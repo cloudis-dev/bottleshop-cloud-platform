@@ -186,15 +186,10 @@ class Footer extends HookConsumerWidget {
                   txt: context.l10n.shippingPayment,
                   enLink: UrlStrings.shippingPaymentEN,
                   skLink: UrlStrings.shippingPaymentSK),
-              TextButton(
-                onPressed: () {
-                  ref
-                      .watch(navigationProvider)
-                      .setNestingBranch(context, NestingBranch.wholesale);
-                },
-                child: Text(context.l10n.wholesale,
-                    style: publicSansTextTheme.caption),
-              ),
+              BilingualLink(
+                  txt: context.l10n.wholesale,
+                  enLink: UrlStrings.wholesaleEN,
+                  skLink: UrlStrings.wholesaleSK),
             ],
           ),
         ),

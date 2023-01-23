@@ -14,7 +14,6 @@ enum NestingBranch {
   shop,
   categories,
   sale,
-  wholesale,
   cart,
   favorites,
   orders,
