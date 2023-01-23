@@ -45,7 +45,10 @@ class CupertinoBottomNavigationScaffold extends HookConsumerWidget {
         resizeToAvoidBottomInset: true,
         tabBar: CustomBottomTabBar(
           activeColor: kBottleshopSecondaryVariantColor,
-          backgroundColor: Colors.transparent,
+          // We don't want the content in the cart get under the tab bar.
+          backgroundColor: selectedBranch == NestingBranch.cart
+              ? Theme.of(context).primaryColor
+              : Colors.transparent,
           iconSize: 30,
           items: navigationBarItems
               .map((item) => item.bottomNavigationBarItem)

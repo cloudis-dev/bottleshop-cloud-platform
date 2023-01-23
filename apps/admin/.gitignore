@@ -14,7 +14,9 @@
 *.iml
 *.ipr
 *.iws
-.idea/
+.idea/*
+
+!.idea/runConfigurations
 
 # Visual Studio Code related
 .classpath
@@ -99,6 +101,7 @@ unlinked_spec.ds
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/firebase_app_id_file.json
 
 # macOS
 **/macos/Flutter/GeneratedPluginRegistrant.swift

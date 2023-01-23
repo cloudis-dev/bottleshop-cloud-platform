@@ -34,7 +34,8 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
+
     return SliverAppBar(
       snap: false,
       floating: false,
@@ -116,7 +117,7 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    category!.categoryDetails.getName(currentLocale),
+                    category!.categoryDetails.getName(currentLang),
                     style: Theme.of(context).textTheme.headline6,
                   )
                 ],
@@ -135,7 +136,7 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
               (e) => _TabWrapper(
                 child: Tab(
                   child: Text(
-                    e.categoryDetails.getName(currentLocale).toUpperCase(),
+                    e.categoryDetails.getName(currentLang).toUpperCase(),
                   ),
                 ),
               ),

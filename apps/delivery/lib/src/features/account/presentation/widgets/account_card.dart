@@ -30,7 +30,7 @@ class AccountCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
     return ref.watch(currentUserAsStream).when(
           data: (user) {
             return Container(
@@ -117,7 +117,7 @@ class AccountCard extends HookConsumerWidget {
                       ),
                       subtitle: Text(
                         user?.dayOfBirth != null
-                            ? FormattingUtils.getDateFormatter(currentLocale)
+                            ? FormattingUtils.getDateFormatter(currentLang)
                                 .format(user!.dayOfBirth!)
                             : context.l10n.tellUsYourBirthdayToGetASpecialGift,
                         style: Theme.of(context).textTheme.caption,

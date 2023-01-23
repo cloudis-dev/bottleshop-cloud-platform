@@ -1,10 +1,9 @@
 import { CallableContext } from 'firebase-functions/lib/providers/https';
 import * as functions from 'firebase-functions';
 
-import { areProductsInCartAvailable } from './nested-functions/on-cart-updated';
-import { isPromoCodeValid } from './nested-functions/promo-codes';
 import { tier1Region } from '../../constants/other';
-import { getCart } from '../../utils/cart-utils';
+import { areProductsAvailableForPurchase, getCart, getCartItems } from '../../utils/cart-utils';
+import { isPromoCodeValid } from './nested-functions/promo-codes';
 
 export type CartUpdateResult = { updated: string } | { error: string };
 
@@ -30,7 +29,8 @@ export const validateCart = functions
         return { status: 'invalid-promo' };
       }
 
-      if (!(await areProductsInCartAvailable(context.auth.uid))) {
+      const cartItems = await getCartItems(context.auth.uid);
+      if (!(await areProductsAvailableForPurchase(cartItems))) {
         return { status: 'unavailable-products' };
       }
 

@@ -21,6 +21,8 @@ import 'package:delivery/src/core/presentation/providers/navigation_providers.da
 import 'package:delivery/src/features/app_initialization/presentation/widgets/platform_initialization_view.dart';
 import 'package:delivery/src/features/app_initialization/presentation/widgets/version_check_view.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_checker_widget.dart';
+import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
+import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -32,6 +34,21 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class App extends HookConsumerWidget {
   const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Load common data at the start
+    ref.watch(countriesProvider);
+    ref.watch(categoriesProvider);
+    ref.watch(unitsProvider);
+    ref.watch(orderTypesProvider);
+
+    return const _AppBody();
+  }
+}
+
+class _AppBody extends HookConsumerWidget {
+  const _AppBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,7 +92,7 @@ class App extends HookConsumerWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        locale: ref.watch(currentLocaleProvider),
+        locale: ref.watch(currentLanguageProvider).language2Locale(),
         theme: appTheme,
         darkTheme: appThemeDark,
         themeMode: ref.watch(currentThemeModeProvider),

@@ -41,7 +41,7 @@ class AppEnvironment {
       'https://bottleshop3veze-delivery.firebaseapp.com/__/auth/handler';
 
   static String get stripePublishableKey =>
-      dotenv.env['DEFINE_STRIPE_KEY'] ??
+      dotenv.env['STRIPE_PUBLISHABLE_KEY'] ??
       'pk_live_fRyyZgnqIu9Ry0YtvIpdv6pJ008KDasBdf';
 
   static String get stripeAndroidPayMode =>

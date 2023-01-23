@@ -32,7 +32,7 @@ class ProviderLogger extends ProviderObserver {
   }
 
   @override
-  void didDisposeProvider(ProviderBase<dynamic> provider, container) {
+  void didDisposeProvider(ProviderBase<dynamic> provider, containers) {
     if (kDebugMode) {
       _logger
           .fine('didDisposeProvider: ${provider.name ?? provider.runtimeType}');

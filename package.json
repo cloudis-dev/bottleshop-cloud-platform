@@ -4,6 +4,13 @@
   "license": "MIT",
   "scripts": {
     "build": "nx run-many --target=build --all --parallel",
+    "lint": "nx run-many --target=lint --all --parallel",
+    "build:admin": "nx run admin:build",
+    "lint:admin": "nx run admin:lint",
+    "build:delivery": "nx run delivery:build",
+    "lint:delivery": "nx run delivery:lint",
+    "build:bottleshop-api": "nx run bottleshop-api:build",
+    "lint:bottleshop-api": "nx run bottleshop-api:lint",
     "test": "nx test",
     "postinstall": "patch-package",
     "start:api:dev": "nx run bottleshop-api:serve"
@@ -23,7 +30,7 @@
     "global": "^4.4.0",
     "luxon": "^2.4.0",
     "remove-accents": "^0.4.2",
-    "stripe": "^9.2.0",
+    "stripe": "^11.4.0",
     "tslib": "~2.4.0"
   },
   "devDependencies": {
@@ -34,7 +41,7 @@
     "@nrwl/jest": "14.4.3",
     "@nrwl/linter": "14.4.3",
     "@nrwl/node": "14.4.3",
-    "@nrwl/nx-cloud": "14.2.0",
+    "@nrwl/nx-cloud": "14.4.1",
     "@nrwl/nx-plugin": "14.4.3",
     "@nrwl/workspace": "14.4.3",
     "@nxrocks/nx-flutter": "^3.0.2",
@@ -68,7 +75,11 @@
     "terser": ">=5.14.2"
   },
   "engines": {
-    "node": "16",
+    "node": "18",
     "yarn": "1"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "yarn": "1.22.19"
   }
 }

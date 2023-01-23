@@ -35,7 +35,7 @@ export const onOrderStatusChangeCustomerMails = async (orderSnapshot: functions.
     order.customer.preferred_language ?? 'sk',
   );
 
-  if (subject !== undefined && html !== undefined) {
+  if (subject !== undefined && html !== undefined && order.customer.email !== undefined) {
     const mail = createMail(order.customer.email, subject, '', html);
 
     await admin.firestore().collection(mailCollection).add(mail);

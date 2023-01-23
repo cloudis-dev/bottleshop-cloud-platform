@@ -8,8 +8,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Bottleshop 3 Veže">
-  <meta content="540936468411-44uajovjnes48qd3b6ditirj8336um5c.apps.googleusercontent.com"
-        name="google-signin-client_id"/>
   <link rel="apple-touch-icon" href="images/icons/icon-192.png">
   <link rel="icon" type="image/png" href="favicon.png"/>
     <title>Bottleshop3veže</title>
@@ -26,96 +24,35 @@
         width: 48px;
         height: 48px;
       }
-</style>
+  </style>
+  <!-- Stripe related -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body style="overflow: hidden; background-color: #121212;">
-<div id="loading_indicator" class="container">
-  <img class="indicator" src="images/spinner.svg" />
-</div>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-functions.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-<script src="https://js.stripe.com/v3/"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
-<script type="text/javascript">
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.worker.min.js";
-</script>
-<script>
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    firebase.initializeApp({
-      apiKey: "AIzaSyBKDk9aqNBON-PcDuahYV89cDXu3jepWj4",
-      authDomain: "bottleshop-3-veze-dev-54908.firebaseapp.com",
-      projectId: "bottleshop-3-veze-dev-54908",
-      storageBucket: "bottleshop-3-veze-dev-54908.appspot.com",
-      messagingSenderId: "525277285012",
-      appId: "1:525277285012:web:bad81f5d913e78c20ec281",
-      measurementId: "G-02K3SVS600"
-    });
-    var serviceWorkerVersion = null;
-    var scriptLoaded = false;
-    function loadMainDartJs() {
-      if (scriptLoaded) {
-        return;
-      }
-      scriptLoaded = true;
-      var scriptTag = document.createElement('script');
-      scriptTag.src = 'main.dart.js';
-      scriptTag.type = 'application/javascript';
-      document.body.append(scriptTag);
-    }
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register("/firebase-messaging-sw.js");
-        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
-        navigator.serviceWorker.register(serviceWorkerUrl)
-          .then((reg) => {
-            function waitForActivation(serviceWorker) {
-              serviceWorker.addEventListener('statechange', () => {
-                if (serviceWorker.state == 'activated') {
-                  console.log('Installed new service worker.');
-                  loadMainDartJs();
-                }
-              });
-            }
-            if (!reg.active && (reg.installing || reg.waiting)) {
-              waitForActivation(reg.installing ?? reg.waiting);
-            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
-              console.log('New service worker available.');
-              reg.update();
-              waitForActivation(reg.installing);
-            } else {
-              console.log('Loading app from service worker.');
-              loadMainDartJs();
-            }
-          });
-
-        setTimeout(() => {
-          if (!scriptLoaded) {
-            console.warn(
-              'Failed to load app from service worker. Falling back to plain tag.',
-            );
-            loadMainDartJs();
-          }
-        }, 4000);
-      });
-    } else {
-      loadMainDartJs();
+  <!-- pdfx package related -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.worker.min.js";
+    pdfRenderOptions = {
+      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/cmaps/',
+      cMapPacked: true,
     }
   </script>
-<script>
-  window.onload = function () {
-        setTimeout(function () {
-          var loadingIndicator = document.getElementById("loading_indicator");
-          if (loadingIndicator) {
-            loadingIndicator.remove();
-          }
-        }, 10000);
-};
-</script>
+
+  <div id="loading_indicator" class="container">
+    <img class="indicator" src="images/spinner.svg" />
+  </div>
+  <script src="main.dart.js" type="application/javascript"></script>
+  <script>
+    window.onload = function () {
+          setTimeout(function () {
+            var loadingIndicator = document.getElementById("loading_indicator");
+            if (loadingIndicator) {
+              loadingIndicator.remove();
+            }
+          }, 10000);
+  };
+  </script>
 </body>
 </html>

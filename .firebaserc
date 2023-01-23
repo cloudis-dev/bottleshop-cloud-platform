@@ -4,5 +4,7 @@
     "prod": "bottleshop3veze-delivery",
     "default": "bottleshop-3-veze-dev-54908"
   },
-  "targets": {}
+  "targets": {
+    
+  }
 }

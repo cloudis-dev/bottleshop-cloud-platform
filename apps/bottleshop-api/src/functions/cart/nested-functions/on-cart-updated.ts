@@ -2,17 +2,10 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
 import { Cart } from '../../../models/cart';
-import {
-  cartCollection,
-  cartItemsSubCollection,
-  productsCollection,
-  usersCollection,
-} from '../../../constants/collections';
+import { cartCollection, cartItemsSubCollection, usersCollection } from '../../../constants/collections';
 import { cartFields } from '../../../constants/model-constants';
 import { CartItem, getCart, getCartItems, getCartRef } from '../../../utils/cart-utils';
-import { getEntityByRef } from '../../../utils/document-reference-utils';
 import { calculateProductFinalPrice } from '../../../utils/product-utils';
-import { Product } from '../../../models/product';
 import { tempCartId, tier1Region, VAT } from '../../../constants/other';
 
 interface Summarization {
@@ -37,22 +30,6 @@ function summarizeProductsInCart(cartItems: CartItem[]): Summarization {
     };
   }, res);
 }
-
-export const areProductsInCartAvailable = async (userId: string): Promise<boolean> => {
-  const cartItems = await getCartItems(userId);
-
-  return Promise.all(
-    cartItems.map(async (e) => {
-      const currentProd = await getEntityByRef<Product>(
-        admin.firestore().collection(productsCollection).doc(e.product.cmat),
-      );
-      if (currentProd === undefined) {
-        return false;
-      }
-      return currentProd.amount >= e.quantity;
-    }),
-  ).then((e) => e.every((isAvailable) => isAvailable));
-};
 
 export const onCartUpdated = functions
   .region(tier1Region)

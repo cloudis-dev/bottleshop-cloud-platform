@@ -35,6 +35,8 @@ class DropDown<T> extends StatefulWidget {
   /// You can choose between show an underline at bottom or not
   final bool showUnderline;
 
+  final Color iconColor;
+
   const DropDown({
     Key? key,
     this.dropDownType = DropDownType.button,
@@ -46,6 +48,7 @@ class DropDown<T> extends StatefulWidget {
     this.isExpanded = false,
     this.isCleared = false,
     this.showUnderline = true,
+    this.iconColor = const Color(0xffBF8A24),
   })  : assert(items is! Widget),
         assert(items.length == customWidgets.length),
         super(key: key);
@@ -86,6 +89,9 @@ class _DropDownState<T> extends State<DropDown<T>> {
           items:
               widget.items.map<DropdownMenuItem<T>>(buildDropDownItem).toList(),
           hint: widget.hint,
+          icon: Icon(Icons.arrow_drop_down),
+          iconDisabledColor: widget.iconColor,
+          iconEnabledColor: widget.iconColor,
         );
     }
 

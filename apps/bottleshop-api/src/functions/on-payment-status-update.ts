@@ -21,11 +21,9 @@ import { PromoCode } from '../models/promo-code';
 import { tier1Region, VAT } from '../constants/other';
 import { User } from '../models/user';
 import { getProduct, getProductRef } from '../utils/product-utils';
+import { createStripeClient } from '..';
+import { StripePaymentMetadata } from '../models/payment-data';
 
-const stripe = new Stripe(functions.config().stripe.secret_key, {
-  typescript: true,
-  apiVersion: '2020-08-27',
-});
 const webhookSecret: string = functions.config().stripe.webhook_secret;
 
 async function getOrderItems(userId: string): Promise<OrderItem[]> {
@@ -46,6 +44,8 @@ export async function createOrder(
   deliveryType: DeliveryType,
   orderId: number,
   orderNote = '',
+  promoCode: { code: string; discountValue: number } | undefined,
+  total_paid: number | undefined,
 ): Promise<[string, Cart] | undefined> {
   if (!userId || !deliveryType) {
     return Promise.reject('createOrder failed: userId or deliveryType undefined - bad request');
@@ -70,9 +70,12 @@ export async function createOrder(
   const ordersCollectionRef = admin.firestore().collection(ordersCollection);
   const timeStamp = admin.firestore.Timestamp.now();
 
+  const [promo_code, promo_code_value] =
+    promoCode === undefined ? [cart.promo_code, cart.promo_code_value] : [promoCode.code, promoCode.discountValue];
+
   const newOrder: Order = {
-    promo_code: cart.promo_code,
-    promo_code_value: cart.promo_code_value,
+    promo_code: promo_code,
+    promo_code_value: promo_code_value,
     id: orderId,
     cart: orderItems,
     created_at: timeStamp,
@@ -81,7 +84,7 @@ export async function createOrder(
     order_type_ref: orderTypeRef,
     status_step_id: 0,
     status_timestamps: [timeStamp],
-    total_paid: getCartTotalPrice(cart),
+    total_paid: total_paid ?? getCartTotalPrice(cart),
     oasis_synced: false,
   };
   const created = await ordersCollectionRef.add(newOrder);
@@ -142,6 +145,7 @@ const app = express();
 
 app.post('/', async (req: express.Request, res: express.Response) => {
   try {
+    const stripe = createStripeClient();
     const firebaseRequest = req as functions.https.Request;
     const signature = firebaseRequest.headers['stripe-signature'] as string | string[] | Buffer;
     const event = stripe.webhooks.constructEvent(firebaseRequest.rawBody, signature, webhookSecret);
@@ -150,13 +154,21 @@ app.post('/', async (req: express.Request, res: express.Response) => {
       case 'checkout.session.completed':
         functions.logger.log('handler checkout.session.completed invoked');
         const session = event.data.object as any;
+        const metadata = session.metadata as StripePaymentMetadata;
         functions.logger.log(`session data: ${JSON.stringify(session)}`);
         const orderDocId = await admin.firestore().runTransaction<string | undefined>(async () => {
           const result = await createOrder(
-            session.metadata.userId,
-            session.metadata.deliveryType,
-            parseInt(session.metadata.orderId, 10),
-            session.metadata.orderNote,
+            metadata.userId,
+            metadata.deliveryType,
+            parseInt(metadata.orderId, 10),
+            metadata.orderNote,
+            metadata.promoCode === undefined || metadata.promoDiscountValue === undefined
+              ? undefined
+              : {
+                  code: metadata.promoCode,
+                  discountValue: Number(metadata.promoDiscountValue),
+                },
+            session.amount_total / 100.0,
           );
           if (!result) {
             return undefined;
@@ -166,7 +178,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
           // First update stock counts and promo counts and after that delete cart items
           await Promise.all([
             updateProductStockCounts(session.metadata.userId),
-            updatePromoCodeUses(cart.promo_code || undefined),
+            updatePromoCodeUses(metadata.promoCode || cart.promo_code || undefined),
           ]);
           await deleteCartItems(session.metadata.userId);
 
@@ -188,7 +200,14 @@ app.post('/', async (req: express.Request, res: express.Response) => {
           const { userId, deliveryType, orderNote, orderId } = pi.metadata;
           functions.logger.log(`payment_intent.succeeded: ${userId} ${deliveryType} ${orderNote} ${orderId}`);
           const oId = await admin.firestore().runTransaction<string | undefined>(async () => {
-            const result = await createOrder(userId, deliveryType as DeliveryType, parseInt(orderId, 10), orderNote);
+            const result = await createOrder(
+              userId,
+              deliveryType as DeliveryType,
+              parseInt(orderId, 10),
+              orderNote,
+              undefined,
+              undefined,
+            );
             if (result === undefined) {
               return undefined;
             }
