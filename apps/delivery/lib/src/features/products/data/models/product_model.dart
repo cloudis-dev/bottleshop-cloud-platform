@@ -94,12 +94,13 @@ class ProductModel {
 
   double get priceNoVat => double.parse(_priceNoVat.toStringAsFixed(2));
 
-  double get priceWithVat => priceNoVat * vatMultiplier;
+  double get priceWithVat =>
+      double.parse((priceNoVat * vatMultiplier).toStringAsFixed(2));
 
   double get productVat => priceWithVat - priceNoVat;
 
   double get finalPrice =>
-      priceNoVat * vatMultiplier * (discount == null ? 1 : 1 - discount!);
+      priceWithVat * (discount == null ? 1 : 1 - discount!);
 
   bool get isFlashSale => _isFlashSale ?? false;
   bool get isNewEntry => _isNewEntry ?? false;
