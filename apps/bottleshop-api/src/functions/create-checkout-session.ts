@@ -62,7 +62,7 @@ export const createCheckoutSession = functions
 
     // order type/shipment
 
-    const orderType = await getOrderTypeByCode(data.deliveryType);
+    const orderType = (await getOrderTypeByCode(data.deliveryType))?.[0];
 
     if (orderType === undefined) {
       return new functions.https.HttpsError('failed-precondition', 'No such order type exists.');

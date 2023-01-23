@@ -6,12 +6,7 @@ import * as functions from 'firebase-functions';
 import Stripe from 'stripe';
 
 import { Cart } from '../models/cart';
-import {
-  ordersCollection,
-  orderTypesCollection,
-  promoCodesCollection,
-  usersCollection,
-} from '../constants/collections';
+import { ordersCollection, promoCodesCollection, usersCollection } from '../constants/collections';
 import { DeliveryType } from '../models/order-type';
 import { getCart, getCartItems, getCartTotalPrice } from '../utils/cart-utils';
 import { getEntityByRef } from '../utils/document-reference-utils';
@@ -23,6 +18,7 @@ import { User } from '../models/user';
 import { getProduct, getProductRef } from '../utils/product-utils';
 import { createStripeClient } from '..';
 import { StripePaymentMetadata } from '../models/payment-data';
+import { getOrderTypeByCode } from '../utils/order-utils';
 
 const webhookSecret: string = functions.config().stripe.webhook_secret;
 
@@ -56,17 +52,16 @@ export async function createOrder(
     return Promise.reject('createOrder failed: orderItems empty - bad request');
   }
 
-  const [orderTypeDoc, customer, cart] = await Promise.all([
-    admin.firestore().collection(orderTypesCollection).where('code', '==', deliveryType).get(),
+  const [orderTypeRef, customer, cart] = await Promise.all([
+    getOrderTypeByCode(deliveryType).then((a) => a?.[1]),
     getEntityByRef<User>(admin.firestore().collection(usersCollection).doc(userId)),
     getCart(userId),
   ]);
 
-  if (cart === undefined || customer === undefined) {
+  if (cart === undefined || customer === undefined || orderTypeRef === undefined) {
     return Promise.reject('createOrder failed: cart or customer is null - bad request');
   }
 
-  const orderTypeRef = orderTypeDoc.docs[0].ref;
   const ordersCollectionRef = admin.firestore().collection(ordersCollection);
   const timeStamp = admin.firestore.Timestamp.now();
 

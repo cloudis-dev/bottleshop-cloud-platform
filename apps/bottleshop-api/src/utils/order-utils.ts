@@ -16,12 +16,15 @@ export async function generateNewOrderId(): Promise<string> {
   return (orders.empty ? 1 : (orders.docs[orders.size - 1].data() as Order).id + 1).toString();
 }
 
-export async function getOrderTypeByCode(shippingCode: DeliveryType): Promise<OrderType | undefined> {
+export async function getOrderTypeByCode(
+  shippingCode: DeliveryType,
+): Promise<[OrderType, FirebaseFirestore.DocumentReference] | undefined> {
   const docs = await admin.firestore().collection(orderTypesCollection).where('code', '==', shippingCode).get();
   if (docs.empty) {
     return undefined;
   }
-  return docs.docs[0].data() as OrderType;
+  const ref = docs.docs[0];
+  return [ref.data() as OrderType, ref.ref];
 }
 
 export function calculateOrderTypeFinalPrice(orderType: OrderType): number {
