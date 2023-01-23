@@ -1,13 +1,19 @@
 import ejs from 'ejs';
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 import { approximately } from './math-utils';
 import { DeliveryType, OrderType } from '../models/order-type';
 import { formatDate } from './time-utils';
 import { getPriceNumberString } from './formatting-utils';
 import { Language, VAT } from '../constants/other';
-import { Order } from '../models/order';
+import { Order, OrderItem } from '../models/order';
 import { User } from '../models/user';
-import { ordersCollection, orderTypesCollection } from '../constants/collections';
+import { ordersCollection, orderTypesCollection, usersCollection } from '../constants/collections';
+import { usePromoCode } from './promo-code-utils';
+import { deleteAllCartItems, getCart, getCartItems, getCartTotalPrice } from './cart-utils';
+import { getProduct, getProductRef } from './product-utils';
+import { productFields } from '../constants/model-constants';
+import { getEntityByRef } from './document-reference-utils';
 
 export async function generateNewOrderId(): Promise<string> {
   const ordersCollectionRef = admin.firestore().collection(ordersCollection);
@@ -29,6 +35,117 @@ export async function getOrderTypeByCode(
 
 export function calculateOrderTypeFinalPrice(orderType: OrderType): number {
   return +(orderType.shipping_fee_eur_no_vat * (1 + VAT)).toFixed(2);
+}
+
+async function getOrderItems(userId: string): Promise<OrderItem[]> {
+  return getCartItems(userId).then((items) =>
+    items.map((item) => {
+      const paidPrice = item.product.price_no_vat * item.quantity * (1 + VAT) * (1 - (item.product.discount ?? 0));
+      return {
+        product: item.product,
+        paid_price: paidPrice,
+        count: item.quantity,
+      };
+    }),
+  );
+}
+
+async function updateProductStockCounts(userId: string): Promise<void> {
+  const cartItems: OrderItem[] = await getOrderItems(userId);
+  await admin.firestore().runTransaction(async () =>
+    Promise.all(
+      cartItems.map(async (item) => {
+        const product = await getProduct(item.product.cmat);
+
+        if (product === undefined) {
+          return undefined;
+        }
+
+        return getProductRef(item.product.cmat)
+          .update({
+            [productFields.countField]: Math.max(0, product.amount - item.count),
+          })
+          .catch(() =>
+            functions.logger.info(
+              `Could not update product amount in warehouse from cart. Quantity to decrease: ${item.count}, Product: ${product}`,
+            ),
+          );
+      }),
+    ),
+  );
+}
+
+/**
+ * Run create order effect - create order for the user, empty his cart,
+ * update product stock counts and updates promo code uses if any.
+ *
+ * Returns order document id.
+ * @param userId
+ * @param deliveryType
+ * @param orderId
+ * @param orderNote
+ * @param promoCode
+ * @param total_paid
+ */
+export async function createOrderEffect(
+  userId: string,
+  deliveryType: DeliveryType,
+  orderId: number,
+  orderNote = '',
+  promoCode: { code: string; discountValue: number } | undefined,
+  total_paid: number | undefined,
+): Promise<string> {
+  return admin.firestore().runTransaction<string>(async () => {
+    if (!userId || !deliveryType) {
+      return Promise.reject('createOrder failed: userId or deliveryType undefined - bad request');
+    }
+
+    const orderItems: OrderItem[] = await getOrderItems(userId);
+    if (orderItems.length === 0) {
+      return Promise.reject('createOrder failed: orderItems empty - bad request');
+    }
+
+    const [orderTypeRef, customer, cart] = await Promise.all([
+      getOrderTypeByCode(deliveryType).then((a) => a?.[1]),
+      getEntityByRef<User>(admin.firestore().collection(usersCollection).doc(userId)),
+      getCart(userId),
+    ]);
+
+    if (cart === undefined || customer === undefined || orderTypeRef === undefined) {
+      return Promise.reject('createOrder failed: cart or customer is null - bad request');
+    }
+
+    const ordersCollectionRef = admin.firestore().collection(ordersCollection);
+    const timeStamp = admin.firestore.Timestamp.now();
+
+    const [promo_code, promo_code_value] =
+      promoCode === undefined ? [cart.promo_code, cart.promo_code_value] : [promoCode.code, promoCode.discountValue];
+
+    const newOrder: Order = {
+      promo_code: promo_code,
+      promo_code_value: promo_code_value,
+      id: orderId,
+      cart: orderItems,
+      created_at: timeStamp,
+      customer,
+      note: orderNote,
+      order_type_ref: orderTypeRef,
+      status_step_id: 0,
+      status_timestamps: [timeStamp],
+      total_paid: total_paid ?? getCartTotalPrice(cart),
+      oasis_synced: false,
+    };
+    const created = await ordersCollectionRef.add(newOrder);
+
+    // First update stock counts and promo counts and after that delete cart items
+    await Promise.all([
+      updateProductStockCounts(userId),
+      usePromoCode(promoCode?.code || cart.promo_code || undefined),
+    ]);
+    await deleteAllCartItems(userId);
+
+    return created.id;
+  });
 }
 
 export function getStatusStepNotificationTitle(

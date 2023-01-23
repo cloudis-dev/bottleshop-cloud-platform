@@ -57,3 +57,14 @@ export async function areProductsAvailableForPurchase(cartItems: CartItem[]): Pr
     }),
   ).then((e) => e.every((isAvailable) => isAvailable));
 }
+
+export async function deleteAllCartItems(userId: string) {
+  const db = admin.firestore();
+  const cartRef = getCartRef(userId).collection(cartItemsSubCollection);
+  const batch = db.batch();
+  const documents = await cartRef.listDocuments();
+  for (const doc of documents) {
+    batch.delete(doc);
+  }
+  await batch.commit();
+}

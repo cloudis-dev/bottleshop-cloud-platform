@@ -17,7 +17,7 @@ export const createCheckoutSession = functions
   .region(tier1Region)
   .runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: PaymentData, context: functions.https.CallableContext) => {
-    functions.logger.info(`PaymentData:  ${JSON.stringify(data)}`);
+    functions.logger.info(`Create checkout session. PaymentData:  ${JSON.stringify(data)}`);
 
     const userUid = context.auth?.uid;
     const user = await getEntityByRef<User>(
@@ -96,7 +96,7 @@ export const createCheckoutSession = functions
 
     const promoRes: [{ coupon: string }[], PromoCode | undefined] | undefined = await (async () => {
       if (data.promoCode !== undefined) {
-        const promo = await getPromoByCode(data.promoCode);
+        const promo = (await getPromoByCode(data.promoCode))?.[0];
         if (promo === undefined || !isPromoValidV2(promo, orderType, cartItems)) {
           return undefined;
         }
