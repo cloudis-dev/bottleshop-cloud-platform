@@ -94,7 +94,7 @@ export const createCheckoutSession = functions
 
     // Promos check
 
-    let promoRes: [{ coupon: string }, PromoCode] | undefined;
+    let promoRes: [{ coupon: string }, PromoCode] | undefined = undefined;
     if (data.promoCode !== undefined) {
       const promo = (await getPromoByCode(data.promoCode))?.[0];
       if (promo === undefined || !isPromoValidV2(promo, orderType, cartItems)) {
@@ -110,7 +110,7 @@ export const createCheckoutSession = functions
         currency: 'eur',
       });
 
-      return [{ coupon: stripeCoupon.id }, promo];
+      promoRes = [{ coupon: stripeCoupon.id }, promo];
     }
 
     const [stripeDiscount, promoCode] = [promoRes?.[0], promoRes?.[1]];
