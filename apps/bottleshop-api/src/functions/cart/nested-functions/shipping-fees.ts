@@ -56,7 +56,7 @@ export const setShippingFee = functions
             .doc(tempCartId);
           const [cart, newOrderType] = await Promise.all([
             getEntityByRef<Cart>(cartRef),
-            getOrderTypeByCode(data.shipping),
+            getOrderTypeByCode(data.shipping).then((a) => a?.[0]),
           ]);
 
           if (newOrderType === undefined) {
