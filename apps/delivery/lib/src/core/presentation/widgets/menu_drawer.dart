@@ -125,6 +125,7 @@ class MenuDrawer extends HookConsumerWidget {
                     ref.read(navigationProvider).setNestingBranch(
                           context,
                           NestingBranch.cart,
+                          resetBranchStack: true,
                         );
                   },
                 ),

@@ -104,7 +104,11 @@ class HomeAppBarButton extends ConsumerWidget {
         if (nav.getNestingBranch(context) == NestingBranch.shop) {
           nav.replaceAllWith(context, []);
         } else {
-          nav.setNestingBranch(context, NestingBranch.shop);
+          nav.setNestingBranch(
+            context,
+            NestingBranch.shop,
+            resetBranchStack: true,
+          );
         }
       },
     );

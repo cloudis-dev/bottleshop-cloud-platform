@@ -76,7 +76,11 @@ class Header extends HookConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                 child: IconButton(
                   onPressed: () {
-                    navigation.setNestingBranch(context, NestingBranch.cart);
+                    navigation.setNestingBranch(
+                      context,
+                      NestingBranch.cart,
+                      resetBranchStack: true,
+                    );
                   },
                   color: kPrimaryColor,
                   icon: Icon(
