@@ -79,7 +79,8 @@ class PushNotificationsService {
 
           await _flutterLocalNotificationsPlugin.initialize(
             initSettings,
-            onSelectNotification: (payload) async {
+            onDidReceiveNotificationResponse: (response) async {
+              final payload = response.payload;
               if (payload != null) {
                 _processNotification(
                     jsonDecode(payload) as Map<String, dynamic>);
