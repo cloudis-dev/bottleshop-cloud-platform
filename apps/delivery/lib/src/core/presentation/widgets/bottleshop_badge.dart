@@ -1,11 +1,11 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 
 class BottleshopBadge extends StatelessWidget {
   final Widget child;
   final String? badgeText;
   final bool showBadge;
-  final BadgePosition position;
+  final badges.BadgePosition position;
 
   const BottleshopBadge({
     Key? key,
@@ -17,10 +17,10 @@ class BottleshopBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Badge(
+    return badges.Badge(
       ignorePointer: true,
       showBadge: showBadge,
-      animationType: BadgeAnimationType.scale,
+      badgeAnimation: const badges.BadgeAnimation.scale(),
       badgeContent: badgeText != null
           ? Text(
               badgeText!,
@@ -30,7 +30,7 @@ class BottleshopBadge extends StatelessWidget {
                   .copyWith(color: Colors.white),
             )
           : null,
-      elevation: 0,
+      badgeStyle: const badges.BadgeStyle(elevation: 0),
       position: position,
       child: child,
     );

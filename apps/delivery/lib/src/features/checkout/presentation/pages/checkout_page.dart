@@ -141,10 +141,13 @@ class _CheckoutPageView extends HookConsumerWidget {
           await ref
               .read(cloudFunctionsProvider)
               .createCashOnDeliveryOrder(paymentData);
-          ref.read(navigationProvider).setNestingBranch(
-                context,
-                NestingBranch.success,
-              );
+
+          if (context.mounted) {
+            ref.read(navigationProvider).setNestingBranch(
+                  context,
+                  NestingBranch.success,
+                );
+          }
         } catch (err, stack) {
           _logger.severe('Failed to create cash-on-delivery order', err, stack);
           showSimpleNotification(
@@ -163,25 +166,29 @@ class _CheckoutPageView extends HookConsumerWidget {
               .createCheckoutSession(paymentData);
 
           if (sessionId == null) {
-            showSimpleNotification(
-              Text(context.l10n.errorGeneric),
-              position: NotificationPosition.top,
-              duration: const Duration(seconds: 3),
-              slideDismissDirection: DismissDirection.horizontal,
-              context: context,
-            );
+            if (context.mounted) {
+              showSimpleNotification(
+                Text(context.l10n.errorGeneric),
+                position: NotificationPosition.top,
+                duration: const Duration(seconds: 3),
+                slideDismissDirection: DismissDirection.horizontal,
+                context: context,
+              );
+            }
           } else {
-            (await redirectToCheckout(
-              context: context,
-              sessionId: sessionId,
-              publishableKey: AppEnvironment.stripePublishableKey,
-              successUrl: successUrl,
-              canceledUrl: cancelUrl,
-            ))
-                .maybeWhen(
-              error: (err) => _logger.severe(err),
-              orElse: () {},
-            );
+            if (context.mounted) {
+              (await redirectToCheckout(
+                context: context,
+                sessionId: sessionId,
+                publishableKey: AppEnvironment.stripePublishableKey,
+                successUrl: successUrl,
+                canceledUrl: cancelUrl,
+              ))
+                  .maybeWhen(
+                error: (err) => _logger.severe(err),
+                orElse: () {},
+              );
+            }
           }
         } else {
           throw UnimplementedError(

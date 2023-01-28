@@ -162,7 +162,9 @@ class AgeVerificationDialog extends HookConsumerWidget {
                   .read(sharedPreferencesProvider)
                   .setHasAgeVerified(verified: true);
 
-              Navigator.of(context).pop();
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
             },
             child: Text(context.l10n.ageValidationDialogButtonYes),
           ),
