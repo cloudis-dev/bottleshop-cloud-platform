@@ -8,6 +8,7 @@ import 'package:delivery/src/features/home/presentation/widgets/organisms/langua
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import '../../../../../core/data/res/constants.dart';
 
 class MobileHeader extends HookConsumerWidget {
@@ -91,7 +92,11 @@ class MobileHeader extends HookConsumerWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    navigation.setNestingBranch(context, NestingBranch.cart);
+                    navigation.setNestingBranch(
+                      context,
+                      NestingBranch.cart,
+                      resetBranchStack: true,
+                    );
                   },
                   color: kPrimaryColor,
                   icon: const CartIconWithBadge(),

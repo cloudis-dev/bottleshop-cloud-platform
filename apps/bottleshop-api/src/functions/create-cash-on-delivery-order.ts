@@ -1,22 +1,17 @@
-import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import {
-  createOrder,
-  deleteCartItems,
-  updateProductStockCounts,
-  updatePromoCodeUses,
-} from './on-payment-status-update';
-import { DeliveryType } from '../models/order-type';
 import { PaymentData } from '../models/payment-data';
 import { tier1Region } from '../constants/other';
-import { generateNewOrderId } from '../utils/order-utils';
+import { createOrderEffect, generateNewOrderId, getOrderTypeByCode } from '../utils/order-utils';
+import { getPromoByCode, isPromoValidV2 } from '../utils/promo-code-utils';
+import { getCartItems, getCartTotalPriceV2 } from '../utils/cart-utils';
 
 export const createCashOnDeliveryOrder = functions
   .region(tier1Region)
   .runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: PaymentData, context: functions.https.CallableContext) => {
-    functions.logger.log('handler for createCashOnDeliveryOrder invoked');
+    functions.logger.info(`Create cash-on-delivery order. PaymentData:  ${JSON.stringify(data)}`);
+
     try {
       const userUid = context.auth?.uid;
 
@@ -25,37 +20,42 @@ export const createCashOnDeliveryOrder = functions
       }
 
       const orderId = await generateNewOrderId();
-      const { deliveryType, orderNote } = data;
-      if (orderId) {
-        functions.logger.log(`createCashOnDeliveryOrder: ${userUid} ${deliveryType} ${orderNote} ${orderId}`);
-        const oId = await admin.firestore().runTransaction<string | undefined>(async () => {
-          const result = await createOrder(
-            userUid,
-            deliveryType as DeliveryType,
-            parseInt(orderId, 10),
-            orderNote,
-            undefined,
-            undefined,
+
+      const orderType = (await getOrderTypeByCode(data.deliveryType))?.[0];
+      if (orderType === undefined) {
+        return new functions.https.HttpsError('failed-precondition', 'No such order type exists.');
+      }
+      if (orderType.code !== 'cash-on-delivery') {
+        return new functions.https.HttpsError('failed-precondition', 'Order type has to be cash-on-delivery.');
+      }
+
+      let promo = undefined;
+      if (data.promoCode !== undefined) {
+        promo = (await getPromoByCode(data.promoCode))?.[0];
+        const cartItems = await getCartItems(userUid);
+        if (promo === undefined || !isPromoValidV2(promo, orderType, cartItems)) {
+          return new functions.https.HttpsError(
+            'failed-precondition',
+            'Promo code either doesnt exist or is not valid for the cart.',
           );
-          if (result === undefined) {
-            return undefined;
-          }
-          const [orderDoc, cart] = result;
-
-          // First update stock counts and promo counts and after that delete cart items
-          await Promise.all([updateProductStockCounts(userUid), updatePromoCodeUses(cart.promo_code || undefined)]);
-          await deleteCartItems(userUid);
-
-          return orderDoc;
-        });
-        functions.logger.log(`createCashOnDeliveryOrder ${oId}`);
-
-        if (oId) {
-          return { orderId };
         }
       }
+
+      const total2Pay = await getCartTotalPriceV2(userUid, orderType, promo);
+
+      const orderDocId = await createOrderEffect(
+        userUid,
+        orderType.code,
+        parseInt(orderId, 10),
+        data.orderNote,
+        promo === undefined ? undefined : { code: promo.code, discountValue: promo.discount_value },
+        total2Pay,
+      );
+
+      functions.logger.log(`createCashOnDeliveryOrder success. Order document id: ${orderDocId}`);
+      return orderDocId;
     } catch (e) {
       functions.logger.error(`payment failed ${e}`);
-      return e;
+      return new functions.https.HttpsError('internal', JSON.stringify(e));
     }
   });

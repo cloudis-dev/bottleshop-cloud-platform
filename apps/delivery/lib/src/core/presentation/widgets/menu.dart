@@ -95,7 +95,6 @@ class Menu extends HookConsumerWidget {
               title: ref.watch(activeOrdersCountProvider).maybeWhen(
                     data: (count) => Wrap(children: <Widget>[
                       BottleshopBadge(
-                        alignment: Alignment.centerLeft,
                         showBadge: count > 0,
                         badgeText: count.toString(),
                         position: BadgePosition.topEnd(end: -15, top: -10),
