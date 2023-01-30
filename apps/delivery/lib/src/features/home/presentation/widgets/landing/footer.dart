@@ -18,9 +18,9 @@ class Footer extends HookConsumerWidget {
     return Container(
       height: 342,
       color: Colors.black,
-      child: Row(children: [
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
-          padding: EdgeInsets.fromLTRB(175, 100, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

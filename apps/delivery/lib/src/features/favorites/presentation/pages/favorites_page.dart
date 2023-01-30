@@ -12,10 +12,11 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
-import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
+import 'package:delivery/src/core/presentation/widgets/menu.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/favorites/presentation/providers/providers.dart';
@@ -62,7 +63,7 @@ class _FavoritesPageView extends HookWidget {
     if (shouldUseMobileLayout(context)) {
       return Scaffold(
         key: scaffoldKey,
-        drawer: const MenuDrawer(),
+        drawer: const Menu(),
         appBar: AppBar(
           title: Text(context.l10n.favoriteTabLabel),
           actions: [
@@ -79,13 +80,6 @@ class _FavoritesPageView extends HookWidget {
     } else {
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
-        appBarActions: [
-          const _SearchIconButton(),
-          AuthPopupButton(
-            key: authButtonKey,
-            scaffoldKey: scaffoldKey,
-          ),
-        ],
         body: PageBodyTemplate(
           child: _Body(authButtonKey),
         ),
@@ -101,7 +95,10 @@ class _SearchIconButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       tooltip: MaterialLocalizations.of(context).searchFieldLabel,
-      icon: const Icon(Icons.search),
+      icon: const Icon(
+        Icons.search,
+        color: kPrimaryColor,
+      ),
       onPressed: () => ref.read(navigationProvider).setNestingBranch(
             context,
             NestingBranch.search,

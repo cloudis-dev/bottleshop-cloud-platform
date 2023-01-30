@@ -12,11 +12,10 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/orders/presentation/widgets/orders_widget.dart';
@@ -56,6 +55,7 @@ class _OrdersPageView extends HookConsumerWidget {
         appBar: AppBar(
           title: Text(context.l10n.orderTabLabel),
           leading: CloseButton(
+            color: kPrimaryColor,
             onPressed: () => ref.read(navigationProvider).setNestingBranch(
                   context,
                   RoutebornBranchParams.of(context).getBranchParam()
@@ -72,11 +72,6 @@ class _OrdersPageView extends HookConsumerWidget {
     } else {
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
-        appBarActions: [
-          const LanguageDropdown(),
-          const CartAppbarButton(),
-          AuthPopupButton(key: authButtonKey, scaffoldKey: scaffoldKey),
-        ],
         body: PageBodyTemplate(child: OrdersWidget(authButtonKey)),
       );
     }

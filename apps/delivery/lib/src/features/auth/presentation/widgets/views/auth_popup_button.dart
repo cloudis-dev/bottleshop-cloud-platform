@@ -1,10 +1,12 @@
 import 'package:align_positioned/align_positioned.dart';
-import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
+import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/account_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class AuthPopupButton extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -27,27 +29,43 @@ class AuthPopupButtonState extends State<AuthPopupButton> {
         final startPos = pos.dx + buttonRenderObj.size.width;
         final maxHeight = pos.dy + buttonRenderObj.size.height;
 
-        return SafeArea(
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  OverlaySupportEntry.of(context)!.dismiss(animate: false);
-                },
-                child: Container(color: const Color(0x80000000)),
-              ),
-              AlignPositioned(
-                alignment: Alignment.topRight,
-                dx: screenSize.width - startPos,
-                dy: buttonRenderObj.size.height,
-                child: AccountMenu(
-                  scaffoldKey: widget.scaffoldKey,
-                  width: startPos < 300 ? startPos : 300,
-                  maxHeight: screenSize.height - maxHeight,
+        return ResponsiveWrapper.builder(
+          SafeArea(
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                  },
+                  child: Container(color: const Color(0x80000000)),
                 ),
-              ),
-            ],
+                AlignPositioned(
+                  alignment: Alignment.topRight,
+                  dx: 0,
+                  dy: shouldUseMobileLayout(context) ? 90 : 118,
+                  child: AccountMenu(
+                    scaffoldKey: widget.scaffoldKey,
+                    width: startPos < 300 ? startPos : 300,
+                    maxHeight: screenSize.height - maxHeight,
+                  ),
+                ),
+              ],
+            ),
           ),
+          maxWidth: 1920,
+          minWidth: 50,
+          defaultScale: true,
+          breakpoints: const [
+            ResponsiveBreakpoint.autoScaleDown(
+              50,
+              name: MOBILE,
+            ),
+            ResponsiveBreakpoint.autoScaleDown(600,
+                name: MOBILE, scaleFactor: 0.63),
+            ResponsiveBreakpoint.autoScaleDown(900,
+                name: TABLET, scaleFactor: 0.63),
+            ResponsiveBreakpoint.autoScale(1440, name: DESKTOP),
+          ],
         );
       },
       context: context,
@@ -74,12 +92,10 @@ class _Content extends HookConsumerWidget {
 
     return IconButton(
       onPressed: onClick,
-      icon: user == null
-          ? const Icon(Icons.supervised_user_circle_rounded)
-          : AspectRatio(
-              aspectRatio: 1,
-              child: ProfileAvatar(imageUrl: user.avatar),
-            ),
+      color: kPrimaryColor,
+      icon: const Icon(
+        Icons.person,
+      ),
     );
   }
 }

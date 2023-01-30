@@ -1,16 +1,16 @@
-import 'package:delivery/src/features/home/presentation/widgets/landing/header.dart';
-import 'package:delivery/src/features/home/presentation/widgets/molecules/breadcrumbs.dart';
+import 'package:delivery/src/core/presentation/widgets/menu.dart';
+import 'package:delivery/src/features/home/presentation/widgets/landing/mobile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-class HomePageTemplate extends HookConsumerWidget {
+class MobileHomePageTemplate extends ConsumerWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Widget body;
-  final Widget? filterBtn;
+  Widget? filterBtn;
 
-  const HomePageTemplate({
+  MobileHomePageTemplate({
     Key? key,
     required this.scaffoldKey,
     required this.body,
@@ -21,6 +21,7 @@ class HomePageTemplate extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         key: scaffoldKey,
+        drawer: Menu(),
         body: Column(children: [
           ResponsiveWrapper(
             maxWidth: 1920,
@@ -38,13 +39,12 @@ class HomePageTemplate extends HookConsumerWidget {
               ResponsiveBreakpoint.autoScale(1440, name: DESKTOP),
             ],
             child: ResponsiveConstraints(
-              child: Header(
+              child: MobileHeader(
                 scaffoldKey: scaffoldKey,
                 filterBtn: filterBtn,
               ),
             ),
           ),
-          const Breadcrumbs(),
           Expanded(
             child: ClipRect(
               child: OverlaySupport.local(child: body),

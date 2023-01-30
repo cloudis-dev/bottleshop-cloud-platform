@@ -6,6 +6,7 @@ class BottleshopBadge extends StatelessWidget {
   final String? badgeText;
   final bool showBadge;
   final BadgePosition position;
+  final Alignment alignment;
 
   const BottleshopBadge({
     Key? key,
@@ -13,11 +14,13 @@ class BottleshopBadge extends StatelessWidget {
     required this.badgeText,
     required this.showBadge,
     required this.position,
+    this.alignment = Alignment.center,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Badge(
+      alignment: alignment,
       ignorePointer: true,
       showBadge: showBadge,
       animationType: BadgeAnimationType.scale,

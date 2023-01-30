@@ -583,6 +583,8 @@
   "@aboutUsButton": {},
   "contactButton": "KONTAKT",
   "@contactButton": {},
+  "categoriesButton": "KATEGÓRIE",
+  "ordersButton": "OBJEDNÁVKY",
   "footerDescription": "Predajňa exkluzívnych značiek alkoholu\n a darčekových predmetov",
   "@footerDescription": {},
   "contactColumn": "Kontakt",

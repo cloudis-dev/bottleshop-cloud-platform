@@ -1,4 +1,5 @@
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
@@ -30,7 +31,10 @@ class CheckoutViewTemplate extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(pageTitle),
-        leading: BackButton(onPressed: onBackButton),
+        leading: BackButton(
+          onPressed: onBackButton,
+          color: kPrimaryColor,
+        ),
       ),
       body: ref.watch(currentUserAsStream).when(
             data: (user) {

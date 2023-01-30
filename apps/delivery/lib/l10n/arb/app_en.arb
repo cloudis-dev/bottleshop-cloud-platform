@@ -583,6 +583,8 @@
   "@aboutUsButton": {},
   "contactButton": "CONTACT",
   "@contactButton": {},
+  "categoriesButton": "CATEGORIES",
+  "ordersButton": "ORDERS",
   "footerDescription": "Shop of exclusive brands of alcohol and gift items",
   "@footerDescription": {},
   "contactColumn": "Contact",

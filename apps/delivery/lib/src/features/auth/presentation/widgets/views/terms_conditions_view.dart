@@ -12,6 +12,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_environment.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
@@ -69,6 +70,7 @@ class _TermsConditionsView extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(
+          color: kPrimaryColor,
           onPressed: () => ref.read(navigationProvider).popPage(context),
         ),
         title: Text(
