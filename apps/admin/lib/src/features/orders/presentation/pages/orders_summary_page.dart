@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/app_page.dart';
 import 'package:bottleshop_admin/src/core/data/services/database_service.dart';
@@ -14,6 +16,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tuple/tuple.dart';
 
 final _selectedDateProvider = StateProvider.autoDispose<DateTime?>((_) => null);
+var offset = 1;
 
 class _TableRecord {
   final String productName;
@@ -41,7 +44,8 @@ final _ordersForDayProvider =
         QueryArgs(
           OrderModel.createdAtTimestampField,
           isGreaterThanOrEqualTo:
-              DateTime(dateTime.year, dateTime.month, dateTime.day),
+              DateTime(dateTime.year, dateTime.month, dateTime.day)
+                  .subtract(Duration(days: offset)),
         ),
         QueryArgs(
           OrderModel.createdAtTimestampField,
@@ -50,7 +54,6 @@ final _ordersForDayProvider =
         )
       ],
     );
-
     final groups = groupBy<Tuple4<String, String, String, int>,
         Tuple3<String, String, String>>(
       res
@@ -82,11 +85,13 @@ final _ordersForDayProvider =
 });
 
 class OrdersSummaryPage extends AppPage {
-  OrdersSummaryPage()
+  OrdersSummaryPage(int offs)
       : super(
           'orders_summary',
           (_) => _OrdersDetailView(),
-        );
+        ) {
+    offset = offs;
+  }
 }
 
 class _OrdersDetailView extends HookWidget {
