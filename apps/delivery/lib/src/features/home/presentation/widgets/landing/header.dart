@@ -111,9 +111,11 @@ class Header extends HookConsumerWidget {
                   )),
               if (currentUser != null)
                 Text(
-                  currentUser.name.toString(),
+                  (currentUser.name != null)
+                      ? currentUser.name.toString()
+                      : context.l10n.anonymousUser,
                   style: publicSansTextTheme.overline,
-                ),
+                )
             ]),
           ),
         ],
