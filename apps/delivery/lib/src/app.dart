@@ -110,7 +110,7 @@ class _RouterWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (kIsWeb) {
-      String? error =
+      final error =
           ref.watch(userRepositoryProvider.select((value) => value.error));
       useEffect(
         () {
