@@ -584,7 +584,7 @@
   "enterEmail":"Enter your Email",
   "enterMsg":"Type your message",
   "tooLong":"Too long message",
-  "wasSent": "Your message was sent"
+  "wasSent": "Your message was sent",
   "applyPromoCode": "Apply promo code",
   "removePromoCode": "Remove promo code",
   "promoCodeInstructions": "Input a promo code when you have one providing you a discount",
@@ -603,7 +603,7 @@
   "informationColumn": "Information",
   "@informationColumn": {},
   "privacyPolicy": "Privacy policy",
-  "@privacyPolicy": {}, 
+  "@privacyPolicy": {},
   "shippingPayment": "Shipping and payment",
   "@shippingPayment": {},
   "findUs": "Find us",

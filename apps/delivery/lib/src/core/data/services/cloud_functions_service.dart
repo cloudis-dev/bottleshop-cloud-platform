@@ -40,28 +40,6 @@ class CloudFunctionsService {
     return true;
   }
 
-
-  HttpsCallable createPaymentIntent() {
-    return _firebaseFunctions
-        .httpsCallable(FirebaseCallableFunctions.createPaymentIntent);
-  }
-
-  Future<String> createCheckoutSession({
-    required String successUrl,
-    required String cancelUrl,
-  }) async {
-    final response = await _firebaseFunctions
-        .httpsCallable(FirebaseCallableFunctions.createCheckoutSession)
-        .call<dynamic>(
-      {
-        "cancel_url": cancelUrl,
-        "success_url": successUrl,
-      },
-    );
-    return response.data;
-  }
-
-  Future<String> createStripePriceIds(StripeSessionRequest sessionReq) async {
   Future<String?> createCheckoutSession(PaymentData paymentData) async {
     try {
       final response = await _firebaseFunctions
