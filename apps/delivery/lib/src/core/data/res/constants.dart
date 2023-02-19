@@ -32,6 +32,7 @@ class FirebaseCallableFunctions {
   static const deleteAccount = 'deleteAccount';
   static const postFeedback = 'postFeedback';
   static const createCheckoutSession = 'createCheckoutSession';
+  static const createCashOnDeliveryOrder = 'createCashOnDeliveryOrder';
 }
 
 class FirestoreCollections {

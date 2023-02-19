@@ -7,9 +7,12 @@ import { OrderType } from '../models/order-type';
 import { CartItem } from './cart-utils';
 import { calculateProductFinalPrice } from './product-utils';
 
-export async function getPromoByCode(code: string): Promise<PromoCode | undefined> {
+export async function getPromoByCode(
+  code: string,
+): Promise<[PromoCode, FirebaseFirestore.DocumentReference] | undefined> {
   const promoRef = admin.firestore().collection(promoCodesCollection).doc(code);
-  return getEntityByRef<PromoCode>(promoRef);
+  const promo = await getEntityByRef<PromoCode>(promoRef);
+  return promo === undefined ? undefined : [promo, promoRef];
 }
 
 /**
@@ -34,4 +37,20 @@ export function isPromoValidV2(promo: PromoCode, orderType: OrderType, cartItems
       orderType.shipping_fee_eur_no_vat +
         cartItems.map((item) => calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc)
   );
+}
+
+/**
+ * Updates promo code uses (subtract 1 from promo uses count).
+ */
+export async function usePromoCode(promoId: string | undefined) {
+  if (promoId) {
+    await admin.firestore().runTransaction(async () => {
+      const promoRes = await getPromoByCode(promoId);
+      if (promoRes === undefined) {
+        return;
+      }
+      const newRemainingUsesCount = promoRes[0].remaining_uses_count > 0 ? promoRes[0].remaining_uses_count - 1 : 0;
+      await promoRes[1].update({ remaining_uses_count: newRemainingUsesCount });
+    });
+  }
 }

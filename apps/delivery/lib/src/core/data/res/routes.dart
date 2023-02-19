@@ -107,7 +107,13 @@ final routes = <String, RouteNode<NestingBranch>>{
         ),
         NestingBranch.cart: BranchInitNode(
           CartPage.pagePathBase,
-          RouteNode(NonParametrizedPage(() => CartPage())),
+          RouteNode(
+            NonParametrizedPage(() => CartPage()),
+            routes: {
+              CheckoutPage.pagePathBase:
+                  RouteNode(NonParametrizedPage(() => CheckoutPage())),
+            },
+          ),
         ),
         NestingBranch.search: BranchInitNode(
           ProductsSearchPage.pagePathBase,
@@ -151,8 +157,6 @@ final routes = <String, RouteNode<NestingBranch>>{
     routes: {
       TutorialPage.pagePathBase:
           RouteNode(NonParametrizedPage(() => TutorialPage())),
-      CheckoutPage.pagePathBase:
-          RouteNode(NonParametrizedPage(() => CheckoutPage())),
       TermsConditionsPage.pagePathBase:
           RouteNode(NonParametrizedPage(() => TermsConditionsPage())),
       FeedbackPage.pagePathBase:

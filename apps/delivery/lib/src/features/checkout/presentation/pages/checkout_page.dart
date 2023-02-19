@@ -24,6 +24,7 @@ import 'package:delivery/src/features/checkout/presentation/widgets/views/remain
 import 'package:delivery/src/features/checkout/presentation/widgets/views/shipping_details_view.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
+import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -102,43 +103,53 @@ class _CheckoutPageView extends HookConsumerWidget {
   }
 
   Future<void> getCheckout(BuildContext context, WidgetRef ref) async {
-    if (kIsWeb) {
-      final successUrl =
-          "${Uri.base.origin}/${HomePage.pagePathBase}/${StripeCheckoutSuccessPage.pagePathBase}";
-      final cancelUrl =
-          "${Uri.base.origin}/${HomePage.pagePathBase}/${StripeCheckoutFailurePage.pagePathBase}";
+    final deliveryOption = ref.read(orderTypeStateProvider)?.deliveryOption;
 
-      final deliveryType =
-          ref.read(orderTypeStateProvider)?.deliveryOption.toString();
+    if (deliveryOption == null) {
+      showSimpleNotification(
+        Text(context.l10n.errorGeneric),
+        position: NotificationPosition.top,
+        duration: const Duration(seconds: 3),
+        slideDismissDirection: DismissDirection.horizontal,
+        context: context,
+      );
+      return;
+    }
 
-      if (deliveryType == null) {
-        showSimpleNotification(
-          Text(context.l10n.errorGeneric),
-          position: NotificationPosition.top,
-          duration: const Duration(seconds: 3),
-          slideDismissDirection: DismissDirection.horizontal,
-          context: context,
-        );
-      } else {
-        final orderNote = ref.read(remarksTextEditCtrlProvider).text;
-        final promo = ref.read(currentAppliedPromoProvider)?.code;
-        final language = ref.watch(currentLanguageProvider);
+    final successUrl =
+        "${Uri.base.origin}/${HomePage.pagePathBase}/${StripeCheckoutSuccessPage.pagePathBase}";
+    final cancelUrl =
+        "${Uri.base.origin}/${HomePage.pagePathBase}/${StripeCheckoutFailurePage.pagePathBase}";
 
-        final sessionId = await ref
-            .read(cloudFunctionsProvider)
-            .createCheckoutSession(
-              PaymentData(
-                successUrl: successUrl,
-                cancelUrl: cancelUrl,
-                deliveryType: deliveryType,
-                orderNote: orderNote,
-                platformType: kIsWeb ? PlatformType.web : PlatformType.mobile,
-                promoCode: promo,
-                locale: language.name,
-              ),
-            );
+    final orderNote = ref.read(remarksTextEditCtrlProvider).text;
+    final promo = ref.read(currentAppliedPromoProvider)?.code;
+    final language = ref.watch(currentLanguageProvider);
 
-        if (sessionId == null) {
+    final paymentData = PaymentData(
+      successUrl: successUrl,
+      cancelUrl: cancelUrl,
+      deliveryType: deliveryOption.toString(),
+      orderNote: orderNote,
+      platformType: kIsWeb ? PlatformType.web : PlatformType.mobile,
+      promoCode: promo,
+      locale: language.name,
+    );
+
+    switch (deliveryOption) {
+      case DeliveryOption.cashOnDelivery:
+        try {
+          await ref
+              .read(cloudFunctionsProvider)
+              .createCashOnDeliveryOrder(paymentData);
+
+          if (context.mounted) {
+            ref.read(navigationProvider).setNestingBranch(
+                  context,
+                  NestingBranch.success,
+                );
+          }
+        } catch (err, stack) {
+          _logger.severe('Failed to create cash-on-delivery order', err, stack);
           showSimpleNotification(
             Text(context.l10n.errorGeneric),
             position: NotificationPosition.top,
@@ -146,23 +157,43 @@ class _CheckoutPageView extends HookConsumerWidget {
             slideDismissDirection: DismissDirection.horizontal,
             context: context,
           );
-        } else {
-          (await redirectToCheckout(
-            context: context,
-            sessionId: sessionId,
-            publishableKey: AppEnvironment.stripePublishableKey,
-            successUrl: successUrl,
-            canceledUrl: cancelUrl,
-          ))
-              .maybeWhen(
-            error: (err) => _logger.severe(err),
-            orElse: () {},
-          );
         }
-      }
-    } else {
-      throw UnimplementedError(
-          "Payments not yet implemented for mobile platform");
+        break;
+      default:
+        if (kIsWeb) {
+          final sessionId = await ref
+              .read(cloudFunctionsProvider)
+              .createCheckoutSession(paymentData);
+
+          if (sessionId == null) {
+            if (context.mounted) {
+              showSimpleNotification(
+                Text(context.l10n.errorGeneric),
+                position: NotificationPosition.top,
+                duration: const Duration(seconds: 3),
+                slideDismissDirection: DismissDirection.horizontal,
+                context: context,
+              );
+            }
+          } else {
+            if (context.mounted) {
+              (await redirectToCheckout(
+                context: context,
+                sessionId: sessionId,
+                publishableKey: AppEnvironment.stripePublishableKey,
+                successUrl: successUrl,
+                canceledUrl: cancelUrl,
+              ))
+                  .maybeWhen(
+                error: (err) => _logger.severe(err),
+                orElse: () {},
+              );
+            }
+          }
+        } else {
+          throw UnimplementedError(
+              "Payments not yet implemented for mobile platform");
+        }
     }
   }
 }

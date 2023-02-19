@@ -86,6 +86,18 @@ class CloudFunctionsService {
       return null;
     }
   }
+
+  Future<void> createCashOnDeliveryOrder(PaymentData paymentData) async {
+    try {
+      await _firebaseFunctions
+          .httpsCallable(FirebaseCallableFunctions.createCashOnDeliveryOrder)
+          .call<dynamic>(paymentData.toMap());
+      _logger.fine('create cash-on-delivery order success.');
+    } catch (e, stack) {
+      _logger.severe('Failed to create cash-on-delivery order', e, stack);
+      rethrow;
+    }
+  }
 }
 
 enum CartStatus { ok, unavailableProducts, invalidPromo, error }

@@ -59,7 +59,8 @@ class PushNotificationService {
       if (defaultTargetPlatform == TargetPlatform.android) {
         const initSettings = InitializationSettings(android: settingsAndroid);
         await _flutterLocalNotificationsPlugin!.initialize(initSettings,
-            onSelectNotification: (orderId) async {
+            onDidReceiveNotificationResponse: (response) async {
+          final orderId = response.payload;
           _logger.fine('foreground clicked: $orderId');
           if (orderId!.isNotEmpty && orderId.split('__').length == 2) {
             ref.read(navigationProvider).replaceRootStackWith(

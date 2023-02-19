@@ -47,7 +47,7 @@ final flashSaleProductsProvider =
   },
 );
 
-final _logger = Logger((flashSaleEndProvider).toString());
+final _logger = Logger('Flash sale end provider');
 
 /// This is using FlashSaleModel as family, so products with the same flash sale
 /// will have the same provider.

@@ -5,27 +5,28 @@ publish_to: 'none'
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
+  flutter: ^3.7.0
 
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^1.20.0
-  firebase_messaging: ^12.0.1
-  firebase_storage: ^10.3.4
-  firebase_auth: ^3.6.1
-  firebase_core_platform_interface: 4.5.1
-  firebase_analytics: ^9.3.0
-  cloud_firestore: ^3.4.2
-  cloud_functions: ^3.3.3
-  firebase_crashlytics: ^2.8.6
+  firebase_core: ^2.4.1
+  firebase_messaging: ^14.2.1
+  firebase_storage: ^11.0.10
+  firebase_auth: ^4.2.2
+  firebase_core_platform_interface: ^4.5.2
+  firebase_analytics: ^10.1.0
+  cloud_firestore: ^4.3.1
+  cloud_functions: ^4.0.7
+  firebase_crashlytics: ^3.0.11
   image_cropper: ^3.0.0
   image_picker: ^0.8.5+3
   file_picker: ^5.0.1
   tuple: ^2.0.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   collection: ^1.16.0
   dropdown_search: ^5.0.2
-  image: ^3.2.0
+  image: ^3.3.0
   path_provider: ^2.0.11
   path: ^1.8.1
   flutter_hooks: ^0.17.0
@@ -38,11 +39,11 @@ dependencies:
     git:
       url: https://github.com/cloudis-dev/streamed-items-state-management.git
       ref: 689d8a48a564940b145444135882dc5e855e7517
-  package_info_plus: ^1.4.3
+  package_info_plus: ^3.0.2
   version: ^3.0.2
   url_launcher: ^6.1.5
   optional: ^6.1.0+1
-  flutter_local_notifications: ^9.7.0
+  flutter_local_notifications: ^13.0.0
 
 dev_dependencies:
   flutter_test:
