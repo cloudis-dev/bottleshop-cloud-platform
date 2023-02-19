@@ -20,6 +20,7 @@ import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/app_initialization/presentation/widgets/platform_initialization_view.dart';
 import 'package:delivery/src/features/app_initialization/presentation/widgets/version_check_view.dart';
+import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_checker_widget.dart';
 import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
@@ -109,34 +110,41 @@ class _RouterWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (kIsWeb) {
+      final error =
+          ref.watch(userRepositoryProvider.select((value) => value.error));
       useEffect(
         () {
           if (!ref.read(sharedPreferencesProvider).getHasAgeVerified()) {
-            final rootNavKey = ref.read(navigationProvider).rootNavKey;
-
-            Future.doWhile(
-              () async {
-                if (rootNavKey.currentContext == null) {
-                  await Future<void>.delayed(const Duration(microseconds: 1));
-                  return true;
-                }
-                return false;
-              },
-            ).then(
-              (_) => showDialog<void>(
-                context: rootNavKey.currentContext!,
-                builder: (_) => const AgeVerificationDialog(),
-                barrierDismissible: false,
-              ),
-            );
+            _showDialog(context, ref, const AgeVerificationDialog());
+          } else if (error != null && error.isNotEmpty) {
+            _showDialog(context, ref, UnsuccessfulLoginAttemptDialog(error));
           }
           return;
         },
         const [],
       );
     }
-
     return router;
+  }
+
+  void _showDialog(BuildContext context, WidgetRef ref, Widget dialog) {
+    final rootNavKey = ref.read(navigationProvider).rootNavKey;
+
+    Future.doWhile(
+      () async {
+        if (rootNavKey.currentContext == null) {
+          await Future<void>.delayed(const Duration(microseconds: 1));
+          return true;
+        }
+        return false;
+      },
+    ).then(
+      (_) => showDialog<void>(
+        context: rootNavKey.currentContext!,
+        builder: (_) => dialog,
+        barrierDismissible: false,
+      ),
+    );
   }
 }
 
@@ -167,6 +175,32 @@ class AgeVerificationDialog extends HookConsumerWidget {
               }
             },
             child: Text(context.l10n.ageValidationDialogButtonYes),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class UnsuccessfulLoginAttemptDialog extends HookConsumerWidget {
+  final String error;
+  const UnsuccessfulLoginAttemptDialog(this.error, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: AlertDialog(
+        title: Text(context.l10n.error.toUpperCase()),
+        content: Text(error),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+            },
+            child: Text(context.l10n.close),
           ),
         ],
       ),

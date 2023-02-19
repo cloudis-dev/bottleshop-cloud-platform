@@ -19,11 +19,11 @@ class DeleteAccountTile extends HookConsumerWidget {
               color: Theme.of(context).errorColor,
             ),
             title: Text(
-              'Delete account',
+              context.l10n.deleteAccount,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             subtitle: Text(
-              'Remove your account and all your data',
+              context.l10n.deleteAccountDetail,
               style: Theme.of(context).textTheme.caption,
             ),
             trailing: ButtonTheme(
@@ -33,7 +33,7 @@ class DeleteAccountTile extends HookConsumerWidget {
               child: TextButton(
                 style:
                     TextButton.styleFrom(primary: Theme.of(context).errorColor),
-                child: Text(context.l10n.deleteAccount),
+                child: Text(context.l10n.delete),
                 onPressed: () {
                   showDialog<void>(
                     context: context,
@@ -113,7 +113,7 @@ class _DeleteConfirmationDialog extends HookConsumerWidget {
                   width: 15,
                   child: CircularProgressIndicator(),
                 )
-              : Text(context.l10n.deleteAccount),
+              : Text(context.l10n.delete),
         ),
       ],
     );
