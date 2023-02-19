@@ -47,7 +47,7 @@ class CheckoutTile extends HookConsumerWidget {
     return ref.watch(cartProvider).when(
           data: (cart) {
             final subtotal = cart.totalProductsPriceNoVat +
-                (orderType?.shippingFeeNoVat ?? 0);
+                (orderType?.shippingFeeNoVat ?? 0) - (promoCode?.discount ?? 0);
             final totalVat = cart.totalProductsVat + (orderType?.feeVat ?? 0);
             final totalValue = cart.totalProductsPrice +
                 (orderType?.feeWithVat ?? 0) -
@@ -108,6 +108,23 @@ class CheckoutTile extends HookConsumerWidget {
                             ),
                           ],
                         ),
+                      if (promoCode != null)
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                  "${context.l10n.promoCodeLabel}: ${promoCode.code}",
+                                  style: Theme.of(context).textTheme.bodyText1),
+                            ),
+                            Text(
+                              '- ${FormattingUtils.getPriceNumberString(
+                                promoCode.discount,
+                                withCurrency: true,
+                              )}',
+                              style: Theme.of(context).textTheme.subtitle1,
+                            )
+                          ],
+                        ),
                       Row(
                         children: <Widget>[
                           Expanded(
@@ -137,23 +154,6 @@ class CheckoutTile extends HookConsumerWidget {
                           )
                         ],
                       ),
-                      if (promoCode != null)
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                  "${context.l10n.promoCodeLabel}: ${promoCode.code}",
-                                  style: Theme.of(context).textTheme.bodyText1),
-                            ),
-                            Text(
-                              '- ${FormattingUtils.getPriceNumberString(
-                                promoCode.discount,
-                                withCurrency: true,
-                              )}',
-                              style: Theme.of(context).textTheme.subtitle1,
-                            )
-                          ],
-                        ),
                       const Spacer(flex: 1),
                       Row(
                         children: <Widget>[
