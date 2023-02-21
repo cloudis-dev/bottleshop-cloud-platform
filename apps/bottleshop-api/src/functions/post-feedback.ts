@@ -7,25 +7,22 @@ import { createMail, getManagementEmails } from '../utils/mail-utils';
 
 export const postFeedback = functions
   .region(tier1Region)
-  .runWith({ allowInvalidAppCheckToken: true })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  .https.onCall(async (DT: {to :string, text :string, html:string, subject: string, path: {path:string}[]}, context) => {
-    const managementEmails = await Promise.all([
-      getManagementEmails(),
-    ]);
+  .https.onCall(async (dataMail: {to :string, text :string, html:string, subject: string, path: {path:string}[]}, context) => {
     if (context.auth === null) {
       functions.logger.error('auth error');
-      return;
+      return new functions.https.HttpsError('unauthenticated', 'Request is unauthenticated'); 
     }
+    const managementEmails = await getManagementEmails();
     const expression = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    if(!expression.test(DT.to) || DT.subject.length < 1 || DT.subject.length > 75 || DT.text.length < 1 || DT.text.length > 300 || DT.to.length < 1 || DT.to.length > 50 || DT.html.length < 1 || DT.html.length > 300){
+    if(!expression.test(dataMail.to) || dataMail.subject.length < 1 || 75 < dataMail.subject.length || dataMail.text.length < 1 || 300 < dataMail.text.length || dataMail.to.length < 1 || 50 < dataMail.to.length || dataMail.html.length < 1 || 300 < dataMail.html.length){
       functions.logger.error('Validation error');
-      return;
+      return new functions.https.HttpsError('invalid-argument', 'Request is unvalidated'); 
     }
-    if(DT.path.length>3){
+    if(dataMail.path.length>3){
       functions.logger.error('too many files');
-      return;
+      return new functions.https.HttpsError('invalid-argument', 'Request has too many files'); 
     }
-    functions.logger.error(DT.to);
-    managementEmails.map((email) => admin.firestore().collection(mailCollection).add(createMail(DT.to,DT.subject , DT.text, DT.html,DT.path)))
+    await Promise.all( managementEmails.map((email) => admin.firestore().collection(mailCollection).add(createMail(dataMail.to,dataMail.subject , dataMail.text, dataMail.html,dataMail.path))))
+    return { success: true };
   });
