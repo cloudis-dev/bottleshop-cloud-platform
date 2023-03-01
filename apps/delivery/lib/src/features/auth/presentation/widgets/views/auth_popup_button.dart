@@ -1,5 +1,6 @@
 import 'package:align_positioned/align_positioned.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
+import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/account_menu.dart';
@@ -93,9 +94,14 @@ class _Content extends HookConsumerWidget {
     return IconButton(
       onPressed: onClick,
       color: kPrimaryColor,
-      icon: const Icon(
-        Icons.person,
-      ),
+      icon: user == null
+          ? const Icon(
+              Icons.person,
+            )
+          : AspectRatio(
+              aspectRatio: 1,
+              child: ProfileAvatar(imageUrl: user.avatar),
+            ),
     );
   }
 }

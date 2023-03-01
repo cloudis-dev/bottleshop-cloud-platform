@@ -1,5 +1,5 @@
 import 'package:delivery/src/core/data/res/app_theme.dart';
-import 'package:delivery/src/core/presentation/widgets/menu.dart';
+import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/footer.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/header.dart';
@@ -27,7 +27,7 @@ class PageTemplate extends HookConsumerWidget {
       Scaffold(
         key: scaffoldKey,
         backgroundColor: kBackgroundColor,
-        drawer: const Menu(),
+        drawer: const MenuDrawer(),
         body: CustomScrollView(
           slivers: shouldUseMobileLayout(context)
               ? <Widget>[

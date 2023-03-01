@@ -1,4 +1,4 @@
-import 'package:delivery/src/core/presentation/widgets/menu.dart';
+import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/mobile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +21,7 @@ class MobileHomePageTemplate extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         key: scaffoldKey,
-        drawer: Menu(),
+        drawer: MenuDrawer(),
         body: Column(children: [
           ResponsiveWrapper(
             maxWidth: 1920,

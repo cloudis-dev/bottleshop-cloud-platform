@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/presentation/widgets/menu.dart';
+import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/home/presentation/widgets/menu_button.dart';
@@ -36,7 +36,7 @@ class _WholeSalePage extends HookWidget {
     if (shouldUseMobileLayout(context)) {
       return Scaffold(
         key: scaffoldKey,
-        drawer: const Menu(),
+        drawer: const MenuDrawer(),
         appBar: AppBar(
           title: Text(context.l10n.wholesale),
           leading: MenuButton(drawerScaffoldKey: scaffoldKey),
