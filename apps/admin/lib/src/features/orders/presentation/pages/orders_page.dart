@@ -8,7 +8,7 @@ import 'package:bottleshop_admin/src/features/orders/presentation/widgets/orders
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum _ContextMenuActions { day, month, halfYear, Year }
+enum _ContextMenuActions { day, month, halfYear, year }
 
 class OrdersPage extends StatelessWidget {
   static const String routeName = '/orders';
@@ -79,7 +79,7 @@ class OrdersPage extends StatelessWidget {
                     ),
                   ),
                   PopupMenuItem(
-                    value: _ContextMenuActions.Year,
+                    value: _ContextMenuActions.year,
                     child: Text(
                       'Ročná sumarizácia',
                       style: AppTheme.popupMenuItemTextStyle,
@@ -103,7 +103,7 @@ class OrdersPage extends StatelessWidget {
                           .read(navigationProvider.notifier)
                           .pushPage(OrdersSummaryPage(182));
                       break;
-                    case _ContextMenuActions.Year:
+                    case _ContextMenuActions.year:
                       context
                           .read(navigationProvider.notifier)
                           .pushPage(OrdersSummaryPage(364));

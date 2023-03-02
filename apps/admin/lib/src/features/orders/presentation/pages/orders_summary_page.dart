@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/app_page.dart';
 import 'package:bottleshop_admin/src/core/data/services/database_service.dart';
@@ -16,7 +14,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tuple/tuple.dart';
 
 final _selectedDateProvider = StateProvider.autoDispose<DateTime?>((_) => null);
-var offset = 1;
 
 class _TableRecord {
   final String productName;
@@ -32,8 +29,10 @@ class _TableRecord {
   });
 }
 
-final _ordersForDayProvider =
-    FutureProvider.autoDispose<List<_TableRecord>>((ref) async {
+typedef _DaysOffset = int;
+
+final _ordersForDayProvider = FutureProvider.autoDispose
+    .family<List<_TableRecord>, _DaysOffset>((ref, daysOffset) async {
   final dateTime = ref.watch(_selectedDateProvider).state;
 
   if (dateTime == null) {
@@ -45,7 +44,7 @@ final _ordersForDayProvider =
           OrderModel.createdAtTimestampField,
           isGreaterThanOrEqualTo:
               DateTime(dateTime.year, dateTime.month, dateTime.day)
-                  .subtract(Duration(days: offset)),
+                  .subtract(Duration(days: daysOffset)),
         ),
         QueryArgs(
           OrderModel.createdAtTimestampField,
@@ -88,13 +87,15 @@ class OrdersSummaryPage extends AppPage {
   OrdersSummaryPage(int offs)
       : super(
           'orders_summary',
-          (_) => _OrdersDetailView(),
-        ) {
-    offset = offs;
-  }
+          (_) => _OrdersDetailView(offs),
+        );
 }
 
 class _OrdersDetailView extends HookWidget {
+  final int daysOffset;
+
+  const _OrdersDetailView(this.daysOffset);
+
   @override
   Widget build(BuildContext context) {
     final scrollCtrl = useScrollController();
@@ -122,7 +123,7 @@ class _OrdersDetailView extends HookWidget {
                   lastDate: DateTime.now().add(Duration(days: 1)),
                 );
 
-                if (res != null) {
+                if (res != null && context.mounted) {
                   context.read(_selectedDateProvider).state = res;
                 }
               },
@@ -139,7 +140,7 @@ class _OrdersDetailView extends HookWidget {
                 'Zobrazujú sa produkty pre ktoré objednávka bola VYTVORENÁ vo vybraný deň',
                 textAlign: TextAlign.center,
               ),
-              useProvider(_ordersForDayProvider).when(
+              useProvider(_ordersForDayProvider(daysOffset)).when(
                 data: (e) => Scrollbar(
                   controller: scrollCtrl,
                   isAlwaysShown: true,
