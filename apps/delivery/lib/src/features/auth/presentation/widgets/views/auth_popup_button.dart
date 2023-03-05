@@ -7,7 +7,6 @@ import 'package:delivery/src/features/home/presentation/widgets/account_menu.dar
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 class AuthPopupButton extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -30,43 +29,27 @@ class AuthPopupButtonState extends State<AuthPopupButton> {
         final startPos = pos.dx + buttonRenderObj.size.width;
         final maxHeight = pos.dy + buttonRenderObj.size.height;
 
-        return ResponsiveWrapper.builder(
-          SafeArea(
-            child: Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    OverlaySupportEntry.of(context)!.dismiss(animate: false);
-                  },
-                  child: Container(color: const Color(0x80000000)),
+        return SafeArea(
+          child: Stack(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                },
+                child: Container(color: const Color(0x80000000)),
+              ),
+              AlignPositioned(
+                alignment: Alignment.topRight,
+                dx: 0,
+                dy: shouldUseMobileLayout(context) ? 90 : 118,
+                child: AccountMenu(
+                  scaffoldKey: widget.scaffoldKey,
+                  width: startPos < 300 ? startPos : 300,
+                  maxHeight: screenSize.height - maxHeight,
                 ),
-                AlignPositioned(
-                  alignment: Alignment.topRight,
-                  dx: 0,
-                  dy: shouldUseMobileLayout(context) ? 90 : 118,
-                  child: AccountMenu(
-                    scaffoldKey: widget.scaffoldKey,
-                    width: startPos < 300 ? startPos : 300,
-                    maxHeight: screenSize.height - maxHeight,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          maxWidth: 1920,
-          minWidth: 50,
-          defaultScale: true,
-          breakpoints: const [
-            ResponsiveBreakpoint.autoScaleDown(
-              50,
-              name: MOBILE,
-            ),
-            ResponsiveBreakpoint.autoScaleDown(600,
-                name: MOBILE, scaleFactor: 0.63),
-            ResponsiveBreakpoint.autoScaleDown(900,
-                name: TABLET, scaleFactor: 0.63),
-            ResponsiveBreakpoint.autoScale(1440, name: DESKTOP),
-          ],
         );
       },
       context: context,

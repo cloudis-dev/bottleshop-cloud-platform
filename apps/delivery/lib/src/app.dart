@@ -30,6 +30,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:routeborn/routeborn.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -75,15 +76,31 @@ class _AppBody extends HookConsumerWidget {
             ScrollConfiguration.of(context).copyWith(scrollbars: false),
         backButtonDispatcher: RootBackButtonDispatcher(),
         routeInformationProvider: ref.watch(routeInformationProvider),
-        builder: (context, router) => OverlaySupport.global(
-          child: PlatformInitializationView(
-            child: VersionCheckView(
-              checkSuccessWidgetBuilder: (context) => AuthCheckerWidget(
-                successViewBuilder: (context) => _RouterWidget(router!),
+        builder: (context, router) => ResponsiveWrapper.builder(
+            // backgroundColor: Colors,
+            maxWidth: 1920,
+            minWidth: 50,
+            defaultScale: true,
+            breakpoints: const [
+              ResponsiveBreakpoint.autoScaleDown(
+                50,
+                name: MOBILE,
               ),
-            ),
-          ),
-        ),
+              ResponsiveBreakpoint.autoScaleDown(600,
+                  name: MOBILE, scaleFactor: 0.63),
+              ResponsiveBreakpoint.autoScaleDown(900,
+                  name: TABLET, scaleFactor: 0.63),
+              ResponsiveBreakpoint.autoScale(1440, name: DESKTOP),
+            ],
+            OverlaySupport.global(
+              child: PlatformInitializationView(
+                child: VersionCheckView(
+                  checkSuccessWidgetBuilder: (context) => AuthCheckerWidget(
+                    successViewBuilder: (context) => _RouterWidget(router!),
+                  ),
+                ),
+              ),
+            )),
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (context) => context.l10n.app_title,
         localizationsDelegates: const [
