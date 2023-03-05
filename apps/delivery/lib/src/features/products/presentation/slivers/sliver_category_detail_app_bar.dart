@@ -12,6 +12,7 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/products/presentation/widgets/subcategories_tab_bar.dart';
@@ -41,6 +42,7 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
       floating: false,
       pinned: true,
       leading: BackButton(
+        color: kPrimaryColor,
         onPressed: () => ref.read(navigationProvider).popPage(context),
       ),
       actions: actions,

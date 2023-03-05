@@ -4,8 +4,6 @@ import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/home/presentation/widgets/menu_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/wholesale/presentation/widgets/wholesale_view.dart';
@@ -56,11 +54,6 @@ class _WholeSalePage extends HookWidget {
 
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
-        appBarActions: [
-          const LanguageDropdown(),
-          const CartAppbarButton(),
-          AuthPopupButton(scaffoldKey: scaffoldKey),
-        ],
         body: Scrollbar(
           controller: scrollCtrl,
           child: const PageBodyTemplate(
