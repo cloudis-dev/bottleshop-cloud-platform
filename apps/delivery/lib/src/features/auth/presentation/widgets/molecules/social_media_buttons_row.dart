@@ -12,7 +12,6 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -71,7 +70,7 @@ class SocialMediaButtonsRow extends HookConsumerWidget {
           ),
         ),
         const SizedBox(width: 10),
-        if (isAppleSupported && !kIsWeb) ...[
+        if (isAppleSupported) ...[
           _SocialMediaButtonWrapper(
             child: Builder(
               builder: (context) => InkWell(
