@@ -36,10 +36,13 @@ class MainMobileSection extends StatelessWidget {
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            context.l10n.luxuriousSpirits,
-            style: libreBodoniTextTheme.headline1,
-            textAlign: TextAlign.center,
+          SizedBox(
+            width: 450,
+            child: Text(
+              context.l10n.luxuryDrinks,
+              style: libreBodoniTextTheme.headline1,
+              textAlign: TextAlign.center,
+            ),
           ),
           SizedBox(
             height: 40,
