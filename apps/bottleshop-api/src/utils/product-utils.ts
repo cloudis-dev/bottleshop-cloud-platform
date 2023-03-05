@@ -12,6 +12,13 @@ export function calculateProductFinalPrice(product: Product): number {
 }
 
 /**
+ * Product price with discount applied without rounding.
+ */
+export function finalProductPriceNoVatNoRounding(product: Product): number {
+  return product.price_no_vat * (1 - (product.discount ?? 0));
+}
+
+/**
  * Get the product's image url.
  * When product has no image, return just the placeholder image.
  */

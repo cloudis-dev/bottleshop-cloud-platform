@@ -32,7 +32,6 @@ import 'package:delivery/src/features/products/presentation/pages/category_produ
 import 'package:delivery/src/features/sale/presentation/pages/sale_page.dart';
 import 'package:delivery/src/features/search/presentation/pages/products_search_page.dart';
 import 'package:delivery/src/features/tutorial/presentation/pages/tutorial_page.dart';
-import 'package:delivery/src/features/wholesale/presentation/pages/wholesale_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routeborn/routeborn.dart';
@@ -78,10 +77,6 @@ final routes = <String, RouteNode<NestingBranch>>{
             routes: {..._categoryDetailRoutes},
           ),
         ),
-        NestingBranch.wholesale: BranchInitNode(
-          WholeSalePage.pagePathBase,
-          RouteNode(NonParametrizedPage(() => WholeSalePage())),
-        ),
         NestingBranch.sale: BranchInitNode(
           SalePage.pagePathBase,
           RouteNode(
@@ -106,7 +101,13 @@ final routes = <String, RouteNode<NestingBranch>>{
         ),
         NestingBranch.cart: BranchInitNode(
           CartPage.pagePathBase,
-          RouteNode(NonParametrizedPage(() => CartPage())),
+          RouteNode(
+            NonParametrizedPage(() => CartPage()),
+            routes: {
+              CheckoutPage.pagePathBase:
+                  RouteNode(NonParametrizedPage(() => CheckoutPage())),
+            },
+          ),
         ),
         NestingBranch.search: BranchInitNode(
           ProductsSearchPage.pagePathBase,
@@ -150,8 +151,6 @@ final routes = <String, RouteNode<NestingBranch>>{
     routes: {
       TutorialPage.pagePathBase:
           RouteNode(NonParametrizedPage(() => TutorialPage())),
-      CheckoutPage.pagePathBase:
-          RouteNode(NonParametrizedPage(() => CheckoutPage())),
       TermsConditionsPage.pagePathBase:
           RouteNode(NonParametrizedPage(() => TermsConditionsPage())),
     },

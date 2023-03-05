@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class MenuButton extends HookConsumerWidget {
         false;
 
     return IconButton(
+      color: kPrimaryColor,
       icon: BottleshopBadge(
         position: BadgePosition.topEnd(top: 0, end: 0),
         showBadge: showBadge,

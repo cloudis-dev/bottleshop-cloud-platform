@@ -38,7 +38,7 @@ class ProfileSettingsDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
     final scrollController = useScrollController();
     var profileData = <String, dynamic>{};
 
@@ -51,7 +51,7 @@ class ProfileSettingsDialog extends HookConsumerWidget {
                 controller: scrollController,
                 user: user,
                 profileData: profileData,
-                formatter: FormattingUtils.getDateFormatter(currentLocale),
+                formatter: FormattingUtils.getDateFormatter(currentLang),
               );
             },
       style: TextButton.styleFrom(

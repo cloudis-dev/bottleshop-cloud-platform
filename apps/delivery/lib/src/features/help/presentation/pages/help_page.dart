@@ -12,13 +12,12 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/help/presentation/providers/help_providers.dart';
 import 'package:delivery/src/features/help/presentation/widgets/help_section.dart';
-import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,6 +58,7 @@ class _HelpPageView extends HookConsumerWidget {
         appBar: AppBar(
           title: Text(context.l10n.help),
           leading: CloseButton(
+            color: kPrimaryColor,
             onPressed: () => ref.read(navigationProvider).setNestingBranch(
                   context,
                   RoutebornBranchParams.of(context).getBranchParam()
@@ -77,10 +77,6 @@ class _HelpPageView extends HookConsumerWidget {
     } else {
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
-        appBarActions: [
-          const LanguageDropdown(),
-          AuthPopupButton(scaffoldKey: scaffoldKey),
-        ],
         body: Scrollbar(
           controller: scrollCtrl,
           child: PageBodyTemplate(

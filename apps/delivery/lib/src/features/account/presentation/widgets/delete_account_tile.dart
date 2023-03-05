@@ -2,6 +2,7 @@ import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -18,11 +19,11 @@ class DeleteAccountTile extends HookConsumerWidget {
               color: Theme.of(context).errorColor,
             ),
             title: Text(
-              'Delete account',
+              context.l10n.deleteAccount,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             subtitle: Text(
-              'Remove your account and all your data',
+              context.l10n.deleteAccountDetail,
               style: Theme.of(context).textTheme.caption,
             ),
             trailing: ButtonTheme(
@@ -32,7 +33,7 @@ class DeleteAccountTile extends HookConsumerWidget {
               child: TextButton(
                 style:
                     TextButton.styleFrom(primary: Theme.of(context).errorColor),
-                child: Text(context.l10n.deleteAccount),
+                child: Text(context.l10n.delete),
                 onPressed: () {
                   showDialog<void>(
                     context: context,
@@ -51,7 +52,7 @@ class DeleteAccountTile extends HookConsumerWidget {
   }
 }
 
-class _DeleteConfirmationDialog extends StatelessWidget {
+class _DeleteConfirmationDialog extends HookConsumerWidget {
   final BuildContext parentContext;
   final WidgetRef parentRef;
 
@@ -87,7 +88,9 @@ class _DeleteConfirmationDialog extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDeleting = useState(false);
+
     return AlertDialog(
       title: Text(context.l10n.deleteAccountDialogTitle),
       content: Text(context.l10n.deleteAccountDialogLabel),
@@ -99,11 +102,18 @@ class _DeleteConfirmationDialog extends StatelessWidget {
           child: Text(context.l10n.deleteAccountNegativeOption),
         ),
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
+            isDeleting.value = true;
+            await _deleteAccount();
             Navigator.of(context).pop();
-            _deleteAccount();
           },
-          child: Text(context.l10n.deleteAccount),
+          child: isDeleting.value
+              ? const SizedBox(
+                  height: 15,
+                  width: 15,
+                  child: CircularProgressIndicator(),
+                )
+              : Text(context.l10n.delete),
         ),
       ],
     );

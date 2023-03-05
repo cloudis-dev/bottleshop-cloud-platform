@@ -17,7 +17,7 @@ export const createCheckoutSession = functions
   .region(tier1Region)
   .runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: PaymentData, context: functions.https.CallableContext) => {
-    functions.logger.info(`PaymentData:  ${JSON.stringify(data)}`);
+    functions.logger.info(`Create checkout session. PaymentData:  ${JSON.stringify(data)}`);
 
     const userUid = context.auth?.uid;
     const user = await getEntityByRef<User>(
@@ -62,7 +62,7 @@ export const createCheckoutSession = functions
 
     // order type/shipment
 
-    const orderType = await getOrderTypeByCode(data.deliveryType);
+    const orderType = (await getOrderTypeByCode(data.deliveryType))?.[0];
 
     if (orderType === undefined) {
       return new functions.https.HttpsError('failed-precondition', 'No such order type exists.');
@@ -94,33 +94,26 @@ export const createCheckoutSession = functions
 
     // Promos check
 
-    const promoRes: [{ coupon: string }[], PromoCode | undefined] | undefined = await (async () => {
-      if (data.promoCode !== undefined) {
-        const promo = await getPromoByCode(data.promoCode);
-        if (promo === undefined || !isPromoValidV2(promo, orderType, cartItems)) {
-          return undefined;
-        }
-
-        const coupon = await stripe.coupons.create({
-          name: `Promo: ${data.promoCode}`,
-          amount_off: Math.round(promo.discount_value * 100),
-          currency: 'eur',
-        });
-
-        return [[{ coupon: coupon.id }], promo];
+    let promoRes: [{ coupon: string }, PromoCode] | undefined = undefined;
+    if (data.promoCode !== undefined) {
+      const promo = (await getPromoByCode(data.promoCode))?.[0];
+      if (promo === undefined || !isPromoValidV2(promo, orderType, cartItems)) {
+        return new functions.https.HttpsError(
+          'failed-precondition',
+          'Promo code either doesnt exist or is not valid for the cart.',
+        );
       }
 
-      return [[], undefined];
-    })();
+      const stripeCoupon = await stripe.coupons.create({
+        name: `Promo: ${data.promoCode}`,
+        amount_off: Math.round(promo.discount_value * 100),
+        currency: 'eur',
+      });
 
-    if (promoRes === undefined) {
-      return new functions.https.HttpsError(
-        'failed-precondition',
-        'Promo code either does not exist, or the cart has not met preconditions.',
-      );
+      promoRes = [{ coupon: stripeCoupon.id }, promo];
     }
 
-    const [discounts, promoCode] = promoRes;
+    const [stripeDiscount, promoCode] = [promoRes?.[0], promoRes?.[1]];
 
     const orderId = await generateNewOrderId();
     const metadata: StripePaymentMetadata = {
@@ -141,7 +134,7 @@ export const createCheckoutSession = functions
       mode: 'payment',
       success_url: data.successUrl,
       cancel_url: data.cancelUrl,
-      discounts: discounts,
+      discounts: stripeDiscount === undefined ? undefined : [stripeDiscount],
       locale: data.locale === 'sk' ? 'sk' : 'en',
     });
 

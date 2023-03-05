@@ -37,7 +37,7 @@ class CountryDropdownsFilterGroup extends HookConsumerWidget {
     final countriesFilter = ref.watch(
         filterModelProvider(filterType).select((value) => value.countries));
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 8),
@@ -53,7 +53,7 @@ class CountryDropdownsFilterGroup extends HookConsumerWidget {
                       .difference(countriesFilter.toSet())
                       .toList()
                     ..sort(
-                      (a, b) => SortingUtil.countryCompare(a, b, currentLocale),
+                      (a, b) => SortingUtil.countryCompare(a, b, currentLang),
                     );
 
                   return List<Widget>.generate(
@@ -95,7 +95,7 @@ class _CountryDropdownFilter extends HookConsumerWidget {
     final usedCountries = ref.watch(
         filterModelProvider(filterType).select((value) => value.countries));
 
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     final selectedValue = usedCountries.length <= id ? null : usedCountries[id];
 
@@ -107,7 +107,7 @@ class _CountryDropdownFilter extends HookConsumerWidget {
               selectableCountries,
               selectedValue,
               compare: (dynamic a, dynamic b) =>
-                  SortingUtil.countryCompare(a, b, currentLocale),
+                  SortingUtil.countryCompare(a, b, currentLang),
             ),
             selectedValue,
           ));
@@ -128,7 +128,7 @@ class _CountryDropdownFilter extends HookConsumerWidget {
                           (e) => DropdownMenuItem(
                             value: e,
                             child: Text(
-                              e.getName(currentLocale)!,
+                              e.getName(currentLang)!,
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ),

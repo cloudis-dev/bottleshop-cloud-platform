@@ -71,7 +71,7 @@ class _OrderStepRow extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
     return Row(
       children: [
         Icon(
@@ -103,10 +103,11 @@ class _OrderStepRow extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     isEnabled
-                        ? FormattingUtils.getDateTimeFormatter(currentLocale)
-                            .format(order.statusStepsDates[order
-                                .orderType.orderStepsIds
-                                .indexOf(orderStepId)])
+                        ? FormattingUtils.getDateTimeFormatter(currentLang)
+                            .format(
+                            order.statusStepsDates[order.orderType.orderStepsIds
+                                .indexOf(orderStepId)],
+                          )
                         : context.l10n.waiting,
                     style: Theme.of(context).textTheme.subtitle2,
                     overflow: TextOverflow.ellipsis,

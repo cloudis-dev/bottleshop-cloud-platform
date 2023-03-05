@@ -11,7 +11,7 @@
 //
 
 import 'package:delivery/src/core/data/models/localized_model.dart';
-import 'package:delivery/src/core/utils/language_utils.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -29,12 +29,12 @@ class CategoryPlainModel extends Equatable {
   final String _name;
   final LocalizedModel _localizedName;
 
-  String getName(Locale locale) {
-    switch (LanguageUtils.parseLocale(locale)) {
-      case LocaleLanguage.slovak:
-        return _localizedName.slovak;
-      case LocaleLanguage.english:
+  String getName(LanguageMode lang) {
+    switch (lang) {
+      case LanguageMode.en:
         return _name;
+      case LanguageMode.sk:
+        return _localizedName.slovak;
     }
   }
 

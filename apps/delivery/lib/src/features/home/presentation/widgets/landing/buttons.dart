@@ -1,8 +1,11 @@
+import 'package:badges/badges.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
+import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
+import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -36,6 +39,43 @@ class Btns extends HookConsumerWidget {
   }
 }
 
+class BtnWithActiveOrdersBadge extends HookConsumerWidget {
+  final String txt;
+  final NestingBranch? nestingBranch;
+  const BtnWithActiveOrdersBadge(
+      {Key? key, required this.txt, this.nestingBranch})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final child = Text(
+      txt,
+      style: publicSansTextTheme.headline3,
+    );
+
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+        child: TextButton(
+          onPressed: () {
+            if (nestingBranch != null) {
+              ref
+                  .watch(navigationProvider)
+                  .setNestingBranch(context, nestingBranch!);
+            }
+          },
+          child: ref.watch(activeOrdersCountProvider).maybeWhen(
+                data: (count) => BottleshopBadge(
+                  showBadge: count > 0,
+                  badgeText: count.toString(),
+                  position: BadgePosition.topEnd(end: -15, top: -10),
+                  child: child,
+                ),
+                orElse: () => child,
+              ),
+        ));
+  }
+}
+
 class BilingualLink extends HookConsumerWidget {
   final String txt;
   final String enLink;
@@ -46,9 +86,8 @@ class BilingualLink extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(
-      sharedPreferencesProvider.select((value) => value.getAppLanguage()),
-    );
+    final language = ref.watch(currentLanguageProvider);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: TextButton(

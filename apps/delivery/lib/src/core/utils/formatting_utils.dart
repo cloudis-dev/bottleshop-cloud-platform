@@ -10,7 +10,7 @@
 //
 //
 
-import 'package:flutter/material.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 class FormattingUtils {
@@ -47,15 +47,15 @@ class FormattingUtils {
     return value.toStringAsFixed(decimalPlaces);
   }
 
-  static DateFormat getDateTimeFormatter(Locale locale) {
-    return getDateFormatter(locale).add_Hms();
+  static DateFormat getDateTimeFormatter(LanguageMode lang) {
+    return getDateFormatter(lang).add_Hms();
   }
 
-  static DateFormat getDateFormatter(Locale locale) {
-    return DateFormat.yMMMMd(locale.languageCode);
+  static DateFormat getDateFormatter(LanguageMode lang) {
+    return DateFormat.yMMMMd(lang.language2Locale().languageCode);
   }
 
-  static DateFormat getTimeFormatter(Locale locale) {
-    return DateFormat.Hms(locale.languageCode);
+  static DateFormat getTimeFormatter(LanguageMode lang) {
+    return DateFormat.Hms(lang.language2Locale().languageCode);
   }
 }

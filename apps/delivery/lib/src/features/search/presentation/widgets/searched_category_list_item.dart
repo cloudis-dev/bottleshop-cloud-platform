@@ -62,7 +62,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Container(
       decoration: ListItemContainerDecoration(
@@ -105,8 +105,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        navigationCategory.categoryDetails
-                            .getName(currentLocale),
+                        navigationCategory.categoryDetails.getName(currentLang),
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1!
@@ -120,7 +119,7 @@ class SearchedCategoryListItem extends HookConsumerWidget {
                         )
                       else
                         Text(
-                          categoryPlainModel.getName(currentLocale),
+                          categoryPlainModel.getName(currentLang),
                           style: Theme.of(context).textTheme.bodyText1,
                         )
                     ],

@@ -13,9 +13,11 @@ class CartAppbarButton extends HookConsumerWidget {
     return IconButton(
       icon: const CartIconWithBadge(),
       onPressed: () {
-        ref
-            .read(navigationProvider)
-            .setNestingBranch(context, NestingBranch.cart);
+        ref.read(navigationProvider).setNestingBranch(
+              context,
+              NestingBranch.cart,
+              resetBranchStack: true,
+            );
       },
     );
   }

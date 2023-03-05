@@ -14,13 +14,14 @@ export const createStripeCustomer = functions
   .runWith({ allowInvalidAppCheckToken: true })
   .https.onCall(async (data: Stripe.CustomerCreateParams, context: CallableContext) => {
     try {
-      if (context.auth && context.auth.uid) {
-        const stripe = createStripeClient();
-        const stripeCustomer = await stripe.customers.create(data);
-        return { stripeCustomerId: stripeCustomer.id };
-      } else {
+      const userUid = context.auth?.uid;
+      if (userUid === undefined) {
         return { access: 'denied' };
       }
+
+      const stripe = createStripeClient();
+      const stripeCustomer = await stripe.customers.create(data);
+      return { stripeCustomerId: stripeCustomer.id };
     } catch (e) {
       functions.logger.error('failed to create StripeCustomer', e);
       return e;

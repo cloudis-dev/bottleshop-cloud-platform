@@ -70,6 +70,9 @@ mixin DeliveryAvailableForUserCheck {
         if (user.phoneNumber == null || user.phoneNumber!.isEmpty) {
           deniedReasons.add(DeniedReason.phoneNumber);
         }
+        if (user.billingAddress == null) {
+          deniedReasons.add(DeniedReason.billingAddress);
+        }
         break;
       case DeliveryOption.homeDelivery:
       case DeliveryOption.cashOnDelivery:

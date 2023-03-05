@@ -12,6 +12,7 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/products/presentation/widgets/subcategories_tab_bar.dart';
@@ -34,12 +35,14 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
+
     return SliverAppBar(
       snap: false,
       floating: false,
       pinned: true,
       leading: BackButton(
+        color: kPrimaryColor,
         onPressed: () => ref.read(navigationProvider).popPage(context),
       ),
       actions: actions,
@@ -116,7 +119,7 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    category!.categoryDetails.getName(currentLocale),
+                    category!.categoryDetails.getName(currentLang),
                     style: Theme.of(context).textTheme.headline6,
                   )
                 ],
@@ -135,7 +138,7 @@ class SliverCategoryDetailAppBar extends HookConsumerWidget {
               (e) => _TabWrapper(
                 child: Tab(
                   child: Text(
-                    e.categoryDetails.getName(currentLocale).toUpperCase(),
+                    e.categoryDetails.getName(currentLang).toUpperCase(),
                   ),
                 ),
               ),

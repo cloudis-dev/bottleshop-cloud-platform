@@ -15,11 +15,12 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
-import 'package:delivery/src/core/presentation/providers/core_providers.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/search_bar.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
+import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
 import 'package:delivery/src/features/products/data/services/product_search_service.dart';
 import 'package:delivery/src/features/products/presentation/widgets/product_list_item.dart';
@@ -86,6 +87,7 @@ class _PageScaffold extends HookConsumerWidget {
       key: scaffoldStateKey,
       appBar: AppBar(
         leading: BackButton(
+          color: kPrimaryColor,
           onPressed: () {
             ref.read(navigationProvider).setNestingBranch(
                   context,
@@ -179,8 +181,7 @@ class _ResultsWidget extends HookConsumerWidget {
         },
       );
     } else {
-      final categories = ref.watch(
-          commonDataRepositoryProvider.select((value) => value.categories));
+      final categories = ref.watch(categoriesProvider).value ?? [];
 
       final searchedCategoryItems = searchResults.value2.map(
         (searchedCategory) => Tuple2(

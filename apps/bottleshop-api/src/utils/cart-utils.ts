@@ -1,9 +1,12 @@
 import { Cart, CartRecord } from '../models/cart';
-import { tempCartId } from '../constants/other';
+import { VAT, tempCartId } from '../constants/other';
 import * as admin from 'firebase-admin';
 import { usersCollection, cartCollection, cartItemsSubCollection, productsCollection } from '../constants/collections';
 import { Product } from '../models/product';
 import { getEntityByRef } from './document-reference-utils';
+import { PromoCode } from '../models/promo-code';
+import { OrderType } from '../models/order-type';
+import { finalProductPriceNoVatNoRounding } from './product-utils';
 
 export interface CartItem {
   id: string;
@@ -13,6 +16,22 @@ export interface CartItem {
 
 export function getCartTotalPrice(cart: Cart): number {
   return +(cart.products_total_price + (cart.shipping_fee_total ?? 0) - (cart.promo_code_value ?? 0)).toFixed(2);
+}
+
+export async function getCartTotalPriceV2(
+  userId: string,
+  orderType: OrderType,
+  promoCode: PromoCode | undefined,
+): Promise<number> {
+  const cartItems = await getCartItems(userId);
+  return +(
+    (orderType.shipping_fee_eur_no_vat +
+      cartItems
+        .map((item) => item.quantity * finalProductPriceNoVatNoRounding(item.product))
+        .reduce((sum, current) => sum + current, 0)) *
+      (1 + VAT) -
+    (promoCode?.discount_value ?? 0)
+  ).toFixed(2);
 }
 
 export function getCartRef(userId: string): FirebaseFirestore.DocumentReference {
@@ -56,4 +75,15 @@ export async function areProductsAvailableForPurchase(cartItems: CartItem[]): Pr
       return currentProd.amount >= e.quantity;
     }),
   ).then((e) => e.every((isAvailable) => isAvailable));
+}
+
+export async function deleteAllCartItems(userId: string) {
+  const db = admin.firestore();
+  const cartRef = getCartRef(userId).collection(cartItemsSubCollection);
+  const batch = db.batch();
+  const documents = await cartRef.listDocuments();
+  for (const doc of documents) {
+    batch.delete(doc);
+  }
+  await batch.commit();
 }
