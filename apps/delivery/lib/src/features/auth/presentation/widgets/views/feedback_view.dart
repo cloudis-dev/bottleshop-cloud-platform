@@ -10,6 +10,7 @@
 //
 //
 import 'dart:convert';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
@@ -22,6 +23,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:routeborn/routeborn.dart';
+import '../../../../../core/presentation/widgets/styled_form_field.dart';
 import '../molecules/image_preview.dart';
 
 class FeedbackPage extends RoutebornPage {
@@ -69,7 +71,7 @@ class _FeedbackView extends HookConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(500, 15, 500, 0),
-                    child: TextFormField(
+                    child: StyledFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return context.l10n.enterSomeText;
@@ -80,38 +82,39 @@ class _FeedbackView extends HookConsumerWidget {
                       onChanged: (value) {
                         name.value = value;
                       },
+                      onSaved: (value) {
+                        name.value = value!;
+                      },
+                      labelText: context.l10n.enterName.toString(),
                       decoration: InputDecoration(
                         border: UnderlineInputBorder(),
-                        labelText: context.l10n.enterName.toString(),
+
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(500, 50, 500, 0),
-                    child: TextFormField(
+                    child: StyledFormField(
                       onChanged: (value) {
                         email.value = value;
                       },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return context.l10n.enterSomeText;
-                        }
-                        if (!RegExp(
-                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                            .hasMatch(value)) {
-                          return context.l10n.invalidEmail;
-                        }
-                        return null;
+                      onSaved: (value) {
+                        email.value = value!;
                       },
+                      validator: MultiValidator([
+                        RequiredValidator(
+                            errorText: context.l10n.enterSomeText),
+                        EmailValidator(errorText: context.l10n.invalidEmail),
+                      ]),
+                       labelText: context.l10n.enterEmail.toString(),
                       decoration: InputDecoration(
                         border: UnderlineInputBorder(),
-                        labelText: context.l10n.enterEmail,
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(500, 50, 500, 25),
-                    child: TextFormField(
+                    child: StyledFormField(
                       maxLines: 5,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -125,13 +128,13 @@ class _FeedbackView extends HookConsumerWidget {
                       onChanged: (value) {
                         message.value = value;
                       },
+                       onSaved: (value) {
+                        message.value = value!;
+                      },
+                      labelText: context.l10n.enterMsg,
                       decoration: InputDecoration(
                           border: UnderlineInputBorder(),
-                          hintText: context.l10n.enterMsg,
-                          hintStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
+                          ),
                     ),
                   ),
                   Padding(
@@ -217,42 +220,46 @@ class _FeedbackView extends HookConsumerWidget {
                       width: 150,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: !disableButton.value?() async {
-                          if (_formKey.currentState!.validate()) {
-                            disableButton.value = true;
-                            List<Map<String, String>> paths = [];
-                            for (int i = 0; i < images.value.length; i++) {
-                              var bytes =
-                                  await images.value.elementAt(i).readAsBytes();
-                              var bs64 = base64Encode(bytes);
-                              Map<String, String> imgObj = {};
-                              imgObj["path"] = 'data:text/plain;base64,$bs64';
-                              paths.add(imgObj);
-                            }
-                            final mail = {
-                              'to': typE.value == 'problem'
-                                  ? 'info@ave-z.com'
-                                  : 'info@bottleshop3veze.sk',
-                              'html': '.',
-                              'subject':
-                                  '${typE.value == 'problem' ? 'problem' : 'suggestion'} from ${name.value}',
-                              'text':
-                                  'Name: ${name.value}\nEmail: ${email.value}\n\n\n${message.value}',
-                              'path': paths
-                            };
+                        onPressed: !disableButton.value
+                            ? () async {
+                                if (_formKey.currentState!.validate()) {
+                                  disableButton.value = true;
+                                  List<Map<String, String>> paths = [];
+                                  for (int i = 0;
+                                      i < images.value.length;
+                                      i++) {
+                                    var bytes = await images.value
+                                        .elementAt(i)
+                                        .readAsBytes();
+                                    var bs64 = base64Encode(bytes);
+                                    Map<String, String> imgObj = {};
+                                    imgObj["path"] =
+                                        'data:text/plain;base64,$bs64';
+                                    paths.add(imgObj);
+                                  }
+                                  final mail = {
+                                    'to': typE.value == 'problem'
+                                        ? 'info@ave-z.com'
+                                        : 'info@bottleshop3veze.sk',
+                                    'html': '.',
+                                    'subject':
+                                        '${typE.value == 'problem' ? 'problem' : 'suggestion'} from ${name.value}',
+                                    'text':
+                                        'Name: ${name.value}\nEmail: ${email.value}\n\n\n${message.value}',
+                                    'path': paths
+                                  };
 
-                            await ref
-                                .read(cloudFunctionsProvider)
-                                .postFeedback(mail);
-                            ref.read(navigationProvider).popPage(context);
-                            showSimpleNotification(
-                                Text(
-                                context.l10n.wasSent),
-                                background: Colors.black,
-                                foreground: Colors.white 
-                                );
-                          }
-                        } : null,
+                                  await ref
+                                      .read(cloudFunctionsProvider)
+                                      .postFeedback(mail);
+                                  ref.read(navigationProvider).popPage(context);
+                                  showSimpleNotification(
+                                      Text(context.l10n.wasSent),
+                                      background: Colors.black,
+                                      foreground: Colors.white);
+                                }
+                              }
+                            : null,
                         child: Text(context.l10n.send),
                       ),
                     ),
