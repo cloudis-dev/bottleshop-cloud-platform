@@ -30,10 +30,10 @@ class PageTemplate extends HookConsumerWidget {
         slivers: shouldUseMobileLayout(context)
             ? <Widget>[
                 SliverPersistentHeader(
-                    pinned: true,
-                    floating: true,
-                    delegate: MyMobileHeader(scaffoldKey: scaffoldKey)),
-                // MobileBody(),
+                  pinned: true,
+                  floating: true,
+                  delegate: MyMobileHeader(scaffoldKey: scaffoldKey),
+                ),
                 mobileBody,
                 SliverToBoxAdapter(
                   child: MobileFooter(),
@@ -41,12 +41,11 @@ class PageTemplate extends HookConsumerWidget {
               ]
             : <Widget>[
                 SliverPersistentHeader(
-                    pinned: true,
-                    floating: true,
-                    delegate: MyHeader(scaffoldKey: scaffoldKey)),
-                // Body(),
+                  pinned: true,
+                  floating: true,
+                  delegate: MyHeader(scaffoldKey: scaffoldKey),
+                ),
                 body,
-
                 SliverToBoxAdapter(
                   child: Footer(),
                 )
@@ -61,7 +60,8 @@ class MyHeader extends SliverPersistentHeaderDelegate {
   MyHeader({Key? key, required this.scaffoldKey});
 
   @override
-  Widget build(BuildContext context, double, bool) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Header(
       scaffoldKey: scaffoldKey,
     );
@@ -86,7 +86,8 @@ class MyMobileHeader extends MyHeader {
       : super(scaffoldKey: scaffoldKey);
 
   @override
-  Widget build(BuildContext context, double, bool) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return MobileHeader(
       scaffoldKey: scaffoldKey,
     );

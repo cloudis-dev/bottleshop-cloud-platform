@@ -77,20 +77,30 @@ class _AppBody extends HookConsumerWidget {
         backButtonDispatcher: RootBackButtonDispatcher(),
         routeInformationProvider: ref.watch(routeInformationProvider),
         builder: (context, router) => ResponsiveWrapper.builder(
-            // backgroundColor: Colors,
+            backgroundColor: Colors.black,
             maxWidth: 1920,
-            minWidth: 50,
+            minWidth: 0,
             defaultScale: true,
             breakpoints: const [
               ResponsiveBreakpoint.autoScaleDown(
-                50,
+                0,
                 name: MOBILE,
               ),
-              ResponsiveBreakpoint.autoScaleDown(600,
-                  name: MOBILE, scaleFactor: 0.63),
-              ResponsiveBreakpoint.autoScaleDown(900,
-                  name: TABLET, scaleFactor: 0.63),
-              ResponsiveBreakpoint.autoScale(1440, name: DESKTOP),
+              ResponsiveBreakpoint.autoScaleDown(
+                750,
+                name: TABLET,
+                scaleFactor: 0.63,
+              ),
+              ResponsiveBreakpoint.autoScaleDown(
+                900,
+                name: TABLET,
+                scaleFactor: 0.63,
+              ),
+              ResponsiveBreakpoint.resize(
+                1440,
+                name: DESKTOP,
+                scaleFactor: 0.9,
+              ),
             ],
             OverlaySupport.global(
               child: PlatformInitializationView(
