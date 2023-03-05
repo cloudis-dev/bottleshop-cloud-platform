@@ -111,7 +111,7 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<void> onUserChangedPreferredLanguage(LanguageMode mode) async {
-    return setPreferredLanguage(language2Locale(mode).languageCode);
+    return setPreferredLanguage(mode.language2Locale().languageCode);
   }
 
   Future<void> sendVerificationMail() async {
@@ -232,6 +232,7 @@ class UserRepository extends ChangeNotifier {
 
   Future<bool> sendResetPasswordEmail(
       BuildContext context, String email) async {
+    AppLocalizations localizations = AppLocalizations.of(context);
     try {
       _loading = true;
       notifyListeners();
@@ -242,11 +243,11 @@ class UserRepository extends ChangeNotifier {
     } on FirebaseAuthException catch (err, stack) {
       _logger.severe(
           'sendResetPasswordEmail FirebaseAuthException error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, err.code);
+      _error = _getAuthenticationErrorMessage(localizations, err.code);
       return false;
     } catch (err, stack) {
       _logger.severe('sendResetPasswordEmail error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, '');
+      _error = _getAuthenticationErrorMessage(localizations, '');
       return false;
     } finally {
       _loading = false;
@@ -259,6 +260,7 @@ class UserRepository extends ChangeNotifier {
     String email,
     String password,
   ) async {
+    AppLocalizations localizations = AppLocalizations.of(context);
     try {
       _status = AuthStatus.authenticating;
       _loading = true;
@@ -273,12 +275,12 @@ class UserRepository extends ChangeNotifier {
       _logger.severe(
           'signUpWithEmailAndPassword FirebaseAuthException error', err, stack);
 
-      _error = _getAuthenticationErrorMessage(context, err.code);
+      _error = _getAuthenticationErrorMessage(localizations, err.code);
       _status = AuthStatus.unauthenticated;
     } catch (err, stack) {
       _logger.severe('signUpWithEmailAndPassword error', err, stack);
 
-      _error = _getAuthenticationErrorMessage(context, '');
+      _error = _getAuthenticationErrorMessage(localizations, '');
       _status = AuthStatus.unauthenticated;
     } finally {
       _loading = false;
@@ -303,6 +305,7 @@ class UserRepository extends ChangeNotifier {
 
   Future<bool> signInWithEmailAndPassword(
       BuildContext context, String email, String password) async {
+    AppLocalizations localizations = AppLocalizations.of(context);
     try {
       _status = AuthStatus.authenticating;
       _loading = true;
@@ -313,14 +316,17 @@ class UserRepository extends ChangeNotifier {
     } on FirebaseAuthException catch (err, stack) {
       _logger.severe(
           'signInWithEmailAndPassword FirebaseAuthException error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, err.code);
+      _error = _getAuthenticationErrorMessage(
+        localizations,
+        err.code,
+      );
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
       return false;
     } catch (err, stack) {
       _logger.severe('signInWithEmailAndPassword error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, '');
+      _error = _getAuthenticationErrorMessage(localizations, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
@@ -329,6 +335,7 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<bool> signUpWithGoogle(BuildContext context) async {
+    AppLocalizations localizations = AppLocalizations.of(context);
     try {
       _status = AuthStatus.authenticating;
       _loading = true;
@@ -343,14 +350,14 @@ class UserRepository extends ChangeNotifier {
     } on FirebaseAuthException catch (err, stack) {
       _logger.severe(
           'signUpWithGoogle FirebaseAuthException error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, err.code);
+      _error = _getAuthenticationErrorMessage(localizations, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
       return false;
     } catch (err, stack) {
       _logger.severe('signUpWithGoogle error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, '');
+      _error = _getAuthenticationErrorMessage(localizations, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
@@ -359,6 +366,7 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<bool> signUpWithFacebook(BuildContext context) async {
+    AppLocalizations localizations = AppLocalizations.of(context);
     try {
       _status = AuthStatus.authenticating;
       _loading = true;
@@ -373,7 +381,7 @@ class UserRepository extends ChangeNotifier {
     } on PlatformException catch (err, stack) {
       _logger.severe('signUpWithFacebook PlatformException error', err, stack);
 
-      _error = _getAuthenticationErrorMessage(context, err.code);
+      _error = _getAuthenticationErrorMessage(localizations, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
@@ -382,14 +390,14 @@ class UserRepository extends ChangeNotifier {
       _logger.severe(
           'signUpWithFacebook FirebaseAuthException error', err, stack);
 
-      _error = _getAuthenticationErrorMessage(context, err.code);
+      _error = _getAuthenticationErrorMessage(localizations, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
       return false;
     } catch (err, stack) {
       _logger.severe('signUpWithFacebook error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, '');
+      _error = _getAuthenticationErrorMessage(localizations, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
@@ -398,6 +406,7 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<bool> signUpAnonymously(BuildContext context) async {
+    AppLocalizations localizations = AppLocalizations.of(context);
     try {
       _status = AuthStatus.authenticating;
       _loading = true;
@@ -408,14 +417,14 @@ class UserRepository extends ChangeNotifier {
     } on FirebaseAuthException catch (err, stack) {
       _logger.severe(
           'signUpAnonymously FirebaseAuthException error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, err.code);
+      _error = _getAuthenticationErrorMessage(localizations, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
       return false;
     } catch (err, stack) {
       _logger.severe('signUpAnonymously error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, '');
+      _error = _getAuthenticationErrorMessage(localizations, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
@@ -424,6 +433,7 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<bool> signUpWithApple(BuildContext context) async {
+    AppLocalizations localizations = AppLocalizations.of(context);
     try {
       _status = AuthStatus.authenticating;
       _loading = true;
@@ -433,14 +443,14 @@ class UserRepository extends ChangeNotifier {
       return true;
     } on FirebaseAuthException catch (err, stack) {
       _logger.severe('signUpWithApple FirebaseAuthException error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, err.code);
+      _error = _getAuthenticationErrorMessage(localizations, err.code);
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
       return false;
     } catch (err, stack) {
       _logger.severe('signUpWithApple error', err, stack);
-      _error = _getAuthenticationErrorMessage(context, '');
+      _error = _getAuthenticationErrorMessage(localizations, '');
       _status = AuthStatus.unauthenticated;
       _loading = false;
       notifyListeners();
@@ -462,21 +472,21 @@ class UserRepository extends ChangeNotifier {
   }
 
   String _getAuthenticationErrorMessage(
-      BuildContext context, String errorCode) {
+      AppLocalizations localizations, String errorCode) {
     switch (errorCode) {
       case ('CANCELLED'):
       case ('FAILED'):
-        return context.l10n.unableToAuthenticatePleaseTryAgainLater;
+        return localizations.unableToAuthenticatePleaseTryAgainLater;
       case ('email-already-in-use'):
-        return context.l10n.userWithThisEmailAlreadyExists;
+        return localizations.userWithThisEmailAlreadyExists;
       case ('user-not-found'):
-        return context.l10n.userWithThisEmailNotFound;
+        return localizations.userWithThisEmailNotFound;
       case ('wrong-password'):
-        return context.l10n.incorrectPassword;
+        return localizations.incorrectPassword;
       case ('account-exists-with-different-credential'):
-        return context.l10n.userAlreadySignedUpWithDifferentProvider;
+        return localizations.userAlreadySignedUpWithDifferentProvider;
       default:
-        return context.l10n.unableToAuthenticatePleaseTryAgainLater;
+        return localizations.unableToAuthenticatePleaseTryAgainLater;
     }
   }
 }

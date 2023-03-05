@@ -1,5 +1,6 @@
-import 'package:delivery/l10n/l10n.dart';
-import 'package:delivery/src/core/data/repositories/common_data_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery/src/core/data/models/country_model.dart';
+import 'package:delivery/src/core/data/models/unit_model.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/authentication_service.dart';
 import 'package:delivery/src/core/data/services/cloud_functions_service.dart';
@@ -11,7 +12,6 @@ import 'package:delivery/src/core/presentation/providers/crashlytics_provider.da
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 
 final authProvider =
     Provider<AuthenticationService>(((ref) => throw UnimplementedError()));
@@ -60,17 +60,8 @@ final currentThemeModeProvider = Provider<ThemeMode>((ref) {
   return themeMode;
 });
 
-final currentLocaleProvider = Provider<Locale>(
-  (ref) {
-    final systemLanguage =
-        WidgetsBinding.instance.platformDispatcher.locale.languageCode;
-    debugPrint(
-        'current locale: ${Intl.getCurrentLocale().substring(0, 2)} - current system locale: $systemLanguage');
-    return AppLocalizations.supportedLocales.firstWhere(
-      (element) => element.languageCode == systemLanguage,
-      orElse: () => AppLocalizations.supportedLocales.first,
-    );
-  },
+final currentLanguageProvider = Provider<LanguageMode>(
+  (ref) => ref.watch(sharedPreferencesProvider).getAppLanguage(),
 );
 
 final platformInitializedProvider = FutureProvider.autoDispose((ref) async {
@@ -86,10 +77,28 @@ final platformInitializedProvider = FutureProvider.autoDispose((ref) async {
 final cloudFunctionsProvider =
     Provider<CloudFunctionsService>(((ref) => throw UnimplementedError()));
 
-final commonDataRepositoryProvider =
-    ChangeNotifierProvider<CommonDataRepository>(
-  (ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
-    return CommonDataRepository(currentLocale);
+final countriesProvider = FutureProvider<List<CountryModel>>(
+  (ref) async {
+    final docs = await FirebaseFirestore.instance
+        .collection(FirestoreCollections.countriesCollection)
+        .get();
+    final docsMap =
+        Map.fromEntries(docs.docs.map((e) => MapEntry(e.id, e.data())));
+    return docsMap.entries
+        .map((e) => CountryModel.fromMap(e.key, e.value))
+        .toList();
+  },
+);
+
+final unitsProvider = FutureProvider<List<UnitModel>>(
+  (ref) async {
+    final docs = await FirebaseFirestore.instance
+        .collection(FirestoreCollections.unitsCollection)
+        .get();
+    final docsMap =
+        Map.fromEntries(docs.docs.map((e) => MapEntry(e.id, e.data)));
+    return docsMap.entries
+        .map((e) => UnitModel.fromMap(e.key, e.value()))
+        .toList();
   },
 );

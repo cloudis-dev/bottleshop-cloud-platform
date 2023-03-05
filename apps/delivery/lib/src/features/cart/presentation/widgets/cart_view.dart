@@ -103,7 +103,6 @@ class CartView extends HookConsumerWidget {
                     ref.read(navigationProvider).pushPage(
                           context,
                           AppPageNode(page: CheckoutPage()),
-                          toParent: true,
                         );
                   },
                 );

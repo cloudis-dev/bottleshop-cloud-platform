@@ -11,6 +11,7 @@
 //
 
 import 'package:delivery/src/core/data/models/category_plain_model.dart';
+import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
 import 'package:delivery/src/core/utils/sorting_util.dart';
 import 'package:flutter/material.dart';
 
@@ -29,22 +30,21 @@ class CategoriesTreeModel {
     Map<String, dynamic> documentJson,
     String documentId,
     Map<String, Map<String, dynamic>> documentIdsToData,
-    Locale currentLocale,
+    LanguageMode lang,
   )   : categoryDetails = CategoryPlainModel.fromJson(documentJson, documentId),
         subCategories = List.unmodifiable(
-          _parseSubcategories(currentLocale, documentJson, documentIdsToData)
-              .toList()
+          _parseSubcategories(lang, documentJson, documentIdsToData).toList()
             ..sort(
               (a, b) => SortingUtil.categoryCompare(
                 a.categoryDetails,
                 b.categoryDetails,
-                currentLocale,
+                lang,
               ),
             ),
         );
 
   static Iterable<CategoriesTreeModel> _parseSubcategories(
-    Locale currentLocale,
+    LanguageMode lang,
     Map<String, dynamic> documentJson,
     Map<String, Map<String, dynamic>> documentIdsToData,
   ) sync* {
@@ -55,7 +55,7 @@ class CategoriesTreeModel {
         documentIdsToData[documentId]!,
         documentId,
         documentIdsToData,
-        currentLocale,
+        lang,
       );
     }
   }

@@ -29,7 +29,7 @@ class ProductDetailsTab extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +55,7 @@ class ProductDetailsTab extends HookConsumerWidget {
               DetailRowItem(
                 title: context.l10n.volume,
                 value:
-                    '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLocale)}',
+                    '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLang)}',
               ),
               if (product.isFlashSale)
                 Row(
@@ -118,7 +118,7 @@ class ProductDetailsTab extends HookConsumerWidget {
               if (product.isFlashSale)
                 DetailRowItem(
                   title: context.l10n.flashsaleUntil,
-                  value: FormattingUtils.getDateTimeFormatter(currentLocale)
+                  value: FormattingUtils.getDateTimeFormatter(currentLang)
                       .format(product.flashSale!.flashSaleUntil),
                 ),
               if (product.isSpecialEdition)
@@ -152,7 +152,7 @@ class ProductDetailsTab extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        product.country.getName(currentLocale)!,
+                        product.country.getName(currentLang)!,
                         style: Theme.of(context).textTheme.subtitle2,
                         maxLines: 1,
                       ),

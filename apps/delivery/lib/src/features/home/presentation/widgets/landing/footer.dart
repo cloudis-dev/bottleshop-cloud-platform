@@ -1,26 +1,26 @@
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:delivery/l10n/l10n.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
 import '../../../../../core/data/res/constants.dart';
 import '../../../../../core/data/services/shared_preferences_service.dart';
 import '../../../../../core/presentation/providers/core_providers.dart';
 
 class Footer extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(
-      sharedPreferencesProvider.select((value) => value.getAppLanguage()),
-    );
+    final language = ref.watch(currentLanguageProvider);
+
     return Container(
       height: 342,
       color: Colors.black,
-      child: Row(children: [
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
-          padding: EdgeInsets.fromLTRB(175, 100, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -186,15 +186,10 @@ class Footer extends HookConsumerWidget {
                   txt: context.l10n.shippingPayment,
                   enLink: UrlStrings.shippingPaymentEN,
                   skLink: UrlStrings.shippingPaymentSK),
-              TextButton(
-                onPressed: () {
-                  ref
-                      .watch(navigationProvider)
-                      .setNestingBranch(context, NestingBranch.wholesale);
-                },
-                child: Text(context.l10n.wholesale,
-                    style: publicSansTextTheme.caption),
-              ),
+              BilingualLink(
+                  txt: context.l10n.wholesale,
+                  enLink: UrlStrings.wholesaleEN,
+                  skLink: UrlStrings.wholesaleSK),
             ],
           ),
         ),

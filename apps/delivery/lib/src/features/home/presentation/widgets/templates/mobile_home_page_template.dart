@@ -1,15 +1,15 @@
-import 'package:delivery/src/features/home/presentation/widgets/landing/header.dart';
-import 'package:delivery/src/features/home/presentation/widgets/molecules/breadcrumbs.dart';
+import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
+import 'package:delivery/src/features/home/presentation/widgets/landing/mobile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class HomePageTemplate extends HookConsumerWidget {
+class MobileHomePageTemplate extends ConsumerWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Widget body;
   final Widget? filterBtn;
 
-  const HomePageTemplate({
+  const MobileHomePageTemplate({
     Key? key,
     required this.scaffoldKey,
     required this.body,
@@ -20,13 +20,13 @@ class HomePageTemplate extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       key: scaffoldKey,
+      drawer: const MenuDrawer(),
       body: Column(
         children: [
-          Header(
+          MobileHeader(
             scaffoldKey: scaffoldKey,
             filterBtn: filterBtn,
           ),
-          const Breadcrumbs(),
           Expanded(
             child: ClipRect(
               child: OverlaySupport.local(child: body),

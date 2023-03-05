@@ -14,10 +14,7 @@ import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/data/services/push_notification_service.dart';
-import 'package:delivery/src/core/presentation/providers/core_providers.dart';
-import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/home/presentation/widgets/views/home_mobile_scaffold.dart';
 import 'package:delivery/src/features/home/presentation/widgets/views/home_web_scaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -58,12 +55,6 @@ class _HomeView extends HookConsumerWidget {
     final currentUser = ref.watch(currentUserProvider);
 
     useEffect(() {
-      ref.read(commonDataRepositoryProvider).fetch().then(
-            (value) => _logger.fine('products initialized'),
-            onError: (dynamic err, dynamic stack) =>
-                _logger.severe('common data repo fetch failed', err, stack),
-          );
-
       PushNotificationService.handleMessageOpenedApp(ref).then(
         (value) => _logger.fine('handleMessageOpenedApp register'),
         onError: (dynamic err, dynamic stack) =>
@@ -77,8 +68,6 @@ class _HomeView extends HookConsumerWidget {
       return;
     }, const []);
 
-    return shouldUseMobileLayout(context)
-        ? const HomeMobileScaffold()
-        : const HomeWebScaffold();
+    return const HomeWebScaffold();
   }
 }

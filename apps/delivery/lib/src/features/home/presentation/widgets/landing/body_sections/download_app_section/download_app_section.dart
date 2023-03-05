@@ -1,3 +1,4 @@
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/shared_preferences_service.dart';
@@ -5,16 +6,14 @@ import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/body_sections/download_app_section/app_feature_row.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:delivery/l10n/l10n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DownloadAppSection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(
-      sharedPreferencesProvider.select((value) => value.getAppLanguage()),
-    );
+    final language = ref.watch(currentLanguageProvider);
+
     return Stack(children: [
       Container(
         height: 606,

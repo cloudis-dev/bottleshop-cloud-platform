@@ -11,6 +11,7 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -31,6 +32,7 @@ class CheckoutDoneView extends HookWidget {
       appBar: AppBar(
         title: Text(context.l10n.checkout),
         leading: CloseButton(
+          color: kPrimaryColor,
           onPressed: onClose,
         ),
       ),

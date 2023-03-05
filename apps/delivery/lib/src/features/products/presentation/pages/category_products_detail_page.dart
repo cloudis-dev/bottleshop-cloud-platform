@@ -163,9 +163,9 @@ class _Body extends HookConsumerWidget {
                 category.subCategories.length + 1, // Adding the 'all' tab
             initialIndex: subcategoryId ?? 0,
           );
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
-    setPageName(category.categoryDetails.getName(currentLocale));
+    setPageName(category.categoryDetails.getName(currentLang));
 
     if (shouldUseMobileLayout(context)) {
       return Scaffold(
@@ -214,23 +214,6 @@ class _Body extends HookConsumerWidget {
 
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
-        appBarActions: [
-          const LanguageDropdown(),
-          const SearchIconButton(),
-          FilterIconButton(bodyScaffoldKey, drawerAcquirerKey),
-          const CartAppbarButton(),
-          AuthPopupButton(scaffoldKey: scaffoldKey),
-        ],
-        appBarBottom: tabController == null
-            ? null
-            : SubcategoriesTabBar(
-                category,
-                Tab(child: Text(context.l10n.all.toUpperCase())),
-                (e) => Tab(
-                    text:
-                        e.categoryDetails.getName(currentLocale).toUpperCase()),
-                controller: tabController,
-              ),
         body: Scaffold(
           key: bodyScaffoldKey,
           endDrawer: FilterDrawer(

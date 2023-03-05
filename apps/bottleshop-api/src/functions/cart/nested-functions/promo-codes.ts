@@ -18,7 +18,7 @@ export const isPromoCodeValid = async (cart: Cart): Promise<boolean> => {
   if (!cart.promo_code) {
     return true;
   }
-  const promo = await getPromoByCode(cart.promo_code);
+  const promo = (await getPromoByCode(cart.promo_code))?.[0];
   if (!promo) {
     return false;
   }
@@ -76,7 +76,7 @@ export const applyPromoCode = functions
       if (context.auth && context.auth.uid) {
         const uid = context.auth.uid;
         return admin.firestore().runTransaction<PromoUpdateResult>(async () => {
-          const promo = await getPromoByCode(data.promo);
+          const promo = (await getPromoByCode(data.promo))?.[0];
           if (promo) {
             const cartRef = admin
               .firestore()

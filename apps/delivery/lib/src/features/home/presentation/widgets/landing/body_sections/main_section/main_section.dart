@@ -1,21 +1,22 @@
+import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:delivery/l10n/l10n.dart';
 
 class MainSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
       Align(
-          alignment: Alignment.topRight,
-          child: Image.asset(
-            kLandingImage1,
-            width: 1118,
-            height: 606,
-          )),
+        alignment: Alignment.topRight,
+        child: Image.asset(
+          kLandingImage1,
+          width: 1118,
+          height: 606,
+        ),
+      ),
       Container(
           width: double.infinity,
           height: 608,
@@ -41,7 +42,7 @@ class MainSection extends StatelessWidget {
         left: 256,
         width: 636,
         child: Text(
-          context.l10n.luxuriousSpirits,
+          context.l10n.luxuryDrinks,
           style: libreBodoniTextTheme.headline1,
         ),
       ),

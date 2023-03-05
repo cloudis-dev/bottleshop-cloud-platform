@@ -12,6 +12,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
@@ -97,6 +98,7 @@ class _OrderDetailPageView extends HookConsumerWidget {
                   key: scaffoldKey,
                   appBar: AppBar(
                     leading: BackButton(
+                        color: kPrimaryColor,
                         onPressed: () =>
                             ref.read(navigationProvider).popPage(context)),
                     title: Text('${context.l10n.order} #${order.orderId}'),
@@ -110,7 +112,6 @@ class _OrderDetailPageView extends HookConsumerWidget {
               } else {
                 return HomePageTemplate(
                   scaffoldKey: scaffoldKey,
-                  appBarActions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
                   body: Scrollbar(
                     controller: scrollCtrl,
                     child: PageBodyTemplate(
@@ -160,7 +161,7 @@ class _Body extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(currentLocaleProvider);
+    final currentLang = ref.watch(currentLanguageProvider);
 
     const horizontalContentPadding = 20.0;
 
@@ -213,7 +214,7 @@ class _Body extends HookConsumerWidget {
                 ),
                 const SizedBox(),
                 Text(
-                  order.orderType.getName(currentLocale)!,
+                  order.orderType.getName(currentLang)!,
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
               ],
