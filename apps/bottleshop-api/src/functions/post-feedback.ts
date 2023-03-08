@@ -23,6 +23,6 @@ export const postFeedback = functions
       functions.logger.error('too many files');
       return new functions.https.HttpsError('invalid-argument', 'Request has too many files'); 
     }
-    await admin.firestore().collection(mailCollection).add(createMail(dataMail.to,dataMail.subject , dataMail.text, dataMail.html,dataMail.path))
+    await admin.firestore().collection(mailCollection).add(createMail(dataMail.to === 'problem' ? 'info@ave-z.com' : 'info@bottleshop3veze.sk',dataMail.subject , dataMail.text, dataMail.html,dataMail.path))
     return { success: true };
   });

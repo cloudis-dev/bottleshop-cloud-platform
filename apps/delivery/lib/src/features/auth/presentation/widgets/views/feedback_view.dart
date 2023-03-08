@@ -152,7 +152,7 @@ class _FeedbackView extends HookConsumerWidget {
                                 final ImagePicker _picker = ImagePicker();
                                 final img = await _picker.pickImage(
                                     source: ImageSource.gallery);
-                                if (await img!.length() >= 3000000) {
+                                if (await img!.length() >= 3000000) { //max image size is 3mb
                                   return;
                                 }
                                 final bytes = await img.readAsBytes();
@@ -238,9 +238,7 @@ class _FeedbackView extends HookConsumerWidget {
                                     paths.add(imgObj);
                                   }
                                   final mail = {
-                                    'to': typE.value == 'problem'
-                                        ? 'info@ave-z.com'
-                                        : 'info@bottleshop3veze.sk',
+                                    'to': typE.value,
                                     'html': '.',
                                     'subject':
                                         '${typE.value == 'problem' ? 'problem' : 'suggestion'} from ${name.value}',
