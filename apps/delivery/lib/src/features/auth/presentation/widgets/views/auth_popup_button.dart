@@ -1,5 +1,7 @@
 import 'package:align_positioned/align_positioned.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/widgets/profile_avatar.dart';
+import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/account_menu.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +40,8 @@ class AuthPopupButtonState extends State<AuthPopupButton> {
               ),
               AlignPositioned(
                 alignment: Alignment.topRight,
-                dx: screenSize.width - startPos,
-                dy: buttonRenderObj.size.height,
+                dx: 0,
+                dy: shouldUseMobileLayout(context) ? 90 : 118,
                 child: AccountMenu(
                   scaffoldKey: widget.scaffoldKey,
                   width: startPos < 300 ? startPos : 300,
@@ -74,8 +76,11 @@ class _Content extends HookConsumerWidget {
 
     return IconButton(
       onPressed: onClick,
+      color: kPrimaryColor,
       icon: user == null
-          ? const Icon(Icons.supervised_user_circle_rounded)
+          ? const Icon(
+              Icons.person,
+            )
           : AspectRatio(
               aspectRatio: 1,
               child: ProfileAvatar(imageUrl: user.avatar),

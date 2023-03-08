@@ -12,6 +12,7 @@
 
 import 'package:badges/badges.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -38,264 +40,399 @@ class MenuDrawer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scrollController = useScrollController();
-    final orderBadge =
-        ref.watch(activeOrdersCountProvider).whenData((value) => value).value ??
-            0;
-
+    final navigation = ref.watch(navigationProvider);
     final hasUser =
         ref.watch(currentUserProvider.select((value) => value != null));
     final currentBranch = ref.watch(
         navigationProvider.select((value) => value.getNestingBranch(context)));
-
     return Drawer(
-      child: CupertinoScrollbar(
-        thumbVisibility: true,
-        controller: scrollController,
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            iconTheme: IconTheme.of(context).copyWith(
-              color: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Colors.black,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 60, 16, 35),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Menu",
+                      style: GoogleFonts.publicSans(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Scaffold.of(context).closeDrawer();
+                      },
+                      icon: const ImageIcon(
+                        AssetImage(kXIcon),
+                        size: 20,
+                      ),
+                    )
+                  ]),
             ),
-          ),
-          child: ListView(
-            controller: scrollController,
-            children: <Widget>[
-              if (hasUser) const SideMenuHeader(),
-              _SideMenuItem(
-                isSelected:
-                    kIsWeb ? currentBranch == NestingBranch.shop : false,
-                leading: Icons.home,
-                title: context.l10n.homeTabLabel,
-                handler: () {
-                  final nav = ref.read(navigationProvider);
+            ListTile(
+              title: Text(
+                context.l10n.homeButton.toUpperCase(),
+                style: publicSansTextTheme.bodyText1,
+              ),
+              onTap: () {
+                if (currentBranch == NestingBranch.landing) {
+                  Scaffold.of(context).closeDrawer();
+                } else {
+                  navigation.setNestingBranch(context, NestingBranch.landing);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            ListTile(
+              title: Text(
+                "ESHOP",
+                style: publicSansTextTheme.bodyText1,
+              ),
+              onTap: () {
+                if (currentBranch == NestingBranch.shop) {
+                  Scaffold.of(context).closeDrawer();
+                } else {
+                  navigation.setNestingBranch(context, NestingBranch.shop);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            ListTile(
+              title: Text(
+                context.l10n.categoriesButton,
+                style: publicSansTextTheme.bodyText1,
+              ),
+              onTap: () {
+                if (currentBranch == NestingBranch.categories) {
+                  Scaffold.of(context).closeDrawer();
+                } else {
+                  navigation.setNestingBranch(
+                      context, NestingBranch.categories);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            ListTile(
+              title: ref.watch(activeOrdersCountProvider).maybeWhen(
+                    data: (count) => Wrap(children: <Widget>[
+                      BottleshopBadge(
+                        showBadge: count > 0,
+                        badgeText: count.toString(),
+                        position: BadgePosition.topEnd(end: -15, top: -10),
+                        child: Text(
+                          context.l10n.ordersButton,
+                          style: publicSansTextTheme.bodyText1,
+                        ),
+                      ),
+                    ]),
+                    orElse: () => Text(
+                      context.l10n.ordersButton,
+                      style: publicSansTextTheme.bodyText1,
+                    ),
+                  ),
+              onTap: () {
+                if (currentBranch == NestingBranch.orders) {
+                  Scaffold.of(context).closeDrawer();
+                } else {
+                  navigation.setNestingBranch(context, NestingBranch.orders);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            ListTile(
+              title: Text(
+                context.l10n.saleButton,
+                style: publicSansTextTheme.bodyText1,
+              ),
+              onTap: () {
+                if (currentBranch == NestingBranch.sale) {
+                  Scaffold.of(context).closeDrawer();
+                } else {
+                  navigation.setNestingBranch(context, NestingBranch.sale);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            ListTile(
+              title: Text(
+                context.l10n.contactButton,
+                style: publicSansTextTheme.bodyText1,
+              ),
+              onTap: () {
+                if (currentBranch == NestingBranch.help) {
+                  Scaffold.of(context).closeDrawer();
+                } else {
+                  navigation.setNestingBranch(context, NestingBranch.help);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            // TODO login button to be added later
+            // ConstrainedBox(
+            //   child: Align(
+            //     alignment: Alignment.bottomCenter,
+            //     child: Container(
+            //       margin: EdgeInsets.symmetric(
+            //         horizontal: 16,
+            //       ),
+            //       child: hasUser
+            //           ? LandingPageButton(
+            //               txt: context.l10n.logOut,
+            //               nestingBranch: NestingBranch.account)
+            //           : LandingPageButton(
+            //               txt: context.l10n.logIn,
+            //               nestingBranch: NestingBranch.account),
+            //     ),
+            //   ),
+            //   constraints: BoxConstraints(
+            //       maxHeight:
+            //           max(60.0, MediaQuery.of(context).size.height - 420 - 16)),
+            // ),
+            // SizedBox(
+            //   height: 16,
+            // )
+          ],
+        ));
 
-                  if (nav.getNestingBranch(context) == NestingBranch.shop) {
-                    nav.replaceAllWith(context, []);
-                  } else {
-                    nav.setNestingBranch(context, NestingBranch.shop);
-                  }
-                },
-              ),
-              _SideMenuItem(
-                isSelected:
-                    kIsWeb ? currentBranch == NestingBranch.categories : false,
-                leading: Icons.liquor,
-                title: context.l10n.categories,
-                handler: () {
-                  final nav = ref.read(navigationProvider);
+    // @override
+    // Widget build(BuildContext context, WidgetRef ref) {
+    //   final scrollController = useScrollController();
+    //   final orderBadge =
+    //       ref.watch(activeOrdersCountProvider).whenData((value) => value).value ??
+    //           0;
 
-                  if (nav.getNestingBranch(context) ==
-                      NestingBranch.categories) {
-                    nav.replaceAllWith(context, []);
-                  } else {
-                    nav.setNestingBranch(
-                      context,
-                      NestingBranch.categories,
-                    );
-                  }
-                },
-              ),
-              _SideMenuItem(
-                isSelected:
-                    kIsWeb ? currentBranch == NestingBranch.favorites : false,
-                leading: Icons.favorite,
-                title: context.l10n.favoriteTabLabel,
-                handler: () {
-                  final nav = ref.read(navigationProvider);
+    //   final hasUser =
+    //       ref.watch(currentUserProvider.select((value) => value != null));
+    //   final currentBranch = ref.watch(
+    //       navigationProvider.select((value) => value.getNestingBranch(context)));
 
-                  if (nav.getNestingBranch(context) ==
-                      NestingBranch.favorites) {
-                    nav.replaceAllWith(context, []);
-                  } else {
-                    nav.setNestingBranch(
-                      context,
-                      NestingBranch.favorites,
-                    );
-                  }
-                },
-              ),
-              if (hasUser)
-                _SideMenuItem(
-                  isSelected:
-                      kIsWeb ? currentBranch == NestingBranch.cart : false,
-                  leading: Icons.shopping_cart,
-                  title: context.l10n.shopping_cart,
-                  handler: () {
-                    ref.read(navigationProvider).setNestingBranch(
-                          context,
-                          NestingBranch.cart,
-                          resetBranchStack: true,
-                        );
-                  },
-                ),
-              _SideMenuItem(
-                isSelected:
-                    kIsWeb ? currentBranch == NestingBranch.orders : false,
-                leading: Icons.fact_check_outlined,
-                handler: () {
-                  final nav = ref.read(navigationProvider);
+    //   return Drawer(
+    //     child: CupertinoScrollbar(
+    //       thumbVisibility: true,
+    //       controller: scrollController,
+    //       child: Theme(
+    //         data: Theme.of(context).copyWith(
+    //           iconTheme: IconTheme.of(context).copyWith(
+    //             color: Theme.of(context).colorScheme.secondary,
+    //           ),
+    //         ),
+    //         child: ListView(
+    //           controller: scrollController,
+    //           children: <Widget>[
+    //             if (hasUser) const SideMenuHeader(),
+    //             _SideMenuItem(
+    //               isSelected:
+    //                   kIsWeb ? currentBranch == NestingBranch.shop : false,
+    //               leading: Icons.home,
+    //               title: context.l10n.homeTabLabel,
+    //               handler: () {
+    //                 final nav = ref.read(navigationProvider);
 
-                  if (nav.getNestingBranch(context) == NestingBranch.orders) {
-                    nav.replaceAllWith(context, []);
-                  } else {
-                    nav.setNestingBranch(
-                      context,
-                      NestingBranch.orders,
-                      branchParam: nav.getNestingBranch(context),
-                    );
-                  }
-                },
-                title: context.l10n.orderTabLabel,
-                badgeValue: orderBadge,
-              ),
-              _SideMenuItem(
-                isSelected:
-                    kIsWeb ? currentBranch == NestingBranch.wholesale : false,
-                leading: Icons.store,
-                title: context.l10n.wholesale,
-                handler: () {
-                  final nav = ref.read(navigationProvider);
+    //                 if (nav.getNestingBranch(context) == NestingBranch.shop) {
+    //                   nav.replaceAllWith(context, []);
+    //                 } else {
+    //                   nav.setNestingBranch(context, NestingBranch.shop);
+    //                 }
+    //               },
+    //             ),
+    //             _SideMenuItem(
+    //               isSelected:
+    //                   kIsWeb ? currentBranch == NestingBranch.categories : false,
+    //               leading: Icons.liquor,
+    //               title: context.l10n.categories,
+    //               handler: () {
+    //                 final nav = ref.read(navigationProvider);
 
-                  if (nav.getNestingBranch(context) ==
-                      NestingBranch.wholesale) {
-                    nav.replaceAllWith(context, []);
-                  } else {
-                    nav.setNestingBranch(
-                      context,
-                      NestingBranch.wholesale,
-                      branchParam: nav.getNestingBranch(context),
-                    );
-                  }
-                },
-              ),
-              _SideMenuItem(
-                dense: true,
-                title: context.l10n.applicationPreferences,
-                titleStyle: Theme.of(context).textTheme.overline,
-              ),
-              _SideMenuItem(
-                isSelected:
-                    kIsWeb ? currentBranch == NestingBranch.account : false,
-                leading: Icons.settings,
-                title: context.l10n.settings,
-                handler: () {
-                  final nav = ref.read(navigationProvider);
+    //                 if (nav.getNestingBranch(context) ==
+    //                     NestingBranch.categories) {
+    //                   nav.replaceAllWith(context, []);
+    //                 } else {
+    //                   nav.setNestingBranch(
+    //                     context,
+    //                     NestingBranch.categories,
+    //                   );
+    //                 }
+    //               },
+    //             ),
+    //             _SideMenuItem(
+    //               isSelected:
+    //                   kIsWeb ? currentBranch == NestingBranch.favorites : false,
+    //               leading: Icons.favorite,
+    //               title: context.l10n.favoriteTabLabel,
+    //               handler: () {
+    //                 final nav = ref.read(navigationProvider);
 
-                  if (nav.getNestingBranch(context) == NestingBranch.account) {
-                    nav.replaceAllWith(context, []);
-                  } else {
-                    nav.setNestingBranch(
-                      context,
-                      NestingBranch.account,
-                      branchParam: nav.getNestingBranch(context),
-                    );
-                  }
-                },
-              ),
-              _SideMenuItem(
-                isSelected:
-                    kIsWeb ? currentBranch == NestingBranch.help : false,
-                leading: Icons.help_outlined,
-                title: context.l10n.helpSupport,
-                handler: () {
-                  final nav = ref.read(navigationProvider);
+    //                 if (nav.getNestingBranch(context) ==
+    //                     NestingBranch.favorites) {
+    //                   nav.replaceAllWith(context, []);
+    //                 } else {
+    //                   nav.setNestingBranch(
+    //                     context,
+    //                     NestingBranch.favorites,
+    //                   );
+    //                 }
+    //               },
+    //             ),
+    //             if (hasUser)
+    //               _SideMenuItem(
+    //                 isSelected:
+    //                     kIsWeb ? currentBranch == NestingBranch.cart : false,
+    //                 leading: Icons.shopping_cart,
+    //                 title: context.l10n.shopping_cart,
+    //                 handler: () {
+    //                   ref.read(navigationProvider).setNestingBranch(
+    //                         context,
+    //                         NestingBranch.cart,
+    //                         resetBranchStack: true,
+    //                       );
+    //                 },
+    //               ),
+    //             _SideMenuItem(
+    //               isSelected:
+    //                   kIsWeb ? currentBranch == NestingBranch.orders : false,
+    //               leading: Icons.fact_check_outlined,
+    //               handler: () {
+    //                 final nav = ref.read(navigationProvider);
 
-                  if (nav.getNestingBranch(context) == NestingBranch.help) {
-                    nav.replaceAllWith(context, []);
-                  } else {
-                    nav.setNestingBranch(
-                      context,
-                      NestingBranch.help,
-                      branchParam: nav.getNestingBranch(context),
-                    );
-                  }
-                },
-              ),
-              const BottleshopAboutTile(),
-              _SideMenuItem(
-                leading: Icons.gavel,
-                handler: () {
-                  ref.read(navigationProvider).pushPage(
-                        context,
-                        AppPageNode(page: TermsConditionsPage()),
-                        toParent: true,
-                      );
-                },
-                title: context.l10n.menuTerms,
-              ),
-              if (hasUser)
-                _SideMenuItem(
-                  handler: () async {
-                    await ref.read(userRepositoryProvider).signOut();
-                  },
-                  leading: Icons.exit_to_app,
-                  title: context.l10n.logOut,
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
+    //                 if (nav.getNestingBranch(context) == NestingBranch.orders) {
+    //                   nav.replaceAllWith(context, []);
+    //                 } else {
+    //                   nav.setNestingBranch(
+    //                     context,
+    //                     NestingBranch.orders,
+    //                     branchParam: nav.getNestingBranch(context),
+    //                   );
+    //                 }
+    //               },
+    //               title: context.l10n.orderTabLabel,
+    //               badgeValue: orderBadge,
+    //             ),
+    //             _SideMenuItem(
+    //               isSelected:
+    //                   kIsWeb ? currentBranch == NestingBranch.account : false,
+    //               leading: Icons.settings,
+    //               title: context.l10n.settings,
+    //               handler: () {
+    //                 final nav = ref.read(navigationProvider);
+
+    //                 if (nav.getNestingBranch(context) == NestingBranch.account) {
+    //                   nav.replaceAllWith(context, []);
+    //                 } else {
+    //                   nav.setNestingBranch(
+    //                     context,
+    //                     NestingBranch.account,
+    //                     branchParam: nav.getNestingBranch(context),
+    //                   );
+    //                 }
+    //               },
+    //             ),
+    //             _SideMenuItem(
+    //               isSelected:
+    //                   kIsWeb ? currentBranch == NestingBranch.help : false,
+    //               leading: Icons.help_outlined,
+    //               title: context.l10n.helpSupport,
+    //               handler: () {
+    //                 final nav = ref.read(navigationProvider);
+
+    //                 if (nav.getNestingBranch(context) == NestingBranch.help) {
+    //                   nav.replaceAllWith(context, []);
+    //                 } else {
+    //                   nav.setNestingBranch(
+    //                     context,
+    //                     NestingBranch.help,
+    //                     branchParam: nav.getNestingBranch(context),
+    //                   );
+    //                 }
+    //               },
+    //             ),
+    //             const BottleshopAboutTile(),
+    //             _SideMenuItem(
+    //               leading: Icons.gavel,
+    //               handler: () {
+    //                 ref.read(navigationProvider).pushPage(
+    //                       context,
+    //                       AppPageNode(page: TermsConditionsPage()),
+    //                       toParent: true,
+    //                     );
+    //               },
+    //               title: context.l10n.menuTerms,
+    //             ),
+    //             if (hasUser)
+    //               _SideMenuItem(
+    //                 handler: () async {
+    //                   await ref.read(userRepositoryProvider).signOut();
+    //                 },
+    //                 leading: Icons.exit_to_app,
+    //                 title: context.l10n.logOut,
+    //               ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   );
   }
 }
 
-class _SideMenuItem extends StatelessWidget {
-  final IconData? leading;
-  final String? title;
-  final TextStyle? titleStyle;
-  final VoidCallback? handler;
-  final Widget? trailing;
-  final bool dense;
-  final int badgeValue;
-  final bool isSelected;
+// class _SideMenuItem extends StatelessWidget {
+//   final IconData? leading;
+//   final String? title;
+//   final TextStyle? titleStyle;
+//   final VoidCallback? handler;
+//   final Widget? trailing;
+//   final bool dense;
+//   final int badgeValue;
+//   final bool isSelected;
 
-  const _SideMenuItem({
-    Key? key,
-    this.leading,
-    this.title,
-    this.titleStyle,
-    this.trailing,
-    this.handler,
-    this.dense = false,
-    this.badgeValue = 0,
-    this.isSelected = false,
-  }) : super(key: key);
+//   const _SideMenuItem({
+//     Key? key,
+//     this.leading,
+//     this.title,
+//     this.titleStyle,
+//     this.trailing,
+//     this.handler,
+//     this.dense = false,
+//     this.badgeValue = 0,
+//     this.isSelected = false,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      selectedTileColor: Theme.of(context).focusColor,
-      selected: isSelected,
-      dense: dense,
-      enabled: handler != null,
-      onTap: handler != null
-          ? () {
-              context.findAncestorStateOfType<DrawerControllerState>()!.close();
-              handler!.call();
-            }
-          : null,
-      leading: leading != null ? _buildBadgeIcon(context) : null,
-      title: Text(
-        title!,
-        style: titleStyle ?? Theme.of(context).textTheme.subtitle2,
-      ),
-      trailing: trailing,
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListTile(
+//       selectedTileColor: Theme.of(context).focusColor,
+//       selected: isSelected,
+//       dense: dense,
+//       enabled: handler != null,
+//       onTap: handler != null
+//           ? () {
+//               context.findAncestorStateOfType<DrawerControllerState>()!.close();
+//               handler!.call();
+//             }
+//           : null,
+//       leading: leading != null ? _buildBadgeIcon(context) : null,
+//       title: Text(
+//         title!,
+//         style: titleStyle ?? Theme.of(context).textTheme.subtitle2,
+//       ),
+//       trailing: trailing,
+//     );
+//   }
 
-  Widget _buildBadgeIcon(BuildContext context) {
-    return BottleshopBadge(
-      badgeText: badgeValue.toString(),
-      showBadge: badgeValue > 0,
-      position: BadgePosition.topEnd(top: -5, end: -5),
-      child: Icon(
-        leading,
-        color: IconTheme.of(context).color,
-      ),
-    );
-  }
-}
+//   Widget _buildBadgeIcon(BuildContext context) {
+//     return BottleshopBadge(
+//       badgeText: badgeValue.toString(),
+//       showBadge: badgeValue > 0,
+//       position: BadgePosition.topEnd(top: -5, end: -5),
+//       child: Icon(
+//         leading,
+//         color: IconTheme.of(context).color,
+//       ),
+//     );
+//   }
+// }
 
 class BottleshopAboutTile extends HookConsumerWidget {
   final VoidCallback? afterTap;

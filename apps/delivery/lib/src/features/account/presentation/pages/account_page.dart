@@ -12,6 +12,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/dropdown.dart';
@@ -21,7 +22,6 @@ import 'package:delivery/src/features/account/presentation/widgets/account_card.
 import 'package:delivery/src/features/account/presentation/widgets/delete_account_tile.dart';
 import 'package:delivery/src/features/account/presentation/widgets/dropdown_list_item.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
 import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
@@ -62,6 +62,7 @@ class _AccountPageView extends HookConsumerWidget {
         appBar: AppBar(
           title: Text(context.l10n.settings),
           leading: CloseButton(
+            color: kPrimaryColor,
             onPressed: () {
               ref.read(navigationProvider).setNestingBranch(
                     context,
@@ -71,7 +72,6 @@ class _AccountPageView extends HookConsumerWidget {
                   );
             },
           ),
-          actions: [AuthPopupButton(scaffoldKey: scaffoldKey)],
         ),
         body: CupertinoScrollbar(
           controller: scrollCtrl,
@@ -81,10 +81,6 @@ class _AccountPageView extends HookConsumerWidget {
     } else {
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
-        appBarActions: [
-          const LanguageDropdown(),
-          AuthPopupButton(scaffoldKey: scaffoldKey),
-        ],
         body: Scrollbar(
           controller: scrollCtrl,
           child: PageBodyTemplate(

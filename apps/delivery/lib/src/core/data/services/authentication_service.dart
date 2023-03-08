@@ -185,7 +185,7 @@ class AuthenticationService {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       supportsAppleSignIn = await SignInWithApple.isAvailable();
     }
-    return supportsAppleSignIn;
+    return supportsAppleSignIn && !kIsWeb;
   }
 
   Future<void> signOut() async {

@@ -214,22 +214,6 @@ class _Body extends HookConsumerWidget {
 
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
-        appBarActions: [
-          const LanguageDropdown(),
-          const SearchIconButton(),
-          FilterIconButton(bodyScaffoldKey, drawerAcquirerKey),
-          const CartAppbarButton(),
-          AuthPopupButton(scaffoldKey: scaffoldKey),
-        ],
-        appBarBottom: tabController == null
-            ? null
-            : SubcategoriesTabBar(
-                category,
-                Tab(child: Text(context.l10n.all.toUpperCase())),
-                (e) => Tab(
-                    text: e.categoryDetails.getName(currentLang).toUpperCase()),
-                controller: tabController,
-              ),
         body: Scaffold(
           key: bodyScaffoldKey,
           endDrawer: FilterDrawer(
