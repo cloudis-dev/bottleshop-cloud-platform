@@ -243,10 +243,7 @@ class ShippingDetailsView extends HookConsumerWidget {
           ? onNextPage
           : null,
       onBackButton: onBackButton,
-      actionButtonText:
-          (ref.read(orderTypeStateProvider)?.isPaymentRequired ?? false)
-              ? context.l10n.proceedToCheckout
-              : context.l10n.confirmOrder,
+      actionButtonText: context.l10n.proceedToOrderDetails,
       pageTitle: context.l10n.delivery,
     );
   }

@@ -48,7 +48,10 @@ class RemainingDetailsView extends HookConsumerWidget {
               ),
               actionCallback: (_) => onNextPage,
               pageTitle: context.l10n.furtherDetails,
-              actionButtonText: context.l10n.proceedToCheckout,
+              actionButtonText:
+                  (ref.read(orderTypeStateProvider)?.isPaymentRequired ?? false)
+                      ? context.l10n.proceedToCheckOutWithANeedToPay
+                      : context.l10n.confirmOrderPayLater,
               onBackButton: onBackButton,
             ),
           ),
