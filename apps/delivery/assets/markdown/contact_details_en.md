@@ -5,8 +5,8 @@
 | **Tuesday**   | 10:00 - 22:00 |
 | **Wednesday** | 10:00 - 22:00 |
 | **Thursday**  | 10:00 - 22:00 |
-| **Friday**    | 10:00 - 24:00 |
-| **Saturday**  | 12:00 - 24:00 |
+| **Friday**    | 10:00 - 22:00 |
+| **Saturday**  | 12:00 - 22:00 |
 | **Sunday**    |    Closed     |
 
 **Business address**  
