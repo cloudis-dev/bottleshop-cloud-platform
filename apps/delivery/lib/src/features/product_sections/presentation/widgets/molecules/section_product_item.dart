@@ -92,7 +92,7 @@ class SectionProductItem extends HookConsumerWidget {
                   alignment: AlignmentDirectional.topEnd,
                   child: Text(
                     '- ${(product.discount! * 100).toStringAsFixed(2)}%',
-                    style: Theme.of(context).textTheme.overline,
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ),
               ),
@@ -161,7 +161,7 @@ class SectionProductItem extends HookConsumerWidget {
                           children: <Widget>[
                             Text(
                               product.name,
-                              style: Theme.of(context).textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.titleSmall,
                               maxLines: 1,
                               softWrap: false,
                               overflow: TextOverflow.fade,
@@ -171,13 +171,14 @@ class SectionProductItem extends HookConsumerWidget {
                               children: <Widget>[
                                 Text(
                                   '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLang)}',
-                                  style: Theme.of(context).textTheme.caption,
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 if (product.alcohol != null)
                                   Text(
                                     FormattingUtils.getAlcoholNumberString(
                                         product.alcohol),
-                                    style: Theme.of(context).textTheme.caption,
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                               ],
                             ),
@@ -185,12 +186,14 @@ class SectionProductItem extends HookConsumerWidget {
                               product.count > 0
                                   ? '${product.count} ${context.l10n.inStock}'
                                   : context.l10n.outOfStock,
-                              style:
-                                  Theme.of(context).textTheme.caption!.copyWith(
-                                        color: product.count > 0
-                                            ? Colors.green
-                                            : Colors.red,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    color: product.count > 0
+                                        ? Colors.green
+                                        : Colors.red,
+                                  ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -200,7 +203,7 @@ class SectionProductItem extends HookConsumerWidget {
                                     product.finalPrice,
                                     withCurrency: true,
                                   ),
-                                  style: Theme.of(context).textTheme.subtitle2,
+                                  style: Theme.of(context).textTheme.titleSmall,
                                 ),
                                 if (product.discount != null)
                                   Expanded(
@@ -211,7 +214,7 @@ class SectionProductItem extends HookConsumerWidget {
                                       ),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .caption!
+                                          .bodySmall!
                                           .copyWith(
                                               decoration:
                                                   TextDecoration.lineThrough),
@@ -268,7 +271,7 @@ class _FlashSaleItem extends HookConsumerWidget {
                     ),
                   ),
                   maxLines: 2,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                   overflow: TextOverflow.fade,
                 ),
                 const SizedBox(
