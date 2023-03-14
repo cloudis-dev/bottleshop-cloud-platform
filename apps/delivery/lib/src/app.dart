@@ -85,6 +85,7 @@ class _AppBody extends HookConsumerWidget {
               ResponsiveBreakpoint.autoScaleDown(
                 0,
                 name: MOBILE,
+                scaleFactor: 1.3,
               ),
               ResponsiveBreakpoint.autoScaleDown(
                 750,

@@ -316,7 +316,7 @@ class _BodyMobile extends HookConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: Colors.transparent,
-            expandedHeight: 450,
+            expandedHeight: 750,
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               stretchModes: const [
