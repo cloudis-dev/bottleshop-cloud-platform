@@ -13,6 +13,7 @@
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/product_sections/presentation/widgets/molecules/section_product_item.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
+import 'package:delivery/src/features/products/presentation/widgets/product_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -47,11 +48,13 @@ class ProductsSectionCarousel extends HookWidget {
               const spacing = 20.0;
               final marginLeft = (id == 0) ? spacing : 0;
 
-              return SectionProductItem(
-                product: data[id],
-                margin: EdgeInsets.only(
-                    left: marginLeft.toDouble(), right: spacing),
-              );
+              return ProductGridItem(product: data[id]);
+
+              //     SectionProductItem(
+              //   product: data[id],
+              //   margin: EdgeInsets.only(
+              //       left: marginLeft.toDouble(), right: spacing),
+              // );
             },
           ),
         );
@@ -62,10 +65,11 @@ class ProductsSectionCarousel extends HookWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: data.length,
           itemBuilder: (context, idx) {
-            return SectionProductItem(
-              product: data[idx],
-              margin: EdgeInsets.zero,
-            );
+            return ProductGridItem(product: data[idx]);
+            // SectionProductItem(
+            //   product: data[idx],
+            //   margin: EdgeInsets.zero,
+            // );
           },
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             mainAxisSpacing: 5,
