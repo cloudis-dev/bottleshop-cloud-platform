@@ -15,6 +15,7 @@ import 'package:delivery/src/core/presentation/providers/navigation_providers.da
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/cart/presentation/widgets/cart_list_item.dart';
+import 'package:delivery/src/features/cart/presentation/widgets/swipe_to_delete.dart';
 import 'package:delivery/src/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/checkout_tile.dart';
 import 'package:flutter/cupertino.dart';
