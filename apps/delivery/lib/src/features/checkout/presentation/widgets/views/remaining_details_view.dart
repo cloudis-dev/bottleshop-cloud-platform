@@ -1,3 +1,8 @@
+import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
@@ -5,9 +10,6 @@ import 'package:delivery/src/features/checkout/presentation/providers/providers.
 import 'package:delivery/src/features/checkout/presentation/widgets/additional_remarks_tile.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/promo_code_tile.dart';
 import 'package:delivery/src/features/checkout/presentation/widgets/templates/cart_view_template.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RemainingDetailsView extends HookConsumerWidget {
   final Future<void> Function() onNextPage;
@@ -49,7 +51,8 @@ class RemainingDetailsView extends HookConsumerWidget {
               actionCallback: (_) => onNextPage,
               pageTitle: context.l10n.furtherDetails,
               actionButtonText:
-                  (ref.read(orderTypeStateProvider)?.isPaymentRequired ?? false)
+                  (ref.read(orderTypeStateProvider)?.deliveryOption !=
+                          DeliveryOption.cashOnDelivery)
                       ? context.l10n.proceedToCheckOutWithANeedToPay
                       : context.l10n.confirmOrderPayLater,
               onBackButton: onBackButton,

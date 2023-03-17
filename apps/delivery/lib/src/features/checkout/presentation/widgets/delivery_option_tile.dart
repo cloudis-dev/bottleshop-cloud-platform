@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
@@ -5,8 +8,6 @@ import 'package:delivery/src/features/checkout/presentation/providers/providers.
 import 'package:delivery/src/features/checkout/presentation/widgets/views/shipping_details_view.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DeliveryOptionTile extends HookConsumerWidget {
   final UserModel? user;
@@ -46,9 +47,9 @@ class DeliveryOptionTile extends HookConsumerWidget {
             data: (orderTypes) => orderTypes.map<Widget>(
               (orderType) => RadioListTile<OrderTypeModel>(
                 title: Text(orderType.getName(currentLang)!,
-                    style: Theme.of(context).textTheme.bodyText1),
+                    style: Theme.of(context).textTheme.bodyLarge),
                 subtitle: Text(orderType.getDescription(currentLang)!,
-                    style: Theme.of(context).textTheme.caption),
+                    style: Theme.of(context).textTheme.bodySmall),
                 dense: true,
                 activeColor: Theme.of(context).colorScheme.secondary,
                 contentPadding:
@@ -104,11 +105,11 @@ class DeliveryOptionTile extends HookConsumerWidget {
         ),
         title: Text(
           context.l10n.deliveryOptions,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         subtitle: Text(
           context.l10n.selectDeliveryOption,
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
         children: items,
       ),
