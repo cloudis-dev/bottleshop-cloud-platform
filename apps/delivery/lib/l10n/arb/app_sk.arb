@@ -654,5 +654,6 @@
   "vodka": "Vodka",
   "landing": "Landing",
   "saleButton": "VÝPREDAJ",
-  "logIn": "Prihlásiť sa"
+  "logIn": "Prihlásiť sa",
+  "swipeToDelete": "potiahnutím odstráňte"
 }
