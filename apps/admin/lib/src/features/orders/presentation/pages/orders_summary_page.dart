@@ -13,7 +13,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tuple/tuple.dart';
 
-final _selectedDateProvider = StateProvider.autoDispose<DateTime?>((_) => null);
+final _selectedDateProvider = StateProvider.autoDispose<DateTimeRange?>((_) => null);
 
 class _TableRecord {
   final String productName;
@@ -43,13 +43,12 @@ final _ordersForDayProvider = FutureProvider.autoDispose
         QueryArgs(
           OrderModel.createdAtTimestampField,
           isGreaterThanOrEqualTo:
-              DateTime(dateTime.year, dateTime.month, dateTime.day)
-                  .subtract(Duration(days: daysOffset)),
+              DateTime(dateTime.start.year, dateTime.start.month, dateTime.start.day)
         ),
         QueryArgs(
           OrderModel.createdAtTimestampField,
-          isLessThan: DateTime(dateTime.year, dateTime.month, dateTime.day)
-              .add(Duration(days: 1)),
+          isLessThan: DateTime(dateTime.end.year, dateTime.end.month, dateTime.end.day)
+            //  .add(Duration(days: 1)),
         )
       ],
     );
@@ -84,17 +83,17 @@ final _ordersForDayProvider = FutureProvider.autoDispose
 });
 
 class OrdersSummaryPage extends AppPage {
-  OrdersSummaryPage(int offs)
+  OrdersSummaryPage()
       : super(
           'orders_summary',
-          (_) => _OrdersDetailView(offs),
+          (_) => _OrdersDetailView(),
         );
 }
 
 class _OrdersDetailView extends HookWidget {
-  final int daysOffset;
 
-  const _OrdersDetailView(this.daysOffset);
+
+  const _OrdersDetailView();
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +115,12 @@ class _OrdersDetailView extends HookWidget {
             ElevatedButton(
               child: Text('Vyber dátum'),
               onPressed: () async {
-                final res = await showDatePicker(
+                final res = await showDateRangePicker(
                   firstDate: DateTime(2021),
-                  initialDate: DateTime.now(),
+                  initialDateRange: DateTimeRange(
+                    start: DateTime.now(),
+                    end: DateTime.now().add(Duration(days: 1)),
+                  ),
                   context: context,
                   lastDate: DateTime.now().add(Duration(days: 1)),
                 );
@@ -131,7 +133,7 @@ class _OrdersDetailView extends HookWidget {
             const SizedBox(height: 16),
             if (selectedDate != null) ...[
               Text(
-                'Vybraný dátum: ${FormattingUtil.getDateString(selectedDate)}',
+                'Vybraný dátum: ${FormattingUtil.getDateString(selectedDate.start)} - ${FormattingUtil.getDateString(selectedDate.end)}',
                 textAlign: TextAlign.center,
                 style: AppTheme.headline1TextStyle,
               ),
@@ -140,7 +142,7 @@ class _OrdersDetailView extends HookWidget {
                 'Zobrazujú sa produkty pre ktoré objednávka bola VYTVORENÁ vo vybraný deň',
                 textAlign: TextAlign.center,
               ),
-              useProvider(_ordersForDayProvider(daysOffset)).when(
+              useProvider(_ordersForDayProvider(0)).when(
                 data: (e) => Scrollbar(
                   controller: scrollCtrl,
                   isAlwaysShown: true,

@@ -8,8 +8,6 @@ import 'package:bottleshop_admin/src/features/orders/presentation/widgets/orders
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum _ContextMenuActions { day, month, halfYear, year }
-
 class OrdersPage extends StatelessWidget {
   static const String routeName = '/orders';
 
@@ -54,61 +52,22 @@ class OrdersPage extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Objednávky'),
             actions: <Widget>[
-              PopupMenuButton<_ContextMenuActions>(
+              PopupMenuButton<String>(
                 icon: Icon(Icons.more_vert),
                 itemBuilder: (_) => [
                   PopupMenuItem(
-                    value: _ContextMenuActions.day,
+                    value: "sum",
                     child: Text(
-                      'Denná sumarizácia',
-                      style: AppTheme.popupMenuItemTextStyle,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: _ContextMenuActions.month,
-                    child: Text(
-                      'Mesačná sumarizácia',
-                      style: AppTheme.popupMenuItemTextStyle,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: _ContextMenuActions.halfYear,
-                    child: Text(
-                      'Polročná sumarizácia',
-                      style: AppTheme.popupMenuItemTextStyle,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: _ContextMenuActions.year,
-                    child: Text(
-                      'Ročná sumarizácia',
+                      'Sumarizácia',
                       style: AppTheme.popupMenuItemTextStyle,
                     ),
                   ),
                 ],
                 onSelected: (val) {
-                  switch (val) {
-                    case _ContextMenuActions.day:
-                      context
-                          .read(navigationProvider.notifier)
-                          .pushPage(OrdersSummaryPage(0));
-                      break;
-                    case _ContextMenuActions.month:
-                      context
-                          .read(navigationProvider.notifier)
-                          .pushPage(OrdersSummaryPage(29));
-                      break;
-                    case _ContextMenuActions.halfYear:
-                      context
-                          .read(navigationProvider.notifier)
-                          .pushPage(OrdersSummaryPage(182));
-                      break;
-                    case _ContextMenuActions.year:
-                      context
-                          .read(navigationProvider.notifier)
-                          .pushPage(OrdersSummaryPage(364));
-                      break;
-                  }
+                  if (val == "sum")
+                    context
+                        .read(navigationProvider.notifier)
+                        .pushPage(OrdersSummaryPage());
                 },
               ),
             ],
