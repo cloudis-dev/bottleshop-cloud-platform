@@ -52,24 +52,13 @@ class OrdersPage extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Objednávky'),
             actions: <Widget>[
-              PopupMenuButton<String>(
-                icon: Icon(Icons.more_vert),
-                itemBuilder: (_) => [
-                  PopupMenuItem(
-                    value: "sum",
-                    child: Text(
-                      'Sumarizácia',
-                      style: AppTheme.popupMenuItemTextStyle,
-                    ),
-                  ),
-                ],
-                onSelected: (val) {
-                  if (val == "sum")
+              IconButton(
+                  onPressed: () {
                     context
                         .read(navigationProvider.notifier)
                         .pushPage(OrdersSummaryPage());
-                },
-              ),
+                  },
+                  icon: Icon(Icons.summarize))
             ],
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(72),
