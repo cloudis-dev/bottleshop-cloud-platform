@@ -92,7 +92,7 @@ class _SwipeToDeleteOverlayState extends State<SwipeToDeleteOverlay>
       end: const Offset(0, 1),
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeOut,
+      curve: Curves.easeOutBack,
     ));
 
     _startTimer();
@@ -114,39 +114,38 @@ class _SwipeToDeleteOverlayState extends State<SwipeToDeleteOverlay>
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      // left: ,
-      // MediaQuery.of(context).size.width / 2,
-      bottom: 100,
-      child: IgnorePointer(
-        ignoring: _animationController.status == AnimationStatus.reverse ||
-            _animationController.status == AnimationStatus.forward,
-        child: AnimatedBuilder(
-          animation: _slideAnimation,
-          builder: (BuildContext context, Widget? child) {
-            return FractionalTranslation(
-              translation: _slideAnimation.value,
-              child: child,
-            );
-          },
-          child: Container(
-            // margin: const EdgeInsets.all(12),
-            padding: const EdgeInsets.all(12),
-            decoration: ShapeDecoration(
-              shape: const StadiumBorder(),
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            child: Text(
-              context.l10n.swipeToDelete,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+    return Stack(
+      alignment: Alignment(Alignment.center.x, Alignment.center.y + 0.5),
+      children: [
+        IgnorePointer(
+          ignoring: _animationController.status == AnimationStatus.reverse ||
+              _animationController.status == AnimationStatus.forward,
+          child: AnimatedBuilder(
+            animation: _slideAnimation,
+            builder: (BuildContext context, Widget? child) {
+              return FractionalTranslation(
+                translation: _slideAnimation.value,
+                child: child,
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: ShapeDecoration(
+                shape: const StadiumBorder(),
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              child: Text(
+                context.l10n.swipeToDelete,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

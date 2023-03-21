@@ -45,8 +45,12 @@ class CartView extends HookConsumerWidget {
             thumbVisibility: false,
             child: ref.watch(cartProvider).when(
                   data: (cart) {
-                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
-                        SwipeToDeleteOverlay.showOverlay(context));
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (timeStamp) async => Future.delayed(
+                        const Duration(seconds: 1),
+                        () => SwipeToDeleteOverlay.showOverlay(context),
+                      ),
+                    );
                     return ListView.builder(
                       physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics(),
