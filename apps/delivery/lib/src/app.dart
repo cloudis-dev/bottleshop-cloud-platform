@@ -12,6 +12,16 @@
 
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:routeborn/routeborn.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/routes.dart';
@@ -24,15 +34,6 @@ import 'package:delivery/src/features/auth/presentation/providers/auth_providers
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_checker_widget.dart';
 import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
-import 'package:routeborn/routeborn.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class App extends HookConsumerWidget {
   const App({Key? key}) : super(key: key);
@@ -85,7 +86,7 @@ class _AppBody extends HookConsumerWidget {
               ResponsiveBreakpoint.autoScaleDown(
                 0,
                 name: MOBILE,
-                scaleFactor: 1.3,
+                scaleFactor: 1.7,
               ),
               ResponsiveBreakpoint.autoScaleDown(
                 750,
