@@ -1,67 +1,9 @@
-// import 'package:flutter/material.dart';
-
-// import 'package:delivery/l10n/l10n.dart';
-
-// class SwipeToDeleteOverlay extends StatefulWidget {
-//   const SwipeToDeleteOverlay({
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   _SwipeToDeleteOverlayState createState() => _SwipeToDeleteOverlayState();
-// }
-
-// class _SwipeToDeleteOverlayState extends State<SwipeToDeleteOverlay> {
-//   bool _showOverlay = true;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _startTimer();
-//   }
-
-//   void _startTimer() {
-//     Future.delayed(const Duration(milliseconds: 5000), () {
-//       if (mounted) {
-//         setState(() {
-//           _showOverlay = false;
-//         });
-//       }
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Visibility(
-//       visible: _showOverlay,
-//       child: Container(
-//         margin: const EdgeInsets.all(12),
-//         padding: const EdgeInsets.all(12),
-//         decoration: ShapeDecoration(
-//           shape: const StadiumBorder(),
-//           color: Theme.of(context).colorScheme.secondary,
-//         ),
-//         child: Text(
-//           context.l10n.swipeToDelete,
-//           textAlign: TextAlign.center,
-//           style: TextStyle(
-//             fontWeight: FontWeight.bold,
-//             color: Theme.of(context).primaryColor,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 
 import 'package:delivery/l10n/l10n.dart';
 
 class SwipeToDeleteOverlay extends StatefulWidget {
-  const SwipeToDeleteOverlay({
-    Key? key,
-  }) : super(key: key);
+  const SwipeToDeleteOverlay({super.key});
 
   static void showOverlay(BuildContext context) {
     final overlayEntry = OverlayEntry(
@@ -77,38 +19,50 @@ class SwipeToDeleteOverlay extends StatefulWidget {
 
 class _SwipeToDeleteOverlayState extends State<SwipeToDeleteOverlay>
     with TickerProviderStateMixin {
-  late final AnimationController _animationController;
-  late final Animation<Offset> _slideAnimation;
+  late final AnimationController _fadeInController;
+  late final AnimationController _fadeOutController;
+  late final Animation<double> _fadeInAnimation;
+  late final Animation<double> _fadeOutAnimation;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
+    _fadeInController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _slideAnimation = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(0, 1),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutBack,
-    ));
-
+    _fadeOutController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeInController,
+        curve: Curves.easeIn,
+      ),
+    );
+    _fadeOutAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _fadeOutController,
+        curve: Curves.easeOut,
+      ),
+    );
+    _fadeInController.forward();
     _startTimer();
   }
 
   void _startTimer() {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
-        _animationController.forward();
+        _fadeOutController.forward();
       }
     });
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _fadeInController.dispose();
+    _fadeOutController.dispose();
     super.dispose();
   }
 
@@ -117,33 +71,36 @@ class _SwipeToDeleteOverlayState extends State<SwipeToDeleteOverlay>
     return Stack(
       alignment: Alignment(Alignment.center.x, Alignment.center.y + 0.5),
       children: [
-        IgnorePointer(
-          ignoring: _animationController.status == AnimationStatus.reverse ||
-              _animationController.status == AnimationStatus.forward,
-          child: AnimatedBuilder(
-            animation: _slideAnimation,
-            builder: (BuildContext context, Widget? child) {
-              return FractionalTranslation(
-                translation: _slideAnimation.value,
-                child: child,
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: ShapeDecoration(
-                shape: const StadiumBorder(),
-                color: Theme.of(context).colorScheme.secondary,
+        AnimatedBuilder(
+          animation: _fadeInAnimation,
+          builder: (BuildContext context, Widget? child) {
+            return Opacity(
+              opacity: _fadeInAnimation.value,
+              child: AnimatedBuilder(
+                animation: _fadeOutAnimation,
+                builder: (BuildContext context, Widget? child) {
+                  return Opacity(
+                    opacity: _fadeOutAnimation.value,
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: ShapeDecoration(
+                        shape: const StadiumBorder(),
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      child: Text(
+                        context.l10n.swipeToDelete,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-              child: Text(
-                context.l10n.swipeToDelete,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );
