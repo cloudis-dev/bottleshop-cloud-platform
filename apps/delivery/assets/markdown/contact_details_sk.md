@@ -5,8 +5,8 @@
 | **Utorok**   |  10:00 - 22:00   |
 | **Streda**   |  10:00 - 22:00   |
 | **Štvrtok**  |  10:00 - 22:00   |
-| **Piatok**   |  10:00 - 24:00   |
-| **Sobota**   |  12:00 - 24:00   |
+| **Piatok**   |  10:00 - 22:00   |
+| **Sobota**   |  12:00 - 22:00   |
 | **Nedeľa**   |    Zatvorené     |
 
 **Adresa prevádzky:**  

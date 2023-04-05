@@ -33,4 +33,8 @@ final remarksTextEditCtrlProvider = Provider.autoDispose<TextEditingController>(
 );
 
 final currentAppliedPromoProvider =
-    StateProvider.autoDispose<PromoCodeModel?>((ref) => null);
+    StateProvider.autoDispose<PromoCodeModel?>((ref) {
+  // reset on order type change
+  ref.watch(orderTypeStateProvider);
+  return null;
+});
