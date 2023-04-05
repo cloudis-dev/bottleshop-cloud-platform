@@ -164,7 +164,7 @@ class SectionProductItem extends HookConsumerWidget {
                               style: Theme.of(context).textTheme.titleSmall,
                               maxLines: 1,
                               softWrap: false,
-                              overflow: TextOverflow.fade,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -48,13 +48,11 @@ class ProductsSectionCarousel extends HookWidget {
               const spacing = 20.0;
               final marginLeft = (id == 0) ? spacing : 0;
 
-              return ProductGridItem(product: data[id]);
-
-              //     SectionProductItem(
-              //   product: data[id],
-              //   margin: EdgeInsets.only(
-              //       left: marginLeft.toDouble(), right: spacing),
-              // );
+              return SectionProductItem(
+                product: data[id],
+                margin: EdgeInsets.only(
+                    left: marginLeft.toDouble(), right: spacing),
+              );
             },
           ),
         );
@@ -65,11 +63,10 @@ class ProductsSectionCarousel extends HookWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: data.length,
           itemBuilder: (context, idx) {
-            return ProductGridItem(product: data[idx]);
-            // SectionProductItem(
-            //   product: data[idx],
-            //   margin: EdgeInsets.zero,
-            // );
+            return SectionProductItem(
+              product: data[idx],
+              margin: EdgeInsets.zero,
+            );
           },
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             mainAxisSpacing: 5,
