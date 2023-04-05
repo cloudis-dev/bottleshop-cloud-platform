@@ -30,6 +30,7 @@ class FirebaseCallableFunctions {
 
   static const createStripeCustomer = 'createStripeCustomer';
   static const deleteAccount = 'deleteAccount';
+  static const postFeedback = 'postFeedback';
   static const createCheckoutSession = 'createCheckoutSession';
   static const createCashOnDeliveryOrder = 'createCashOnDeliveryOrder';
 }

@@ -114,14 +114,14 @@ class AddressSettingsDialog extends HookConsumerWidget {
                   _logger.fine(
                       'data: ${profileData['city']}, ${profileData['phoneNumber']} billingOnly: ${profileData['billingOnly']}');
                   var userData = <String, dynamic>{};
-                  if (addressType == AddressType.billing) {
+                  if (addressType == AddressType.shipping) {
                     if (profileData['billingOnly'] ?? false) {
                       profileData.remove('billingOnly');
-                      userData['shipping_address'] = profileData;
+                      userData['billing_address'] = profileData;
                     }
-                    userData['billing_address'] = profileData;
-                  } else {
                     userData['shipping_address'] = profileData;
+                  } else {
+                    userData['billing_address'] = profileData;
                   }
                   userDb.updateData(user.uid, userData);
                   showSimpleNotification(
@@ -236,7 +236,7 @@ class AddressSettingsDialog extends HookConsumerWidget {
             onSaved: null,
             validator: null,
           ),
-          if (addressType == AddressType.billing)
+          if (addressType == AddressType.shipping)
             CheckboxListTileFormField(
               activeColor: Theme.of(context).colorScheme.secondary,
               title: Text(

@@ -131,33 +131,6 @@ class AccountCard extends HookConsumerWidget {
                   ListTile(
                     dense: true,
                     leading: const Icon(
-                      Icons.business_outlined,
-                    ),
-                    title: Text(
-                      context.l10n.billingAddress,
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                    subtitle: Text(
-                      user?.billingAddress?.getAddressAsString() ??
-                          context.l10n.notSet,
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                    trailing: ButtonTheme(
-                      padding: const EdgeInsets.all(0),
-                      minWidth: 50.0,
-                      height: 25.0,
-                      child: AddressSettingsDialog(
-                          title: context.l10n.billingAddress),
-                    ),
-                  ),
-                  const Divider(
-                    indent: 15,
-                    endIndent: 15,
-                    thickness: 0.5,
-                  ),
-                  ListTile(
-                    dense: true,
-                    leading: const Icon(
                       Icons.home_outlined,
                     ),
                     title: Text(
@@ -178,6 +151,33 @@ class AccountCard extends HookConsumerWidget {
                         title: context.l10n.shippingAddress,
                         icon: const Icon(Icons.home_outlined),
                       ),
+                    ),
+                  ),
+                  const Divider(
+                    indent: 15,
+                    endIndent: 15,
+                    thickness: 0.5,
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(
+                      Icons.business_outlined,
+                    ),
+                    title: Text(
+                      context.l10n.billingAddress,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    subtitle: Text(
+                      user?.billingAddress?.getAddressAsString() ??
+                          context.l10n.notSet,
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    trailing: ButtonTheme(
+                      padding: const EdgeInsets.all(0),
+                      minWidth: 50.0,
+                      height: 25.0,
+                      child: AddressSettingsDialog(
+                          title: context.l10n.billingAddress),
                     ),
                   ),
                 ],
