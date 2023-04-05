@@ -13,7 +13,6 @@
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/product_sections/presentation/widgets/molecules/section_product_item.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
-import 'package:delivery/src/features/products/presentation/widgets/product_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
