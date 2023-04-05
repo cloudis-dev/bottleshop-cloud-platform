@@ -156,7 +156,8 @@ class ProductGridItem extends HookConsumerWidget {
                             fit: fit,
                             child: Text(
                               '${FormattingUtils.getVolumeNumberString(product.unitsCount)} ${product.unitsType.getUnitAbbreviation(currentLang)}',
-                              style: body1Theme,
+                              style: Theme.of(context).textTheme.bodySmall,
+                              // body1Theme,
                             ),
                           ),
                           FittedBox(
@@ -164,10 +165,26 @@ class ProductGridItem extends HookConsumerWidget {
                             child: Text(
                               FormattingUtils.getAlcoholNumberString(
                                   product.alcohol ?? 0),
-                              style: body1Theme,
+                              style: Theme.of(context).textTheme.bodySmall,
+                              // body1Theme,
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: stockTextTheme.fontSize!.toInt(),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: FittedBox(
+                        fit: fit,
+                        child: Text(
+                          product.count > 0
+                              ? '${product.count} ${context.l10n.inStock}'
+                              : context.l10n.outOfStock,
+                          style: stockTextTheme,
+                        ),
                       ),
                     ),
                   ),
@@ -212,21 +229,6 @@ class ProductGridItem extends HookConsumerWidget {
                               ),
                             )
                         ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: stockTextTheme.fontSize!.toInt(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: FittedBox(
-                        fit: fit,
-                        child: Text(
-                          product.count > 0
-                              ? '${product.count} ${context.l10n.inStock}'
-                              : context.l10n.outOfStock,
-                          style: stockTextTheme,
-                        ),
                       ),
                     ),
                   ),
