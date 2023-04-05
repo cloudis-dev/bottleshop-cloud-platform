@@ -13,7 +13,6 @@
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/features/account/presentation/pages/account_page.dart';
-import 'package:delivery/src/features/auth/presentation/widgets/views/feedback_view.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/reset_password_view.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/terms_conditions_view.dart';
 import 'package:delivery/src/features/categories/presentation/pages/categories_page.dart';
@@ -154,8 +153,8 @@ final routes = <String, RouteNode<NestingBranch>>{
           RouteNode(NonParametrizedPage(() => TutorialPage())),
       TermsConditionsPage.pagePathBase:
           RouteNode(NonParametrizedPage(() => TermsConditionsPage())),
-      FeedbackPage.pagePathBase:
-          RouteNode(NonParametrizedPage(() => FeedbackPage())),
+      // FeedbackPage.pagePathBase:
+      //     RouteNode(NonParametrizedPage(() => FeedbackPage())),
     },
   ),
   Page404.pagePathBase: RouteNode(NonParametrizedPage(() => Page404())),
