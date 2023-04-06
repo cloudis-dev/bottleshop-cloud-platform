@@ -24,7 +24,7 @@ Bottleshop3veze Delivery app
 Development:
   `flutter build web --target=lib/main_web_development.dart --dart-define-from-file=.env.dev.json`
 Production:
-  `flutter build web --target=lib/main_web_production.dart --dart-define-from-file=.env.prod.json`
+  `flutter build web --release --target=lib/main_web_production.dart --dart-define-from-file=.env.prod.json`
 
 Deploying:
   `firebase deploy`
