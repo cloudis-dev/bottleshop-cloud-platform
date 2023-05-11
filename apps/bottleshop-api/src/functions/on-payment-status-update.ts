@@ -62,7 +62,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
         functions.logger.log(`payment_intent.succeeded: ${userId} ${deliveryType} ${orderNote} ${orderId}`);
 
         try {
-          const oId = createOrderEffect(
+          const oId = await createOrderEffect(
             userId,
             deliveryType as DeliveryType,
             parseInt(orderId, 10),

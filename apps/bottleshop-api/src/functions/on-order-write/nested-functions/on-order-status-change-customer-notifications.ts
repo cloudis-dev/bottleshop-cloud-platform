@@ -45,6 +45,8 @@ export const onOrderStatusChangeCustomerNotification = async (orderSnapshot: fun
       },
     });
 
-    await admin.messaging().sendToDevice(deviceTokens, notification);
+    if (deviceTokens.length > 0) {
+      await admin.messaging().sendToDevice(deviceTokens, notification);
+    }
   }
 };
