@@ -1,4 +1,4 @@
-import { CallableContext } from 'firebase-functions/lib/providers/https';
+import { CallableContext } from 'firebase-functions/lib/v1/providers/https';
 import * as functions from 'firebase-functions';
 
 import { tier1Region } from '../../constants/other';

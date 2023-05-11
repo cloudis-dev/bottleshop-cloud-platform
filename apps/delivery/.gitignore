@@ -136,4 +136,5 @@ android/android_keys.zip
 android/app/cloudis.jks
 local.properties
 .fvm
-.env
+.env.dev.json
+.env.prod.json

@@ -1,4 +1,4 @@
-import { CallableContext } from 'firebase-functions/lib/providers/https';
+import { CallableContext } from 'firebase-functions/lib/v1/providers/https';
 import * as functions from 'firebase-functions';
 import Stripe from 'stripe';
 
@@ -11,7 +11,7 @@ import { createStripeClient } from '..';
 
 export const createStripeCustomer = functions
   .region(tier1Region)
-  .runWith({ allowInvalidAppCheckToken: true })
+  .runWith({ enforceAppCheck: false })
   .https.onCall(async (data: Stripe.CustomerCreateParams, context: CallableContext) => {
     try {
       const userUid = context.auth?.uid;

@@ -10,18 +10,8 @@
 //
 //
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 class AppEnvironment {
   AppEnvironment._();
-
-  static const stripeSupportedCards = [
-    'american_express',
-    'visa',
-    'electron',
-    'maestro',
-    'master_card',
-  ];
 
   static const cloudFunctionsRegion = 'europe-west1';
   static const facebookPermissions = ['public_profile', 'email'];
@@ -31,27 +21,19 @@ class AppEnvironment {
     'openid'
   ];
   static const appleSignInClientId = 'sk.bottleshop3veze.applesignin';
-  static const applePayMerchantId =
-      'merchant.sk.bottleshop3veze.bottleshopdeliveryapp';
+
   static const termsPdfEndpoint =
       'https://firebasestorage.googleapis.com/v0/b/bottleshop3veze-delivery.appspot.com/o/assets%2Fpdf%2F';
 
-  static String get appleSignInRedirectUri =>
-      dotenv.env['DEFINE_APPLE_SIGN_IN_REDIRECT'] ??
-      'https://bottleshop3veze-delivery.firebaseapp.com/__/auth/handler';
+  static String get appleSignInRedirectUri => const String.fromEnvironment(
+      'APPLE_SIGN_IN_REDIRECT',
+      defaultValue:
+          'https://bottleshop3veze-delivery.firebaseapp.com/__/auth/handler');
 
   static String get stripePublishableKey =>
-      dotenv.env['STRIPE_PUBLISHABLE_KEY'] ??
-      'pk_live_fRyyZgnqIu9Ry0YtvIpdv6pJ008KDasBdf';
+      const String.fromEnvironment('STRIPE_PUBLISHABLE_KEY');
 
-  static String get stripeAndroidPayMode =>
-      dotenv.env['DEFINE_ANDROID_PAY_MODE'] ?? 'development';
-
-  static String get vapidKey =>
-      dotenv.env['DEFINE_VAPID_KEY'] ??
-      'BKJD6AGTNjU2aHqCWSP-njCoaIMW-ONn6e8397J14m8BQ2Tq-sch2PPZFIsPxYM6847Q9ldtW90BXrLIDMyi3-E';
-
-  static const devFirebaseAuthPort = 9000;
-  static const devFirestorePort = 8000;
-  static const devFunctionsPort = 5001;
+  static String get vapidKey => const String.fromEnvironment('DEFINE_VAPID_KEY',
+      defaultValue:
+          'BKJD6AGTNjU2aHqCWSP-njCoaIMW-ONn6e8397J14m8BQ2Tq-sch2PPZFIsPxYM6847Q9ldtW90BXrLIDMyi3-E');
 }
