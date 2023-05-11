@@ -12,6 +12,7 @@ import '../../../../../core/data/services/shared_preferences_service.dart';
 import '../../../../../core/presentation/providers/core_providers.dart';
 
 class Footer extends HookConsumerWidget {
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(currentLanguageProvider);
 
@@ -20,7 +21,7 @@ class Footer extends HookConsumerWidget {
       color: Colors.black,
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
-          padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -43,10 +44,10 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Container(
-                  constraints: BoxConstraints(maxWidth: 250),
+                  constraints: const BoxConstraints(maxWidth: 250),
                   child: Text(
                     context.l10n.footerDescription,
-                    style: publicSansTextTheme.caption,
+                    style: publicSansTextTheme.bodySmall,
                   ),
                 ),
               ),
@@ -54,36 +55,36 @@ class Footer extends HookConsumerWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(64, 100, 0, 0),
+          padding: const EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.contactColumn,
-                    style: publicSansTextTheme.headline2),
+                    style: publicSansTextTheme.displayMedium),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text("Bottleroom s.r.o.",
-                    style: publicSansTextTheme.caption),
+                    style: publicSansTextTheme.bodySmall),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child:
-                    Text("Bajkalská 9/A,", style: publicSansTextTheme.caption),
+                child: Text("Bajkalská 9/A,",
+                    style: publicSansTextTheme.bodySmall),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text("831 04 Bratislava",
-                    style: publicSansTextTheme.caption),
+                    style: publicSansTextTheme.bodySmall),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 26, 0, 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.mail,
                       color: Colors.white,
                       size: 14,
@@ -92,7 +93,7 @@ class Footer extends HookConsumerWidget {
                       padding: const EdgeInsets.fromLTRB(2, 0, 0, 0),
                       child: TextButton(
                         child: Text("info@bottleshop3veze.sk",
-                            style: publicSansTextTheme.caption?.copyWith(
+                            style: publicSansTextTheme.bodySmall?.copyWith(
                                 decoration: TextDecoration.underline)),
                         onPressed: () {
                           launchUrlString("mailto:info@bottleshop3veze.sk");
@@ -107,7 +108,7 @@ class Footer extends HookConsumerWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.phone,
                       color: Colors.white,
                       size: 14,
@@ -115,7 +116,7 @@ class Footer extends HookConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(9, 0, 0, 0),
                       child: Text("+421 904 797 094",
-                          style: publicSansTextTheme.caption),
+                          style: publicSansTextTheme.bodySmall),
                     ),
                   ],
                 ),
@@ -124,47 +125,47 @@ class Footer extends HookConsumerWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(64, 100, 0, 0),
+          padding: const EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.openingHours,
-                    style: publicSansTextTheme.headline2),
+                    style: publicSansTextTheme.displayMedium),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(context.l10n.monTh + " 10:00 - 22:00",
-                    style: publicSansTextTheme.caption),
+                child: Text("${context.l10n.monFr} 10:00 - 22:00",
+                    style: publicSansTextTheme.bodySmall),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+              //   child: Text("${context.l10n.fri} 10:00 - 22:00",
+              //       style: publicSansTextTheme.bodySmall),
+              // ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(context.l10n.fri + " 10:00 - 24:00",
-                    style: publicSansTextTheme.caption),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(context.l10n.sat + " 12:00 - 24:00",
-                    style: publicSansTextTheme.caption),
+                child: Text("${context.l10n.sat} 12:00 - 22:00",
+                    style: publicSansTextTheme.bodySmall),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.sun + context.l10n.closed,
-                    style: publicSansTextTheme.caption),
+                    style: publicSansTextTheme.bodySmall),
               ),
             ],
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(64, 100, 0, 0),
+          padding: const EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
                 child: Text(context.l10n.informationColumn,
-                    style: publicSansTextTheme.headline2),
+                    style: publicSansTextTheme.displayMedium),
               ),
               TextButton(
                 onPressed: () {
@@ -172,7 +173,7 @@ class Footer extends HookConsumerWidget {
                       .watch(navigationProvider)
                       .setNestingBranch(context, NestingBranch.help);
                 },
-                child: Text("F.A.Q.", style: publicSansTextTheme.caption),
+                child: Text("F.A.Q.", style: publicSansTextTheme.bodySmall),
               ),
               BilingualLink(
                   txt: context.l10n.menuTerms,
@@ -194,14 +195,14 @@ class Footer extends HookConsumerWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(64, 100, 0, 0),
+          padding: const EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(context.l10n.findUs,
-                    style: publicSansTextTheme.headline2),
+                    style: publicSansTextTheme.displayMedium),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -221,7 +222,7 @@ class Footer extends HookConsumerWidget {
                     TextButton(
                         style: TextButton.styleFrom(
                             minimumSize: Size.zero,
-                            padding: EdgeInsets.fromLTRB(21, 0, 0, 0)),
+                            padding: const EdgeInsets.fromLTRB(21, 0, 0, 0)),
                         child: Image.asset(
                           kFacebookIcon,
                           height: 24,
@@ -236,13 +237,13 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 25, 0, 12),
                 child: Text(context.l10n.downloadApp,
-                    style: publicSansTextTheme.headline2),
+                    style: publicSansTextTheme.displayMedium),
               ),
               TextButton(
                   style: TextButton.styleFrom(
                       minimumSize: Size.zero, padding: EdgeInsets.zero),
                   child: Padding(
-                    padding: EdgeInsets.only(left: 6),
+                    padding: const EdgeInsets.only(left: 6),
                     child: (language == LanguageMode.en)
                         ? Image.asset(kAppStoreBadgeEn,
                             width: 93, fit: BoxFit.contain)
@@ -261,7 +262,7 @@ class Footer extends HookConsumerWidget {
                         ? Image.asset(kGooglePlayBadgeEn,
                             width: 107, fit: BoxFit.contain)
                         : Padding(
-                            padding: EdgeInsets.only(left: 6),
+                            padding: const EdgeInsets.only(left: 6),
                             child: Image.asset(kGooglePlayBadgeSk,
                                 width: 93, fit: BoxFit.contain)),
                     onPressed: () {

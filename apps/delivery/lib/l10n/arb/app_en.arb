@@ -617,6 +617,7 @@
   "@downloadApp": {},
   "openingHours": "Opening hours",
   "monTh": "Mon-Thu:",
+  "monFr": "Mon-Fri:",
   "fri": "Fri:",
   "sat": "Sat:",
   "sun": "Sun:",
