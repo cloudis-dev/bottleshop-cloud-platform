@@ -11,6 +11,7 @@
       "nx run bottleshop-api:build",
       "nx run bottleshop-api:lint"
     ],
+    "runtime": "nodejs18",
     "source": "dist/apps/bottleshop-api"
   },
   "emulators": {
