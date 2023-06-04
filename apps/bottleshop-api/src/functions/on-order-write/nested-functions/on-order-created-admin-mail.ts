@@ -37,12 +37,10 @@ export const onOrderCreatedAdminMail = async (orderSnapshot: functions.firestore
     );
     return;
   }
-
-  return Promise.all(
-    managementEmails.map((email) => admin.firestore().collection(mailCollection).add(createMail(email, subject, body))),
-  )
-    .then(() => functions.logger.log(`Email with the created order (id: ${order.id}) sent to management.`))
-    .catch(() =>
-      functions.logger.error(`Failed to send an email with the created order (id: ${order.id}) to management.`),
-    );
+  const adminMails = await getManagementEmails();
+  adminMails.map(email =>  admin.firestore().collection(mailCollection).add(createMail(email, subject, body)));
+  
+   
+  
+  
 };
