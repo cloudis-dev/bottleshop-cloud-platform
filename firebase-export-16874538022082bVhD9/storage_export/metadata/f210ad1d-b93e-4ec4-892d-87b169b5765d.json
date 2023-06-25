@@ -1,0 +1,20 @@
+{
+  "name": "warehouse/417.jpeg",
+  "bucket": "bottleshop-3-veze-dev-54908.appspot.com",
+  "metageneration": 1,
+  "generation": 1652036864292,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "05d2949b-4be5-4982-bc6a-d7128df5f34f"
+  ],
+  "etag": "I5c5mdo0TmgQxtOhScQcN6DBxLc",
+  "timeCreated": "2022-05-08T19:07:44.291Z",
+  "updated": "2022-05-08T19:07:44.293Z",
+  "size": 283503,
+  "md5Hash": "KBLVI+uRzw+kNolPpS25Qw==",
+  "crc32c": "322532589"
+}
