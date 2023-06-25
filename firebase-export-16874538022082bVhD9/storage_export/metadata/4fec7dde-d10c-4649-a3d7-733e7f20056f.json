@@ -1,0 +1,20 @@
+{
+  "name": "shop/splash 1.jpg",
+  "bucket": "bottleshop-3-veze-dev-54908.appspot.com",
+  "metageneration": 1,
+  "generation": 1652036812370,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "4f319dbf-b796-440d-91ec-aded95c18c29"
+  ],
+  "etag": "maeNkgAp7GiOwH5Nq+gkNmPR+dE",
+  "timeCreated": "2022-05-08T19:06:52.369Z",
+  "updated": "2022-05-08T19:06:52.371Z",
+  "size": 207167,
+  "md5Hash": "kR+caIRhhzJbFbJeDof6cQ==",
+  "crc32c": "846175279"
+}

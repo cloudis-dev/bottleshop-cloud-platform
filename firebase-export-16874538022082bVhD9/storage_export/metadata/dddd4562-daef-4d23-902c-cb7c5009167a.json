@@ -1,0 +1,20 @@
+{
+  "name": "shop/BTV App.jpg",
+  "bucket": "bottleshop-3-veze-dev-54908.appspot.com",
+  "metageneration": 1,
+  "generation": 1652036812360,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "a07d6656-6322-41e1-a482-fd28a8c9984a"
+  ],
+  "etag": "1HdS/LpL4c8i3x9H79aLTvt+jLs",
+  "timeCreated": "2022-05-08T19:06:52.359Z",
+  "updated": "2022-05-08T19:06:52.360Z",
+  "size": 182701,
+  "md5Hash": "G31nrzR1MZ/klalapIFDSg==",
+  "crc32c": "3678471304"
+}

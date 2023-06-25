@@ -1,0 +1,20 @@
+{
+  "name": "flags/my.svg",
+  "bucket": "bottleshop-3-veze-dev-54908.appspot.com",
+  "metageneration": 1,
+  "generation": 1652036795510,
+  "contentType": "image/svg+xml",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "54d1e96c-5f6f-45c5-8f39-de3ebcadc8a4"
+  ],
+  "etag": "cDSwhmWBSndAhOEiobZwo1ZvakA",
+  "timeCreated": "2022-05-08T19:06:35.509Z",
+  "updated": "2022-05-08T19:06:35.509Z",
+  "size": 578,
+  "md5Hash": "U32qo+wQjzEbxfDQv7O6cA==",
+  "crc32c": "3787731898"
+}

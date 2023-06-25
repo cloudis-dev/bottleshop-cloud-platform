@@ -1,0 +1,20 @@
+{
+  "name": "warehouse/bottleshop-logo.png",
+  "bucket": "bottleshop-3-veze-dev-54908.appspot.com",
+  "metageneration": 1,
+  "generation": 1652036863112,
+  "contentType": "image/png",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "d3fcaabc-e295-4e74-9a3c-60fb59ab0392"
+  ],
+  "etag": "esKCRH1qNPjXyrNv+URutzNe+YE",
+  "timeCreated": "2022-05-08T19:07:43.111Z",
+  "updated": "2022-05-08T19:07:43.112Z",
+  "size": 5976,
+  "md5Hash": "xPTRUaKELlnSQ5yNWeCg+Q==",
+  "crc32c": "616826146"
+}

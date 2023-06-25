@@ -13,7 +13,7 @@
 class AppEnvironment {
   AppEnvironment._();
 
-  static const cloudFunctionsRegion = 'europe-west1';
+  static const cloudFunctionsRegion = 'asia-south1';
   static const facebookPermissions = ['public_profile', 'email'];
   static const googleSignInScopes = [
     'https://www.googleapis.com/auth/userinfo.email',

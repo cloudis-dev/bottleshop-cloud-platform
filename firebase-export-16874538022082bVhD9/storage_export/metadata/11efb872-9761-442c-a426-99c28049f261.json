@@ -1,0 +1,20 @@
+{
+  "name": "shop/1920x900_stahuj_SVK.jpg",
+  "bucket": "bottleshop-3-veze-dev-54908.appspot.com",
+  "metageneration": 1,
+  "generation": 1652036812461,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "3adf1de5-c7da-4ab0-8e47-0a88f4d172df"
+  ],
+  "etag": "iMvoliiWMIwUXPUsrp6w3iSDHYo",
+  "timeCreated": "2022-05-08T19:06:52.460Z",
+  "updated": "2022-05-08T19:06:52.465Z",
+  "size": 759773,
+  "md5Hash": "M+4pYoYkTbV+ygYwIMkzhQ==",
+  "crc32c": "2862633356"
+}
