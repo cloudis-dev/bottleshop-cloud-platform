@@ -95,6 +95,7 @@ export const createCheckoutSession = functions
     // Promos check
 
     let promoRes: [{ coupon: string }, PromoCode] | undefined = undefined;
+    let discountValue: number | undefined = undefined;
     if (data.promoCode !== undefined) {
       const promo = (await getPromoByCode(data.promoCode))?.[0];
       if (promo === undefined || !isPromoValidV2(promo, orderType, cartItems)) {
@@ -103,10 +104,14 @@ export const createCheckoutSession = functions
           'Promo code either doesnt exist or is not valid for the cart.',
         );
       }
+      const totalSum = cartItems.map((item) => item.quantity * calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc);
+      discountValue = (promo?.promo_code_type == 'percent'
+      ? promo!.discount_value / 100 *  totalSum
+      : Math.round(promo.discount_value * 100));
 
       const stripeCoupon = await stripe.coupons.create({
         name: `Promo: ${data.promoCode}`,
-        amount_off: Math.round(promo.discount_value * 100),
+        amount_off: discountValue,
         currency: 'eur',
       });
 
@@ -123,7 +128,7 @@ export const createCheckoutSession = functions
       deliveryType: data.deliveryType,
       orderNote: data.orderNote.trim() === '' ? data.orderNote.trim() : undefined,
       promoCode: promoCode?.code,
-      promoDiscountValue: promoCode?.discount_value,
+      promoDiscountValue: discountValue,
     };
 
     const session = await stripe.checkout.sessions.create({
