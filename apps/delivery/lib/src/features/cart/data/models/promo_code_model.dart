@@ -19,12 +19,14 @@ class PromoCodeModel extends Equatable {
   static const String remainingUsesCountField = 'remaining_uses_count';
   static const String discountField = 'discount_value';
   static const String minCartValueField = 'min_cart_value';
+ static const String promoCodeTypeField = 'promo_code_type';
 
   final String uid;
   final String code;
   final int remainingUsesCount;
   final double discount;
   final double minCartValue;
+  final String promoCodeType;
 
   const PromoCodeModel({
     required this.uid,
@@ -32,6 +34,7 @@ class PromoCodeModel extends Equatable {
     required this.remainingUsesCount,
     required this.discount,
     required this.minCartValue,
+    required this.promoCodeType
   });
 
   bool isPromoValid(CartModel cart, OrderTypeModel? orderType) {
@@ -43,14 +46,16 @@ class PromoCodeModel extends Equatable {
       : code = json[codeField],
         remainingUsesCount = json[remainingUsesCountField],
         discount = json[discountField],
-        minCartValue = json[minCartValueField];
+        minCartValue = json[minCartValueField],
+        promoCodeType = json[promoCodeTypeField];
 
   Map<String, dynamic> toFirebaseJson() {
     return {
       codeField: code,
       remainingUsesCountField: remainingUsesCount,
       discountField: discount,
-      minCartValueField: minCartValue
+      minCartValueField: minCartValue,
+      promoCodeTypeField: promoCodeType
     };
   }
 
@@ -61,6 +66,7 @@ class PromoCodeModel extends Equatable {
         remainingUsesCount,
         discount,
         minCartValue,
+        promoCodeType
       ];
 
   @override

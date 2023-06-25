@@ -33,9 +33,10 @@ export function isPromoValidV1(promo: PromoCode, cart: Cart): boolean {
 export function isPromoValidV2(promo: PromoCode, orderType: OrderType, cartItems: CartItem[]): boolean {
   return (
     promo.remaining_uses_count > 0 &&
-    promo.min_cart_value <=
+    (promo.promo_code_type != 'percent' ? promo.min_cart_value <=
       orderType.shipping_fee_eur_no_vat +
-        cartItems.map((item) => item.quantity * calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc)
+        cartItems.map((item) => item.quantity * calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc):true)
+      
   );
 }
 

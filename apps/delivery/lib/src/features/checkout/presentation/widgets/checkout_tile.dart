@@ -47,11 +47,16 @@ class CheckoutTile extends HookConsumerWidget {
     return ref.watch(cartProvider).when(
           data: (cart) {
             final subtotal = cart.totalProductsPriceNoVat +
-                (orderType?.shippingFeeNoVat ?? 0) - (promoCode?.discount ?? 0);
+                (orderType?.shippingFeeNoVat ?? 0) -
+                (promoCode?.promoCodeType == 'percent'
+                    ? promoCode!.discount / 100 * cart.totalProductsPrice
+                    : (promoCode?.discount ?? 0));
             final totalVat = cart.totalProductsVat + (orderType?.feeVat ?? 0);
             final totalValue = cart.totalProductsPrice +
                 (orderType?.feeWithVat ?? 0) -
-                (promoCode?.discount ?? 0);
+                (promoCode?.promoCodeType == 'percent'
+                    ? promoCode!.discount / 100 * cart.totalProductsPrice
+                    : (promoCode?.discount ?? 0));
 
             return Container(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
@@ -118,7 +123,11 @@ class CheckoutTile extends HookConsumerWidget {
                             ),
                             Text(
                               '- ${FormattingUtils.getPriceNumberString(
-                                promoCode.discount,
+                                (promoCode?.promoCodeType == 'percent'
+                                    ? promoCode!.discount /
+                                        100 *
+                                        cart.totalProductsPrice
+                                    : (promoCode?.discount ?? 0)),
                                 withCurrency: true,
                               )}',
                               style: Theme.of(context).textTheme.subtitle1,

@@ -6,4 +6,5 @@ export interface PromoCode {
   min_cart_value: number;
   remaining_uses_count: number;
   [promoCodeFields.stripeCouponId]: string | undefined;
+  promo_code_type: string;
 }
