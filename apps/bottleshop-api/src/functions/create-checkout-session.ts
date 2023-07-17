@@ -104,10 +104,13 @@ export const createCheckoutSession = functions
           'Promo code either doesnt exist or is not valid for the cart.',
         );
       }
-      const totalSum = cartItems.map((item) => item.quantity * calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc);
-      discountValue = (promo?.promo_code_type == 'percent'
-      ? promo!.discount_value / 100 *  totalSum
-      : Math.round(promo.discount_value * 100));
+      const totalSum = cartItems
+        .map((item) => item.quantity * calculateProductFinalPrice(item.product))
+        .reduce((acc, a) => a + acc);
+      discountValue =
+        promo?.promo_code_type == 'percent'
+          ? (promo!.discount_value / 100) * totalSum
+          : Math.round(promo.discount_value * 100);
 
       const stripeCoupon = await stripe.coupons.create({
         name: `Promo: ${data.promoCode}`,
