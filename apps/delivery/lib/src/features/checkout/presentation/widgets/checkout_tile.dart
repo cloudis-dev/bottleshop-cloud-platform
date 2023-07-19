@@ -129,11 +129,7 @@ class CheckoutTile extends HookConsumerWidget {
                             ),
                             Text(
                               '- ${FormattingUtils.getPriceNumberString(
-                                (promoCode?.promoCodeType == 'percent'
-                                    ? promoCode!.discount /
-                                        100 *
-                                        cart.totalProductsPrice
-                                    : (promoCode?.discount ?? 0)),
+                               calculatePromoDiscount(orderType, promoCode, cart),
                                 withCurrency: true,
                               )}',
                               style: Theme.of(context).textTheme.subtitle1,
