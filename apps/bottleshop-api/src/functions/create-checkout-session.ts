@@ -108,7 +108,7 @@ export const createCheckoutSession = functions
         .map((item) => item.quantity * calculateProductFinalPrice(item.product))
         .reduce((acc, a) => a + acc);
       discountValue =
-        promo.promo_code_type == 'percent'
+        promo.promo_code_type === 'percent'
           ? (promo.discount_value / 100) * totalSum
           : Math.round(promo.discount_value * 100);
 
