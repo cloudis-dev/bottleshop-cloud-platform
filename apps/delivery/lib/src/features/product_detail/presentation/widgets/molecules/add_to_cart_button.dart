@@ -44,7 +44,7 @@ class AddToCartButton extends HookConsumerWidget {
                   try {
                     ref.read(cartRepositoryProvider)!.add(product.uniqueId, 1);
                     logAddToCart(
-                      context,
+                      ref,
                       product.uniqueId,
                       product.name,
                       product.allCategories.first.categoryDetails.toString(),
