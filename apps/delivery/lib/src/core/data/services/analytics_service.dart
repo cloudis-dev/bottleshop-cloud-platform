@@ -48,13 +48,13 @@ Future<void> logAddToCart(WidgetRef ref, String itemId, String itemName,
       quantity.toString(): quantity.toString()});
 }
 
-Future<void> logAddToWishlist(BuildContext context, String itemId,
+Future<void> logAddToWishlist(WidgetRef ref, String itemId,
     String itemName, String itemCategory, int quantity) async {
-  /*return _getAnalytics(context).logAddToWishlist(
+    return _getAnalytics(ref).logEvent( name: 'addToWishlist',parameters: {
       itemId: itemId,
       itemName: itemName,
       itemCategory: itemCategory,
-      quantity: quantity);*/
+      quantity.toString(): quantity.toString()});
 }
 
 Future<void> logPurchase(WidgetRef ref, double value) async {

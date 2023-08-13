@@ -65,7 +65,7 @@ class ToggleWishlistButton extends HookConsumerWidget {
                       );
                 } else {
                   logAddToWishlist(
-                      context,
+                      ref,
                       product.uniqueId,
                       product.name,
                       product.allCategories.first.categoryDetails.toString(),
