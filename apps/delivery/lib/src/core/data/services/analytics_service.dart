@@ -41,7 +41,6 @@ Future<void> logAddPaymentInfo(WidgetRef ref) async {
 
 Future<void> logAddToCart(WidgetRef ref, String itemId, String itemName,
     String itemCategory, int quantity) async {
-      print('wrksss');
   return _getAnalytics(ref).logEvent(name: "addToCart", parameters: {
       itemId: itemId,
       itemName: itemName,
@@ -63,13 +62,14 @@ Future<void> logPurchase(WidgetRef ref, double value) async {
 }
 
 Future<void> logViewItem(
-  BuildContext context,
+  WidgetRef context,
   String itemId,
   String itemName,
   String itemCategory,
 ) async {
-  /*return _getAnalytics(context).logViewItem(
-      itemId: itemId, itemCategory: itemCategory, itemName: itemName);*/
+  print('rgrgwe');
+  return _getAnalytics(context).logEvent( name: 'ViewItem', parameters: {
+      itemId: itemId, itemCategory: itemCategory, itemName: itemName});
 }
 
 String analyticsNameExtractor(RouteSettings settings) {
