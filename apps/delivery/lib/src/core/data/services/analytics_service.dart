@@ -57,6 +57,19 @@ Future<void> logAddToWishlist(WidgetRef ref, String itemId,
       quantity.toString(): quantity.toString()});
 }
 
+Future<void> logUsePromo(WidgetRef ref, String promo,
+    String type, double discount) async {
+      print('rgg');
+    return _getAnalytics(ref).logEvent( name: 'usePromo',parameters: {
+      promo: promo,
+      type: type,
+      discount.toString(): discount.toString()});
+}
+
+Future<void> logPaymentMethod(WidgetRef ref, String method) async {
+    return _getAnalytics(ref).logEvent( name: 'paymentMethod',parameters: { method:method});
+}
+
 Future<void> logPurchase(WidgetRef ref, double value) async {
   return _getAnalytics(ref).logPurchase(value: value, currency: 'EUR');
 }

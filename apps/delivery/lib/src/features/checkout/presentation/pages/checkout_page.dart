@@ -13,6 +13,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_environment.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
@@ -148,6 +149,8 @@ class _CheckoutPageView extends HookConsumerWidget {
                   NestingBranch.success,
                 );
           }
+         await logPaymentMethod(ref,  DeliveryOption.cashOnDelivery.toString());
+          
         } catch (err, stack) {
           _logger.severe('Failed to create cash-on-delivery order', err, stack);
           showSimpleNotification(
@@ -161,6 +164,7 @@ class _CheckoutPageView extends HookConsumerWidget {
         break;
       default:
         if (kIsWeb) {
+          await logPaymentMethod(ref,  deliveryOption.toString());
           final sessionId = await ref
               .read(cloudFunctionsProvider)
               .createCheckoutSession(paymentData);
@@ -175,6 +179,7 @@ class _CheckoutPageView extends HookConsumerWidget {
                 context: context,
               );
             }
+            await logPaymentMethod(ref, deliveryOption.toString());
           } else {
             if (context.mounted) {
               (await redirectToCheckout(
