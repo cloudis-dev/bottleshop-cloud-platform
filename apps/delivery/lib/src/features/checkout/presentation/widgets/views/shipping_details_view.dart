@@ -11,6 +11,7 @@
 //
 
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/features/account/presentation/widgets/account_card.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
@@ -188,6 +189,7 @@ class ShippingDetailsView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logProceeds(ref, 'user');
     final selectedDeliveryOption = ref
         .watch(orderTypeStateProvider.select((value) => value?.deliveryOption));
     final scrollController = useScrollController();

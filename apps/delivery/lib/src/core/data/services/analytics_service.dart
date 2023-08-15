@@ -70,6 +70,9 @@ Future<void> logPaymentMethod(WidgetRef ref, String method) async {
     return _getAnalytics(ref).logEvent( name: 'paymentMethod',parameters: { method:method});
 }
 
+Future<void> logProceeds(WidgetRef ref, String user) async {
+    return _getAnalytics(ref).logEvent( name: 'proceeds',parameters: { user:user});
+}
 Future<void> logPurchase(WidgetRef ref, double value) async {
   return _getAnalytics(ref).logPurchase(value: value, currency: 'EUR');
 }
