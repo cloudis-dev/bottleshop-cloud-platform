@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/app_config.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
+import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
@@ -12,6 +17,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:routeborn/routeborn.dart';
+
+import '../providers/providers.dart';
+
+
 
 class StripeCheckoutSuccessPage extends RoutebornPage {
   static const String pagePathBase = 'success';
@@ -34,7 +43,9 @@ class _StripeCheckoutSuccessView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
-
+    print(ref.read(orderTypeStateProvider)!.deliveryOption.toString());
+    var orderedItems =  ref.watch(orderCartProvider);
+    logOrderCreated(ref, orderedItems, kIsWeb ? 'Web' : 'Mobile', ref.read(orderTypeStateProvider)!.deliveryOption.toString());
     if (shouldUseMobileLayout(context)) {
       return Scaffold(
         key: scaffoldKey,

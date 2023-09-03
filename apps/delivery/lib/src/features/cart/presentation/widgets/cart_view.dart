@@ -10,9 +10,13 @@
 //
 //
 
+import 'dart:convert';
+
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
+import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/cart/presentation/widgets/cart_list_item.dart';
 import 'package:delivery/src/features/checkout/presentation/pages/checkout_page.dart';
@@ -24,6 +28,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
+
+import '../../../checkout/presentation/pages/stripe_checkout_success.dart';
 
 final _logger = Logger((CartView).toString());
 
@@ -100,6 +106,12 @@ class CartView extends HookConsumerWidget {
                 return CheckoutTile(
                   actionLabel: context.l10n.proceedToShipment,
                   actionCallback: () async {
+                    var items = [...cart.products.toList()];
+                    final productJsonList = items.map((e) {
+                      return {'name': e.product.name, 'count': e.count};
+                    }).toList();
+                    ref.read(orderCartProvider.state).state =
+                        jsonEncode(productJsonList);
                     ref.read(navigationProvider).pushPage(
                           context,
                           AppPageNode(page: CheckoutPage()),

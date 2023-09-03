@@ -1,9 +1,11 @@
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
+import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/cart/data/repositories/cart_repository.dart';
 import 'package:delivery/src/features/cart/data/services/cart_content_service.dart';
+import 'package:delivery/src/features/orders/presentation/widgets/order_cart_list_item.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:delivery/src/features/products/presentation/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,6 +33,11 @@ final _cartContentServiceProvider =
   (_, user) => CartContentService(user),
 );
 
+final orderCartProvider = StateProvider(
+  (ref) =>
+   'null'
+);
+
 final cartRepositoryProvider = Provider.autoDispose<CartRepository?>(
   (ref) {
     final currentUser = ref.watch(currentUserProvider);
@@ -52,6 +59,8 @@ final cartProvider = StreamProvider.autoDispose<CartModel>(
       ref.watch(cartRepositoryProvider)?.streamCart ??
       Stream.value(CartModel.empty()),
 );
+
+
 
 final isCartEmptyProvider = FutureProvider.autoDispose<bool>((ref) {
   return ref.watch(cartProvider).maybeWhen(
