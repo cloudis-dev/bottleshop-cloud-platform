@@ -12,8 +12,10 @@
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/features/auth/data/models/user_model.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger((CloudFunctionsService).toString());
@@ -40,7 +42,7 @@ class CloudFunctionsService {
     return true;
   }
 
-  Future<String?> createCheckoutSession(PaymentData paymentData) async {
+  Future<String?> createCheckoutSession(PaymentData paymentData, WidgetRef ref) async {
     try {
       final response = await _firebaseFunctions
           .httpsCallable(FirebaseCallableFunctions.createCheckoutSession)
@@ -48,6 +50,7 @@ class CloudFunctionsService {
       return response.data;
     } catch (err, stack) {
       _logger.severe("Failed to create checkout session $err", stack);
+      await logErrors(ref, 'Failed to create cash-on-delivery order');
       return null;
     }
   }

@@ -43,7 +43,9 @@ class _StripeCheckoutSuccessView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = useMemoized(() => GlobalKey<ScaffoldState>());
-    print(ref.read(orderTypeStateProvider)!.deliveryOption.toString());
+    if(ref.read(currentAppliedPromoProvider) != null){
+     logUsePromo(ref, ref.read(currentAppliedPromoProvider)!.code);
+    }
     var orderedItems =  ref.watch(orderCartProvider);
     logOrderCreated(ref, orderedItems, kIsWeb ? 'Web' : 'Mobile', ref.read(orderTypeStateProvider)!.deliveryOption.toString());
     if (shouldUseMobileLayout(context)) {

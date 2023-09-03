@@ -1,3 +1,5 @@
+import 'package:delivery/src/core/data/services/analytics_service.dart';
+import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -24,7 +26,6 @@ class RemainingDetailsView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollCtrl = useScrollController();
-
     return ref.watch(cartProvider).when(
           data: (cart) => Loader(
             inAsyncCall: ref.watch(isRedirectingProvider),

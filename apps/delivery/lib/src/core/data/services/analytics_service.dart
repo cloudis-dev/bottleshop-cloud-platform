@@ -57,17 +57,17 @@ Future<void> logAddToWishlist(WidgetRef ref, String itemId,
       quantity.toString(): quantity.toString()});
 }
 
-Future<void> logUsePromo(WidgetRef ref, String promo,
-    String type, double discount) async {
-      print('rgg');
+Future<void> logUsePromo(WidgetRef ref, String promo) async {
     return _getAnalytics(ref).logEvent( name: 'usePromo',parameters: {
-      promo: promo,
-      type: type,
-      discount.toString(): discount.toString()});
+      promo: promo});
 }
 
 Future<void> logPaymentMethod(WidgetRef ref, String method) async {
     return _getAnalytics(ref).logEvent( name: 'paymentMethod',parameters: { method:method});
+}
+
+Future<void> logOrderCreated(WidgetRef ref, String products, String platform, String shipping) async {
+    return _getAnalytics(ref).logEvent( name: 'orderCreated',parameters: { products:products, platform:platform, shipping:shipping});
 }
 
 Future<void> logProceeds(WidgetRef ref, String user) async {
@@ -77,13 +77,20 @@ Future<void> logPurchase(WidgetRef ref, double value) async {
   return _getAnalytics(ref).logPurchase(value: value, currency: 'EUR');
 }
 
+Future<void> logErrors(WidgetRef ref, String error) async {
+    return _getAnalytics(ref).logEvent( name: 'errors',parameters: { error:error});
+}
+
+Future<void> logSearch(WidgetRef ref, String name, int count, String id) async {
+    return _getAnalytics(ref).logEvent( name: 'search',parameters: { name:name, count.toString(): count.toString(), id:id});
+}
+
 Future<void> logViewItem(
   WidgetRef context,
   String itemId,
   String itemName,
   String itemCategory,
 ) async {
-  print('rgrgwe');
   return _getAnalytics(context).logEvent( name: 'ViewItem', parameters: {
       itemId: itemId, itemCategory: itemCategory, itemName: itemName});
 }

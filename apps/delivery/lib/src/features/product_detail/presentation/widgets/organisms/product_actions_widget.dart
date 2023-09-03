@@ -100,6 +100,7 @@ class ProductActionsWidget extends HookConsumerWidget {
                                     context, _ProductAction.purchase),
                           ),
                         ),
+                     IconButton(onPressed:() {}, icon: Icon(Icons.share))
                 ],
               );
             },

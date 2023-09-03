@@ -10,6 +10,8 @@
 //
 //
 
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_environment.dart';
@@ -17,6 +19,7 @@ import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
+import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:delivery/src/features/checkout/data/models/payment_data.dart';
 import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout_failure.dart';
 import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout_success.dart';
@@ -35,6 +38,8 @@ import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
 import 'package:stripe_checkout/stripe_checkout.dart';
+
+import '../../../cart/presentation/providers/providers.dart';
 
 final _logger = Logger((CheckoutPage).toString());
 
@@ -72,11 +77,19 @@ class _CheckoutPageView extends HookConsumerWidget {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         ShippingDetailsView(
-          onNextPage: () => pageCtrl.animateToPage(
-            1,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeIn,
-          ),
+          onNextPage: () async {
+            logProceeds(
+                ref,
+                ref.read(currentUserProvider) == null
+                    ? 'anonym'
+                    : ref.read(currentUserProvider)!.name ?? 'anonym');
+
+            pageCtrl.animateToPage(
+              1,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          },
           onBackButton: () {
             ref.read(navigationProvider).popPage(context);
           },
@@ -135,7 +148,6 @@ class _CheckoutPageView extends HookConsumerWidget {
       promoCode: promo,
       locale: language.name,
     );
-
     switch (deliveryOption) {
       case DeliveryOption.cashOnDelivery:
         try {
@@ -149,10 +161,10 @@ class _CheckoutPageView extends HookConsumerWidget {
                   NestingBranch.success,
                 );
           }
-         await logPaymentMethod(ref,  DeliveryOption.cashOnDelivery.toString());
-          
+          await logPaymentMethod(ref, DeliveryOption.cashOnDelivery.toString());
         } catch (err, stack) {
           _logger.severe('Failed to create cash-on-delivery order', err, stack);
+          await logErrors(ref, 'Failed to create cash-on-delivery order');
           showSimpleNotification(
             Text(context.l10n.errorGeneric),
             position: NotificationPosition.top,
@@ -164,10 +176,10 @@ class _CheckoutPageView extends HookConsumerWidget {
         break;
       default:
         if (kIsWeb) {
-          await logPaymentMethod(ref,  deliveryOption.toString());
+          await logPaymentMethod(ref, deliveryOption.toString());
           final sessionId = await ref
               .read(cloudFunctionsProvider)
-              .createCheckoutSession(paymentData);
+              .createCheckoutSession(paymentData, ref);
 
           if (sessionId == null) {
             if (context.mounted) {
@@ -196,6 +208,8 @@ class _CheckoutPageView extends HookConsumerWidget {
             }
           }
         } else {
+          await logErrors(
+              ref, "Payments not yet implemented for mobile platform");
           throw UnimplementedError(
               "Payments not yet implemented for mobile platform");
         }

@@ -189,7 +189,6 @@ class ShippingDetailsView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    logProceeds(ref, 'user');
     final selectedDeliveryOption = ref
         .watch(orderTypeStateProvider.select((value) => value?.deliveryOption));
     final scrollController = useScrollController();

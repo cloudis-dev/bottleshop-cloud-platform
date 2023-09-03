@@ -22,7 +22,6 @@ class PromoCodeTile extends HookConsumerWidget {
     final promoCode = ref.watch(currentAppliedPromoProvider);
     final textCtrl = useTextEditingController(text: promoCode?.code);
     final orderType = ref.watch(orderTypeStateProvider);
-
     return Card(
       color: Theme.of(context).primaryColor,
       margin: const EdgeInsets.symmetric(
@@ -63,8 +62,7 @@ class PromoCodeTile extends HookConsumerWidget {
                       } else {
                         if (promo.isPromoValid(cart, orderType)) {
                           ref.read(currentAppliedPromoProvider.state).state =
-                              promo;                 
-                          logUsePromo(ref, promo.code, promo.promoCodeType, promoCode!.discount);
+                              promo;
                           showSimpleNotification(
                             Text(context.l10n.promoCodeApplied),
                             duration: const Duration(seconds: 5),
