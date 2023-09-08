@@ -5,6 +5,7 @@ import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/molecules/add_to_cart_button.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/molecules/quantity_update_widget.dart';
+import 'package:delivery/src/features/product_detail/presentation/widgets/molecules/share_buttons.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/molecules/toggle_wishlist_button.dart';
 import 'package:delivery/src/features/products/data/models/product_model.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,7 @@ class ProductActionsWidget extends HookConsumerWidget {
                                     context, _ProductAction.purchase),
                           ),
                         ),
-                     IconButton(onPressed:() {}, icon: Icon(Icons.share))
+                     ProductShareButton(product: product)
                 ],
               );
             },
