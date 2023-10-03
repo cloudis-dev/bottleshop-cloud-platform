@@ -56,6 +56,7 @@ class FirestoreCollections {
   static const String ordersCollection = 'orders';
   static const String versionConstraintsCollection = 'version_constraints';
   static const String promoCodesCollection = 'promo_codes';
+  static const String openHours = 'open_hours';
 
   static const String slidersSubCollection = 'configuration/sliders/data';
   static const String aggregationsCollection = 'aggregations';

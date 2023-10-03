@@ -12,9 +12,15 @@
 
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/data/services/database_service.dart';
+import 'package:delivery/src/features/home/data/models/open_hours_model.dart';
 import 'package:delivery/src/features/home/data/models/slider_model.dart';
 
 DatabaseService<SliderModel> homeSliderDb = DatabaseService<SliderModel>(
   FirestoreCollections.slidersSubCollection,
   fromMapAsync: (id, data) async => SliderModel.fromMap(data, id),
+);
+
+DatabaseService<OpenHourModel> openHoursDb = DatabaseService<OpenHourModel>(
+  FirestoreCollections.openHours,
+  fromMapAsync: (id, data) async => OpenHourModel.fromMap(data),
 );
