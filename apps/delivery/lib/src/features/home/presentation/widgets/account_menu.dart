@@ -1,4 +1,5 @@
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/menu_drawer.dart';
 import 'package:delivery/src/features/auth/presentation/providers/auth_providers.dart';
@@ -6,13 +7,17 @@ import 'package:delivery/src/features/auth/presentation/widgets/atoms/terms_and_
 import 'package:delivery/src/features/auth/presentation/widgets/organisms/sign_in_form.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/organisms/sign_up_form.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/terms_conditions_view.dart';
+import 'package:delivery/src/features/home/data/models/open_hours_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routeborn/routeborn.dart';
+
+import '../providers/providers.dart';
 
 final _logger = Logger((AccountMenu).toString());
 
@@ -117,7 +122,7 @@ class _MenuItemsTab extends HookConsumerWidget {
     final scrollCtrl = useScrollController();
     final hasUser =
         ref.watch(currentUserProvider.select((value) => value != null));
-
+    final openHours = ref.watch(openHoursStreamProvider);
     return IntrinsicHeight(
       child: CupertinoScrollbar(
         controller: scrollCtrl,
@@ -211,6 +216,39 @@ class _MenuItemsTab extends HookConsumerWidget {
                 //     OverlaySupportEntry.of(context)!.dismiss(animate: false);
                 //   },
                 // ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Center(
+                      child: openHours.when(
+                          data: (data) {
+                            final currentDay = DateFormat('EEEE',
+                                    Localizations.localeOf(context).toString())
+                                .format(DateTime.now());
+                            final currentDate = DateFormat('d MMM y',
+                                    Localizations.localeOf(context).toString())
+                                .format(DateTime.now());
+                            OpenHourModel? closing = null;
+                            data.forEach((x) {
+                              if (x.dateFrom.isBefore(DateTime.now()) &&
+                                  x.dateTo.isAfter(DateTime.now()) &&
+                                  x.type.isEmpty) closing = x;
+                            });
+                            if (closing == null) if (currentDay == "Saturday")
+                              closing =
+                                  data.firstWhere((x) => x.type == "Saturday");
+                            else if (currentDay == "Sunday")
+                              closing =
+                                  data.firstWhere((x) => x.type == "Sunday");
+                            else
+                              closing =
+                                  data.firstWhere((x) => x.type == "Workdays");
+
+                            return Text(
+                                '${currentDay}, ${currentDate}\n${((closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0) && (closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0)) ? context.l10n.closeAt + DateFormat('HH:mm').format(closing!.dateTo) : context.l10n.closed}');
+                          },
+                          error: (error, stackTrace) => Text(error.toString()),
+                          loading: () => CircularProgressIndicator())),
+                ),
                 if (hasUser)
                   ListTile(
                     leading: const Icon(Icons.exit_to_app),

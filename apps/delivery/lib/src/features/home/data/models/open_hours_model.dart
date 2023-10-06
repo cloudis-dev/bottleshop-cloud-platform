@@ -16,33 +16,28 @@ import 'package:flutter/material.dart';
 
 @immutable
 class OpenHourModel {
-  final int _hourFrom;
-  final int _hourTo;
   final DateTime _dateFrom;
   final DateTime _dateTo;
+  final String _type;
 
   const OpenHourModel({
-  required int hourFrom,
-  required int hourTo,
   required DateTime dateFrom,
   required DateTime dateTo,
-  })  : _hourFrom = hourFrom,
-        _hourTo = hourTo,
-        _dateFrom = dateFrom,
-        _dateTo = dateTo;
+  required String type,
+  })  : _dateFrom = dateFrom,
+        _dateTo = dateTo,
+        _type = type;
 
   factory OpenHourModel.fromMap(Map<String, dynamic> data) {
     return OpenHourModel(
-      hourTo: data['hourTo'],
-      hourFrom: data['hourFrom'],
       dateFrom: data['dateFrom'].toDate(),
-      dateTo:data['dateTo'].toDate()
+      dateTo:data['dateTo'].toDate(),
+      type: data['type'],
     );
   }
 
-  int get hourTo => _hourTo;
-  int get hourFrom => _hourFrom;
-  DateTime get DateTo => _dateTo;
-  DateTime get DateFrom => _dateFrom;
+  DateTime get dateTo => _dateTo;
+  DateTime get dateFrom => _dateFrom;
+  String get type => _type;
 }
 
