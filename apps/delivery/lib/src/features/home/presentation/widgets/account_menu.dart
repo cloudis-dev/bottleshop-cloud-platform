@@ -231,7 +231,7 @@ class _MenuItemsTab extends HookConsumerWidget {
                             data.forEach((x) {
                               if (x.dateFrom.isBefore(DateTime.now()) &&
                                   x.dateTo.isAfter(DateTime.now()) &&
-                                  x.type.isEmpty) closing = x;
+                                  x.type.contains(RegExp('[0-9]'))) closing = x;
                             });
                             if (closing == null) if (currentDay == "Saturday")
                               closing =

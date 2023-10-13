@@ -12,12 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../open_hours/presentation/open_hours_view.dart';
+
 enum TabIndex {
   home,
   orders,
   products,
   sections,
   promoCodes,
+  openHours
 }
 
 final appActivityTabIndexProvider =
@@ -98,6 +101,10 @@ class _BottomNavigationBar extends HookWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long_outlined),
             label: 'Kupóny',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.timelapse),
+            label: 'Rozvrh',
           )
         ],
       );
@@ -121,6 +128,8 @@ class _BodyWidget extends HookWidget {
         return const SectionsPage();
       case TabIndex.promoCodes:
         return const PromoCodesView();
+        case TabIndex.openHours:
+        return const OpenHoursView();
     }
   }
 }

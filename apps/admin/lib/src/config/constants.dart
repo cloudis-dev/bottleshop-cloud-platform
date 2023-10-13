@@ -17,4 +17,5 @@ class Constants {
   static const String promoCodesCollection = 'promo_codes';
   static const String flashSalesCollection = 'flash_sales';
   static const String versionConstraintsCollection = 'version_constraints';
+  static const String openHoursCollection = 'open_hours';
 }
