@@ -656,6 +656,7 @@
   "landing": "Landing",
   "saleButton": "SALE",
   "logIn": "Log in",
-  "closeAt": "close at "
+  "closeAt": "close at ",
+  "closedHour" : "closed"
 }
 

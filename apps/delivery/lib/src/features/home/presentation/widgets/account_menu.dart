@@ -229,9 +229,10 @@ class _MenuItemsTab extends HookConsumerWidget {
                                 .format(DateTime.now());
                             OpenHourModel? closing = null;
                             data.forEach((x) {
-                              if (x.dateFrom.isBefore(DateTime.now()) &&
-                                  x.dateTo.isAfter(DateTime.now()) &&
-                                  x.type.contains(RegExp('[0-9]'))) closing = x;
+                             // print(x.type + DateUtils.dateOnly(x.dateFrom).isBefore(DateUtils.dateOnly(DateTime.now())).toString() + DateUtils.dateOnly(x.dateFrom).isAfter(DateUtils.dateOnly(DateTime.now())).toString());
+                              if (!DateUtils.dateOnly(x.dateFrom).isBefore(DateUtils.dateOnly(DateTime.now())) && !DateUtils.dateOnly(x.dateFrom).isAfter(DateUtils.dateOnly(DateTime.now()))){
+                                     closing = x;
+                            }
                             });
                             if (closing == null) if (currentDay == "Saturday")
                               closing =
@@ -242,9 +243,9 @@ class _MenuItemsTab extends HookConsumerWidget {
                             else
                               closing =
                                   data.firstWhere((x) => x.type == "Workdays");
-
+                            print(closing!.isClosed.toString());
                             return Text(
-                                '${currentDay}, ${currentDate}\n${((closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0) && (closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0)) ? context.l10n.closeAt + DateFormat('HH:mm').format(closing!.dateTo) : context.l10n.closed}');
+                                '${currentDay}, ${currentDate}\n${((closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0) && (closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0)) && !closing!.isClosed ? context.l10n.closeAt + DateFormat('HH:mm').format(closing!.dateTo) : context.l10n.closedHour}');
                           },
                           error: (error, stackTrace) => Text(error.toString()),
                           loading: () => CircularProgressIndicator())),

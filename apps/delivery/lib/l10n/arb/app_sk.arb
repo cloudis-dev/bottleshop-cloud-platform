@@ -656,5 +656,6 @@
   "landing": "Landing",
   "saleButton": "VÝPREDAJ",
   "logIn": "Prihlásiť sa",
-  "closeAt": "zatvara sa o "
+  "closeAt": "zatvara sa o ",
+  "closedHour" : "zatvorené"
 }
