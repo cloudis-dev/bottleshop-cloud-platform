@@ -657,5 +657,6 @@
   "saleButton": "VÝPREDAJ",
   "logIn": "Prihlásiť sa",
   "closeAt": "zatvara sa o ",
-  "closedHour" : "zatvorené"
+  "closedHour" : "zatvorené",
+  "popUpOpenHours" : "Vážený zákazník, nezabudnite, že tovar si budete môcť vyzdvihnúť iba počas oficiálnych otváracích hodín Bottleshop Tri Veže"
 }

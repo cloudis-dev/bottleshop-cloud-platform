@@ -216,20 +216,29 @@ class _MenuItemsTab extends HookConsumerWidget {
                 //     OverlaySupportEntry.of(context)!.dismiss(animate: false);
                 //   },
                 // ),
-                Padding(
+               
+                if (hasUser)
+                  ListTile(
+                    leading: const Icon(Icons.exit_to_app),
+                    title: Text(context.l10n.logOut),
+                    onTap: () async {
+                      await ref.read(userRepositoryProvider).signOut();
+                      OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                    },
+                  ),
+                 Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: Center(
                       child: openHours.when(
                           data: (data) {
                             final currentDay = DateFormat('EEEE',
-                                    Localizations.localeOf(context).toString())
+                                   'en_US')
                                 .format(DateTime.now());
                             final currentDate = DateFormat('d MMM y',
                                     Localizations.localeOf(context).toString())
                                 .format(DateTime.now());
                             OpenHourModel? closing = null;
                             data.forEach((x) {
-                             // print(x.type + DateUtils.dateOnly(x.dateFrom).isBefore(DateUtils.dateOnly(DateTime.now())).toString() + DateUtils.dateOnly(x.dateFrom).isAfter(DateUtils.dateOnly(DateTime.now())).toString());
                               if (!DateUtils.dateOnly(x.dateFrom).isBefore(DateUtils.dateOnly(DateTime.now())) && !DateUtils.dateOnly(x.dateFrom).isAfter(DateUtils.dateOnly(DateTime.now()))){
                                      closing = x;
                             }
@@ -245,20 +254,13 @@ class _MenuItemsTab extends HookConsumerWidget {
                                   data.firstWhere((x) => x.type == "Workdays");
                             print(closing!.isClosed.toString());
                             return Text(
-                                '${currentDay}, ${currentDate}\n${((closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0) && (closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0)) && !closing!.isClosed ? context.l10n.closeAt + DateFormat('HH:mm').format(closing!.dateTo) : context.l10n.closedHour}');
+                                '${DateFormat('EEEE',
+                                    Localizations.localeOf(context).toString())
+                                .format(DateTime.now())}, ${currentDate}\n${((closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0) && (closing!.dateTo.hour + closing!.dateTo.minute / 60.0 >= DateTime.now().hour + DateTime.now().minute / 60.0)) && !closing!.isClosed ? context.l10n.closeAt + DateFormat('HH:mm').format(closing!.dateTo) : context.l10n.closedHour}');
                           },
                           error: (error, stackTrace) => Text(error.toString()),
                           loading: () => CircularProgressIndicator())),
                 ),
-                if (hasUser)
-                  ListTile(
-                    leading: const Icon(Icons.exit_to_app),
-                    title: Text(context.l10n.logOut),
-                    onTap: () async {
-                      await ref.read(userRepositoryProvider).signOut();
-                      OverlaySupportEntry.of(context)!.dismiss(animate: false);
-                    },
-                  )
               ],
             ),
           ),

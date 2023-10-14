@@ -657,6 +657,8 @@
   "saleButton": "SALE",
   "logIn": "Log in",
   "closeAt": "close at ",
-  "closedHour" : "closed"
+  "closedHour" : "closed",
+  "popUpOpenHours" : "Dear customer, please note that you will be able to pick-up your goods only during the official opening hours of Bottleshop Tri Veže"
+  
 }
 
