@@ -1,10 +1,13 @@
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
+import 'package:delivery/src/features/home/data/models/open_hours_model.dart';
+import 'package:delivery/src/features/home/presentation/providers/providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/landing/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../core/data/res/constants.dart';
@@ -15,7 +18,7 @@ class Footer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(currentLanguageProvider);
-
+    final openHours = ref.watch(openHoursStreamProvider);
     return Container(
       height: 342,
       color: Colors.black,
@@ -124,7 +127,12 @@ class Footer extends HookConsumerWidget {
             ],
           ),
         ),
-        Container(
+        openHours.when(error: (error, stackTrace) => Text(error.toString()), loading: () => CircularProgressIndicator(),
+        data: (data) { 
+          final workdays = data.firstWhere((element) => element.type == 'Workdays');
+          final saturday = data.firstWhere((element) => element.type == 'Saturday');
+          final sunday = data.firstWhere((element) => element.type == 'Sunday');
+          return Container(
           padding: const EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +144,11 @@ class Footer extends HookConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text("${context.l10n.monFr} 10:00 - 22:00",
+                child: workdays.isClosed ?
+              Text("${context.l10n.monFr} ${context.l10n.closed}",
+                    style: publicSansTextTheme.bodySmall):
+              
+              Text("${context.l10n.monFr} ${DateFormat.Hm().format(workdays.dateFrom).toString()} - ${DateFormat.Hm().format(workdays.dateTo).toString()}",
                     style: publicSansTextTheme.bodySmall),
               ),
               // Padding(
@@ -146,17 +158,25 @@ class Footer extends HookConsumerWidget {
               // ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text("${context.l10n.sat} 12:00 - 22:00",
+                child: saturday.isClosed ?
+              Text("${context.l10n.sat} ${context.l10n.closed}",
+                    style: publicSansTextTheme.bodySmall):
+              
+              Text("${context.l10n.sat} ${DateFormat.Hm().format(saturday.dateFrom).toString()} - ${DateFormat.Hm().format(saturday.dateFrom).toString()}",
                     style: publicSansTextTheme.bodySmall),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Text(context.l10n.sun + context.l10n.closed,
+                child: sunday.isClosed ?
+              Text("${context.l10n.sun} ${context.l10n.closed}",
+                    style: publicSansTextTheme.bodySmall):
+              
+              Text("${context.l10n.sun} ${DateFormat.Hm().format(sunday.dateFrom).toString()} - ${DateFormat.Hm().format(sunday.dateTo).toString()}",
                     style: publicSansTextTheme.bodySmall),
-              ),
+              ),              
             ],
           ),
-        ),
+        );}),
         Container(
           padding: const EdgeInsets.fromLTRB(64, 100, 0, 0),
           child: Column(
