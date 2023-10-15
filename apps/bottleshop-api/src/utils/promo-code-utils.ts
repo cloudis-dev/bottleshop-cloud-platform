@@ -35,7 +35,7 @@ export function isPromoValidV2(promo: PromoCode, orderType: OrderType, cartItems
     promo.remaining_uses_count > 0 &&
     promo.min_cart_value <=
       orderType.shipping_fee_eur_no_vat +
-        cartItems.map((item) => calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc)
+        cartItems.map((item) => item.quantity * calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc)
   );
 }
 

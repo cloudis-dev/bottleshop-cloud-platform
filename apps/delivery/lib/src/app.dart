@@ -12,6 +12,16 @@
 
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:routeborn/routeborn.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/routes.dart';
@@ -24,14 +34,6 @@ import 'package:delivery/src/features/auth/presentation/providers/auth_providers
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_checker_widget.dart';
 import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
 import 'package:delivery/src/features/orders/presentation/providers/providers.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
-import 'package:routeborn/routeborn.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class App extends HookConsumerWidget {
   const App({Key? key}) : super(key: key);
@@ -75,15 +77,42 @@ class _AppBody extends HookConsumerWidget {
             ScrollConfiguration.of(context).copyWith(scrollbars: false),
         backButtonDispatcher: RootBackButtonDispatcher(),
         routeInformationProvider: ref.watch(routeInformationProvider),
-        builder: (context, router) => OverlaySupport.global(
-          child: PlatformInitializationView(
-            child: VersionCheckView(
-              checkSuccessWidgetBuilder: (context) => AuthCheckerWidget(
-                successViewBuilder: (context) => _RouterWidget(router!),
+        builder: (context, router) => ResponsiveWrapper.builder(
+            backgroundColor: Colors.black,
+            maxWidth: 1920,
+            minWidth: 0,
+            defaultScale: true,
+            breakpoints: const [
+              ResponsiveBreakpoint.autoScaleDown(
+                0,
+                name: MOBILE,
+                scaleFactor: 1.7,
               ),
-            ),
-          ),
-        ),
+              ResponsiveBreakpoint.autoScaleDown(
+                750,
+                name: TABLET,
+                scaleFactor: 0.63,
+              ),
+              ResponsiveBreakpoint.autoScaleDown(
+                900,
+                name: TABLET,
+                scaleFactor: 0.63,
+              ),
+              ResponsiveBreakpoint.resize(
+                1440,
+                name: DESKTOP,
+                scaleFactor: 0.9,
+              ),
+            ],
+            OverlaySupport.global(
+              child: PlatformInitializationView(
+                child: VersionCheckView(
+                  checkSuccessWidgetBuilder: (context) => AuthCheckerWidget(
+                    successViewBuilder: (context) => _RouterWidget(router!),
+                  ),
+                ),
+              ),
+            )),
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (context) => context.l10n.app_title,
         localizationsDelegates: const [

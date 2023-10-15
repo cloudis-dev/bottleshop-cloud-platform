@@ -13,7 +13,7 @@ import { generateNewOrderId } from '../utils/order-utils';
 
 export const createPaymentIntent = functions
   .region(tier1Region)
-  .runWith({ allowInvalidAppCheckToken: true })
+  .runWith({ enforceAppCheck: false })
   .https.onCall(async (data: PaymentData, context) => {
     const userUid = context.auth?.uid;
 

@@ -199,6 +199,18 @@ class _MenuItemsTab extends HookConsumerWidget {
                     OverlaySupportEntry.of(context)!.dismiss(animate: false);
                   },
                 ),
+                // ListTile(
+                //   leading: const Icon(Icons.feedback),
+                //   title: Text(context.l10n.feedback),
+                //   onTap: () {
+                //     ref.read(navigationProvider).pushPage(
+                //           context,
+                //           AppPageNode(page: FeedbackPage()),
+                //           toParent: true,
+                //         );
+                //     OverlaySupportEntry.of(context)!.dismiss(animate: false);
+                //   },
+                // ),
                 if (hasUser)
                   ListTile(
                     leading: const Icon(Icons.exit_to_app),

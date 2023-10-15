@@ -15,6 +15,7 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/models/categories_tree_model.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/search_bar.dart';
@@ -86,6 +87,7 @@ class _PageScaffold extends HookConsumerWidget {
       key: scaffoldStateKey,
       appBar: AppBar(
         leading: BackButton(
+          color: kPrimaryColor,
           onPressed: () {
             ref.read(navigationProvider).setNestingBranch(
                   context,

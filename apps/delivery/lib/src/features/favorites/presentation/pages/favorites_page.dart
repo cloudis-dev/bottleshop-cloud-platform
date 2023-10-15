@@ -12,6 +12,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
@@ -79,13 +80,6 @@ class _FavoritesPageView extends HookWidget {
     } else {
       return HomePageTemplate(
         scaffoldKey: scaffoldKey,
-        appBarActions: [
-          const _SearchIconButton(),
-          AuthPopupButton(
-            key: authButtonKey,
-            scaffoldKey: scaffoldKey,
-          ),
-        ],
         body: PageBodyTemplate(
           child: _Body(authButtonKey),
         ),
@@ -101,7 +95,10 @@ class _SearchIconButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       tooltip: MaterialLocalizations.of(context).searchFieldLabel,
-      icon: const Icon(Icons.search),
+      icon: const Icon(
+        Icons.search,
+        color: kPrimaryColor,
+      ),
       onPressed: () => ref.read(navigationProvider).setNestingBranch(
             context,
             NestingBranch.search,

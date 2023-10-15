@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import Stripe from 'stripe';
+import { stripeSecretKey } from './environment';
 
 admin.initializeApp(functions.config().firebase);
 admin.firestore().settings({
@@ -9,7 +10,7 @@ admin.firestore().settings({
 });
 
 export function createStripeClient(): Stripe {
-  return new Stripe(functions.config().stripe.secret_key, {
+  return new Stripe(stripeSecretKey.value(), {
     typescript: true,
     apiVersion: '2022-11-15',
   });
@@ -34,3 +35,4 @@ export { onCategoryWriteAlgoliaUpdate as onCategoryWrite } from './functions/on-
 export { onAdminUserCreate, onAdminUserDelete } from './functions/on-admin-user-create-delete';
 export { createCashOnDeliveryOrder } from './functions/create-cash-on-delivery-order';
 export { deleteAccount } from './functions/delete-account';
+export { postFeedback } from './functions/post-feedback';

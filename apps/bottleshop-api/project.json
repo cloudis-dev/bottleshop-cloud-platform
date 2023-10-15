@@ -11,7 +11,11 @@
         "main": "apps/bottleshop-api/src/index.ts",
         "tsConfig": "apps/bottleshop-api/tsconfig.app.json",
         "packageJson": "apps/bottleshop-api/package.json",
-        "assets": ["apps/bottleshop-api/.runtimeconfig.json", "apps/bottleshop-api/templates"]
+        "assets": [
+          "apps/bottleshop-api/templates/*",
+          "apps/bottleshop-api/.env.bottleshop-3-veze-dev-54908",
+          "apps/bottleshop-api/.env.bottleshop3veze-delivery"
+        ]
       }
     },
     "deploy": {

@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bottleshop_admin/src/core/utils/files_util.dart';
 import 'package:bottleshop_admin/src/core/utils/image_util.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -81,9 +79,11 @@ class FirebaseStorageService {
     final thumbnailPath = getThumbnailPath(productUniqueId);
     await FirebaseStorage.instance.ref().child(cleanImagePath).putData(
           cleanImgData,
+          SettableMetadata(contentType: 'image/jpeg'),
         );
     await FirebaseStorage.instance.ref().child(watermarkedImagePath).putData(
           watermarkedImgData,
+          SettableMetadata(contentType: 'image/jpeg'),
         );
     return ImageUploadResult(
       imagePath: watermarkedImagePath,

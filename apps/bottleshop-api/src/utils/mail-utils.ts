@@ -16,13 +16,14 @@ import { OrderType } from '../models/order-type';
  * @param html
  * @returns
  */
-export function createMail(to: string, subject: string, text = '', html = ''): Mail {
+export function createMail(to: string, subject: string, text = '', html = '', attachments?: {path:string}[]): Mail {
   return {
     to,
     message: {
       subject,
       text,
       html,
+      attachments
     },
   };
 }

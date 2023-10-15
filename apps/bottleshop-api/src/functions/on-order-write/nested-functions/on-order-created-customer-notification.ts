@@ -48,7 +48,7 @@ export const onOrderCreatedCustomerNotification = async (orderSnapshot: function
     },
   });
 
-  if (deviceTokens.length > 0 && deviceTokens.every((val) => val.length > 0)) {
+  if (deviceTokens.length > 0) {
     await admin.messaging().sendToDevice(deviceTokens, notification);
   }
 };

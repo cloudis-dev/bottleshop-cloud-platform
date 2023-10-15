@@ -15,7 +15,7 @@ import { PromoCode } from '../models/promo-code';
 
 export const createCheckoutSession = functions
   .region(tier1Region)
-  .runWith({ allowInvalidAppCheckToken: true })
+  .runWith({ enforceAppCheck: false })
   .https.onCall(async (data: PaymentData, context: functions.https.CallableContext) => {
     functions.logger.info(`Create checkout session. PaymentData:  ${JSON.stringify(data)}`);
 

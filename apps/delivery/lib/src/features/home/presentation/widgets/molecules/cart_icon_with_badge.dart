@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/widgets/bottleshop_badge.dart';
 import 'package:delivery/src/features/cart/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,10 @@ class CartIconWithBadge extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const icon = Icon(Icons.shopping_cart);
+    const icon = Icon(
+      Icons.shopping_cart,
+      color: kPrimaryColor,
+    );
 
     return ref.watch(cartProvider).maybeWhen(
           data: (cart) => BottleshopBadge(

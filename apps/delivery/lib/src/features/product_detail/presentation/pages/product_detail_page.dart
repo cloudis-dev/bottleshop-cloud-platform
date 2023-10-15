@@ -12,6 +12,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
 import 'package:delivery/src/core/presentation/pages/page_404.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -19,10 +20,7 @@ import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
 import 'package:delivery/src/core/presentation/widgets/loader_widget.dart';
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/auth/presentation/widgets/views/auth_popup_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/organisms/cart_appbar_button.dart';
-import 'package:delivery/src/features/home/presentation/widgets/organisms/language_dropdown.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/home_page_template.dart';
-import 'package:delivery/src/features/product_detail/presentation/widgets/molecules/share_buttons.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/organisms/product_actions_widget.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/views/product_description_tab.dart';
 import 'package:delivery/src/features/product_detail/presentation/widgets/views/product_detail_bottom_bar.dart';
@@ -179,15 +177,6 @@ class _BodyWeb extends HookWidget {
 
     return HomePageTemplate(
       scaffoldKey: scaffoldKey,
-      appBarActions: [
-        const LanguageDropdown(),
-        const ProductShareButton(),
-        const CartAppbarButton(),
-        AuthPopupButton(
-          key: authButtonKey,
-          scaffoldKey: scaffoldKey,
-        ),
-      ],
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20) +
             const EdgeInsets.only(top: 12),
@@ -315,6 +304,7 @@ class _BodyMobile extends HookConsumerWidget {
         slivers: <Widget>[
           SliverAppBar(
             leading: BackButton(
+              color: kPrimaryColor,
               onPressed: () => ref.read(navigationProvider).popPage(context),
             ),
             actions: [
@@ -326,7 +316,7 @@ class _BodyMobile extends HookConsumerWidget {
             floating: false,
             pinned: true,
             backgroundColor: Colors.transparent,
-            expandedHeight: 450,
+            expandedHeight: 750,
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               stretchModes: const [
