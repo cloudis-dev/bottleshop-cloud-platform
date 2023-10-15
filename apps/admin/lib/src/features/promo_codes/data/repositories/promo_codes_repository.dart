@@ -14,7 +14,7 @@ class PromoCodesRepository {
     if (await promoCodesDbService.exists(id: promoCode.uid)) {
       throw PromoCodeAlreadyExistsException();
     }
-
+     print(promoCode.toFirebaseJson());
     return promoCodesDbService.create(
       promoCode.toFirebaseJson(),
       id: promoCode.code,
