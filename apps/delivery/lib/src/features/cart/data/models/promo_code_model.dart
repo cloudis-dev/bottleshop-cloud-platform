@@ -14,6 +14,26 @@ import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/orders/data/models/order_type_model.dart';
 import 'package:equatable/equatable.dart';
 
+
+enum PromoCodeType{
+  percent,
+  value;
+
+  static const kPercent = 'percent';
+  static const kValue = 'value';
+
+  @override
+  String toString() {
+    switch (this) {
+      case PromoCodeType.percent:
+        return kPercent;
+      case PromoCodeType.value:
+        return kValue;
+    }
+  }
+}
+
+
 class PromoCodeModel extends Equatable {
   static const String codeField = 'code';
   static const String remainingUsesCountField = 'remaining_uses_count';
@@ -26,7 +46,7 @@ class PromoCodeModel extends Equatable {
   final int remainingUsesCount;
   final double discount;
   final double minCartValue;
-  final String promoCodeType;
+  final PromoCodeType promoCodeType;
 
   const PromoCodeModel({
     required this.uid,

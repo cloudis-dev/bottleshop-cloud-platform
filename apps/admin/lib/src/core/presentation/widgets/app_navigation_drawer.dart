@@ -6,11 +6,16 @@ import 'package:bottleshop_admin/src/features/login/presentation/pages/intro_act
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class AppNavigationDrawer extends HookWidget {
   const AppNavigationDrawer({
     Key? key,
   }) : super(key: key);
+
+  Future<PackageInfo> getVersion() {
+    return PackageInfo.fromPlatform();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +90,29 @@ class AppNavigationDrawer extends HookWidget {
                 .catchError(
                   (_) => print('TODO: something went wrong'),
                 ),
+          ),
+          FutureBuilder(
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  final data = snapshot.data as PackageInfo;
+                  return Center(
+                    child: Text(
+                      'Version: ${data.version}',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+                }
+                return Center(
+                    child: Text(
+                      'Error',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+              } else
+                return CircularProgressIndicator();
+            },
+            future: getVersion(),
           ),
         ],
       ),

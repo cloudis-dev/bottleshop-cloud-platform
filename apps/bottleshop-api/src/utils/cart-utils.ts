@@ -25,6 +25,8 @@ export async function getCartTotalPriceV2(
 ): Promise<number> {
   const cartItems = await getCartItems(userId);
   const totalSum = cartItems.map((item) => item.quantity * calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc);
+  if(promoCode?.promo_code_type == 'percent')
+    promoCode.discount_value = promoCode!.discount_value / 100 *  totalSum;
   return +(
     (orderType.shipping_fee_eur_no_vat +
       cartItems
@@ -32,7 +34,7 @@ export async function getCartTotalPriceV2(
         .reduce((sum, current) => sum + current, 0)) *
       (1 + VAT) -
       (promoCode?.promo_code_type == 'percent'
-      ? promoCode!.discount_value / 100 *  totalSum
+      ? promoCode.discount_value
       : (promoCode?.discount_value ?? 0))
   ).toFixed(2);
 }
