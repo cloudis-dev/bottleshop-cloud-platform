@@ -10,24 +10,31 @@
     },
     ".eslintrc.json": "*"
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "N2I1MTU5NDktMGY3OS00MzgxLWIyMmItYTMxZTJkYmRlNGRkfHJlYWQtd3JpdGU="
-      }
-    }
-  },
-  "plugins": ["@nxrocks/nx-flutter"],
+  "plugins": [
+    "@nxrocks/nx-flutter"
+  ],
   "defaultProject": "bottleshop-api",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     }
   },
   "cli": {
     "packageManager": "yarn"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "lint"
+        ],
+        "parallel": 3
+      }
+    }
   }
 }

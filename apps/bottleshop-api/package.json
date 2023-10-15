@@ -8,7 +8,7 @@
     "deploy": "cd ../../ && nx run bottleshop-api:deploy"
   },
   "engines": {
-    "node": "16"
+    "node": "18"
   },
   "main": "src/index.js",
   "dependencies": {},

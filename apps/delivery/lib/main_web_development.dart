@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:delivery/src/app.dart';
 import 'package:delivery/src/config/firebase_options_dev.dart';
@@ -26,6 +27,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DevelopmentFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  final host = defaultTargetPlatform == TargetPlatform.android
+      ? '10.0.2.2'
+      : 'localhost';
+  FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
+  FirebaseFunctions.instance.useFunctionsEmulator(
+    'localhost',
+    5001,
   );
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

@@ -1,12 +1,12 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-
-import { createMail, getManagementEmails, getOrderDetailsForMail } from '../../../utils/mail-utils';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
-import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
 import { mailCollection } from '../../../constants/collections';
 import { Order } from '../../../models/order';
 import { OrderType } from '../../../models/order-type';
+
+import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
+import { createMail, getManagementEmails, getOrderDetailsForMail } from '../../../utils/mail-utils';
 
 /**
  * Send mail to management about the new order.
@@ -21,7 +21,7 @@ export const onOrderCreatedAdminMail = async (orderSnapshot: functions.firestore
   ]);
 
   if (orderType === undefined) {
-    functions.logger.error(`Could not get OrderType entity by reference: ${order.order_type_ref}`);
+    functions.logger.error(`Could not get OrderType entity by reference: ${order.order_type_ref.id}`);
     return;
   }
 
@@ -38,7 +38,7 @@ export const onOrderCreatedAdminMail = async (orderSnapshot: functions.firestore
     return;
   }
 
-  return Promise.all(
+  await Promise.all(
     managementEmails.map((email) => admin.firestore().collection(mailCollection).add(createMail(email, subject, body))),
   )
     .then(() => functions.logger.log(`Email with the created order (id: ${order.id}) sent to management.`))

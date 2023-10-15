@@ -1,11 +1,10 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import removeAccents = require('remove-accents');
-
 import { hasFieldChanged } from '../../../utils/document-snapshot-utils';
 import { productFields } from '../../../constants/model-constants';
 import { productsCollection } from '../../../constants/collections';
 import { VAT } from '../../../constants/other';
+import removeAccents = require('remove-accents');
 
 /**
  * Update sort fields on product and update the product document.
@@ -14,8 +13,8 @@ import { VAT } from '../../../constants/other';
 export const onUpdateSortFields = async (snap: functions.Change<functions.firestore.DocumentSnapshot>) => {
   // When not deleted
   if (snap.after.exists) {
-    const data = snap.after.data()!;
-    const resultUpdateObj: any = {};
+    const data = snap.after.data() as admin.firestore.DocumentData;
+    const resultUpdateObj: Record<string, number | string> = {};
 
     // When discount or priceNoVat is not equal to previous version
     const shouldChangeFinalPrice =
