@@ -26,6 +26,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../../cart/data/models/cart_model.dart';
+import '../../../cart/data/models/promo_code_model.dart';
+import '../../../orders/data/models/order_type_model.dart';
+
 class CheckoutTile extends HookConsumerWidget {
   final String actionLabel;
   final Future<void> Function()? actionCallback;
@@ -38,6 +42,13 @@ class CheckoutTile extends HookConsumerWidget {
     required this.actionCallback,
   }) : super(key: key);
 
+  double calculatePromoDiscount(
+      OrderTypeModel orderType, PromoCodeModel promoCode, CartModel cart) {
+    return (promoCode?.promoCodeType == 'percent'
+        ? promoCode!.discount / 100 * cart.totalProductsPrice
+        : (promoCode?.discount ?? 0));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final promoCode = ref.watch(currentAppliedPromoProvider);
@@ -47,12 +58,12 @@ class CheckoutTile extends HookConsumerWidget {
     return ref.watch(cartProvider).when(
           data: (cart) {
             final subtotal = cart.totalProductsPriceNoVat +
-                (orderType?.shippingFeeNoVat ?? 0) - (promoCode?.discount ?? 0);
+                (orderType?.shippingFeeNoVat ?? 0) -
+                calculatePromoDiscount(orderType!, promoCode!, cart);
             final totalVat = cart.totalProductsVat + (orderType?.feeVat ?? 0);
             final totalValue = cart.totalProductsPrice +
                 (orderType?.feeWithVat ?? 0) -
-                (promoCode?.discount ?? 0);
-
+                calculatePromoDiscount(orderType!, promoCode!, cart);
             return Container(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
               decoration: BoxDecoration(
@@ -118,7 +129,7 @@ class CheckoutTile extends HookConsumerWidget {
                             ),
                             Text(
                               '- ${FormattingUtils.getPriceNumberString(
-                                promoCode.discount,
+                               calculatePromoDiscount(orderType, promoCode, cart),
                                 withCurrency: true,
                               )}',
                               style: Theme.of(context).textTheme.subtitle1,
