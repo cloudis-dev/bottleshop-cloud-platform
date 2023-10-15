@@ -76,7 +76,6 @@ dependencies:
     git:
       url: https://github.com/KristianBalaj/flutter_scroll_to_top.git
       ref: 21d47cab93a52e83eed910d3564278623c830e88
-  flutter_dotenv: ^5.0.2
   collection: ^1.16.0
   responsive_framework: ^0.2.0
   image_picker: ^0.8.6+2
@@ -91,7 +90,6 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - .env
     - assets/images/
     - assets/markdown/
     - assets/fonts/

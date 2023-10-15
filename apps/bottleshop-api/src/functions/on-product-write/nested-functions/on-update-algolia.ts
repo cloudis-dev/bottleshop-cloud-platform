@@ -1,4 +1,3 @@
-import { config } from 'firebase-functions';
 import * as functions from 'firebase-functions';
 
 import { acquireProductsIndex, createClient, firebase2AlgoliaObjMappingFn } from '../../../utils/algolia-utils';
@@ -6,6 +5,7 @@ import { DocumentChange, getDocumentChange } from '../../../utils/document-snaps
 import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
 import { Product } from '../../../models/product';
 import { productFields } from '../../../constants/model-constants';
+import { algoliaApiKey } from '../../../environment';
 
 /**
  * Update and sync the algolia products with the firestore.
@@ -19,7 +19,7 @@ export const onUpdateAlgolia = async (snap: functions.Change<functions.firestore
   }
 
   const client = createClient({
-    algoliaAdminKey: config().algolia.apikey,
+    algoliaAdminKey: algoliaApiKey.value(),
   });
   const productsIndex = acquireProductsIndex(client);
 

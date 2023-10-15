@@ -1,4 +1,3 @@
-import { config } from 'firebase-functions';
 import * as functions from 'firebase-functions';
 
 import { acquireCategoriesIndex, createClient, objectIdAlgoliaFieldName } from '../utils/algolia-utils';
@@ -7,6 +6,7 @@ import { categoryFields } from '../constants/model-constants';
 import { DocumentChange, getDocumentChange } from '../utils/document-snapshot-utils';
 import { isEmulator, isTestEnv } from '../utils/functions-utils';
 import { tier1Region } from '../constants/other';
+import { algoliaApiKey } from '../environment';
 
 /**
  * Updating algolia categories index.
@@ -20,7 +20,7 @@ export const onCategoryWriteAlgoliaUpdate = functions
     }
 
     const client = createClient({
-      algoliaAdminKey: config().algolia.apikey,
+      algoliaAdminKey: algoliaApiKey.value(),
     });
     const categoriesIndex = acquireCategoriesIndex(client);
 

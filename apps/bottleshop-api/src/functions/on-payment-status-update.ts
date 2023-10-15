@@ -9,8 +9,7 @@ import { tier1Region } from '../constants/other';
 import { createStripeClient } from '..';
 import { StripePaymentMetadata } from '../models/payment-data';
 import { createOrderEffect } from '../utils/order-utils';
-
-const webhookSecret: string = functions.config().stripe.webhook_secret;
+import { stripeWebhookSecret } from '../environment';
 
 const app = express();
 
@@ -19,7 +18,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
     const stripe = createStripeClient();
     const firebaseRequest = req as functions.https.Request;
     const signature = firebaseRequest.headers['stripe-signature'] as string | string[] | Buffer;
-    const event = stripe.webhooks.constructEvent(firebaseRequest.rawBody, signature, webhookSecret);
+    const event = stripe.webhooks.constructEvent(firebaseRequest.rawBody, signature, stripeWebhookSecret.value());
     const eventType: string = event.type;
     switch (eventType) {
       case 'checkout.session.completed':
@@ -63,7 +62,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
         functions.logger.log(`payment_intent.succeeded: ${userId} ${deliveryType} ${orderNote} ${orderId}`);
 
         try {
-          const oId = createOrderEffect(
+          const oId = await createOrderEffect(
             userId,
             deliveryType as DeliveryType,
             parseInt(orderId, 10),

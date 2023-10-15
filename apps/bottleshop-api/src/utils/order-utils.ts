@@ -338,7 +338,7 @@ export function getMailBodyHtml(
     };
 
     ejs.renderFile(
-      lang === 'sk' ? '/workspace/templates/order-created_sk.html' : '/workspace/templates/order-created_en.html',
+      lang === 'sk' ? '/workspace/order-created_sk.html' : '/workspace/order-created_en.html',
       data,
       (err, result) => {
         if (err) {

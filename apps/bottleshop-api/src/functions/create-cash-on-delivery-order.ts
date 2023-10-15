@@ -8,7 +8,7 @@ import { getCartItems, getCartTotalPriceV2 } from '../utils/cart-utils';
 
 export const createCashOnDeliveryOrder = functions
   .region(tier1Region)
-  .runWith({ allowInvalidAppCheckToken: true })
+  .runWith({ enforceAppCheck: false })
   .https.onCall(async (data: PaymentData, context: functions.https.CallableContext) => {
     functions.logger.info(`Create cash-on-delivery order. PaymentData:  ${JSON.stringify(data)}`);
 

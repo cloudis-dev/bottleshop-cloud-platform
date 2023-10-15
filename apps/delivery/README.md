@@ -15,9 +15,21 @@ Bottleshop3veze Delivery app
 
 1. Add `.env` file (Copy the contents from `.env.template`)
 
-### Run project
+### Run/build project
 
-- flutter run --flavor [development|production] --target [lib/main_web_development.dart|lib/main_web_production.dart]
+- flutter run --flavor=[development|production] --target=[lib/main_web_development.dart|lib/main_web_production.dart] --dart-define-from-file=[.env.dev.json|.env.prod.json]
+
+
+**Building web:**
+Development:
+  `flutter build web --target=lib/main_web_development.dart --dart-define-from-file=.env.dev.json`
+Production:
+  `flutter build web --release --target=lib/main_web_production.dart --dart-define-from-file=.env.prod.json`
+
+Deploying:
+  `firebase deploy`
+Or:
+  `firebase deploy --only hosting`
 
 ### Appcheck for local setup
 

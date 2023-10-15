@@ -50,6 +50,19 @@ storeFile=cloudis.jks
 
 ## Releasing
 
+### Web
+
+```
+flutter build web --release --target=lib/main_production.dart
+```
+
+And then:
+
+```
+firebase deploy --only hosting
+```
+
+### Other
 Release version for Android and iOS using Fastlane.
 
 In the project directory is a `scripts` directory containing 
