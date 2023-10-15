@@ -123,22 +123,22 @@ class _Body extends HookWidget {
                     }
                   },
                 ),
-                // RadioListTile<PromoCodeType>(
-                //   title: Text('Percento'),
-                //   value: PromoCodeType.percent,
-                //   groupValue: promoCodeType,
-                //   onChanged: (value) {
-                //     if (value != null) {
-                //       context.read(editedPromoCodeProvider).state =
-                //           context.read(editedPromoCodeProvider).state.copyWith(
-                //                 discountValue: 0,
-                //                 promoCodeType: PromoCodeType.percent,
-                //               );
-                //
-                //       context.read(_promoCodeTypeProvider).state = value;
-                //     }
-                //   },
-                // ),
+                RadioListTile<PromoCodeType>(
+                  title: Text('Percento'),
+                  value: PromoCodeType.percent,
+                  groupValue: promoCodeType,
+                  onChanged: (value) {
+                    if (value != null) {
+                      context.read(editedPromoCodeProvider).state =
+                          context.read(editedPromoCodeProvider).state.copyWith(
+                                discountValue: 0,
+                                promoCodeType: PromoCodeType.percent,
+                              );
+                
+                      context.read(_promoCodeTypeProvider).state = value;
+                    }
+                  },
+                ),
               ],
             ),
             const SizedBox(height: 8),
