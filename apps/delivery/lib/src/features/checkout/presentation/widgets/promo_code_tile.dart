@@ -1,4 +1,5 @@
 import 'package:delivery/l10n/l10n.dart';
+import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/features/cart/data/models/cart_model.dart';
 import 'package:delivery/src/features/checkout/data/services/promo_codes_service.dart';
 import 'package:delivery/src/features/checkout/presentation/providers/providers.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 
 class PromoCodeTile extends HookConsumerWidget {
   final CartModel cart;
@@ -20,7 +22,6 @@ class PromoCodeTile extends HookConsumerWidget {
     final promoCode = ref.watch(currentAppliedPromoProvider);
     final textCtrl = useTextEditingController(text: promoCode?.code);
     final orderType = ref.watch(orderTypeStateProvider);
-
     return Card(
       color: Theme.of(context).primaryColor,
       margin: const EdgeInsets.symmetric(
@@ -62,7 +63,6 @@ class PromoCodeTile extends HookConsumerWidget {
                         if (promo.isPromoValid(cart, orderType)) {
                           ref.read(currentAppliedPromoProvider.state).state =
                               promo;
-
                           showSimpleNotification(
                             Text(context.l10n.promoCodeApplied),
                             duration: const Duration(seconds: 5),

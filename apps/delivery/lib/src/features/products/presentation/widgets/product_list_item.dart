@@ -12,6 +12,7 @@
 
 import 'package:delivery/l10n/l10n.dart';
 import 'package:delivery/src/core/data/res/constants.dart';
+import 'package:delivery/src/core/data/services/analytics_service.dart';
 import 'package:delivery/src/core/presentation/other/list_item_container_decoration.dart';
 import 'package:delivery/src/core/presentation/providers/core_providers.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
@@ -40,6 +41,8 @@ class ProductListItem extends HookConsumerWidget {
     ref
         .read(navigationProvider)
         .pushPage(context, AppPageNode(page: ProductDetailPage(product)));
+
+    logSearch(ref, this.product.name, this.product.count, this.product.uniqueId);
   }
 
   @override

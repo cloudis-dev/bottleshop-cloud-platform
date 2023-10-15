@@ -241,7 +241,7 @@ class ProductGridItem extends HookConsumerWidget {
                   child: InkWell(
                     onTap: () async {
                       await logViewItem(
-                        context,
+                        ref,
                         product.uniqueId,
                         product.name,
                         product.allCategories.first.categoryDetails

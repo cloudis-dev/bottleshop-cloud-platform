@@ -9,6 +9,7 @@ import 'package:delivery/src/core/data/services/shared_preferences_service.dart'
 import 'package:delivery/src/core/data/services/storage_service.dart';
 import 'package:delivery/src/core/data/services/stripe_service.dart';
 import 'package:delivery/src/core/presentation/providers/crashlytics_provider.dart';
+import 'package:delivery/src/features/cart/data/models/cart_item_model.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
