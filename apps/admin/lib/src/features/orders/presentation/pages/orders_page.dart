@@ -8,8 +8,6 @@ import 'package:bottleshop_admin/src/features/orders/presentation/widgets/orders
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum _ContextMenuActions { summary }
-
 class OrdersPage extends StatelessWidget {
   static const String routeName = '/orders';
 
@@ -54,26 +52,13 @@ class OrdersPage extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Objednávky'),
             actions: <Widget>[
-              PopupMenuButton<_ContextMenuActions>(
-                icon: Icon(Icons.more_vert),
-                itemBuilder: (_) => [
-                  PopupMenuItem(
-                    value: _ContextMenuActions.summary,
-                    child: Text(
-                      'Denná sumarizácia',
-                      style: AppTheme.popupMenuItemTextStyle,
-                    ),
-                  ),
-                ],
-                onSelected: (val) {
-                  switch (val) {
-                    case _ContextMenuActions.summary:
-                      context
-                          .read(navigationProvider.notifier)
-                          .pushPage(OrdersSummaryPage());
-                  }
-                },
-              ),
+              IconButton(
+                  onPressed: () {
+                    context
+                        .read(navigationProvider.notifier)
+                        .pushPage(OrdersSummaryPage());
+                  },
+                  icon: Icon(Icons.summarize))
             ],
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(72),

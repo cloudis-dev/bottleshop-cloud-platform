@@ -13,7 +13,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tuple/tuple.dart';
 
-final _selectedDateProvider = StateProvider.autoDispose<DateTime?>((_) => null);
+final _selectedDateProvider = StateProvider.autoDispose<DateTimeRange?>((_) => null);
 
 class _TableRecord {
   final String productName;
@@ -29,8 +29,10 @@ class _TableRecord {
   });
 }
 
-final _ordersForDayProvider =
-    FutureProvider.autoDispose<List<_TableRecord>>((ref) async {
+typedef _DaysOffset = int;
+
+final _ordersForDayProvider = FutureProvider.autoDispose
+    .family<List<_TableRecord>, _DaysOffset>((ref, daysOffset) async {
   final dateTime = ref.watch(_selectedDateProvider).state;
 
   if (dateTime == null) {
@@ -41,16 +43,15 @@ final _ordersForDayProvider =
         QueryArgs(
           OrderModel.createdAtTimestampField,
           isGreaterThanOrEqualTo:
-              DateTime(dateTime.year, dateTime.month, dateTime.day),
+              DateTime(dateTime.start.year, dateTime.start.month, dateTime.start.day)
         ),
         QueryArgs(
           OrderModel.createdAtTimestampField,
-          isLessThan: DateTime(dateTime.year, dateTime.month, dateTime.day)
-              .add(Duration(days: 1)),
+          isLessThan: DateTime(dateTime.end.year, dateTime.end.month, dateTime.end.day)
+            //  .add(Duration(days: 1)),
         )
       ],
     );
-
     final groups = groupBy<Tuple4<String, String, String, int>,
         Tuple3<String, String, String>>(
       res
@@ -90,6 +91,10 @@ class OrdersSummaryPage extends AppPage {
 }
 
 class _OrdersDetailView extends HookWidget {
+
+
+  const _OrdersDetailView();
+
   @override
   Widget build(BuildContext context) {
     final scrollCtrl = useScrollController();
@@ -110,14 +115,17 @@ class _OrdersDetailView extends HookWidget {
             ElevatedButton(
               child: Text('Vyber dátum'),
               onPressed: () async {
-                final res = await showDatePicker(
+                final res = await showDateRangePicker(
                   firstDate: DateTime(2021),
-                  initialDate: DateTime.now(),
+                  initialDateRange: DateTimeRange(
+                    start: DateTime.now(),
+                    end: DateTime.now().add(Duration(days: 1)),
+                  ),
                   context: context,
                   lastDate: DateTime.now().add(Duration(days: 1)),
                 );
 
-                if (res != null) {
+                if (res != null && context.mounted) {
                   context.read(_selectedDateProvider).state = res;
                 }
               },
@@ -125,7 +133,7 @@ class _OrdersDetailView extends HookWidget {
             const SizedBox(height: 16),
             if (selectedDate != null) ...[
               Text(
-                'Vybraný dátum: ${FormattingUtil.getDateString(selectedDate)}',
+                'Vybraný dátum: ${FormattingUtil.getDateString(selectedDate.start)} - ${FormattingUtil.getDateString(selectedDate.end)}',
                 textAlign: TextAlign.center,
                 style: AppTheme.headline1TextStyle,
               ),
@@ -134,7 +142,7 @@ class _OrdersDetailView extends HookWidget {
                 'Zobrazujú sa produkty pre ktoré objednávka bola VYTVORENÁ vo vybraný deň',
                 textAlign: TextAlign.center,
               ),
-              useProvider(_ordersForDayProvider).when(
+              useProvider(_ordersForDayProvider(0)).when(
                 data: (e) => Scrollbar(
                   controller: scrollCtrl,
                   isAlwaysShown: true,
