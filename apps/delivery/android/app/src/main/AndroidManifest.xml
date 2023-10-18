@@ -10,7 +10,7 @@
        tools:targetApi="donut">
        <activity
            android:name=".MainActivity"
-           android:exported="false">
+           android:exported="true">
            <meta-data
                android:name="io.flutter.embedding.android.NormalTheme"
                android:resource="@style/LaunchTheme" />

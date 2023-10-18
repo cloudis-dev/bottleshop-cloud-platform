@@ -1,12 +1,12 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-
-import { Cart } from '../../../models/cart';
-import { cartCollection, cartItemsSubCollection, usersCollection } from '../../../constants/collections';
-import { cartFields } from '../../../constants/model-constants';
-import { CartItem, getCart, getCartItems, getCartRef } from '../../../utils/cart-utils';
 import { calculateProductFinalPrice } from '../../../utils/product-utils';
+import { Cart } from '../../../models/cart';
+import { cartFields } from '../../../constants/model-constants';
+
+import { cartCollection, cartItemsSubCollection, usersCollection } from '../../../constants/collections';
 import { tempCartId, tier1Region, VAT } from '../../../constants/other';
+import { CartItem, getCart, getCartItems, getCartRef } from '../../../utils/cart-utils';
 
 interface Summarization {
   total_items: number;
@@ -65,5 +65,6 @@ export const onCartUpdated = functions
       });
     } catch (err) {
       functions.logger.error(`cart update failed ${err}`);
+      return null;
     }
   });

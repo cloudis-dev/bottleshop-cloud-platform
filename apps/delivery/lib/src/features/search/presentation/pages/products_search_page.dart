@@ -18,7 +18,8 @@ import 'package:delivery/src/core/data/models/categories_tree_model.dart';
 import 'package:delivery/src/core/data/res/app_theme.dart';
 import 'package:delivery/src/core/presentation/providers/navigation_providers.dart';
 import 'package:delivery/src/core/presentation/widgets/empty_tab.dart';
-import 'package:delivery/src/core/presentation/widgets/search_bar.dart';
+import 'package:delivery/src/core/presentation/widgets/search_bar.dart'
+    as delivery;
 import 'package:delivery/src/core/utils/screen_adaptive_utils.dart';
 import 'package:delivery/src/features/categories/presentation/providers/providers.dart';
 import 'package:delivery/src/features/home/presentation/widgets/templates/page_body_template.dart';
@@ -99,7 +100,7 @@ class _PageScaffold extends HookConsumerWidget {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: SearchBar(
+        title: delivery.SearchBar(
           autoFocus: true,
           showFilter: false,
           onChangedCallback: (query) => _onSearchChanged(
@@ -189,7 +190,6 @@ class _ResultsWidget extends HookConsumerWidget {
             (element) => CategoriesTreeModel.getAllCategoryPlainModels(element)
                 .map((e) => e.id)
                 .contains(searchedCategory.id),
-            orElse: null,
           ),
           searchedCategory,
         ),

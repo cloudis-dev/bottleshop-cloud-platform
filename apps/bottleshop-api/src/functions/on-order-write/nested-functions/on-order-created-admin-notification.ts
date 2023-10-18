@@ -1,14 +1,11 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-
 import { AdminNewOrderNotification } from '../../../models/notification-models';
-import {
-  adminNewOrderNotificationTag,
-  adminNotificationTopic,
-} from '../../../constants/notification-constants';
 import { createNotification } from '../../../utils/notification-utils';
 import { isEmulator } from '../../../utils/functions-utils';
 import { Order } from '../../../models/order';
+
+import { adminNewOrderNotificationTag, adminNotificationTopic } from '../../../constants/notification-constants';
 
 /**
  * Send notification to admins that a new order has been created.
@@ -31,10 +28,10 @@ export const onOrderCreatedAdminNotification = async (orderSnapshot: functions.f
     functions.logger.log(
       `Sending order created notification to admins.
       Topic: ${adminNotificationTopic}
-      Notification: ${notification}`,
+      Notification: ${notification.data}`,
     );
     return;
   }
 
-  return admin.messaging().sendToTopic(adminNotificationTopic, notification);
+  await admin.messaging().sendToTopic(adminNotificationTopic, notification);
 };

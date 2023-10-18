@@ -1,16 +1,16 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { AdminOutOfStockNotification } from '../../../models/notification-models';
+import { createNotification } from '../../../utils/notification-utils';
+import { mailCollection } from '../../../constants/collections';
+import { Product } from '../../../models/product';
 
 import {
   adminNotificationTopic,
   adminProductOutOfStockNotificationTag,
 } from '../../../constants/notification-constants';
-import { AdminOutOfStockNotification } from '../../../models/notification-models';
-import { createMail, getManagementEmails } from '../../../utils/mail-utils';
-import { createNotification } from '../../../utils/notification-utils';
 import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
-import { mailCollection } from '../../../constants/collections';
-import { Product } from '../../../models/product';
+import { createMail, getManagementEmails } from '../../../utils/mail-utils';
 
 export const onQuantityUpdated = async (productSnapshot: functions.firestore.DocumentSnapshot) => {
   const product = productSnapshot.data() as Product;
@@ -40,7 +40,7 @@ async function sendOutOfStockAdminNotification(product: Product): Promise<void> 
     return;
   }
 
-  return admin
+  await admin
     .messaging()
     .sendToTopic(adminNotificationTopic, notification)
     .then(() => functions.logger.log(`Product out of stock admin notifications sent. CMAT: ${product.cmat}`));

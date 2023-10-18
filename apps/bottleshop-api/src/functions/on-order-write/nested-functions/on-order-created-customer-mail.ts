@@ -1,14 +1,14 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-
 import { createMail } from '../../../utils/mail-utils';
 import { getEntityByRef } from '../../../utils/document-reference-utils';
 import { getMailBodyHtml } from '../../../utils/order-utils';
-import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
 import { Language } from '../../../constants/other';
 import { mailCollection } from '../../../constants/collections';
 import { Order } from '../../../models/order';
 import { OrderType } from '../../../models/order-type';
+
+import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
 
 /**
  * Send mail to customer that the order has been created.
@@ -20,12 +20,12 @@ export const onOrderCreatedCustomerMail = async (orderSnapshot: functions.firest
   const orderType = await getEntityByRef<OrderType>(order.order_type_ref);
 
   if (!orderType) {
-    functions.logger.error(`Could not get OrderType entity by reference: ${order.order_type_ref}`);
+    functions.logger.error(`Could not get OrderType entity by reference: ${order.order_type_ref.id}`);
     return;
   }
 
   if (!order.customer.email) {
-    functions.logger.error(`User doesn't have email: ${order.customer}`);
+    functions.logger.error(`User doesn't have email: ${order.customer.uid}`);
     return;
   }
 
@@ -44,7 +44,7 @@ export const onOrderCreatedCustomerMail = async (orderSnapshot: functions.firest
     return;
   }
 
-  return admin
+  await admin
     .firestore()
     .collection(mailCollection)
     .add(mail)

@@ -1,11 +1,11 @@
 import * as functions from 'firebase-functions';
+import { algoliaApiKey } from '../../../environment';
+import { Product } from '../../../models/product';
+import { productFields } from '../../../constants/model-constants';
 
 import { acquireProductsIndex, createClient, firebase2AlgoliaObjMappingFn } from '../../../utils/algolia-utils';
 import { DocumentChange, getDocumentChange } from '../../../utils/document-snapshot-utils';
 import { isEmulator, isTestEnv } from '../../../utils/functions-utils';
-import { Product } from '../../../models/product';
-import { productFields } from '../../../constants/model-constants';
-import { algoliaApiKey } from '../../../environment';
 
 /**
  * Update and sync the algolia products with the firestore.
@@ -26,8 +26,8 @@ export const onUpdateAlgolia = async (snap: functions.Change<functions.firestore
   if (getDocumentChange(snap) === DocumentChange.deleted) {
     productsIndex
       .deleteObject(snap.before.get(productFields.cmatField))
-      .then((val: any) => functions.logger.log(val))
-      .catch((err: any) => functions.logger.error(err));
+      .then((val: unknown) => functions.logger.log(val))
+      .catch((err: unknown) => functions.logger.error(err));
   }
   // created or updated
   else {
@@ -35,7 +35,7 @@ export const onUpdateAlgolia = async (snap: functions.Change<functions.firestore
 
     productsIndex
       .saveObject(firebase2AlgoliaObjMappingFn(product))
-      .then((val: any) => functions.logger.log(val))
-      .catch((err: any) => functions.logger.error(err));
+      .then((val: unknown) => functions.logger.log(val))
+      .catch((err: unknown) => functions.logger.error(err));
   }
 };
