@@ -131,6 +131,7 @@ class Footer extends HookConsumerWidget {
         data: (data) { 
           final workdays = data.firstWhere((element) => element.type == 'Workdays');
           final saturday = data.firstWhere((element) => element.type == 'Saturday');
+          final friday = data.firstWhere((element) => element.type == 'Friday');
           final sunday = data.firstWhere((element) => element.type == 'Sunday');
           return Container(
           padding: const EdgeInsets.fromLTRB(64, 100, 0, 0),
@@ -151,11 +152,15 @@ class Footer extends HookConsumerWidget {
               Text("${context.l10n.monFr} ${DateFormat.Hm().format(workdays.dateFrom).toString()} - ${DateFormat.Hm().format(workdays.dateTo).toString()}",
                     style: publicSansTextTheme.bodySmall),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-              //   child: Text("${context.l10n.fri} 10:00 - 22:00",
-              //       style: publicSansTextTheme.bodySmall),
-              // ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                child: friday.isClosed ?
+              Text("${context.l10n.sat} ${context.l10n.closed}",
+                    style: publicSansTextTheme.bodySmall):
+              
+              Text("${context.l10n.sat} ${DateFormat.Hm().format(friday.dateFrom).toString()} - ${DateFormat.Hm().format(friday.dateFrom).toString()}",
+                    style: publicSansTextTheme.bodySmall),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: saturday.isClosed ?

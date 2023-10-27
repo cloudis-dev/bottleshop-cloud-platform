@@ -12,11 +12,14 @@
 
 import 'dart:ui';
 
+import 'package:delivery/src/features/home/data/models/open_hours_model.dart';
+import 'package:delivery/src/features/home/presentation/providers/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:routeborn/routeborn.dart';
@@ -153,7 +156,26 @@ class _RouterWidget extends HookConsumerWidget {
         const [],
       );
     }
+    showClosedPopUp(ref, context);
     return router;
+  }
+
+  Future<void> showClosedPopUp(WidgetRef ref, BuildContext context) async {
+    OpenHourModel? closing = null;
+    var openHours = await ref.read(openHoursStreamProvider.future);
+    openHours.forEach((x) {
+      if (!DateUtils.dateOnly(x.dateFrom)
+              .isBefore(DateUtils.dateOnly(DateTime.now())) &&
+          !DateUtils.dateOnly(x.dateFrom)
+              .isAfter(DateUtils.dateOnly(DateTime.now()))) closing = x;
+    });
+    if (closing == null) 
+      return;
+    _showDialog(
+      context,
+      ref,
+      ClosedShopDialog(closing!.type)
+    );
   }
 
   void _showDialog(BuildContext context, WidgetRef ref, Widget dialog) {
@@ -234,5 +256,34 @@ class UnsuccessfulLoginAttemptDialog extends HookConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class ClosedShopDialog extends HookConsumerWidget {
+  final String message;
+  const ClosedShopDialog(this.message, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AlertDialog(
+        title: null,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(message),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
   }
 }

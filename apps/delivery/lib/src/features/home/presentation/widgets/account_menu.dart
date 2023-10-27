@@ -249,6 +249,9 @@ class _MenuItemsTab extends HookConsumerWidget {
                             else if (currentDay == "Sunday")
                               closing =
                                   data.firstWhere((x) => x.type == "Sunday");
+                             else if (currentDay == "Friday")
+                              closing =
+                                  data.firstWhere((x) => x.type == "Friday");
                             else
                               closing =
                                   data.firstWhere((x) => x.type == "Workdays");

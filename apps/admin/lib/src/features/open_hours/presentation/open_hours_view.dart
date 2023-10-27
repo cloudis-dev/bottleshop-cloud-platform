@@ -21,6 +21,8 @@ import 'package:streamed_items_state_management/streamed_items_state_management.
 final _messengerKey = Provider.autoDispose<GlobalKey<ScaffoldMessengerState>>(
     (_) => GlobalKey<ScaffoldMessengerState>());
 
+final isButtonVisible = useState(false);
+
 class OpenHoursView extends HookWidget {
   const OpenHoursView({Key? key}) : super(key: key);
 
@@ -31,24 +33,6 @@ class OpenHoursView extends HookWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Rozvrh'),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final emptyDoc = FirebaseFirestore.instance
-                .collection(Constants.openHoursCollection)
-                .doc();
-            final batch = FirebaseFirestore.instance.batch();
-            final dtNow = DateTime.now();
-            await openHoursDb.create({
-              'dateFrom': dtNow,
-              'dateTo': DateTime(dtNow.year, dtNow.month, dtNow.day, dtNow.hour + 1),
-              'isClosed': false,
-              'type': emptyDoc.id
-            }, id: emptyDoc.id, batch: batch);
-            await batch.commit();
-          },
-          label: Text('Nova doba'),
-          icon: Icon(Icons.add),
         ),
         drawer: const AppNavigationDrawer(),
         body: const _Body(),
@@ -62,12 +46,12 @@ class _Body extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('load2');
     final val = useProvider(openHoursStreamProvider);
     return val.when(
         data: (data) {
           var otherDays = data.where((element) =>
               element.type != 'Workdays' &&
+              element.type != 'Friday' &&
               element.type != 'Sunday' &&
               element.type != 'Saturday');
           return Column(
@@ -79,22 +63,44 @@ class _Body extends HookWidget {
                 val: data.firstWhere((element) => element.type == 'Sunday'),
               ),
               ChangeHour(
+                val: data.firstWhere((element) => element.type == 'Friday'),
+              ),
+              ChangeHour(
                 val: data.firstWhere((element) => element.type == 'Workdays'),
               ),
-              Padding(padding: EdgeInsets.only(top: 10),
-              child: Expanded(
-                child: Divider()
-                ),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Expanded(child: Divider()),
               ),
               SizedBox(
-                height: 300,
+                height: 200,
                 child: Padding(
                     padding: const EdgeInsets.only(top: 10.0),
-                    child: ListView.builder(
-                        itemCount: otherDays.length,
-                        itemBuilder: (_, index) =>
-                            ChangeDate(val: otherDays.elementAt(index)))
-                        ),
+                    child: otherDays.length == 0
+                        ? TextButton(
+                            onPressed: () async {
+                              final emptyDoc = FirebaseFirestore.instance
+                                  .collection(Constants.openHoursCollection)
+                                  .doc();
+                              final batch = FirebaseFirestore.instance.batch();
+                              final dtNow = DateTime.now();
+                              await openHoursDb.create({
+                                'dateFrom': dtNow,
+                                'dateTo': DateTime(dtNow.year, dtNow.month,
+                                    dtNow.day, dtNow.hour + 1),
+                                'isClosed': false,
+                                'type': emptyDoc.id
+                              }, id: emptyDoc.id, batch: batch);
+                              await batch.commit();
+                            },
+                            child: Text('Nova doba'),
+                          )
+                        : ListView.builder(
+                            itemCount: otherDays.length,
+                            itemBuilder: (_, index) {
+                              return ChangeDate(
+                                  val: otherDays.elementAt(index));
+                            })),
               ),
             ],
           );

@@ -11,6 +11,7 @@ class ChangeDate extends HookWidget {
   late ValueNotifier<bool> saveState;
   late ValueNotifier<bool> buttonState;
   late ValueNotifier<bool> isClosed;
+  late ValueNotifier<String> message;
   DateTime title;
   OpenHourModel val;
 
@@ -93,6 +94,7 @@ class ChangeDate extends HookWidget {
     selectedTimeFrom = useState(val.dateFrom);
     selectedTimeTo = useState(val.dateTo);
     isClosed = useState(val.isClosed);
+    message = useState('');
     buttonState = useState(true);
     saveState = useState(false);
     return Padding(
@@ -150,6 +152,17 @@ class ChangeDate extends HookWidget {
                   ),
                 ),
               ),
+              SizedBox(width: 16.0),
+              Expanded(
+                child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Sprava',
+                    ),
+                    onChanged: (val){
+                       message.value = val;
+                    },
+                )
+              ),
               Checkbox(
                   value: isClosed.value,
                   onChanged: (value) {
@@ -175,7 +188,8 @@ class ChangeDate extends HookWidget {
                               {
                                 'dateFrom': val.dateFrom,
                                 'dateTo': val.dateTo,
-                                'isClosed': isClosed.value
+                                'isClosed': isClosed.value,
+                                'type': message.value.isEmpty ? val.type : message.value
                               },
                               batch: batch);
                           await batch.commit();
