@@ -18,24 +18,23 @@ export function getCartTotalPrice(cart: Cart): number {
   return +(cart.products_total_price + (cart.shipping_fee_total ?? 0) - (cart.promo_code_value ?? 0)).toFixed(2);
 }
 
-export async function getCartTotalPriceV2( 
+export async function getCartTotalPriceV2(
   userId: string,
   orderType: OrderType,
   promoCode: PromoCode | undefined,
 ): Promise<number> {
   const cartItems = await getCartItems(userId);
-  const totalSum = cartItems.map((item) => item.quantity * calculateProductFinalPrice(item.product)).reduce((acc, a) => a + acc);
-  if(promoCode?.promo_code_type == 'percent')
-    promoCode.discount_value = promoCode!.discount_value / 100 *  totalSum;
+  const totalSum = cartItems
+    .map((item) => item.quantity * calculateProductFinalPrice(item.product))
+    .reduce((acc, a) => a + acc);
+  if (promoCode?.promo_code_type === 'percent') promoCode.discount_value = (promoCode!.discount_value / 100) * totalSum;
   return +(
     (orderType.shipping_fee_eur_no_vat +
       cartItems
         .map((item) => item.quantity * finalProductPriceNoVatNoRounding(item.product))
         .reduce((sum, current) => sum + current, 0)) *
       (1 + VAT) -
-      (promoCode?.promo_code_type == 'percent'
-      ? promoCode.discount_value
-      : (promoCode?.discount_value ?? 0))
+    (promoCode?.promo_code_type === 'percent' ? promoCode.discount_value : promoCode?.discount_value ?? 0)
   ).toFixed(2);
 }
 

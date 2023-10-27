@@ -36,3 +36,4 @@ export { onAdminUserCreate, onAdminUserDelete } from './functions/on-admin-user-
 export { createCashOnDeliveryOrder } from './functions/create-cash-on-delivery-order';
 export { deleteAccount } from './functions/delete-account';
 export { postFeedback } from './functions/post-feedback';
+export { heurekaXmlFeed } from './functions/heureka-feed';
