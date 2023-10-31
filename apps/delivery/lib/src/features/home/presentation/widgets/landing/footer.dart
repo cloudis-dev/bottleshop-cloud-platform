@@ -146,10 +146,10 @@ class Footer extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: workdays.isClosed ?
-              Text("${context.l10n.monFr} ${context.l10n.closed}",
+              Text("${context.l10n.monTh} ${context.l10n.closed}",
                     style: publicSansTextTheme.bodySmall):
               
-              Text("${context.l10n.monFr} ${DateFormat.Hm().format(workdays.dateFrom).toString()} - ${DateFormat.Hm().format(workdays.dateTo).toString()}",
+              Text("${context.l10n.monTh} ${DateFormat.Hm().format(workdays.dateFrom).toString()} - ${DateFormat.Hm().format(workdays.dateTo).toString()}",
                     style: publicSansTextTheme.bodySmall),
               ),
               Padding(

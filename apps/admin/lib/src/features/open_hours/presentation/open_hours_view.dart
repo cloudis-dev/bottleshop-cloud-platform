@@ -57,16 +57,16 @@ class _Body extends HookWidget {
           return Column(
             children: [
               ChangeHour(
-                val: data.firstWhere((element) => element.type == 'Saturday'),
-              ),
-              ChangeHour(
-                val: data.firstWhere((element) => element.type == 'Sunday'),
+                val: data.firstWhere((element) => element.type == 'Workdays'),
               ),
               ChangeHour(
                 val: data.firstWhere((element) => element.type == 'Friday'),
               ),
               ChangeHour(
-                val: data.firstWhere((element) => element.type == 'Workdays'),
+                val: data.firstWhere((element) => element.type == 'Saturday'),
+              ),
+              ChangeHour(
+                val: data.firstWhere((element) => element.type == 'Sunday'),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 10),
@@ -89,7 +89,8 @@ class _Body extends HookWidget {
                                 'dateTo': DateTime(dtNow.year, dtNow.month,
                                     dtNow.day, dtNow.hour + 1),
                                 'isClosed': false,
-                                'type': emptyDoc.id
+                                'type': emptyDoc.id,
+                                'message':''
                               }, id: emptyDoc.id, batch: batch);
                               await batch.commit();
                             },

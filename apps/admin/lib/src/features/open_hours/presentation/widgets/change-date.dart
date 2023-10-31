@@ -60,7 +60,8 @@ class ChangeDate extends HookWidget {
   }
 
   Future<void> _selectTimeFrom(BuildContext context) async {
-    final picked = await showDateTimePicker(context: context, initialDate: selectedTimeFrom.value);
+    final picked = await showDateTimePicker(
+        context: context, initialDate: selectedTimeFrom.value);
     if (picked != null && picked != selectedTimeFrom) {
       selectedTimeFrom.value = picked;
       if (selectedTimeTo.value.hour < selectedTimeFrom.value.hour ||
@@ -75,7 +76,8 @@ class ChangeDate extends HookWidget {
   }
 
   Future<void> _selectTimeTo(BuildContext context) async {
-    final picked = await showDateTimePicker(context: context, initialDate: selectedTimeTo.value);
+    final picked = await showDateTimePicker(
+        context: context, initialDate: selectedTimeTo.value);
     if (picked != null && picked != selectedTimeTo) {
       selectedTimeTo.value = picked;
       if (selectedTimeTo.value.hour < selectedTimeFrom.value.hour ||
@@ -102,7 +104,8 @@ class ChangeDate extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${title.day}.${title.month}'),//'${selectedTimeFrom.value.day}.${selectedTimeFrom.value.month}'),
+          Text(
+              '${title.day}.${title.month}'), //'${selectedTimeFrom.value.day}.${selectedTimeFrom.value.month}'),
           Row(
             children: [
               Expanded(
@@ -154,15 +157,23 @@ class ChangeDate extends HookWidget {
               ),
               SizedBox(width: 16.0),
               Expanded(
-                child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Sprava',
-                    ),
-                    onChanged: (val){
-                       message.value = val;
-                    },
-                )
-              ),
+                  child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Sprava (min. 4 znaky)',
+                ),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+                onChanged: (val) {
+                  message.value = val;
+                  if (message.value.length > 4)
+                    buttonState.value = true;
+                  else
+                    buttonState.value = false;
+                  saveState.value = false;
+                },
+              )),
               Checkbox(
                   value: isClosed.value,
                   onChanged: (value) {
@@ -180,8 +191,7 @@ class ChangeDate extends HookWidget {
                   onPressed: buttonState.value && !saveState.value
                       ? () async {
                           val = val.updateDateTimes(
-                              selectedTimeFrom.value,
-                              selectedTimeTo.value);
+                              selectedTimeFrom.value, selectedTimeTo.value);
                           final batch = FirebaseFirestore.instance.batch();
                           await openHoursDb.updateData(
                               val.type,
@@ -189,7 +199,9 @@ class ChangeDate extends HookWidget {
                                 'dateFrom': val.dateFrom,
                                 'dateTo': val.dateTo,
                                 'isClosed': isClosed.value,
-                                'type': message.value.isEmpty ? val.type : message.value
+                                'message': message.value.isEmpty
+                                    ? val.type
+                                    : message.value
                               },
                               batch: batch);
                           await batch.commit();
@@ -202,7 +214,7 @@ class ChangeDate extends HookWidget {
                   ),
                 ),
               ),
-               SizedBox(width: 10.0),
+              SizedBox(width: 10.0),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.red,
@@ -211,6 +223,7 @@ class ChangeDate extends HookWidget {
                 child: IconButton(
                   onPressed: () async {
                     final batch = FirebaseFirestore.instance.batch();
+                    print(val.type);
                     await openHoursDb.removeItem(val.type, batch: batch);
                     await batch.commit();
                   },
