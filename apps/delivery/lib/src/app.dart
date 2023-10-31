@@ -156,26 +156,7 @@ class _RouterWidget extends HookConsumerWidget {
         const [],
       );
     }
-    showClosedPopUp(ref, context);
     return router;
-  }
-
-  Future<void> showClosedPopUp(WidgetRef ref, BuildContext context) async {
-    OpenHourModel? closing = null;
-    var openHours = await ref.read(openHoursStreamProvider.future);
-    openHours.forEach((x) {
-      if (!DateUtils.dateOnly(x.dateFrom)
-              .isBefore(DateUtils.dateOnly(DateTime.now())) &&
-          !DateUtils.dateOnly(x.dateFrom)
-              .isAfter(DateUtils.dateOnly(DateTime.now()))) closing = x;
-    });
-    if (closing == null) 
-      return;
-    _showDialog(
-      context,
-      ref,
-      ClosedShopDialog(closing!.type)
-    );
   }
 
   void _showDialog(BuildContext context, WidgetRef ref, Widget dialog) {
