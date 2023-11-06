@@ -32,6 +32,20 @@ export async function getProductImageUrl(product: Product): Promise<string | und
   }
 }
 
+export async function getProductCleanImageUrl(product: Product): Promise<string | undefined> {
+  if (product.image_path === undefined) {
+    return undefined;
+  } else {
+    try {
+      const file = admin.storage().bucket().file(product.image_path.replace('warehouse', 'warehouse_clean'));
+      await file.makePublic();
+      return file.publicUrl();
+    } catch {
+      return undefined;
+    }
+  }
+}
+
 export function getProductRef(productUid: string): FirebaseFirestore.DocumentReference {
   return admin.firestore().collection(productsCollection).doc(productUid);
 }

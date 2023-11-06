@@ -3,14 +3,14 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { tier1Region } from '../constants/other';
 import { Product } from '../models/product';
-import { getProductImageUrl } from '../utils/product-utils';
+import { getProductCleanImageUrl } from '../utils/product-utils';
 import { productsCollection } from '../constants/collections';
 import { XMLBuilder } from 'fast-xml-parser';
 
 const app = express();
 
 async function createHeurekaObj(obj: Product): Promise<object> {
-  const img_url = await getProductImageUrl(obj);
+  const img_url = await getProductCleanImageUrl(obj);
 
   return {
     ITEM_ID: obj.cmat.trim(),
