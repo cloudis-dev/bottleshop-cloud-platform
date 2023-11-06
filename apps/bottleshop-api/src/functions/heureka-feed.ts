@@ -18,7 +18,7 @@ async function createHeurekaObj(obj: Product): Promise<object> {
     PRODUCT: obj.name + ' ' + 'Kuriér SR',
     DESCRIPTION: obj.description_sk,
     URL: 'https://bottleshop3veze.sk/home/products/product-detail/' + encodeURI(obj.cmat),
-    IMGURL: img_url ? encodeURI(img_url) : undefined,
+    IMGURL: img_url ? img_url : undefined,
     PRICE_VAT: +(obj.price_no_vat * 1.2).toFixed(2),
     CATEGORYTEXT: 'Jedlo a nápoje | Alkoholické nápoje',
     // EAN: obj.ean,
