@@ -117,9 +117,13 @@ class Footer extends HookConsumerWidget {
                       size: 14,
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(9, 0, 0, 0),
-                      child: Text("+421 904 797 094",
-                          style: publicSansTextTheme.bodySmall),
+                      padding: const EdgeInsets.fromLTRB(2, 0, 0, 0),
+                      child: TextButton(
+                        onPressed: () => launchUrlString("tel:421-904-797-094"),
+                        child: Text("+421 904 797 094",
+                            style: publicSansTextTheme.bodySmall?.copyWith(
+                                decoration: TextDecoration.underline)),
+                      ),
                     ),
                   ],
                 ),
@@ -191,14 +195,6 @@ class Footer extends HookConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
                 child: Text(context.l10n.informationColumn,
                     style: publicSansTextTheme.displayMedium),
-              ),
-              TextButton(
-                onPressed: () {
-                  ref
-                      .watch(navigationProvider)
-                      .setNestingBranch(context, NestingBranch.help);
-                },
-                child: Text("F.A.Q.", style: publicSansTextTheme.bodySmall),
               ),
               BilingualLink(
                   txt: context.l10n.menuTerms,

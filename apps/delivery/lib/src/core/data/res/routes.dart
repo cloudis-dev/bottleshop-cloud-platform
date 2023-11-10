@@ -20,7 +20,6 @@ import 'package:delivery/src/features/checkout/presentation/pages/checkout_page.
 import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout_failure.dart';
 import 'package:delivery/src/features/checkout/presentation/pages/stripe_checkout_success.dart';
 import 'package:delivery/src/features/favorites/presentation/pages/favorites_page.dart';
-import 'package:delivery/src/features/help/presentation/pages/help_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/cart_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/home_page.dart';
 import 'package:delivery/src/features/home/presentation/pages/landing_page.dart';
@@ -135,10 +134,6 @@ final routes = <String, RouteNode<NestingBranch>>{
         NestingBranch.account: BranchInitNode(
           AccountPage.pagePathBase,
           RouteNode(NonParametrizedPage(() => AccountPage())),
-        ),
-        NestingBranch.help: BranchInitNode(
-          HelpPage.pagePathBase,
-          RouteNode(NonParametrizedPage(() => HelpPage())),
         ),
         NestingBranch.success: BranchInitNode(
             StripeCheckoutSuccessPage.pagePathBase,

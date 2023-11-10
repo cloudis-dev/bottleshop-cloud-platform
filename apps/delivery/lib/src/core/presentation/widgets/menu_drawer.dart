@@ -157,20 +157,7 @@ class MenuDrawer extends HookConsumerWidget {
                 }
               },
             ),
-            ListTile(
-              title: Text(
-                context.l10n.contactButton,
-                style: publicSansTextTheme.bodyText1,
-              ),
-              onTap: () {
-                if (currentBranch == NestingBranch.help) {
-                  Scaffold.of(context).closeDrawer();
-                } else {
-                  navigation.setNestingBranch(context, NestingBranch.help);
-                  Navigator.pop(context);
-                }
-              },
-            ),
+           
             // TODO login button to be added later
             // ConstrainedBox(
             //   child: Align(

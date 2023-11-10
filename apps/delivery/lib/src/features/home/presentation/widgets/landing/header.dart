@@ -59,11 +59,7 @@ class Header extends HookConsumerWidget {
                       Btns(
                         txt: context.l10n.saleButton,
                         nestingBranch: NestingBranch.sale,
-                      ),
-                      Btns(
-                        txt: context.l10n.contactButton,
-                        nestingBranch: NestingBranch.help,
-                      ),
+                      ),                    
                     ],
                   ),
                 )

@@ -155,18 +155,6 @@ class MobileFooter extends HookConsumerWidget {
           Transform.translate(
             // e.g: vertical negative margin
             offset: const Offset(-8, 0),
-            child: TextButton(
-              onPressed: () {
-                ref
-                    .watch(navigationProvider)
-                    .setNestingBranch(context, NestingBranch.help);
-              },
-              child: Text("F.A.Q.", style: publicSansTextTheme.caption),
-            ),
-          ),
-          Transform.translate(
-            // e.g: vertical negative margin
-            offset: const Offset(-8, 0),
             child: BilingualLink(
                 txt: context.l10n.menuTerms,
                 enLink: UrlStrings.menuTermsEN,
