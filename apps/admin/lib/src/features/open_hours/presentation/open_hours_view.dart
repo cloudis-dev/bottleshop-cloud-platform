@@ -54,56 +54,58 @@ class _Body extends HookWidget {
               element.type != 'Friday' &&
               element.type != 'Sunday' &&
               element.type != 'Saturday');
-          return Column(
-            children: [
-              ChangeHour(
-                val: data.firstWhere((element) => element.type == 'Workdays'),
-              ),
-              ChangeHour(
-                val: data.firstWhere((element) => element.type == 'Friday'),
-              ),
-              ChangeHour(
-                val: data.firstWhere((element) => element.type == 'Saturday'),
-              ),
-              ChangeHour(
-                val: data.firstWhere((element) => element.type == 'Sunday'),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Expanded(child: Divider()),
-              ),
-              SizedBox(
-                height: 200,
-                child: Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: otherDays.length == 0
-                        ? TextButton(
-                            onPressed: () async {
-                              final emptyDoc = FirebaseFirestore.instance
-                                  .collection(Constants.openHoursCollection)
-                                  .doc();
-                              final batch = FirebaseFirestore.instance.batch();
-                              final dtNow = DateTime.now();
-                              await openHoursDb.create({
-                                'dateFrom': dtNow,
-                                'dateTo': DateTime(dtNow.year, dtNow.month,
-                                    dtNow.day, dtNow.hour + 1),
-                                'isClosed': false,
-                                'type': emptyDoc.id,
-                                'message':''
-                              }, id: emptyDoc.id, batch: batch);
-                              await batch.commit();
-                            },
-                            child: Text('Nova doba'),
-                          )
-                        : ListView.builder(
-                            itemCount: otherDays.length,
-                            itemBuilder: (_, index) {
-                              return ChangeDate(
-                                  val: otherDays.elementAt(index));
-                            })),
-              ),
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ChangeHour(
+                  val: data.firstWhere((element) => element.type == 'Workdays'),
+                ),
+                ChangeHour(
+                  val: data.firstWhere((element) => element.type == 'Friday'),
+                ),
+                ChangeHour(
+                  val: data.firstWhere((element) => element.type == 'Saturday'),
+                ),
+                ChangeHour(
+                  val: data.firstWhere((element) => element.type == 'Sunday'),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Expanded(child: Divider()),
+                ),
+                SizedBox(
+                  height: 200,
+                  child: Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: otherDays.length == 0
+                          ? TextButton(
+                              onPressed: () async {
+                                final emptyDoc = FirebaseFirestore.instance
+                                    .collection(Constants.openHoursCollection)
+                                    .doc();
+                                final batch = FirebaseFirestore.instance.batch();
+                                final dtNow = DateTime.now();
+                                await openHoursDb.create({
+                                  'dateFrom': dtNow,
+                                  'dateTo': DateTime(dtNow.year, dtNow.month,
+                                      dtNow.day, dtNow.hour + 1),
+                                  'isClosed': false,
+                                  'type': emptyDoc.id,
+                                  'message':''
+                                }, id: emptyDoc.id, batch: batch);
+                                await batch.commit();
+                              },
+                              child: Text('Nova doba'),
+                            )
+                          : ListView.builder(
+                              itemCount: otherDays.length,
+                              itemBuilder: (_, index) {
+                                return ChangeDate(
+                                    val: otherDays.elementAt(index));
+                              })),
+                ),
+              ],
+            ),
           );
         },
         error: (error, stack) => Text(error.toString()),
