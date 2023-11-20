@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -105,8 +104,8 @@ class PushNotificationsService {
         FirebaseMessaging.onMessageOpenedApp.listen(
           (msg) => _processNotification(msg.data),
         );
-      } catch (e, stack) {
-        await FirebaseCrashlytics.instance.recordError(e, stack);
+      } catch (e) {
+        debugPrint(e.toString());
       }
     }
   }

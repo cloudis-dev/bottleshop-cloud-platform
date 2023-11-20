@@ -6,9 +6,9 @@ class OrderTypeChip extends StatelessWidget {
   final OrderTypeModel? orderTypeModel;
 
   const OrderTypeChip({
-    Key? key,
+    super.key,
     required this.orderTypeModel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => Chip(

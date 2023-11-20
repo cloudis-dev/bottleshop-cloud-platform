@@ -75,8 +75,8 @@ class ProductCardNewEntryMenuButton extends StatelessWidget {
 
   const ProductCardNewEntryMenuButton(
     this.product, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) => PopupMenuButton<_Action>(

@@ -9,7 +9,7 @@ class SectionsPage extends StatelessWidget {
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
-  const SectionsPage({Key? key}) : super(key: key);
+  const SectionsPage({super.key});
 
   static const List<String> navigationTabsNames = [
     'FLASH SALE',

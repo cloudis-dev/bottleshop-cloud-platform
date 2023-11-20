@@ -5,7 +5,7 @@ import 'package:bottleshop_admin/src/features/section_flash_sales/data/models/fl
 import 'package:bottleshop_admin/src/features/section_flash_sales/data/repositories/flash_sale_products_repository.dart';
 import 'package:bottleshop_admin/src/features/section_flash_sales/data/repositories/flash_sales_repository.dart';
 import 'package:bottleshop_admin/src/features/section_flash_sales/presentation/view_models/flash_sale_view_model.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final flashSaleProductsRepository =
@@ -74,7 +74,7 @@ final isFlashSaleLoadedProvider = Provider.autoDispose<bool>(
         data: (_) => true,
         loading: () => false,
         error: (err, stacktrace) {
-          FirebaseCrashlytics.instance.recordError(err, stacktrace);
+          debugPrint(err.toString());
           return false;
         },
       ),

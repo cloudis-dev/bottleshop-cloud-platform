@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'logged_user_widget.dart';
+import 'package:bottleshop_admin/src/features/login/presentation/widgets/logged_user_widget.dart';
 
 class LoadingStateColumn extends StatelessWidget {
   const LoadingStateColumn({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) => Column(

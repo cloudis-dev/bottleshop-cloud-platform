@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ActiveTextField extends StatelessWidget {
   const ActiveTextField({
-    Key? key,
+    super.key,
     required this.label,
     required this.ctrl,
     required this.onSaved,
@@ -13,7 +13,7 @@ class ActiveTextField extends StatelessWidget {
     this.keyboardType,
     this.minLines,
     this.maxLines,
-  }) : super(key: key);
+  });
 
   final String? Function(String?)? validator;
   final void Function(String?) onSaved;

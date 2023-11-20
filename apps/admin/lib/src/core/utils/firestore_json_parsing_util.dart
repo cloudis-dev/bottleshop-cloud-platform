@@ -113,7 +113,7 @@ class FirestoreJsonParsingUtil {
       throw Exception('All categories haven\'t been found');
     }
 
-    CategoryModel? _parseCategories(
+    CategoryModel? parseCategories(
       Iterable<DocumentSnapshot> categories,
     ) {
       if (categories.isEmpty) return null;
@@ -121,11 +121,11 @@ class FirestoreJsonParsingUtil {
       return CategoryModel(
         categoryDetails: CategoryPlainModel.fromJson(
             doc.data()! as Map<String, dynamic>, doc.id),
-        subCategory: _parseCategories(categories.skip(1)),
+        subCategory: parseCategories(categories.skip(1)),
       );
     }
 
-    Iterable<int> _categoriesCounts(
+    Iterable<int> categoriesCounts(
       List<DocumentSnapshot> allCategories,
     ) sync* {
       if (allCategories.isEmpty) return;
@@ -134,7 +134,7 @@ class FirestoreJsonParsingUtil {
         if ((allCategories[i].data()! as Map<String, dynamic>)
             .containsKey(CategoriesTreeModel.isMainCategoryField)) {
           yield i;
-          yield* _categoriesCounts(allCategories.skip(i).toList());
+          yield* categoriesCounts(allCategories.skip(i).toList());
           return;
         }
       }
@@ -142,12 +142,12 @@ class FirestoreJsonParsingUtil {
     }
 
     final result =
-        _categoriesCounts(docs).fold<Tuple2<int, Iterable<CategoryModel>>>(
+        categoriesCounts(docs).fold<Tuple2<int, Iterable<CategoryModel>>>(
       Tuple2(0, Iterable<CategoryModel>.empty()),
       (previousValue, element) => Tuple2(
         previousValue.item1 + element,
         previousValue.item2.followedBy(
-          [_parseCategories(docs.skip(previousValue.item1).take(element))]
+          [parseCategories(docs.skip(previousValue.item1).take(element))]
               .where((element) => element != null)
               .map((e) => e!),
         ),

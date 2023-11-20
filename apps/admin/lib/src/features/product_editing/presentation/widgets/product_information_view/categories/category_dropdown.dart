@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class CategoryDropdown extends StatelessWidget {
   const CategoryDropdown({
-    Key? key,
+    super.key,
     required this.isSubcategory,
     required this.currentValue,
     required this.categoriesOptions,
     required this.onSaved,
     required this.validator,
-  }) : super(key: key);
+  });
 
   final bool isSubcategory;
   final List<CategoriesTreeModel> categoriesOptions;

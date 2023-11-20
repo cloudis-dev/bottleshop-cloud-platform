@@ -107,7 +107,7 @@ class DatabaseService<T> {
 
     // ignore: cascade_invocations
     streamCtrl.onListen = () async {
-      final _getStreamCtrl = () => streamCtrl.isClosed ? null : streamCtrl;
+      getStreamCtrl() => streamCtrl.isClosed ? null : streamCtrl;
 
       try {
         // The initial batch have to be first awaited and fully added to the stream
@@ -126,7 +126,7 @@ class DatabaseService<T> {
               ),
             );
 
-        _getStreamCtrl()?.add(initialBatch);
+        getStreamCtrl()?.add(initialBatch);
 
         final snapshotsStream = query.snapshots().asyncMap(
           (snap) {
@@ -142,9 +142,9 @@ class DatabaseService<T> {
           },
         );
 
-        await _getStreamCtrl()?.addStream(snapshotsStream);
+        await getStreamCtrl()?.addStream(snapshotsStream);
       } catch (e) {
-        _getStreamCtrl()?.addError(e);
+        getStreamCtrl()?.addError(e);
       }
     };
 

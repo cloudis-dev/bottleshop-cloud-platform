@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class AsyncParamPageViewModel<T> extends StateNotifier<AsyncValue<T>> {
   AsyncParamPageViewModel() : super(const AsyncValue.loading());
 
-  StreamSubscription? _subscription;
+  StreamSubscription<dynamic>? _subscription;
   bool _isLoaded = false;
 
   @override

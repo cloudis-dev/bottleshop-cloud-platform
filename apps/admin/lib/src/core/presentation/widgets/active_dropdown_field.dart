@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 class ActiveDropdownField<T> extends StatelessWidget {
   const ActiveDropdownField({
-    Key? key,
+    super.key,
     required this.label,
     required this.items,
     required this.currentValue,
     required this.onSaved,
     this.validator,
     this.validateInitially,
-  }) : super(key: key);
+  });
 
   final bool? validateInitially;
   final String label;
@@ -21,7 +21,7 @@ class ActiveDropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fieldKey = GlobalKey<FormFieldState>();
+    final fieldKey = GlobalKey<FormFieldState<dynamic>>();
 
     if (validateInitially ?? false) {
       Future.microtask(() => fieldKey.currentState?.validate());

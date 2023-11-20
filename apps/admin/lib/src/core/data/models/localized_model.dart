@@ -8,7 +8,7 @@ class LocalizedModel {
 
   String get local => _slovak;
 
-  LocalizedModel({required slovak}) : _slovak = slovak;
+  const LocalizedModel({required String slovak}) : _slovak = slovak;
 
   LocalizedModel.fromJson(Map<String, dynamic> json)
       : _slovak = json[slovakField];

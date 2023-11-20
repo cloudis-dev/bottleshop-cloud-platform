@@ -37,7 +37,7 @@ class OrderCardActionButton extends HookWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: AppTheme.primaryColor),
+        style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primaryColor),
         onPressed: order.isTakenOverByAdmin &&
                 useProvider(loggedUserProvider).state != order.preparingAdmin
             ? null

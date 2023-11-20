@@ -3,7 +3,7 @@ import 'package:bottleshop_admin/src/features/orders/presentation/pages/orders_p
 import 'package:flutter/material.dart';
 
 class CompletedOrderChip extends StatelessWidget {
-  const CompletedOrderChip({Key? key}) : super(key: key);
+  const CompletedOrderChip({super.key});
 
   @override
   Widget build(BuildContext context) => Chip(

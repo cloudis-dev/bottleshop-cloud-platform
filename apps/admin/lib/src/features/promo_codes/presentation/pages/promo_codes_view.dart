@@ -15,7 +15,7 @@ final _messengerKey = Provider.autoDispose<GlobalKey<ScaffoldMessengerState>>(
     (_) => GlobalKey<ScaffoldMessengerState>());
 
 class PromoCodesView extends HookWidget {
-  const PromoCodesView({Key? key}) : super(key: key);
+  const PromoCodesView({super.key});
 
   @override
   Widget build(BuildContext context) {

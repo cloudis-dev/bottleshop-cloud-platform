@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bottleshop_admin/src/features/product_search/data/services/products_search_service.dart';
 import 'package:bottleshop_admin/src/features/product_search/presentation/providers/providers.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -14,12 +13,12 @@ class SearchBar extends HookWidget {
   final ScaffoldState? pageScaffoldState;
 
   const SearchBar({
-    Key? key,
+    super.key,
     required this.pageScaffoldState,
-  }) : super(key: key);
+  });
 
   @override
-  Widget build(_) {
+  Widget build(context) {
     return Stack(
       alignment: Alignment.centerRight,
       children: <Widget>[
@@ -27,53 +26,52 @@ class SearchBar extends HookWidget {
           onChanged: (query) {
             /// This is to prevent continuing in search processing
             /// in case the widget is not in widget tree
-            final _getContext = () {
+            getContext() {
               if (pageScaffoldState == null) {
                 throw Exception();
               }
               return pageScaffoldState!.context;
-            };
+            }
 
             try {
               if (query.trim().isEmpty) {
-                _getContext().read(searchResultsProvider).state =
+                getContext().read(searchResultsProvider).state =
                     AsyncValue.data([]);
               } else {
                 final currentTime = DateTime.now();
-                _getContext().read(lastQueriedSearchTimeProvider).state =
+                getContext().read(lastQueriedSearchTimeProvider).state =
                     currentTime;
 
-                _getContext().read(searchResultsProvider).state =
+                getContext().read(searchResultsProvider).state =
                     AsyncValue.data([]);
 
-                _getContext().read(debounceTimerProvider).state?.cancel();
-                _getContext().read(debounceTimerProvider).state = Timer(
+                getContext().read(debounceTimerProvider).state?.cancel();
+                getContext().read(debounceTimerProvider).state = Timer(
                   const Duration(milliseconds: _debounceMs),
                   () async {
                     try {
-                      _getContext().read(searchResultsProvider).state =
+                      getContext().read(searchResultsProvider).state =
                           AsyncValue.loading();
                       final res = await ProductsSearchService.search(
                           query, _maxResults, 0);
 
                       // Only show the results when this was the last search query made
-                      if (_getContext()
+                      if (getContext()
                               .read(lastQueriedSearchTimeProvider)
                               .state ==
                           currentTime) {
-                        _getContext().read(searchResultsProvider).state =
+                        getContext().read(searchResultsProvider).state =
                             AsyncValue.data(res);
                       }
-                    } catch (err, stack) {
-                      await FirebaseCrashlytics.instance
-                          .recordError(err, stack);
+                    } catch (err) {
+                      debugPrint(err.toString());
                       return;
                     }
                   },
                 );
               }
-            } catch (err, stack) {
-              FirebaseCrashlytics.instance.recordError(err, stack);
+            } catch (err) {
+              debugPrint(err.toString());
               return;
             }
           },

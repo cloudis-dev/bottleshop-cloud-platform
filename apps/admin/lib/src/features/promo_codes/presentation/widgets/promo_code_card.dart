@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class PromoCodeCard extends StatelessWidget {
   const PromoCodeCard({
-    Key? key,
+    super.key,
     required this.promoCode,
     required this.onPromoCodeDeleteActionSelected,
     required this.onPromoCodeModifyActionSelected,
-  }) : super(key: key);
+  });
 
   final PromoCodeModel promoCode;
   final void Function(PromoCodeModel) onPromoCodeDeleteActionSelected;

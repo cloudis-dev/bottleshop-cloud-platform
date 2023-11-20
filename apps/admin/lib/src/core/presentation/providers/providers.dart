@@ -10,8 +10,6 @@ import 'package:bottleshop_admin/src/core/data/services/push_notifications_servi
 import 'package:bottleshop_admin/src/core/presentation/view_models/navigation_notifier.dart';
 import 'package:bottleshop_admin/src/features/login/presentation/pages/intro_activity.dart';
 import 'package:bottleshop_admin/src/features/orders/data/models/order_type_model.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final cloudFunctionsServiceProvider = Provider((_) => CloudFunctionsService());
@@ -22,7 +20,6 @@ final navigationProvider =
     StateNotifierProvider<NavigationNotifier, List<AppPage>>(
   (ref) => NavigationNotifier(
     [IntroActivityPage()],
-    ref,
   ),
 );
 
@@ -59,15 +56,7 @@ final pushNotificationsInitProvider = FutureProvider.autoDispose((ref) async {
   await pushNotifs.init();
 });
 
-final crashlyticsInitProvider = FutureProvider.autoDispose<void>(
-  (ref) => !kIsWeb
-      ? FirebaseCrashlytics.instance
-          .setCrashlyticsCollectionEnabled(!kDebugMode)
-      : Future<void>.value(),
-);
-
 final platformInitializedProvider =
     FutureProvider.autoDispose<void>((ref) async {
-  await ref.watch(crashlyticsInitProvider.future);
   await ref.watch(pushNotificationsInitProvider.future);
 });

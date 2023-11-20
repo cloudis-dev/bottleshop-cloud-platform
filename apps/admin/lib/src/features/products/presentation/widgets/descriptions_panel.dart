@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class DescriptionsPanel extends StatelessWidget {
   const DescriptionsPanel({
-    Key? key,
+    super.key,
     required this.descriptionSk,
     required this.descriptionEn,
-  }) : super(key: key);
+  });
 
   final String? descriptionSk;
   final String? descriptionEn;

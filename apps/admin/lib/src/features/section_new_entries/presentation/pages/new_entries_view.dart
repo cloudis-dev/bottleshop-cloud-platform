@@ -8,7 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
 class NewEntriesView extends HookWidget {
-  const NewEntriesView({Key? key}) : super(key: key);
+  const NewEntriesView({super.key});
 
   @override
   Widget build(BuildContext context) {

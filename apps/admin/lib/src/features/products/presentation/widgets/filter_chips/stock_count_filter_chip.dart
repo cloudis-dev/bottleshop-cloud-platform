@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class StockCountFilterChip extends HookWidget {
   const StockCountFilterChip({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   String _stockCountRangeString(RangeValues stockCount) =>
       '${stockCount.start.round()} - ${stockCount.end.round()}${stockCount.end.round() == Constants.filterMaxStock ? '+' : ''}';

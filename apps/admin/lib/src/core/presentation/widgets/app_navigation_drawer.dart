@@ -10,8 +10,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class AppNavigationDrawer extends HookWidget {
   const AppNavigationDrawer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   Future<PackageInfo> getVersion() {
     return PackageInfo.fromPlatform();
@@ -104,13 +104,14 @@ class AppNavigationDrawer extends HookWidget {
                   );
                 }
                 return Center(
-                    child: Text(
-                      'Error',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  );
-              } else
+                  child: Text(
+                    'Error',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                );
+              } else {
                 return CircularProgressIndicator();
+              }
             },
             future: getVersion(),
           ),

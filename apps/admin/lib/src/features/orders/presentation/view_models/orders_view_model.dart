@@ -1,6 +1,6 @@
 import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
 class OrdersPaginationViewModel extends PagedStreamsItemsStateNotifier<
@@ -13,7 +13,7 @@ class OrdersPaginationViewModel extends PagedStreamsItemsStateNotifier<
   ) : super(
           createStream,
           _OrderItemsHandler(descending),
-          (err, stack) => FirebaseCrashlytics.instance.recordError(err, stack),
+          (err, stack) => debugPrint(err.toString()),
         );
 }
 

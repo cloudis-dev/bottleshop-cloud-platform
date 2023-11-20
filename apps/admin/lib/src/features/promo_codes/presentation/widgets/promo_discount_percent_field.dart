@@ -48,6 +48,7 @@ class PromoDiscountPercentField extends HookWidget {
         if (parsed > 100) {
           return 'Musí byť menšie ako 100';
         }
+        return null;
       },
     );
   }

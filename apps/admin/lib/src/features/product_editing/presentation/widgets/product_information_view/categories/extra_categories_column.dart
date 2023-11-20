@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'extra_category_container.dart';
+import 'package:bottleshop_admin/src/features/product_editing/presentation/widgets/product_information_view/categories/extra_category_container.dart';
 
 class ExtraCategoriesColumn extends HookWidget {
   const ExtraCategoriesColumn({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class OrderChipsRow extends StatelessWidget {
   const OrderChipsRow({
-    Key? key,
+    super.key,
     required this.order,
-  }) : super(key: key);
+  });
 
   final OrderModel order;
 

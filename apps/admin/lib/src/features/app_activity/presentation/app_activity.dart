@@ -34,7 +34,7 @@ class AppActivityPage extends AppPage {
 }
 
 class _AppActivity extends HookWidget {
-  _AppActivity(this._initialIndex);
+  const _AppActivity(this._initialIndex);
 
   final TabIndex _initialIndex;
 

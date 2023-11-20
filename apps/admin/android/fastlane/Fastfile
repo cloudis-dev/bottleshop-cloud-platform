@@ -5,9 +5,9 @@ platform :android do
     lane :distribute do
         firebase_app_distribution(
             app: "1:540936468411:android:9271fca1d03a8d1bbff69e",
-            service_credentials_file: "/Users/kristian/Documents/Kristian/bottleshop/bottleshop3veze-firebase_app_distribution.json",
+            service_credentials_file: "/Users/johny/Development/bottleshop3veze.json",
             groups: "android-testers",
-            apk_path: "/Users/kristian/Documents/Kristian/bottleshop/bottleshop-cloud-platform/apps/admin/build/app/outputs/flutter-apk/app-arm64-v8a-production-release.apk",
+            apk_path: "/Users/johny/Development/bottleshop-cloud-platform/apps/admin/build/app/outputs/flutter-apk/app-arm64-v8a-production-release.apk",
             release_notes: "Let's go bottleroom"
         )
     end

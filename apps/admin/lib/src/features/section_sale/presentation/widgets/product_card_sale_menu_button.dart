@@ -73,7 +73,7 @@ void _onActionSelected(
 class ProductCardSaleMenuButton extends StatelessWidget {
   final ProductModel product;
 
-  const ProductCardSaleMenuButton(this.product, {Key? key}) : super(key: key);
+  const ProductCardSaleMenuButton(this.product, {super.key});
 
   @override
   Widget build(BuildContext context) => PopupMenuButton<_Action>(

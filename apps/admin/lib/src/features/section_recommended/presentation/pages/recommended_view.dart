@@ -8,7 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
 class RecommendedView extends HookWidget {
-  const RecommendedView({Key? key}) : super(key: key);
+  const RecommendedView({super.key});
 
   @override
   Widget build(BuildContext context) {

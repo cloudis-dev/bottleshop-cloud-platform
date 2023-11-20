@@ -15,7 +15,6 @@ import 'package:bottleshop_admin/src/features/order_detail/presentation/widgets/
 import 'package:bottleshop_admin/src/features/orders/data/models/order_model.dart';
 import 'package:bottleshop_admin/src/features/orders/data/models/order_type_model.dart';
 import 'package:bottleshop_admin/src/features/orders/data/services/services.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -184,7 +183,6 @@ class _OrderDetailView extends HookWidget {
             ),
           ),
           error: (err, stack) {
-            FirebaseCrashlytics.instance.recordError(err, stack);
             Text(
               'Niekde nastala chyba.',
               style: TextStyle(color: Colors.red),

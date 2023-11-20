@@ -1,17 +1,14 @@
 import 'package:bottleshop_admin/src/core/utils/sorting_util.dart';
 import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
 class ProductStateViewModel
     extends SingleStreamItemsStateNotifier<ProductModel, String?> {
   ProductStateViewModel(
     Stream<ItemsStateStreamBatch<ProductModel>> Function() requestStream,
-  ) : super(
-          requestStream,
-          _ProductItemsHandler(),
-          (err, stack) => FirebaseCrashlytics.instance.recordError(err, stack),
-        );
+  ) : super(requestStream, _ProductItemsHandler(),
+            (err, stack) => debugPrint(err.toString()));
 }
 
 /// The generic [T] parameter is the paging key.
@@ -22,11 +19,8 @@ class PagedProductsViewModel<T>
   PagedProductsViewModel(
     Stream<PagedItemsStateStreamBatch<ProductModel, T>> Function(T? lastPageKey)
         requestMoreItemsStream,
-  ) : super(
-          requestMoreItemsStream,
-          _ProductItemsHandler(),
-          (err, stack) => FirebaseCrashlytics.instance.recordError(err, stack),
-        );
+  ) : super(requestMoreItemsStream, _ProductItemsHandler(),
+            (err, stack) => debugPrint(err.toString()));
 }
 
 class _ProductItemsHandler extends ItemsHandler<ProductModel, String?> {

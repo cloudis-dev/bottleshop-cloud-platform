@@ -9,8 +9,8 @@ import 'package:streamed_items_state_management/streamed_items_state_management.
 
 class ProductsList extends HookWidget {
   const ProductsList({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -35,10 +35,9 @@ final _isDiscountChanged = Provider.autoDispose<bool>(
 
 class DiscountSetupDialog extends ProcessingAlertDialog {
   DiscountSetupDialog({
-    Key? key,
+    super.key,
     required this.product,
   }) : super(
-          key: key,
           actionButtonColor: AppTheme.primaryColor,
           contentPadding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
           negativeButtonOptionBuilder: (_) => Text('ZRUŠIŤ',
@@ -81,6 +80,7 @@ class DiscountSetupDialog extends ProcessingAlertDialog {
     useEffect(() {
       Future.microtask(() =>
           context.read(discountEditInitialProductProvider).state = product);
+      return null;
     }, []);
 
     final formKey = useProvider(_discountEditFormKey);
@@ -157,7 +157,7 @@ class DiscountSetupDialog extends ProcessingAlertDialog {
   @protected
   Widget positiveButton(
     BuildContext context,
-    _,
+    isButtonActive,
     ProcessingAlertDialogViewModel model,
   ) {
     return super.positiveButton(

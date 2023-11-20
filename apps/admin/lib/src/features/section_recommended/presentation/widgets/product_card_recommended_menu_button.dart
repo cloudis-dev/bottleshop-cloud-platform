@@ -12,7 +12,7 @@ import 'package:bottleshop_admin/src/features/section_recommended/presentation/p
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../sections/presentation/pages/sections_page.dart';
+import 'package:bottleshop_admin/src/features/sections/presentation/pages/sections_page.dart';
 
 enum _Action {
   edit,
@@ -76,8 +76,8 @@ class ProductCardRecommendedMenuButton extends StatelessWidget {
 
   const ProductCardRecommendedMenuButton(
     this.product, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) => PopupMenuButton<_Action>(

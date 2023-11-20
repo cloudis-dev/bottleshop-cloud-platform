@@ -5,7 +5,6 @@ import 'package:bottleshop_admin/src/core/presentation/widgets/processing_alert_
 import 'package:bottleshop_admin/src/features/promo_codes/data/models/promo_code_model.dart';
 import 'package:bottleshop_admin/src/features/promo_codes/data/repositories/promo_codes_repository.dart';
 import 'package:bottleshop_admin/src/features/promo_codes/presentation/providers/providers.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -18,11 +17,10 @@ class PromoCodeEditingResult {
 
 class ConfirmPromoCodeChangesDialog extends ProcessingAlertDialog {
   ConfirmPromoCodeChangesDialog({
-    Key? key,
+    super.key,
     required PromoCodeModel promoCode,
     required PromoCodeModel previousCode,
   }) : super(
-          key: key,
           actionButtonColor: AppTheme.primaryColor,
           negativeButtonOptionBuilder: (_) => Text(
             'Nie',
@@ -60,8 +58,8 @@ class ConfirmPromoCodeChangesDialog extends ProcessingAlertDialog {
             e.message,
           ),
         );
-      } catch (err, stack) {
-        FirebaseCrashlytics.instance.recordError(err, stack);
+      } catch (err) {
+        debugPrint(err.toString());
 
         Navigator.pop(
           context,
@@ -85,9 +83,7 @@ class ConfirmPromoCodeChangesDialog extends ProcessingAlertDialog {
             AppStrings.promoCodeEditedMsg,
           ),
         );
-      } catch (err, stack) {
-        FirebaseCrashlytics.instance.recordError(err, stack);
-
+      } catch (err) {
         Navigator.pop(
           context,
           PromoCodeEditingResult(

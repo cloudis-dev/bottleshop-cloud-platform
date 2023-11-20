@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class PriceFilterChip extends HookWidget {
   const PriceFilterChip({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   String _priceRangeString(RangeValues priceRange) {
     return '€${priceRange.start.round()} - €${priceRange.end.round()}${priceRange.end.round() == Constants.filterMaxPrice ? '+' : ''}';

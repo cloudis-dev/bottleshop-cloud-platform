@@ -8,7 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:streamed_items_state_management/streamed_items_state_management.dart';
 
 class SaleView extends HookWidget {
-  const SaleView({Key? key}) : super(key: key);
+  const SaleView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class SaleView extends HookWidget {
               productCardMenuButtonBuilder: (_) =>
                   ProductCardSaleMenuButton(item),
             ),
-            requestData: () => null,
+            requestData: () {},
           )
         ],
       ),

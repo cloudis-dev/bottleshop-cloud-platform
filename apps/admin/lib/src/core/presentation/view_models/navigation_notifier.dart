@@ -7,9 +7,7 @@ import 'package:bottleshop_admin/src/features/product_editing/presentation/provi
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NavigationNotifier extends StateNotifier<List<AppPage>> {
-  NavigationNotifier(List<AppPage> state, this._providerRef) : super(state);
-
-  final ProviderReference _providerRef;
+  NavigationNotifier(super.state);
 
   void pushPage(AppPage newPage) {
     state = [...state, newPage];

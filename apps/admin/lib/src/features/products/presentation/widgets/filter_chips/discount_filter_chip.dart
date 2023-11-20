@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DiscountFilterChip extends HookWidget {
   const DiscountFilterChip({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   String _discountRangeString(RangeValues discountRange) =>
       '${discountRange.start.round()}% - ${discountRange.end.round()}%';

@@ -12,7 +12,7 @@ class CountryModel {
   final String? flagUrl;
   final LocalizedModel localizedName;
 
-  CountryModel({
+  const CountryModel({
     required this.id,
     required this.flagUrl,
     required this.localizedName,

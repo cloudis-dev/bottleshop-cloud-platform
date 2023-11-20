@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'category_column.dart';
+import 'package:bottleshop_admin/src/features/product_editing/presentation/widgets/product_information_view/categories/category_column.dart';
 
 class MainCategoryColumn extends HookWidget {
   const MainCategoryColumn({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

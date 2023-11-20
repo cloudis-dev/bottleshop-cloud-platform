@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AlcoholFilterChip extends HookWidget {
   const AlcoholFilterChip({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   String _alcoholRangeString(RangeValues alcoholRange) =>
       '${alcoholRange.start.round()}% - ${alcoholRange.end.round()}%';

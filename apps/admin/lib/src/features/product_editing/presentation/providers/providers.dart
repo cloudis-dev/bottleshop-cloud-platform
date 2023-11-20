@@ -1,7 +1,8 @@
+// ignore_for_file: unused_import
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:bottleshop_admin/src/core/data/services/firebase_storage_service.dart';
@@ -9,7 +10,6 @@ import 'package:bottleshop_admin/src/core/utils/image_util.dart';
 import 'package:bottleshop_admin/src/core/utils/math_util.dart';
 import 'package:bottleshop_admin/src/features/products/data/models/product_model.dart';
 import 'package:bottleshop_admin/src/features/products/data/services/services.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -60,12 +60,14 @@ final _productImgFileFutureProvider = FutureProvider.autoDispose<String?>(
       return Future.value(null);
     } else {
       if (!kIsWeb) {
-      var rng = Random();
-      var response = await http.get(Uri.parse(await FirebaseStorageService.getDownloadUrlFromPath(imagePath)));
-      final tempDir = await getTemporaryDirectory();
-       var f =await File('${tempDir.path}/${rng.nextInt(100)}.jpg').writeAsBytes(response.bodyBytes);
-       return f.path;
-    }
+        final rng = Random();
+        final response = await http.get(Uri.parse(
+            await FirebaseStorageService.getDownloadUrlFromPath(imagePath)));
+        final tempDir = await getTemporaryDirectory();
+        final f = await File('${tempDir.path}/${rng.nextInt(100)}.jpg')
+            .writeAsBytes(response.bodyBytes);
+        return f.path;
+      }
       return FirebaseStorageService.getDownloadUrlFromPath(imagePath);
     }
   },
@@ -79,7 +81,6 @@ final isImgLoadedProvider = Provider.autoDispose<bool>(
         data: (_) => true,
         loading: () => false,
         error: (err, stacktrace) {
-          FirebaseCrashlytics.instance.recordError(err, stacktrace);
           return false;
         },
       ),
@@ -101,16 +102,13 @@ final isProductImageValid = FutureProvider.autoDispose<bool>(
     if (currentImg == null) {
       return Future.value(true);
     } else {
-      return ImageUtil.getImageSize(XFile(currentImg))
-          .then(
-        (value){ 
-           return MathUtil.approximately(
+      return ImageUtil.getImageSize(XFile(currentImg)).then((value) {
+        return MathUtil.approximately(
           targetImgAspect,
           ImageUtil.getImgSizeRatio(value),
           epsilon: 0.01,
-        );}
-      )
-          .then((value) async {
+        );
+      }).then((value) async {
         await Future<void>.delayed(Duration(seconds: 1));
         return value;
       });
@@ -123,7 +121,6 @@ final blopProvider = StateProvider.autoDispose<String?>(
         data: (file) => file,
         loading: () => null,
         error: (err, stacktrace) {
-          FirebaseCrashlytics.instance.recordError(err, stacktrace);
           return null;
         },
       ),

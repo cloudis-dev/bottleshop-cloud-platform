@@ -7,7 +7,10 @@ class CloudFunctionsService {
       app: Firebase.app(), region: 'europe-west1');
 
   Future<Timestamp> getServerTimestamp() {
-    return _cloudFunctions.httpsCallable('getCurrentTimestamp').call().then(
+    return _cloudFunctions
+        .httpsCallable('getCurrentTimestamp')
+        .call<dynamic>()
+        .then(
           (value) => Timestamp.fromMillisecondsSinceEpoch(
             value.data['_seconds'] * 1000,
           ),

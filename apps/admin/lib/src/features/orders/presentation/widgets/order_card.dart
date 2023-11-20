@@ -12,14 +12,14 @@ import 'package:bottleshop_admin/src/features/orders/presentation/providers/prov
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'order_card_action_button.dart';
+import 'package:bottleshop_admin/src/features/orders/presentation/widgets/order_card_action_button.dart';
 
 class OrderCard extends StatelessWidget {
   const OrderCard({
-    Key? key,
+    super.key,
     required this.id,
     required this.order,
-  }) : super(key: key);
+  });
 
   final int id;
   final OrderModel order;
@@ -186,7 +186,8 @@ class OrderCard extends StatelessWidget {
             ),
             if (order.isTakenOverByAdmin && order.isFirstOrderStatusStep)
               ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.redAccent),
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
                 onPressed: () => context
                     .read(ordersRepositoryProvider)
                     .cancelOrderTakeOver(order),

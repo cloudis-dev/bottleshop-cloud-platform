@@ -11,11 +11,11 @@ import 'package:image_picker/image_picker.dart';
 
 class ActionButtonsColumn extends HookWidget {
   const ActionButtonsColumn({
-    Key? key,
+    super.key,
     required this.onPickImage,
     required this.onCropImage,
     required this.onImageDelete,
-  }) : super(key: key);
+  });
 
   final Future Function(BuildContext, ImageSource) onPickImage;
   final Future Function(BuildContext) onCropImage;

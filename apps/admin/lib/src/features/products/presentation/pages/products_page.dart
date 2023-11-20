@@ -18,7 +18,7 @@ class ProductsPage extends StatelessWidget {
   // static const double _backdropHeaderHeight = 76;
   static const double _backdropHeaderHeight = 48;
 
-  ProductsPage({Key? key}) : super(key: key);
+  ProductsPage({super.key});
 
   Widget _backLayer() =>
 //    final textStyle = TextStyle(fontSize: 16, color: Colors.white);

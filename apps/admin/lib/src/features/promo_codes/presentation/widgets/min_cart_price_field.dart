@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MinCartPriceField extends HookWidget {
   const MinCartPriceField({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +35,10 @@ class MinCartPriceField extends HookWidget {
       },
       validator: (val) {
         final parsed = double.tryParse(val?.replaceAll(',', '.') ?? '');
-        if (parsed == null) {
-          return 'Musí byť číslo';
-        }
-
-        if (parsed < 0) {
+        if (parsed! < 0) {
           return 'Musí byť väčšie alebo rovné 0';
+        } else {
+          return 'Musí byť číslo';
         }
       },
     );

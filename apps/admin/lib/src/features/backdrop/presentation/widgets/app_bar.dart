@@ -128,7 +128,7 @@ class BackdropAppBar extends StatelessWidget implements PreferredSizeWidget {
   ///
   /// For more information see [AppBar].
   BackdropAppBar({
-    Key? key,
+    super.key,
     this.leading,
     this.automaticallyImplyLeading = true,
     this.title,
@@ -150,8 +150,7 @@ class BackdropAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottomOpacity = 1.0,
   })  : assert(elevation >= 0.0),
         preferredSize = Size.fromHeight(
-            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
-        super(key: key);
+            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0));
 
   @override
   Widget build(BuildContext context) => AppBar(
@@ -164,15 +163,15 @@ class BackdropAppBar extends StatelessWidget implements PreferredSizeWidget {
         elevation: elevation,
         shape: shape,
         backgroundColor: backgroundColor,
-        brightness: brightness,
         iconTheme: iconTheme,
         actionsIconTheme: actionsIconTheme,
-        textTheme: textTheme,
         primary: primary,
         centerTitle: centerTitle,
         excludeHeaderSemantics: excludeHeaderSemantics,
         titleSpacing: titleSpacing,
         toolbarOpacity: toolbarOpacity,
         bottomOpacity: bottomOpacity,
+        toolbarTextStyle: textTheme?.bodyMedium,
+        titleTextStyle: textTheme?.titleLarge,
       );
 }

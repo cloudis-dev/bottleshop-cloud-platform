@@ -3,7 +3,7 @@ import 'package:bottleshop_admin/src/core/data/models/admin_user_model.dart';
 import 'package:flutter/material.dart';
 
 class AdminUserChip extends StatelessWidget {
-  const AdminUserChip({Key? key, required this.adminUser}) : super(key: key);
+  const AdminUserChip({super.key, required this.adminUser});
 
   final AdminUserModel? adminUser;
 

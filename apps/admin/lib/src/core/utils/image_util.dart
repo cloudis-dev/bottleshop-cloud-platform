@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:bottleshop_admin/src/core/utils/files_util.dart';
@@ -101,7 +100,7 @@ Uint8List _createResizedJpg(List<int> params) {
 
   final maxWidth = params[0];
 
-  final bytes = params.skip(headerLength).toList();
+  final bytes = params.skip(headerLength).toList() as Uint8List;
 
   var img = img_util.decodeImage(bytes)!;
 
@@ -109,7 +108,7 @@ Uint8List _createResizedJpg(List<int> params) {
     img = img_util.copyResize(img, width: maxWidth);
   }
 
-  return img_util.encodeJpg(img, quality: 70) as Uint8List;
+  return img_util.encodeJpg(img, quality: 70);
 }
 
 Uint8List _createResizedJpgWithWatermarkProcess(List<int> params) {
@@ -118,9 +117,9 @@ Uint8List _createResizedJpgWithWatermarkProcess(List<int> params) {
   final maxWidth = params[0];
   final imgBytesLength = params[1];
   final watermarkSizeMultiplier = params[2] / 100.0;
-
-  final bytes = params.skip(headerLength).toList();
-  final watermarkBytes = params.skip(headerLength + imgBytesLength).toList();
+  final bytes = params.skip(headerLength).toList() as Uint8List;
+  final watermarkBytes =
+      params.skip(headerLength + imgBytesLength).toList() as Uint8List;
 
   var img = img_util.decodeImage(bytes)!;
 
@@ -131,7 +130,7 @@ Uint8List _createResizedJpgWithWatermarkProcess(List<int> params) {
   final watermarkImg = img_util.decodeImage(watermarkBytes)!;
   final newWatermarkSize = (img.width * watermarkSizeMultiplier).round();
 
-  img_util.drawImage(
+  img_util.compositeImage(
     img,
     watermarkImg,
     dstX: (img.width * (1 - watermarkSizeMultiplier) / 2).round(),
@@ -140,5 +139,5 @@ Uint8List _createResizedJpgWithWatermarkProcess(List<int> params) {
     dstH: newWatermarkSize,
   );
 
-  return img_util.encodeJpg(img, quality: 70) as Uint8List;
+  return img_util.encodeJpg(img, quality: 70);
 }

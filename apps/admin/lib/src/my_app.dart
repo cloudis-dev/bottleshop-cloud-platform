@@ -1,7 +1,6 @@
 import 'package:bottleshop_admin/src/config/app_theme.dart';
 import 'package:bottleshop_admin/src/core/presentation/providers/providers.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class _PlatformInitBody extends HookWidget {
 }
 
 class _VersionCheckBody extends HookWidget {
-  const _VersionCheckBody({Key? key}) : super(key: key);
+  const _VersionCheckBody();
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +77,6 @@ class _VersionCheckBody extends HookWidget {
       },
       loading: () => const _LoadingWidget(),
       error: (err, stack) {
-        FirebaseCrashlytics.instance.recordError(err, stack);
         return Text('An error occured.');
       },
     );
@@ -86,18 +84,13 @@ class _VersionCheckBody extends HookWidget {
 }
 
 class _AppBody extends StatelessWidget {
-  const _AppBody({Key? key}) : super(key: key);
+  const _AppBody();
 
   @override
   Widget build(BuildContext context) {
     return _Unfocus(
       child: Scaffold(
-        body: WillPopScope(
-          onWillPop: () async {
-            // res means if anything was popped
-            /*final res = */ await MyApp.navKey.currentState!.maybePop();
-            return Future.value(false);
-          },
+        body: PopScope(
           child: Consumer(
             builder: (context, watch, child) {
               final pages = watch(navigationProvider);
@@ -115,6 +108,11 @@ class _AppBody extends StatelessWidget {
               );
             },
           ),
+          onPopInvoked: (didPop) {
+            MyApp.navKey.currentState!
+                .maybePop()
+                .then((value) => debugPrint('pop'));
+          },
         ),
       ),
     );
@@ -123,7 +121,7 @@ class _AppBody extends StatelessWidget {
 
 /// Credits to: @rrousselGit
 class _Unfocus extends StatelessWidget {
-  const _Unfocus({Key? key, this.child}) : super(key: key);
+  const _Unfocus({this.child});
 
   final Widget? child;
 
@@ -138,7 +136,7 @@ class _Unfocus extends StatelessWidget {
 }
 
 class _WrongVersionWidget extends StatelessWidget {
-  const _WrongVersionWidget({Key? key}) : super(key: key);
+  const _WrongVersionWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +156,7 @@ class _WrongVersionWidget extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () =>
-                launch('https://appdistribution.firebase.google.com'),
+                launchUrl(Uri.https('appdistribution.firebase.google.com')),
             child: Text('Stiahnuť aktualizáciu'),
           )
         ],
@@ -168,7 +166,7 @@ class _WrongVersionWidget extends StatelessWidget {
 }
 
 class _LoadingWidget extends StatelessWidget {
-  const _LoadingWidget({Key? key}) : super(key: key);
+  const _LoadingWidget();
 
   @override
   Widget build(BuildContext context) {

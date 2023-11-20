@@ -42,7 +42,7 @@ class AuthenticationService {
     _providerRef.read(loggedUserProvider).state = null;
   }
 
-  Future signIn({
+  Future<dynamic> signIn({
     required String email,
     required String password,
   }) async {

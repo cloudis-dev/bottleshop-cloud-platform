@@ -8,8 +8,8 @@ import 'package:optional/optional.dart';
 
 class YearTextField extends HookWidget {
   const YearTextField({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -34,16 +34,7 @@ class AppTheme {
       TextStyle(fontSize: 16, color: Colors.black);
 
   static final ThemeData theme = ThemeData(
-    primarySwatch: primaryColor as MaterialColor?,
-    canvasColor: Colors.white,
-    textTheme: TextTheme(
-      headline1: headline1TextStyle,
-      headline2: headline2TextStyle,
-      headline3: headline3TextStyle,
-      subtitle1: subtitle1TextStyle,
-      button: buttonTextStyle,
-      overline: overlineTextStyle,
-    ),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-  );
+      primarySwatch: primaryColor as MaterialColor?,
+      canvasColor: Colors.white,
+      textTheme: Typography.dense2021);
 }

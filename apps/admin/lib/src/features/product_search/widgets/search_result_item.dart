@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
 class SearchResultItem extends StatelessWidget {
-  SearchResultItem(this.productSearchRes, {Key? key}) : super(key: key);
+  SearchResultItem(this.productSearchRes, {super.key});
 
   final Tuple2<Map<SearchMatchField, String>, ProductModel> productSearchRes;
 
@@ -43,14 +43,14 @@ class SearchResultItem extends StatelessWidget {
     final res = Iterable<int>.generate(splits.length)
         .map(
           (id) {
-            final tmp = splits[id].split('<\/em>');
+            final tmp = splits[id].split('</em>');
             if (tmp.length == 1) {
               return [Tuple2(false, tmp.first)];
             }
 
             return Iterable<int>.generate(tmp.length).map((e) => Tuple2(
                   e % 2 == 0,
-                  tmp[e].replaceFirst('<\/em>', ''),
+                  tmp[e].replaceFirst('</em>', ''),
                 ));
           },
         )

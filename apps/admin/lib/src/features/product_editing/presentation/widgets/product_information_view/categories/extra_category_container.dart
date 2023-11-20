@@ -4,7 +4,7 @@ import 'package:bottleshop_admin/src/features/product_editing/presentation/provi
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'category_column.dart';
+import 'package:bottleshop_admin/src/features/product_editing/presentation/widgets/product_information_view/categories/category_column.dart';
 
 class ExtraCategoryContainer extends StatelessWidget {
   const ExtraCategoryContainer({

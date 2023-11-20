@@ -7,18 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'category_dropdown.dart';
+import 'package:bottleshop_admin/src/features/product_editing/presentation/widgets/product_information_view/categories/category_dropdown.dart';
 
 class CategoryColumn extends HookWidget {
-  CategoryColumn({
-    Key? key,
+  const CategoryColumn({
+    super.key,
     required List<CategoriesTreeModel> categoriesOptions,
     required CategoryModel? category,
     required int categoryId,
   })  : _categoriesOptions = categoriesOptions,
         _categoryId = categoryId,
-        _category = category,
-        super(key: key);
+        _category = category;
 
   final List<CategoriesTreeModel> _categoriesOptions;
   final int _categoryId;

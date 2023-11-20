@@ -16,10 +16,9 @@ class ProductDeleteResult {
 
 class ProductDeleteConfirmationDialog extends ProcessingAlertDialog {
   ProductDeleteConfirmationDialog({
-    Key? key,
+    super.key,
     required ProductModel product,
   }) : super(
-          key: key,
           actionButtonColor: Colors.red,
           negativeButtonOptionBuilder: (_) => Text('Nie',
               style: AppTheme.buttonTextStyle.copyWith(color: Colors.grey)),

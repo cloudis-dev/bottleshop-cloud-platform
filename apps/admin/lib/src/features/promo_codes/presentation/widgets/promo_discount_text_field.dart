@@ -8,8 +8,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class PromoDiscountTextField extends HookWidget {
   const PromoDiscountTextField({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +45,7 @@ class PromoDiscountTextField extends HookWidget {
         if (MathUtil.approximately(parsed, 0) || parsed < 0) {
           return 'Musí byť väčšie ako 0';
         }
+        return null;
       },
     );
   }

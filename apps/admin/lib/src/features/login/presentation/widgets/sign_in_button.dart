@@ -23,7 +23,7 @@ class SignInButton extends HookWidget {
       height: 48,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: AppTheme.primaryColor,
+          backgroundColor: AppTheme.primaryColor,
           textStyle: TextStyle(color: Colors.white),
         ),
         onPressed: isLoading

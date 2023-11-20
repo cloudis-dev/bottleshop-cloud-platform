@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import 'localized_model.dart';
+import 'package:bottleshop_admin/src/core/data/models/localized_model.dart';
 
 @immutable
 class CategoryPlainModel extends Equatable {
@@ -14,7 +14,7 @@ class CategoryPlainModel extends Equatable {
   final String name;
   final bool isExtraCategory;
 
-  CategoryPlainModel({
+  const CategoryPlainModel({
     required this.id,
     required this.localizedName,
     required this.name,
