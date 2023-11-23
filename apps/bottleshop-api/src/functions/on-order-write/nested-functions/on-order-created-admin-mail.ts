@@ -35,14 +35,15 @@ export const onOrderCreatedAdminMail = async (orderSnapshot: functions.firestore
       Subject: ${subject}
       Body: ${body}`,
     );
-    return;
+    //return;
   }
-
-  return Promise.all(
-    managementEmails.map((email) => admin.firestore().collection(mailCollection).add(createMail(email, subject, body))),
-  )
-    .then(() => functions.logger.log(`Email with the created order (id: ${order.id}) sent to management.`))
-    .catch(() =>
-      functions.logger.error(`Failed to send an email with the created order (id: ${order.id}) to management.`),
-    );
+  const addMailPromises = managementEmails.map(async (mail) => {
+    await addMail(mail, subject, body);
+  });
+  await Promise.all(addMailPromises);
+  functions.logger.log(managementEmails.length);
 };
+
+const addMail = async (email: string, subject: string, body:string) => {
+      await admin.firestore().collection(mailCollection).add(createMail(email, subject, body));
+}
