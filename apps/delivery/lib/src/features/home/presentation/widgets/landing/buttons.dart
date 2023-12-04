@@ -27,7 +27,13 @@ class Btns extends HookConsumerWidget {
           if (nestingBranch != null) {
             ref
                 .watch(navigationProvider)
-                .setNestingBranch(context, nestingBranch!);
+                .setNestingBranch(context, nestingBranch!);         
+            if(nestingBranch == NestingBranch.shop) {
+              ref.watch(navigationProvider).popUntil(context, (page) => page.name =='products' );
+            }
+            else if(nestingBranch == NestingBranch.categories){
+              ref.watch(navigationProvider).popUntil(context, (page) =>   page.name =='categories');
+            }
           }
         },
         child: Text(
