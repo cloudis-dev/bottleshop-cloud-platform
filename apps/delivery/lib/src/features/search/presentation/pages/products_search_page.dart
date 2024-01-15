@@ -208,7 +208,7 @@ class _ResultsWidget extends HookConsumerWidget {
               heroTag: '${e.value1.categoryDetails.id}_categorySearch',
             ),
           ),
-          ...searchResults.value1
+          ...searchResults.value1.where((e) => e.value2.count > 0)
               .map<Widget>(
                 (e) => ProductListItem(
                   product: e.value2,

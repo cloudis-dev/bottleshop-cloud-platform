@@ -18,6 +18,7 @@ import 'package:delivery/src/core/utils/sorting_util.dart';
 import 'package:delivery/src/features/categories/data/services/db_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tuple/tuple.dart';
 
 final categoriesProvider = FutureProvider<List<CategoriesTreeModel>>(
   (ref) async {
@@ -66,6 +67,19 @@ final categoryProductCountsProvider =
         .map((event) => CategoryProductCountsModel.fromMap(event.data()!));
   },
 );
+
+final countProductsProvider =
+    FutureProvider.autoDispose<List<Tuple2>>((ref) async {
+  QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('warehouse').get();
+  List<DocumentSnapshot> docs = snapshot.docs;
+
+  return docs.map((d) {
+    var categoryRefs = d.get("category_refs") as List;
+    var amount = d.get("amount") as int;
+    return Tuple2(categoryRefs, amount);
+  }).toList();
+});
 
 @immutable
 class CategoryProductCountsModel {

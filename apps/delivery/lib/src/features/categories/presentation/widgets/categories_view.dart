@@ -44,8 +44,7 @@ class CategoriesView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(mainCategoriesWithoutExtraProvider);
-    final productCounts = ref.watch(categoryProductCountsProvider);
-
+    final productCounts = ref.watch(countProductsProvider);
     const maxSize = 200.0;
 
     return GridView.builder(
@@ -64,16 +63,17 @@ class CategoriesView extends HookConsumerWidget {
         return CategoryGridItem(
           category: category,
           onNavigateToCategory: onNavigateToCategory,
-          productsCount: productCounts.map(
-            data: (res) => AsyncValue.data(
-              res.value.getProductsCount(category.categoryDetails.id),
-            ),
-            error: (err) {
-              _logger.severe('Failed to fetch products counts', err);
-              return const AsyncValue.loading();
-            },
-            loading: (value) => const AsyncValue.loading(),
-          ),
+          productsCount: productCounts.whenData((data) {
+            var res = data.where((element) {
+              var res = (element.item1 as List)
+                  .where((x) => x.id == category.categoryDetails.id);
+              if (res.isNotEmpty && (element.item2 as int) > 0)
+                return true;
+              else
+                return false;
+            });
+            return res.length;
+          }),
           maxSize: maxSize,
         );
       },

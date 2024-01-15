@@ -78,7 +78,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
         )
         .map(
           (event) => PagedItemsStateStreamBatch(
-            event
+            event.where((e) => e.item3.count > 0)
                 .map(
                   (e) => Tuple3(
                     ChangeStatusUtil.convertFromFirestoreChange(e.item1),
@@ -102,7 +102,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
 
     return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
-            event
+            event.where((e) => e.item2.count > 0)
                 .map(
                   (e) => Tuple2(
                     ChangeStatusUtil.convertFromFirestoreChange(e.item1),
@@ -116,7 +116,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
 
   Stream<ItemsStateStreamBatch<ProductModel>> getRecommendedProductsStream() {
     final query = <QueryArgs>[
-      QueryArgs(ProductModel.isRecommendedField, isEqualTo: true),
+      QueryArgs(ProductModel.isRecommendedField, isEqualTo: true)
     ];
     final orderBy = <OrderBy>[
       OrderBy(ProductModel.unaccentedNameSortField),
@@ -124,7 +124,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
 
     return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
-            event
+            event.where((e) => e.item2.count > 0)
                 .map(
                   (e) => Tuple2(
                     ChangeStatusUtil.convertFromFirestoreChange(e.item1),
@@ -146,7 +146,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
 
     return db.streamQueryListWithChangesAll(args: query, orderBy: orderBy).map(
           (event) => ItemsStateStreamBatch<ProductModel>(
-            event
+            event.where((e) => e.item2.count > 0)
                 .map(
                   (e) => Tuple2(
                     ChangeStatusUtil.convertFromFirestoreChange(e.item1),
@@ -158,6 +158,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
         );
   }
 
+  
   Stream<PagedItemsStateStreamBatch<ProductModel, DocumentSnapshot>>
       getProductsByCategoryStream(
     CategoryPlainModel category,
@@ -173,6 +174,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
       )
     ];
 
+
     return db
         .streamQueryListWithChanges(
           args: query,
@@ -182,7 +184,7 @@ class ProductsRepository extends RepositoryBase<ProductModel> {
         )
         .map(
           (event) => PagedItemsStateStreamBatch(
-            event
+            event.where((e) => e.item3.count > 0)
                 .map(
                   (e) => Tuple3(
                     ChangeStatusUtil.convertFromFirestoreChange(e.item1),
